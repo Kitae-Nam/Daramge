@@ -1,0 +1,37 @@
+#validate-section {
+    margin-top: 8px;
+}
+
+#separator {
+    height: 1px;
+    background-color: rgba(128, 128, 128, 0.35);
+    margin-bottom: 6px;
+}
+
+#validate-button {
+    margin-bottom: 6px;
+    height: 26px;
+}
+
+#result-scroll {
+    display: none;
+    max-height: 200px;
+    background-color: rgba(0, 0, 0, 0.15);
+    border-radius: 3px;
+    border-width: 1px;
+    border-color: rgba(128, 128, 128, 0.35);
+    padding: 4px;
+}
+
+#result-label {
+    white-space: normal;
+    font-size: 12px;
+}
+
+.result-pass {
+    color: rgb(100, 220, 100);
+}
+
+.result-fail {
+    color: rgb(255, 120, 100);
+}
