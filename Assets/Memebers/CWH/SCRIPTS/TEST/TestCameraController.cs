@@ -6,30 +6,28 @@ namespace Memebers.CWH.SCRIPTS.TEST
     public class TestCameraController : MonoBehaviour
     {
         [SerializeField] private float moveSpeed = 5f;
-        [SerializeField] private Transform cameraTransform;
 
-        private void Update()
+        void Update()
         {
-            Vector2 input = Vector2.zero;
+            Vector3 input = Vector3.zero;
 
-            if (Keyboard.current.wKey.isPressed) input.y += 1;
-            if (Keyboard.current.sKey.isPressed) input.y -= 1;
-            if (Keyboard.current.aKey.isPressed) input.x -= 1;
-            if (Keyboard.current.dKey.isPressed) input.x += 1;
+            if (Keyboard.current != null)
+            {
+                if (Keyboard.current.wKey.isPressed)
+                    input.z += 1;
 
-            Vector3 cameraForward = cameraTransform.forward;
-            Vector3 cameraRight = cameraTransform.right;
+                if (Keyboard.current.sKey.isPressed)
+                    input.z -= 1;
 
-            cameraForward.y = 0;
-            cameraRight.y = 0;
+                if (Keyboard.current.aKey.isPressed)
+                    input.x -= 1;
 
-            cameraForward.Normalize();
-            cameraRight.Normalize();
+                if (Keyboard.current.dKey.isPressed)
+                    input.x += 1;
+            }
 
-            Vector3 moveDirection =
-                (cameraForward * input.y + cameraRight * input.x).normalized;
-
-            transform.position += moveDirection * moveSpeed * Time.deltaTime;
+            Vector3 move = new Vector3(input.x, 0f, input.z);
+            transform.position += move.normalized * moveSpeed * Time.deltaTime;
         }
     }
 }
