@@ -765,6 +765,7 @@ GameObject:
   m_Component:
   - component: {fileID: 90378674}
   - component: {fileID: 90378673}
+  - component: {fileID: 90378675}
   m_Layer: 0
   m_Name: Light_Window
   m_TagString: Untagged
@@ -852,6 +853,35 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2117964444}
   m_LocalEulerAnglesHint: {x: 141.242, y: 61.179993, z: 78.28}
+--- !u!114 &90378675
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 90378672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_CustomShadowLayers: 0
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
+  m_RenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_ShadowRenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_Version: 4
+  m_LightLayerMask: 1
+  m_ShadowLayerMask: 1
+  m_RenderingLayers: 1
+  m_ShadowRenderingLayers: 1
 --- !u!1001 &126933327
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2655,6 +2685,7 @@ GameObject:
   m_Component:
   - component: {fileID: 463569249}
   - component: {fileID: 463569248}
+  - component: {fileID: 463569250}
   m_Layer: 0
   m_Name: Point light (7)
   m_TagString: Untagged
@@ -2742,6 +2773,35 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2117964444}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &463569250
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 463569247}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_CustomShadowLayers: 0
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
+  m_RenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_ShadowRenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_Version: 4
+  m_LightLayerMask: 1
+  m_ShadowLayerMask: 1
+  m_RenderingLayers: 1
+  m_ShadowRenderingLayers: 1
 --- !u!1001 &464235532
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2912,6 +2972,7 @@ GameObject:
   m_Component:
   - component: {fileID: 496258093}
   - component: {fileID: 496258092}
+  - component: {fileID: 496258094}
   m_Layer: 0
   m_Name: Point light (1)
   m_TagString: Untagged
@@ -2999,6 +3060,35 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2117964444}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &496258094
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 496258091}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_CustomShadowLayers: 0
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
+  m_RenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_ShadowRenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_Version: 4
+  m_LightLayerMask: 1
+  m_ShadowLayerMask: 1
+  m_RenderingLayers: 1
+  m_ShadowRenderingLayers: 1
 --- !u!1001 &515903377
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3345,6 +3435,7 @@ GameObject:
   m_Component:
   - component: {fileID: 573738430}
   - component: {fileID: 573738429}
+  - component: {fileID: 573738431}
   m_Layer: 0
   m_Name: Point light (4)
   m_TagString: Untagged
@@ -3432,6 +3523,35 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2117964444}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &573738431
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 573738428}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_CustomShadowLayers: 0
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
+  m_RenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_ShadowRenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_Version: 4
+  m_LightLayerMask: 1
+  m_ShadowLayerMask: 1
+  m_RenderingLayers: 1
+  m_ShadowRenderingLayers: 1
 --- !u!1001 &584579840
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4182,6 +4302,7 @@ GameObject:
   m_Component:
   - component: {fileID: 661621120}
   - component: {fileID: 661621119}
+  - component: {fileID: 661621121}
   m_Layer: 0
   m_Name: Light_Window(1)
   m_TagString: Untagged
@@ -4269,6 +4390,35 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2117964444}
   m_LocalEulerAnglesHint: {x: 141.515, y: 108.599, z: 87.507996}
+--- !u!114 &661621121
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 661621118}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_CustomShadowLayers: 0
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
+  m_RenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_ShadowRenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_Version: 4
+  m_LightLayerMask: 1
+  m_ShadowLayerMask: 1
+  m_RenderingLayers: 1
+  m_ShadowRenderingLayers: 1
 --- !u!1 &668337400
 GameObject:
   m_ObjectHideFlags: 0
@@ -5758,6 +5908,7 @@ GameObject:
   m_Component:
   - component: {fileID: 939263396}
   - component: {fileID: 939263395}
+  - component: {fileID: 939263397}
   m_Layer: 0
   m_Name: Directional Light
   m_TagString: Untagged
@@ -5845,6 +5996,35 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2117964444}
   m_LocalEulerAnglesHint: {x: -82.32001, y: -110.47401, z: 26.673}
+--- !u!114 &939263397
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 939263394}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_CustomShadowLayers: 0
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
+  m_RenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_ShadowRenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_Version: 4
+  m_LightLayerMask: 1
+  m_ShadowLayerMask: 1
+  m_RenderingLayers: 1
+  m_ShadowRenderingLayers: 1
 --- !u!1 &964446321
 GameObject:
   m_ObjectHideFlags: 0
@@ -6229,6 +6409,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1009771831}
   - component: {fileID: 1009771830}
+  - component: {fileID: 1009771832}
   m_Layer: 0
   m_Name: Point light (3)
   m_TagString: Untagged
@@ -6316,6 +6497,35 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2117964444}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1009771832
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1009771829}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_CustomShadowLayers: 0
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
+  m_RenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_ShadowRenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_Version: 4
+  m_LightLayerMask: 1
+  m_ShadowLayerMask: 1
+  m_RenderingLayers: 1
+  m_ShadowRenderingLayers: 1
 --- !u!1001 &1015275810
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6458,6 +6668,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1033812197}
   - component: {fileID: 1033812196}
+  - component: {fileID: 1033812198}
   m_Layer: 0
   m_Name: Point light (6)
   m_TagString: Untagged
@@ -6545,6 +6756,35 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2117964444}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1033812198
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1033812195}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_CustomShadowLayers: 0
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
+  m_RenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_ShadowRenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_Version: 4
+  m_LightLayerMask: 1
+  m_ShadowLayerMask: 1
+  m_RenderingLayers: 1
+  m_ShadowRenderingLayers: 1
 --- !u!1001 &1055068112
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7526,6 +7766,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1161728696}
   - component: {fileID: 1161728695}
+  - component: {fileID: 1161728697}
   m_Layer: 0
   m_Name: Point light
   m_TagString: Untagged
@@ -7613,6 +7854,35 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2117964444}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1161728697
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1161728694}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_CustomShadowLayers: 0
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
+  m_RenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_ShadowRenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_Version: 4
+  m_LightLayerMask: 1
+  m_ShadowLayerMask: 1
+  m_RenderingLayers: 1
+  m_ShadowRenderingLayers: 1
 --- !u!1001 &1167616100
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7755,6 +8025,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1181440234}
   - component: {fileID: 1181440233}
+  - component: {fileID: 1181440235}
   m_Layer: 0
   m_Name: Point light (2)
   m_TagString: Untagged
@@ -7842,6 +8113,35 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2117964444}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1181440235
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1181440232}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_CustomShadowLayers: 0
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
+  m_RenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_ShadowRenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_Version: 4
+  m_LightLayerMask: 1
+  m_ShadowLayerMask: 1
+  m_RenderingLayers: 1
+  m_ShadowRenderingLayers: 1
 --- !u!1001 &1190393897
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10455,27 +10755,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: d46780b85201cc94d9ba1240124ce4b0, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.823
+      value: -1.6426
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: d46780b85201cc94d9ba1240124ce4b0, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.041
+      value: -0.038
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: d46780b85201cc94d9ba1240124ce4b0, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.8
+      value: -0.5367
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: d46780b85201cc94d9ba1240124ce4b0, type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.5565492
+      value: 0.713859
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: d46780b85201cc94d9ba1240124ce4b0, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: d46780b85201cc94d9ba1240124ce4b0, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.83081466
+      value: 0.7002894
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: d46780b85201cc94d9ba1240124ce4b0, type: 3}
       propertyPath: m_LocalRotation.z
@@ -10487,7 +10787,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: d46780b85201cc94d9ba1240124ce4b0, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 247.635
+      value: 88.9
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: d46780b85201cc94d9ba1240124ce4b0, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -11314,6 +11614,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1879755142}
   - component: {fileID: 1879755141}
+  - component: {fileID: 1879755143}
   m_Layer: 0
   m_Name: Point light (5)
   m_TagString: Untagged
@@ -11401,6 +11702,35 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2117964444}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1879755143
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1879755140}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_CustomShadowLayers: 0
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
+  m_RenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_ShadowRenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_Version: 4
+  m_LightLayerMask: 1
+  m_ShadowLayerMask: 1
+  m_RenderingLayers: 1
+  m_ShadowRenderingLayers: 1
 --- !u!1001 &1904621602
 PrefabInstance:
   m_ObjectHideFlags: 0
