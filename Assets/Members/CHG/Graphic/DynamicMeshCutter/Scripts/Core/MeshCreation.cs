@@ -1,10 +1,11 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Collections;
-using System.Collections.Generic;
+using Members.CHG.Graphic.DynamicMeshCutter.Scripts.Ragdoll;
+using Members.CHG.Graphic.DynamicMeshCutter.Scripts.Utility;
 using UnityEngine;
+using Behaviour = Members.CHG.Graphic.DynamicMeshCutter.Scripts.Ragdoll.Behaviour;
 
-namespace DynamicMeshCutter
+namespace Members.CHG.Graphic.DynamicMeshCutter.Scripts.Core
 {
     public class MeshCreationData
     {

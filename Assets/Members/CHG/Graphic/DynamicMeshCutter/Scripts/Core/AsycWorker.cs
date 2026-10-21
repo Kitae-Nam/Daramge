@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using Members.CHG.Graphic.DynamicMeshCutter.Scripts.Utility;
 using UnityEngine;
 
-namespace DynamicMeshCutter
+namespace Members.CHG.Graphic.DynamicMeshCutter.Scripts.Core
 {
     public class AsycWorker
     {

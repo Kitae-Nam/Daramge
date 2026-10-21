@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
+using Members.CHG.Graphic.DynamicMeshCutter.Scripts.Core;
 using UnityEngine;
 
-namespace DynamicMeshCutter
+namespace Members.CHG.Graphic.DynamicMeshCutter.Scripts.Utility
 {
 
     public delegate void OnCut(bool success, Info info); //after cut, before mesh creation

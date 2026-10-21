@@ -1,8 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
+using Members.CHG.Graphic.DynamicMeshCutter.Scripts.Core;
 using UnityEngine;
 
-namespace DynamicMeshCutter
+namespace Members.CHG.Graphic.DynamicMeshCutter.Scripts.Utility
 {
 
     [RequireComponent(typeof(LineRenderer))]

@@ -1,12 +1,12 @@
-using System.Linq;
 using System.Collections.Generic;
-using UnityEngine;
+using System.Linq;
 using UnityEditor;
+using UnityEngine;
 
-namespace DynamicMeshCutter
+namespace Members.CHG.Graphic.DynamicMeshCutter.Scripts.Ragdoll.Editor
 {
     [CustomEditor(typeof(DynamicRagdoll))]
-    public class DynamicRagdollInspector : Editor
+    public class DynamicRagdollInspector : UnityEditor.Editor
     {
         DynamicRagdoll _rd;
 
