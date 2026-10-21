@@ -10,6 +10,7 @@ namespace Members.CHG._02_Scripts.Player
         
         public event Action<Vector2> OnMovementChange;
         public event Action OnAttackKeyPressed;
+        public event Action OnDashKeyPressed;
         
         public delegate void SkillKeyPress(int keyCode, bool isPressed);
         public event SkillKeyPress OnSkillKeyPressed;
@@ -65,11 +66,25 @@ namespace Members.CHG._02_Scripts.Player
             
         }
         
-
+        public void OnSkill(InputAction.CallbackContext context)
+        {
+            int keyCode = context.action.GetBindingIndexForControl(context.control);
+            
+            if(context.performed)
+                OnSkillKeyPressed?.Invoke(keyCode, true);
+            else if(context.canceled)
+                OnSkillKeyPressed?.Invoke(keyCode, false);
+        }
 
         public void OnPointer(InputAction.CallbackContext context)
         {
             _screenMousePosition = context.ReadValue<Vector2>();
+        }
+
+        public void OnDash(InputAction.CallbackContext context)
+        {
+            if(context.performed)
+                OnDashKeyPressed?.Invoke();
         }
 
         public Vector3 GetWorldMousePosition()

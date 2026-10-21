@@ -11,7 +11,7 @@ namespace Members.CHG._02_Scripts.Agent
         
         public void Initialize(ModuleOwner owner) { }
         
-        private void AnimationEndTrigger() => OnAnimationEnd?.Invoke();
-        private void DamageCastTrigger() => OnDamageCast?.Invoke();
+        public void AnimationEndTrigger() => OnAnimationEnd?.Invoke();
+        public void DamageCastTrigger() => OnDamageCast?.Invoke();
     }
 }

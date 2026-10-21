@@ -9,13 +9,11 @@ namespace Members.CHG._02_Scripts.CombatSystem
     {
         public event Action OnDeath;
         
-        [SerializeField] private StatSO vitalStat;
-        [SerializeField] private float baseMaxHealth;
-        [SerializeField] private float maxHealth; //나중에 스탯으로 변경한다.
-        [SerializeField] private float currentHealth;
+        [SerializeField] private int baseMaxHealth;
+        [SerializeField] private int maxHealth; //나중에 스탯으로 변경한다.
+        [SerializeField] private int currentHealth;
 
         private ModuleOwner _owner;
-        private IStatModule _statModule;
         
         public event Action<float, float> OnHealthChanged;
         
@@ -26,18 +24,10 @@ namespace Members.CHG._02_Scripts.CombatSystem
         {
             _owner = owner;
             currentHealth = maxHealth;
-            _statModule = _owner.GetModule<IStatModule>();
         }
         
         public void AfterInit()
         {
-            if (_statModule != null)
-            {
-                float vital = _statModule.SubscribeStat(vitalStat.AssetIndex, HandleVitalChange, vitalStat.BaseValue);
-
-                float k = 0.01f;
-                currentHealth = maxHealth = baseMaxHealth + 5 * vital / (1 + k * vital);
-            }
         }
 
         private void Start()
@@ -47,22 +37,16 @@ namespace Members.CHG._02_Scripts.CombatSystem
 
         private void OnDestroy()
         {
-            _statModule?.UnSubscribeStat(vitalStat.AssetIndex, HandleVitalChange);
         }
 
         private void HandleVitalChange(StatSO stat, float currentValue, float prevValue)
         {
-            float k = 0.01f;
-            float beforeMaxHealth = maxHealth;
-            maxHealth = baseMaxHealth + 5 * currentValue / (1 + k * currentValue);
-            float delta = maxHealth - beforeMaxHealth;
-            currentHealth = Mathf.Clamp(currentHealth + delta, 1, maxHealth);
+            
             RaiseHealthChanged();
         }
 
         public void ApplyDamage(float damageAmount)
         {
-            currentHealth -= damageAmount;
             RaiseHealthChanged();
             if (currentHealth <= 0)
             {
