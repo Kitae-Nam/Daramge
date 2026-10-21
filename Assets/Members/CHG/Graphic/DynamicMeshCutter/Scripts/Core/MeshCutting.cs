@@ -1,9 +1,10 @@
-﻿using UnityEngine;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System;
+using Members.CHG.Graphic.DynamicMeshCutter.Scripts.Utility;
+using UnityEngine;
 
-namespace DynamicMeshCutter
+namespace Members.CHG.Graphic.DynamicMeshCutter.Scripts.Core
 {
     public class MeshCutting
     {

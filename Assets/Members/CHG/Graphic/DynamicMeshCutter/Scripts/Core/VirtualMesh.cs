@@ -1,8 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Members.CHG.Graphic.DynamicMeshCutter.Scripts.Ragdoll;
 using UnityEngine;
 
-namespace DynamicMeshCutter
+namespace Members.CHG.Graphic.DynamicMeshCutter.Scripts.Core
 {
 
     public class VertexInfo

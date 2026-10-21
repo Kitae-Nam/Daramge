@@ -1,5 +1,7 @@
 
-namespace DynamicMeshCutter
+using Members.CHG.Graphic.DynamicMeshCutter.Scripts.Core;
+
+namespace Members.CHG.Graphic.DynamicMeshCutter.Scripts.Utility
 {
     public class PlaneBehaviour : CutterBehaviour
     {

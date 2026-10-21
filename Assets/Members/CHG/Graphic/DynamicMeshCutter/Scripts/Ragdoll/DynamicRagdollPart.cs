@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace DynamicMeshCutter
+namespace Members.CHG.Graphic.DynamicMeshCutter.Scripts.Ragdoll
 {
     public class DynamicRagdollPart : MonoBehaviour
     {

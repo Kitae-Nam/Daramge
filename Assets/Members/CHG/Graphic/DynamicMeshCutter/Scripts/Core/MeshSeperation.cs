@@ -1,10 +1,9 @@
-using System.Collections;
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-namespace DynamicMeshCutter
+namespace Members.CHG.Graphic.DynamicMeshCutter.Scripts.Core
 {
     public static class MeshSeperation
     {

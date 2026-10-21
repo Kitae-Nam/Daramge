@@ -1,9 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
-
-namespace DynamicMeshCutter
+namespace Members.CHG.Graphic.DynamicMeshCutter.Scripts.Utility
 {
     public static class MeshTargetShephard
     {

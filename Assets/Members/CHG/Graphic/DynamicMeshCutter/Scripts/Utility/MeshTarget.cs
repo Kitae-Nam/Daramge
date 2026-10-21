@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Members.CHG.Graphic.DynamicMeshCutter.Scripts.Ragdoll;
 using UnityEngine;
+using Behaviour = Members.CHG.Graphic.DynamicMeshCutter.Scripts.Ragdoll.Behaviour;
 
-
-namespace DynamicMeshCutter
+namespace Members.CHG.Graphic.DynamicMeshCutter.Scripts.Utility
 {
     public class MeshTarget : MonoBehaviour
     {
