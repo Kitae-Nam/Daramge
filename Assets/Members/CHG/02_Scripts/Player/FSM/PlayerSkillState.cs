@@ -22,8 +22,12 @@ namespace Members.CHG._02_Scripts.Player.FSM
         public override void Update()
         {
             base.Update();
-            if(_isSkillEnd)
-                _player.ChangeState(PlayerState.IDLE, 0.1f);
+            if (_isSkillEnd)
+            {
+                PlayerState nextState = _player.PlayerInput.Movement.magnitude > INPUT_DEADZONE
+                    ? PlayerState.RUN : PlayerState.IDLE;
+                _player.ChangeState(nextState, 0.1f);
+            }
         }
 
         public override void Exit()

@@ -11,9 +11,10 @@ namespace Members.CHG._02_Scripts.Player
         public event Action<Vector2> OnMovementChange;
         public event Action OnAttackKeyPressed;
         public event Action OnDashKeyPressed;
+        public event Action OnSkillKeyPressed;
         
-        public delegate void SkillKeyPress(int keyCode, bool isPressed);
-        public event SkillKeyPress OnSkillKeyPressed;
+
+        public Vector2 Movement { get; private set; }
 
         [SerializeField] private LayerMask whatIsGround;
         private Controls _controls;
@@ -51,7 +52,8 @@ namespace Members.CHG._02_Scripts.Player
         public void OnMove(InputAction.CallbackContext context)
         {
             Vector2 movement = context.ReadValue<Vector2>();
-            
+            Movement = movement;
+
             OnMovementChange?.Invoke(movement);
         }
 
@@ -68,12 +70,8 @@ namespace Members.CHG._02_Scripts.Player
         
         public void OnSkill(InputAction.CallbackContext context)
         {
-            int keyCode = context.action.GetBindingIndexForControl(context.control);
-            
             if(context.performed)
-                OnSkillKeyPressed?.Invoke(keyCode, true);
-            else if(context.canceled)
-                OnSkillKeyPressed?.Invoke(keyCode, false);
+                OnSkillKeyPressed?.Invoke();
         }
 
         public void OnPointer(InputAction.CallbackContext context)

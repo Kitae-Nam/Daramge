@@ -50,6 +50,7 @@ namespace Members.CHG._02_Scripts.Player
         {
             Player.PlayerInput.OnAttackKeyPressed += HandleAttackKeyPressed;
             Player.PlayerInput.OnDashKeyPressed += HandleDashKeyPressed;
+            Player.PlayerInput.OnSkillKeyPressed += HandleSkillKeyPressed;
 
             _atkSpeed = _statModule.SubscribeStat(attackSpeedStat.AssetIndex, HandleAttackSpeedChange,
                 attackSpeedStat.BaseValue);
@@ -62,10 +63,13 @@ namespace Members.CHG._02_Scripts.Player
             {
                 Player.PlayerInput.OnAttackKeyPressed -= HandleAttackKeyPressed;
                 Player.PlayerInput.OnDashKeyPressed -= HandleDashKeyPressed;
+                Player.PlayerInput.OnSkillKeyPressed += HandleSkillKeyPressed;
+                
             }
 
             _statModule?.UnSubscribeStat(attackSpeedStat.AssetIndex, HandleAttackSpeedChange);
         }
+        
 
         private void HandleAttackSpeedChange(StatSO stat, float currentValue, float prevValue)
         {
@@ -89,6 +93,15 @@ namespace Members.CHG._02_Scripts.Player
             {
                 Player.ChangeState(PlayerState.SKILL, 0);
                 UseSkill(1);
+            }
+        }
+        
+        private void HandleSkillKeyPressed()
+        {
+            if (CanUseSkill(2))
+            {
+                Player.ChangeState(PlayerState.SKILL, 0);
+                UseSkill(2);
             }
         }
 

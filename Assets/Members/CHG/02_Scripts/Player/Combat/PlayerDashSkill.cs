@@ -13,30 +13,33 @@ namespace Members.CHG._02_Scripts.Player.Combat
         [SerializeField] private AnimationCurve dashCurve;
         [SerializeField] private float speed = 4f;
         [SerializeField] private float dashDuration = 0.4f;
-
-
-        private AgentTrigger _trigger;
         
+        [Tooltip("test")] [SerializeField] private float staminaUseAmount = 1f;
+        
+        private AgentTrigger _trigger;
+        private StaminaModule _stamina;
+                
         public override void InitializeSkill(ISkillModule skillModule)
         {
             base.InitializeSkill(skillModule);
             _trigger = _player.GetModule<AgentTrigger>();
-            Debug.Assert(_trigger != null, "애니메이션 트리거가 있어야 rolling 스킬이 정상작동합니다.");
+            _stamina = _player.GetModule<StaminaModule>();
+            Debug.Assert(_trigger != null, $"Animation Trigger is null : {gameObject.name}");
+            Debug.Assert(_stamina != null, $"StaminaModule is null : {gameObject.name}");
         }
 
         public override bool CanUseSkill(GameObject target = null)
         {
-            return NormalizedCooldown >= 1f && !IsUsing;
+            return NormalizedCooldown >= 1f && !IsUsing && _stamina.CanUseStamina(staminaUseAmount);
         }
 
         public override void UseSkill(GameObject target = null)
         {
             base.UseSkill(target);
-            
-            Vector3 worldMousePosition = _player.PlayerInput.GetWorldMousePosition();
-            Vector3 direction = (worldMousePosition - _player.transform.position).normalized;
-            _movement.RotateTo(direction);
-            StartCoroutine(RollingCoroutine());
+            if (_stamina.TryUseStamina(staminaUseAmount))
+            {
+                StartCoroutine(RollingCoroutine());
+            }
         }
 
         private IEnumerator RollingCoroutine()
