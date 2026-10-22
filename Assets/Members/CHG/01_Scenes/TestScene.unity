@@ -408,6 +408,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Gen_Chr_Street_Male_02
       objectReference: {fileID: 0}
+    - target: {fileID: 2601170466289135297, guid: 0f895ab6fa2a7e9419ef17d25c18bf9c, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 2430602750742732773, guid: 0f895ab6fa2a7e9419ef17d25c18bf9c, type: 3}
@@ -433,8 +437,39 @@ PrefabInstance:
     - {fileID: 3616361964068801174, guid: 0f895ab6fa2a7e9419ef17d25c18bf9c, type: 3}
     - {fileID: 2195754300306909652, guid: 0f895ab6fa2a7e9419ef17d25c18bf9c, type: 3}
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2601170466289135297, guid: 0f895ab6fa2a7e9419ef17d25c18bf9c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 417886333}
   m_SourcePrefab: {fileID: 100100000, guid: 0f895ab6fa2a7e9419ef17d25c18bf9c, type: 3}
+--- !u!1 &417886330 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2601170466289135297, guid: 0f895ab6fa2a7e9419ef17d25c18bf9c, type: 3}
+  m_PrefabInstance: {fileID: 262762934}
+  m_PrefabAsset: {fileID: 0}
+--- !u!136 &417886333
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 417886330}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 1.92
+  m_Direction: 1
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!1 &429536517
 GameObject:
   m_ObjectHideFlags: 0
@@ -617,8 +652,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   maxRange: 10
-  shootSpeed: 30
-  pullSpeed: 2
+  shootSpeed: 50
+  pullSpeed: 3
   tipRadius: 0.3
   endPointOffset: 1
   maxPullTime: 2
@@ -2727,6 +2762,70 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2043320281}
     m_Modifications:
+    - target: {fileID: 2256949278147322525, guid: f6354bff6fb62934dbb15a704d6a3374, type: 3}
+      propertyPath: speed
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2256949278147322525, guid: f6354bff6fb62934dbb15a704d6a3374, type: 3}
+      propertyPath: dashCurve.m_Curve.Array.data[1].time
+      value: 0.25028536
+      objectReference: {fileID: 0}
+    - target: {fileID: 2256949278147322525, guid: f6354bff6fb62934dbb15a704d6a3374, type: 3}
+      propertyPath: dashCurve.m_Curve.Array.data[2].time
+      value: 0.7877275
+      objectReference: {fileID: 0}
+    - target: {fileID: 2256949278147322525, guid: f6354bff6fb62934dbb15a704d6a3374, type: 3}
+      propertyPath: dashCurve.m_Curve.Array.data[3].time
+      value: 1.7220194
+      objectReference: {fileID: 0}
+    - target: {fileID: 2256949278147322525, guid: f6354bff6fb62934dbb15a704d6a3374, type: 3}
+      propertyPath: dashCurve.m_Curve.Array.data[1].value
+      value: 0.85209954
+      objectReference: {fileID: 0}
+    - target: {fileID: 2256949278147322525, guid: f6354bff6fb62934dbb15a704d6a3374, type: 3}
+      propertyPath: dashCurve.m_Curve.Array.data[2].value
+      value: 0.6107188
+      objectReference: {fileID: 0}
+    - target: {fileID: 2256949278147322525, guid: f6354bff6fb62934dbb15a704d6a3374, type: 3}
+      propertyPath: dashCurve.m_Curve.Array.data[3].value
+      value: 0.1625686
+      objectReference: {fileID: 0}
+    - target: {fileID: 2256949278147322525, guid: f6354bff6fb62934dbb15a704d6a3374, type: 3}
+      propertyPath: dashCurve.m_Curve.Array.data[0].inSlope
+      value: 0.5095262
+      objectReference: {fileID: 0}
+    - target: {fileID: 2256949278147322525, guid: f6354bff6fb62934dbb15a704d6a3374, type: 3}
+      propertyPath: dashCurve.m_Curve.Array.data[1].inSlope
+      value: 0.030198663
+      objectReference: {fileID: 0}
+    - target: {fileID: 2256949278147322525, guid: f6354bff6fb62934dbb15a704d6a3374, type: 3}
+      propertyPath: dashCurve.m_Curve.Array.data[2].inSlope
+      value: -0.6244222
+      objectReference: {fileID: 0}
+    - target: {fileID: 2256949278147322525, guid: f6354bff6fb62934dbb15a704d6a3374, type: 3}
+      propertyPath: dashCurve.m_Curve.Array.data[3].inSlope
+      value: -0.47966826
+      objectReference: {fileID: 0}
+    - target: {fileID: 2256949278147322525, guid: f6354bff6fb62934dbb15a704d6a3374, type: 3}
+      propertyPath: dashCurve.m_Curve.Array.data[0].outSlope
+      value: 0.5095262
+      objectReference: {fileID: 0}
+    - target: {fileID: 2256949278147322525, guid: f6354bff6fb62934dbb15a704d6a3374, type: 3}
+      propertyPath: dashCurve.m_Curve.Array.data[1].outSlope
+      value: 0.030198663
+      objectReference: {fileID: 0}
+    - target: {fileID: 2256949278147322525, guid: f6354bff6fb62934dbb15a704d6a3374, type: 3}
+      propertyPath: dashCurve.m_Curve.Array.data[2].inWeight
+      value: 0.12615609
+      objectReference: {fileID: 0}
+    - target: {fileID: 2256949278147322525, guid: f6354bff6fb62934dbb15a704d6a3374, type: 3}
+      propertyPath: dashCurve.m_Curve.Array.data[2].outSlope
+      value: -0.6244222
+      objectReference: {fileID: 0}
+    - target: {fileID: 2256949278147322525, guid: f6354bff6fb62934dbb15a704d6a3374, type: 3}
+      propertyPath: dashCurve.m_Curve.Array.data[3].outSlope
+      value: -0.47966826
+      objectReference: {fileID: 0}
     - target: {fileID: 4652120572220808338, guid: f6354bff6fb62934dbb15a704d6a3374, type: 3}
       propertyPath: m_Name
       value: Dash SKill
@@ -2950,6 +3049,18 @@ PrefabInstance:
     - target: {fileID: 4735501817935712439, guid: 586f373893ff70649bb96ec0aa2b3d4d, type: 3}
       propertyPath: m_Name
       value: Stamina Module
+      objectReference: {fileID: 0}
+    - target: {fileID: 5028053925224058752, guid: 586f373893ff70649bb96ec0aa2b3d4d, type: 3}
+      propertyPath: maxStamina
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5028053925224058752, guid: 586f373893ff70649bb96ec0aa2b3d4d, type: 3}
+      propertyPath: baseMaxStamina
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5028053925224058752, guid: 586f373893ff70649bb96ec0aa2b3d4d, type: 3}
+      propertyPath: currentStamina
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 8914208976787272630, guid: 586f373893ff70649bb96ec0aa2b3d4d, type: 3}
       propertyPath: m_LocalPosition.x

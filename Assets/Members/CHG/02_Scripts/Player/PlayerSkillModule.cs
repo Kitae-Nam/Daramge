@@ -50,7 +50,8 @@ namespace Members.CHG._02_Scripts.Player
         {
             Player.PlayerInput.OnAttackKeyPressed += HandleAttackKeyPressed;
             Player.PlayerInput.OnDashKeyPressed += HandleDashKeyPressed;
-            Player.PlayerInput.OnSkillKeyPressed += HandleSkillKeyPressed;
+            Player.PlayerInput.OnFirstSkillKeyPressed += HandleFirstSkillKeyPressed;
+            Player.PlayerInput.OnScendSkillKeyPressed += HandleScendSkillKeyPressed;
 
             _atkSpeed = _statModule.SubscribeStat(attackSpeedStat.AssetIndex, HandleAttackSpeedChange,
                 attackSpeedStat.BaseValue);
@@ -63,13 +64,16 @@ namespace Members.CHG._02_Scripts.Player
             {
                 Player.PlayerInput.OnAttackKeyPressed -= HandleAttackKeyPressed;
                 Player.PlayerInput.OnDashKeyPressed -= HandleDashKeyPressed;
-                Player.PlayerInput.OnSkillKeyPressed += HandleSkillKeyPressed;
+                Player.PlayerInput.OnFirstSkillKeyPressed -= HandleFirstSkillKeyPressed;
+                Player.PlayerInput.OnScendSkillKeyPressed -= HandleScendSkillKeyPressed;
                 
             }
 
             _statModule?.UnSubscribeStat(attackSpeedStat.AssetIndex, HandleAttackSpeedChange);
         }
-        
+
+
+
 
         private void HandleAttackSpeedChange(StatSO stat, float currentValue, float prevValue)
         {
@@ -96,13 +100,22 @@ namespace Members.CHG._02_Scripts.Player
             }
         }
         
-        private void HandleSkillKeyPressed()
+        private void HandleFirstSkillKeyPressed()
         {
             if (CanUseSkill(2))
             {
                 Player.ChangeState(PlayerState.SKILL, 0);
                 UseSkill(2);
             }
+        }
+        
+        private void HandleScendSkillKeyPressed()
+        {
+            if (CanUseSkill(3))
+            {
+                Player.ChangeState(PlayerState.SKILL, 0);
+                UseSkill(3);
+            } 
         }
 
         public bool CanUseSkill(int skillIndex, GameObject target = null)

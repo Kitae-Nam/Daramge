@@ -11,7 +11,10 @@ namespace Members.CHG._02_Scripts.Player
         public event Action<Vector2> OnMovementChange;
         public event Action OnAttackKeyPressed;
         public event Action OnDashKeyPressed;
-        public event Action OnSkillKeyPressed;
+        public event Action OnFirstSkillKeyPressed;
+        public event Action OnFirstSkillKeyReleased;
+        public event Action OnScendSkillKeyPressed;
+        public event Action OnScendSkillKeyReleased;
         
 
         public Vector2 Movement { get; private set; }
@@ -68,10 +71,23 @@ namespace Members.CHG._02_Scripts.Player
             
         }
         
-        public void OnSkill(InputAction.CallbackContext context)
+        public void OnFirstSkill(InputAction.CallbackContext context)
         {
             if(context.performed)
-                OnSkillKeyPressed?.Invoke();
+                OnFirstSkillKeyPressed?.Invoke();
+            
+            if (context.canceled)
+                OnFirstSkillKeyReleased?.Invoke();
+        }
+        
+        public void OnScendSkill(InputAction.CallbackContext context)
+        {
+            if(context.performed)
+                OnScendSkillKeyPressed?.Invoke();
+            
+            if (context.canceled)
+                OnScendSkillKeyReleased?.Invoke();
+            
         }
 
         public void OnPointer(InputAction.CallbackContext context)
