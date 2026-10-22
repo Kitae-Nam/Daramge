@@ -1,15 +1,13 @@
-using Members.CHG._02_Scripts.Agent;
-
-namespace Members.CHG._02_Scripts.FSM
+namespace Members.CHG._02_Scripts.Agent.FSM
 {
     public abstract class AgentState
     {
-        protected Agent.Agent _agent;
+        protected _02_Scripts.Agent.Agent _agent;
         protected readonly int _stateClipHash;
 
         protected IRenderer _renderer;
 
-        public AgentState(Agent.Agent agent, int stateClipHash)
+        public AgentState(_02_Scripts.Agent.Agent agent, int stateClipHash)
         {
             _agent = agent;
             _stateClipHash = stateClipHash;

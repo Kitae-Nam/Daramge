@@ -1,4 +1,4 @@
-using Members.CHG._02_Scripts.FSM;
+using Members.CHG._02_Scripts.Agent.FSM;
 using Members.CHG._02_Scripts.Player.FSM;
 using UnityEngine;
 
