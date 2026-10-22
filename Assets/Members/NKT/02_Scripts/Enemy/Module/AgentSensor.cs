@@ -8,7 +8,7 @@ namespace NKT.Enemy.Module
         [SerializeField] private LayerMask whatIsTarget;
         [SerializeField] private LayerMask whatIsObstacle;
         [SerializeField] private int maxColliderCount = 5;
-        [SerializeField] private int eyeHeight = 1;
+        [SerializeField] private float eyeHeight = 1;
 
         private ModuleOwner _owner;
         private Collider[] _colliderResults;
@@ -32,17 +32,10 @@ namespace NKT.Enemy.Module
 
         public bool IsTargetIsInSight(Transform targetTrm)
         {
-            Vector3 targetPosition = targetTrm.position;
-            targetPosition.y = eyeHeight;
-            Vector3 direction = targetPosition - transform.position;
-            float distance = direction.magnitude;
-            if (Physics.Raycast(transform.position, direction.normalized, out RaycastHit hit, distance, whatIsObstacle))
-            {
-                Debug.Log(hit.collider.gameObject.name);
-                return false;
-            }
-
-            return true;
+            Vector3 origin = transform.position + Vector3.up * eyeHeight;
+            Vector3 target = targetTrm.position + Vector3.up * eyeHeight;
+            Vector3 dir = target - origin;
+            return !Physics.Raycast(origin, dir.normalized, dir.magnitude, whatIsObstacle);
         }
         
         public bool IsTargetInViewRadius(Transform targetTrm, float viewRadius)

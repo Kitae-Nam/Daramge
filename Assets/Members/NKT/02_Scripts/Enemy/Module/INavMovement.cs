@@ -12,5 +12,8 @@ namespace NKT.Enemy.Module
         bool IsArrived { get; } //get만 준다
         
         void SetDestination(Vector3 destination);
+
+        bool TryGetRandomPoint(
+            Vector3 center, float radius, float min, out Vector3 result, int tryCount = 10);
     }
 }

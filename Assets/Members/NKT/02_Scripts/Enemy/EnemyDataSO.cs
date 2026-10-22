@@ -15,6 +15,8 @@ namespace NKT.Enemy
         [field: SerializeField] public float DetectRadius { get; private set; } = 5f;
         [field: SerializeField] public float ViewAngle { get; private set; } = 160f;
         [field: SerializeField] public float StopDistance { get; private set; } = 1f;
+        [field: SerializeField] public float WanderRadius { get; private set; } = 6f;
+        [field: SerializeField] public float MinWanderDistance { get; private set; } = 2f;
 
         public float GetFieldValue(EnemyDataField fieldEnum) => fieldEnum switch
         {
