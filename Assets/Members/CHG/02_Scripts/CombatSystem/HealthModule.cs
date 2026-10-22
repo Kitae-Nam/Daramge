@@ -5,13 +5,13 @@ using UnityEngine;
 
 namespace Members.CHG._02_Scripts.CombatSystem
 {
-    public class HealthModule : MonoBehaviour, IModule
+   public class HealthModule : MonoBehaviour, IModule, IAfterInitModule
     {
         public event Action OnDeath;
         
         [SerializeField] private StatSO vitalStat;
         [SerializeField] private float baseMaxHealth;
-        [SerializeField] private float maxHealth; //나중에 스탯으로 변경한다.
+        [SerializeField] private float maxHealth; 
         [SerializeField] private float currentHealth;
 
         private ModuleOwner _owner;
@@ -27,7 +27,7 @@ namespace Members.CHG._02_Scripts.CombatSystem
             _owner = owner;
             currentHealth = maxHealth;
             _statModule = _owner.GetModule<IStatModule>();
-        }
+        }   
         
         public void AfterInit()
         {
@@ -52,9 +52,8 @@ namespace Members.CHG._02_Scripts.CombatSystem
 
         private void HandleVitalChange(StatSO stat, float currentValue, float prevValue)
         {
-            float k = 0.01f;
             float beforeMaxHealth = maxHealth;
-            maxHealth = baseMaxHealth + 5 * currentValue / (1 + k * currentValue);
+            maxHealth = baseMaxHealth + currentValue;
             float delta = maxHealth - beforeMaxHealth;
             currentHealth = Mathf.Clamp(currentHealth + delta, 1, maxHealth);
             RaiseHealthChanged();

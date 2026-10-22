@@ -1,7 +1,7 @@
 using Members.CHG._02_Scripts.CoreSystem.AnimationSystem;
 using UnityEngine;
 
-namespace Members.CHG._02_Scripts.FSM
+namespace Members.CHG._02_Scripts.Agent.FSM
 {
     [CreateAssetMenu(fileName = "State data", menuName = "Agent/StateData", order = 10)]
     public class StateSO : ScriptableObject
