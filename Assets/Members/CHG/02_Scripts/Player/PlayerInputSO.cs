@@ -10,9 +10,14 @@ namespace Members.CHG._02_Scripts.Player
         
         public event Action<Vector2> OnMovementChange;
         public event Action OnAttackKeyPressed;
+        public event Action OnDashKeyPressed;
+        public event Action OnFirstSkillKeyPressed;
+        public event Action OnFirstSkillKeyReleased;
+        public event Action OnScendSkillKeyPressed;
+        public event Action OnScendSkillKeyReleased;
         
-        public delegate void SkillKeyPress(int keyCode, bool isPressed);
-        public event SkillKeyPress OnSkillKeyPressed;
+
+        public Vector2 Movement { get; private set; }
 
         [SerializeField] private LayerMask whatIsGround;
         private Controls _controls;
@@ -50,7 +55,8 @@ namespace Members.CHG._02_Scripts.Player
         public void OnMove(InputAction.CallbackContext context)
         {
             Vector2 movement = context.ReadValue<Vector2>();
-            
+            Movement = movement;
+
             OnMovementChange?.Invoke(movement);
         }
 
@@ -65,11 +71,34 @@ namespace Members.CHG._02_Scripts.Player
             
         }
         
-
+        public void OnFirstSkill(InputAction.CallbackContext context)
+        {
+            if(context.performed)
+                OnFirstSkillKeyPressed?.Invoke();
+            
+            if (context.canceled)
+                OnFirstSkillKeyReleased?.Invoke();
+        }
+        
+        public void OnScendSkill(InputAction.CallbackContext context)
+        {
+            if(context.performed)
+                OnScendSkillKeyPressed?.Invoke();
+            
+            if (context.canceled)
+                OnScendSkillKeyReleased?.Invoke();
+            
+        }
 
         public void OnPointer(InputAction.CallbackContext context)
         {
             _screenMousePosition = context.ReadValue<Vector2>();
+        }
+
+        public void OnDash(InputAction.CallbackContext context)
+        {
+            if(context.performed)
+                OnDashKeyPressed?.Invoke();
         }
 
         public Vector3 GetWorldMousePosition()

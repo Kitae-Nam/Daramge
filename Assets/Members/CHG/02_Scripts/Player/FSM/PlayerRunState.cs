@@ -11,8 +11,8 @@ namespace Members.CHG._02_Scripts.Player.FSM
         public override void Enter(float transitionDuration, int layerIndex = 0)
         {
             base.Enter(transitionDuration, layerIndex);
-            Debug.Log("Entering run state");
             _player.PlayerInput.OnMovementChange += HandleMovementChange;
+            _controlMovement.SetMovementDirection(_player.PlayerInput.Movement);
         }
 
         public override void Exit()

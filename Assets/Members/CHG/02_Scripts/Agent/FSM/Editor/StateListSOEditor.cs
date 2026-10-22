@@ -6,7 +6,7 @@ using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Members.CHG._02_Scripts.FSM.Editor
+namespace Members.CHG._02_Scripts.Agent.FSM.Editor
 {
     [CustomEditor(typeof(StateListSO))]
     public class StateListSOEditor : UnityEditor.Editor
