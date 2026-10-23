@@ -5,6 +5,6 @@ namespace NKT.Enemy.BT
     [BlackboardEnum]
     public enum EnemyState
     {
-        IDLE, MOVE, COMBAT, HIT, DEATH
+        IDLE, MOVE, NOTICE, COMBAT, HIT, DEATH
     }
 }
