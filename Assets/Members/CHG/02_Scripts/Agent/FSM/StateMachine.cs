@@ -2,14 +2,14 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Members.CHG._02_Scripts.FSM
+namespace Members.CHG._02_Scripts.Agent.FSM
 {
     public class StateMachine
     {
         public AgentState CurrentState { get; private set; }
         private Dictionary<int, AgentState> _stateDict;
 
-        public StateMachine(Agent.Agent agent, StateSO[] stateList)
+        public StateMachine(_02_Scripts.Agent.Agent agent, StateSO[] stateList)
         {
             _stateDict = new Dictionary<int, AgentState>();
             foreach (StateSO stateData in stateList)

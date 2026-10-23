@@ -6,6 +6,7 @@ namespace Members.CHG._02_Scripts.Player
 {
     public class PlayerMovement : MonoBehaviour, IModule, IControlMovement, IAfterInitModule
     {
+        
         [SerializeField] private float moveSpeedStat;
         [SerializeField] private float gravity = -9.8f;
         
@@ -18,6 +19,7 @@ namespace Members.CHG._02_Scripts.Player
         private float _moveSpeed = 8f; //변수 이동.
 
         public bool CanManualMove { get; set; } = true;
+        public bool CanUseGravity { get; set; } = true;
         public Vector3 Velocity => _velocity;
         public bool IsGround => _characterController.isGrounded;
 
@@ -80,11 +82,19 @@ namespace Members.CHG._02_Scripts.Player
 
         private void ApplyGravity()
         {
-            if (IsGround && _verticalVelocity < 0)
+            if (!CanUseGravity)
+            {
+                _verticalVelocity = 0f;
+            }
+            else if (IsGround && _verticalVelocity < 0f)
+            {
                 _verticalVelocity = -0.03f;
+            }
             else
+            {
                 _verticalVelocity += gravity * Time.fixedDeltaTime;
-            
+            }
+
             _velocity.y = _verticalVelocity;
         }
 
@@ -92,8 +102,6 @@ namespace Members.CHG._02_Scripts.Player
         {
             _characterController.Move(_velocity);
         }
-
-
         
     }
 }
