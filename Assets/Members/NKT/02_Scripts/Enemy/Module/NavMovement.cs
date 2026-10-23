@@ -61,13 +61,13 @@ namespace NKT.Enemy.Module
             for (int i = 0; i < tryCount; i++)
             {
                 Vector2 circle = Random.insideUnitCircle * radius;
-                Vector2 candidate = center + new Vector3(circle.x, 0 , circle.y);
+                Vector3 candidate = center + new Vector3(circle.x, 0 , circle.y);
                 
                 if(!NavMesh.SamplePosition(candidate, out NavMeshHit hit, NavAgent.height, NavAgent.areaMask))
                     continue;
                 if ((hit.position - NavAgent.transform.position).sqrMagnitude < min * min)
                     continue;
-                if(!NavAgent.CalculatePath(candidate, _path) || _path.status != NavMeshPathStatus.PathComplete)
+                if(!NavAgent.CalculatePath(hit.position, _path) || _path.status != NavMeshPathStatus.PathComplete)
                     continue;
                 
                 result = hit.position;

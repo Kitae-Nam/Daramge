@@ -40,7 +40,6 @@ namespace NKT.Enemy
 
         public virtual void Start()
         {
-            SetBTVariable(BTVar.Enemy, this);
             if (BTAgent.GetVariable(BTVar.StateChannel, out BlackboardVariable<StateChannel> channel))
                 StateChannel = channel.Value;
             else

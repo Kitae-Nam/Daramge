@@ -1,0 +1,168 @@
+.boss-hud {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    align-items: center;
+    padding-top: 44px;
+    overflow: hidden;
+}
+
+.boss-health-bar {
+    width: 64%;
+    max-width: 960px;
+    flex-direction: row;
+    align-items: center;
+    overflow: hidden;
+}
+
+.boss-portrait-frame {
+    width: 68px;
+    height: 68px;
+    flex-shrink: 0;
+    margin-right: 14px;
+    border-width: 2px;
+    border-color: rgb(195, 160, 104);
+    border-radius: 34px;
+    background-color: rgb(255, 255, 255);
+    overflow: hidden;
+}
+
+.boss-portrait {
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    bottom: 3px;
+    left: 3px;
+    border-radius: 30px;
+    -unity-background-scale-mode: scale-and-crop;
+    overflow: hidden;
+}
+
+.portrait-fallback {
+    flex-grow: 1;
+    margin: 0;
+    color: rgb(225, 201, 155);
+    font-size: 40px;
+    -unity-text-align: middle-center;
+    overflow: hidden;
+    visibility: visible;
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: rgb(107, 107, 107);
+}
+
+.boss-details {
+    flex-grow: 1;
+    min-width: 0;
+    overflow: hidden;
+}
+
+.boss-heading {
+    min-height: 36px;
+    flex-direction: row;
+    align-items: center;
+    overflow: hidden;
+}
+
+.boss-phases {
+    flex-direction: row;
+    flex-wrap: wrap;
+    max-width: 35%;
+    flex-shrink: 0;
+    margin-right: 12px;
+    overflow: hidden;
+}
+
+.phase-dot {
+    width: 11px;
+    height: 11px;
+    margin: 3px;
+    border-radius: 6px;
+    border-width: 2px;
+    border-color: rgb(240, 93, 94);
+    background-color: rgb(200, 45, 54);
+    overflow: hidden;
+}
+
+.phase-dot--current {
+    background-color: rgb(255, 224, 208);
+    border-color: rgb(255, 104, 104);
+    overflow: hidden;
+}
+
+.phase-dot--spent {
+    background-color: rgb(53, 29, 36);
+    border-color: rgb(106, 57, 64);
+    overflow: hidden;
+}
+
+.boss-name {
+    flex-grow: 1;
+    flex-shrink: 1;
+    margin: 0;
+    padding-right: 70px;
+    color: rgb(247, 243, 233);
+    font-size: 40px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    -unity-text-outline-width: 3px;
+    -unity-text-outline-color: rgb(12, 16, 24);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.health-track {
+    height: 45px;
+    margin-top: 3px;
+    border-width: 1px;
+    border-color: rgb(125, 113, 99);
+    background-color: rgb(8, 13, 21);
+    overflow: hidden;
+    border-top-width: 4px;
+    border-right-width: 4px;
+    border-bottom-width: 4px;
+    border-left-width: 4px;
+    border-left-color: rgb(83, 67, 69);
+    border-right-color: rgb(83, 67, 69);
+    border-top-color: rgb(83, 67, 69);
+    border-bottom-color: rgb(83, 67, 69);
+}
+
+.health-fill {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    overflow: hidden;
+}
+
+.health-lag {
+    background-color: rgb(231, 170, 104);
+    overflow: hidden;
+}
+
+.health-current {
+    background-color: rgb(205, 57, 58);
+    border-top-width: 2px;
+    border-top-color: rgb(244, 109, 98);
+    overflow: hidden;
+}
+
+.health-percent {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: 0;
+    padding: 0;
+    color: rgb(255, 246, 235);
+    font-size: 30px;
+    -unity-text-align: middle-center;
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: rgb(0, 0, 0);
+    overflow: hidden;
+}
