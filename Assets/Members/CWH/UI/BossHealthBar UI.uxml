@@ -1,0 +1,26 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/Members/CWH/UI/USS/BossHealthBar.uss?fileID=7433441132597879392&amp;guid=cd467f125a6ee704d92b55243cc37acf&amp;type=3#BossHealthBar"/>
+    <ui:VisualElement name="boss-hud" picking-mode="Ignore" class="boss-hud">
+        <ui:VisualElement name="boss-health-bar" picking-mode="Ignore" class="boss-health-bar">
+            <ui:VisualElement picking-mode="Ignore" class="boss-portrait-frame">
+                <ui:Image name="boss-portrait" class="boss-portrait"/>
+                <ui:Label name="portrait-fallback" text="N" picking-mode="Ignore" class="portrait-fallback"/>
+            </ui:VisualElement>
+            <ui:VisualElement picking-mode="Ignore" class="boss-details">
+                <ui:VisualElement picking-mode="Ignore" class="boss-heading">
+                    <ui:VisualElement name="boss-phases" picking-mode="Ignore" class="boss-phases">
+                        <ui:VisualElement picking-mode="Ignore" class="phase-dot phase-dot--current"/>
+                        <ui:VisualElement picking-mode="Ignore" class="phase-dot"/>
+                        <ui:VisualElement picking-mode="Ignore" class="phase-dot"/>
+                    </ui:VisualElement>
+                    <ui:Label name="boss-name" text="THE KING" picking-mode="Ignore" class="boss-name"/>
+                </ui:VisualElement>
+                <ui:VisualElement name="health-track" picking-mode="Ignore" class="health-track">
+                    <ui:VisualElement name="health-lag" picking-mode="Ignore" class="health-fill health-lag" style="width: 85%;"/>
+                    <ui:VisualElement name="health-current" picking-mode="Ignore" class="health-fill health-current" style="width: 50%;"/>
+                    <ui:Label name="health-percent" text="100/100" picking-mode="Ignore" class="health-percent"/>
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
