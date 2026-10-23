@@ -18,6 +18,7 @@ namespace Members.CHG._02_Scripts.CombatSystem
         public virtual void InitCaster(ModuleOwner owner)
         {
             CasterOwner = owner;
+            StatModule = owner.GetModule<IStatModule>();
         }
 
         public abstract bool CastDamage(Vector3 position, Vector3 direction, SkillDataSO skillData);

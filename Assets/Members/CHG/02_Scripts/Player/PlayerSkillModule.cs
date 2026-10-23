@@ -7,6 +7,7 @@ using Members.CHG._02_Scripts.Agent;
 using Members.CHG._02_Scripts.Agent.StatSystem;
 using Members.CHG._02_Scripts.CombatSystem;
 using Members.CHG._02_Scripts.CoreSystem.AnimationSystem;
+using Members.CHG._02_Scripts.Player.Combat;
 using Members.CHG._02_Scripts.Player.FSM;
 using UnityEngine;
 
@@ -52,6 +53,8 @@ namespace Members.CHG._02_Scripts.Player
             Player.PlayerInput.OnDashKeyPressed += HandleDashKeyPressed;
             Player.PlayerInput.OnFirstSkillKeyPressed += HandleFirstSkillKeyPressed;
             Player.PlayerInput.OnScendSkillKeyPressed += HandleScendSkillKeyPressed;
+            Player.PlayerInput.OnFirstSkillKeyReleased += HandleChargeKeyReleased;
+            Player.PlayerInput.OnScendSkillKeyReleased += HandleChargeKeyReleased;
 
             _atkSpeed = _statModule.SubscribeStat(attackSpeedStat.AssetIndex, HandleAttackSpeedChange,
                 attackSpeedStat.BaseValue);
@@ -66,6 +69,9 @@ namespace Members.CHG._02_Scripts.Player
                 Player.PlayerInput.OnDashKeyPressed -= HandleDashKeyPressed;
                 Player.PlayerInput.OnFirstSkillKeyPressed -= HandleFirstSkillKeyPressed;
                 Player.PlayerInput.OnScendSkillKeyPressed -= HandleScendSkillKeyPressed;
+                Player.PlayerInput.OnFirstSkillKeyReleased -= HandleChargeKeyReleased;
+                Player.PlayerInput.OnScendSkillKeyReleased -= HandleChargeKeyReleased;
+                
                 
             }
 
@@ -116,6 +122,12 @@ namespace Members.CHG._02_Scripts.Player
                 Player.ChangeState(PlayerState.SKILL, 0);
                 UseSkill(3);
             } 
+        }
+        
+        private void HandleChargeKeyReleased()
+        {
+            if (_currentSkill is IChargeSkill chargeSkill && chargeSkill.ChargeLogic.IsCharging)
+                chargeSkill.ReleaseCharge();
         }
 
         public bool CanUseSkill(int skillIndex, GameObject target = null)
