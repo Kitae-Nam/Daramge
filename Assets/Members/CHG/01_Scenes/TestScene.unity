@@ -135,7 +135,6 @@ GameObject:
   - component: {fileID: 147620411}
   - component: {fileID: 147620412}
   - component: {fileID: 147620413}
-  - component: {fileID: 147620414}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -209,28 +208,6 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
---- !u!95 &147620414
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 147620407}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &212965747
 GameObject:
   m_ObjectHideFlags: 0
@@ -653,6 +630,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2601170466289135297, guid: 0f895ab6fa2a7e9419ef17d25c18bf9c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 417886333}
+    - targetCorrespondingSourceObject: {fileID: 2601170466289135297, guid: 0f895ab6fa2a7e9419ef17d25c18bf9c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 417886336}
   m_SourcePrefab: {fileID: 100100000, guid: 0f895ab6fa2a7e9419ef17d25c18bf9c, type: 3}
 --- !u!1 &417886330 stripped
 GameObject:
@@ -682,6 +662,22 @@ CapsuleCollider:
   m_Height: 1.92
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
+--- !u!114 &417886336
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 417886330}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab04cf5ee6da4b5d897705f295a401cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Members.CHG._02_Scripts.CombatSystem.HealthModule
+  vitalStat: {fileID: 11400000, guid: 542d6f0ab91d85e48a37aa80513216c8, type: 2}
+  baseMaxHealth: 0
+  maxHealth: 0
+  currentHealth: 0
 --- !u!1 &429536517
 GameObject:
   m_ObjectHideFlags: 0
@@ -885,9 +881,9 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  minSpeed: 6
-  maxSpeed: 14
-  dashDuration: 0.3
+  minSpeed: 1.03
+  maxSpeed: 6.96
+  dashDuration: 0.6
   damageByCharge:
     serializedVersion: 2
     m_Curve:
@@ -1596,7 +1592,7 @@ MonoBehaviour:
   whatIsEnemy:
     serializedVersion: 2
     m_Bits: 128
-  radius: 0.76
+  radius: 1.94
   maxCount: 10
 --- !u!1 &1572091853
 GameObject:
@@ -3417,15 +3413,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5028053925224058752, guid: 586f373893ff70649bb96ec0aa2b3d4d, type: 3}
       propertyPath: maxStamina
-      value: 10
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5028053925224058752, guid: 586f373893ff70649bb96ec0aa2b3d4d, type: 3}
       propertyPath: baseMaxStamina
-      value: 10
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5028053925224058752, guid: 586f373893ff70649bb96ec0aa2b3d4d, type: 3}
       propertyPath: currentStamina
-      value: 10
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8914208976787272630, guid: 586f373893ff70649bb96ec0aa2b3d4d, type: 3}
       propertyPath: m_LocalPosition.x
