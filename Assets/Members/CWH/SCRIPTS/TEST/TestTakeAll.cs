@@ -17,8 +17,9 @@ namespace Memebers.CWH.SCRIPTS.TEST
                 bossHealth.ReceiveDamage(100f);
             if (Keyboard.current.tKey.wasPressedThisFrame)
                 _bossGroggyController.TryEnterGroggy();
+            // 에디터 전용 ContextMenu 함수를 참조하지 않아 플레이어 빌드에서도 컴파일된다.
             if(Keyboard.current.yKey.wasPressedThisFrame)
-                _roarPattern.RoarPatternEditor();
+                _roarPattern.GetComponent<BossPatternRunner>().TryRun(_roarPattern);
         }
     }
 }

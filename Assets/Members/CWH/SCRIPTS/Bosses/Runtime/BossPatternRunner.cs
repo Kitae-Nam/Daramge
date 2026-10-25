@@ -52,12 +52,7 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
 
         public bool TryRun(BossPattern pattern)
         {
-            if (!isActiveAndEnabled || _isFinishing || !ReferenceEquals(CurrentPattern, null) || _health.IsDead ||
-                _groggy.IsGroggy
-                || pattern == null || !pattern.isActiveAndEnabled || !pattern.CanExecute() ||
-                Time.time < _nextPatternTime)
-                return false;
-            if (_readyTimes.TryGetValue(pattern, out float readyTime) && Time.time < readyTime) return false;
+            if (!IsReadyFor(pattern)) return false;
 
             CurrentPattern = pattern;
             _cancelRequested = false;
@@ -65,6 +60,17 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
             _readyTimes[pattern] = Time.time + pattern.Cooldown;
             _routine = StartCoroutine(Run(pattern));
             return true;
+        }
+
+        /// <summary>AI가 선택 전에 실행 가능 여부만 조회한다. 조회는 쿨타임을 소비하지 않는다.</summary>
+        public bool IsReadyFor(BossPattern pattern)
+        {
+            if (!isActiveAndEnabled || _isFinishing || !ReferenceEquals(CurrentPattern, null) || _health.IsDead ||
+                _groggy.IsGroggy
+                || pattern == null || !pattern.isActiveAndEnabled || !pattern.CanExecute() ||
+                Time.time < _nextPatternTime)
+                return false;
+            return !_readyTimes.TryGetValue(pattern, out float readyTime) || Time.time >= readyTime;
         }
 
         public void CancelCurrentPattern()
