@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using GGMLib.ModuleSystems;
-using Members.CHG._02_Scripts.CombatSystem;
 using UnityEngine;
 
 namespace CHG._02_Scripts.CombatSystem

@@ -1,11 +1,9 @@
-using System;
 using System.Collections;
 using CHG._02_Scripts.CombatSystem;
-using Members.CHG._02_Scripts.CombatSystem;
-using Members.CHG._02_Scripts.CoreSystem.AnimationSystem;
+using CHG._02_Scripts.CoreSystem.AnimationSystem;
 using UnityEngine;
 
-namespace Members.CHG._02_Scripts.Player.Combat
+namespace CHG._02_Scripts.Player.Combat
 {
     public class HeadbuttSkill : AbstractPlayerSkill, IChargeSkill
 {

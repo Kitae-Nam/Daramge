@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Members.CHG._02_Scripts.CoreSystem.DataSystem
+namespace CHG._02_Scripts.CoreSystem.DataSystem
 {
     [CreateAssetMenu(fileName = "AssetName", menuName = "SO/AssetName", order = 10)]
     public class AssetNameSO : ScriptableObject

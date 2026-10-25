@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Members.CHG._02_Scripts.CombatSystem
+namespace CHG._02_Scripts.CombatSystem
 {
     [CreateAssetMenu(fileName = "Skill data", menuName = "Agent/Skill data", order = 25)]
     public class SkillDataSO : ScriptableObject

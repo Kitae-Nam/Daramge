@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Members.CHG.Graphic.DynamicMeshCutter.Scripts.Utility.Editor
+namespace CHG._05.Graphic.Asset.DynamicMeshCutter.Scripts.Utility.Editor
 {
     [CustomEditor(typeof(PlaneBehaviour))]
     public class PlaneBehaviourInspector : UnityEditor.Editor

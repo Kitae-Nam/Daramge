@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace Members.CHG.Graphic.DynamicMeshCutter.Scripts.Core
+namespace CHG._05.Graphic.Asset.DynamicMeshCutter.Scripts.Core
 {
     public static class MeshSeperation
     {

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Members.CHG._02_Scripts.CoreSystem.EventBusSystem
+namespace CHG._02_Scripts.CoreSystem.EventBusSystem
 {
     public static class EventBusRegistry
     {

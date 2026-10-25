@@ -3,7 +3,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
-namespace Members.CHG.Graphic.DynamicMeshCutter.Scripts.Ragdoll.Editor
+namespace CHG._05.Graphic.Asset.DynamicMeshCutter.Scripts.Ragdoll.Editor
 {
     [CustomEditor(typeof(DynamicRagdoll))]
     public class DynamicRagdollInspector : UnityEditor.Editor

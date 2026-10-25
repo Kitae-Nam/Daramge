@@ -1,8 +1,8 @@
+using CHG._02_Scripts.Agent.StatSystem;
 using GGMLib.ModuleSystems;
-using Members.CHG._02_Scripts.Agent.StatSystem;
 using UnityEngine;
 
-namespace Members.CHG._02_Scripts.CombatSystem
+namespace CHG._02_Scripts.CombatSystem
 {
     public abstract class AbstractDamageCaster : MonoBehaviour
     {

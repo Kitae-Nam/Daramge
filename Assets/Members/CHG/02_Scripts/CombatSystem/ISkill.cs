@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Members.CHG._02_Scripts.CombatSystem
+namespace CHG._02_Scripts.CombatSystem
 {
     public interface ISkill
     {

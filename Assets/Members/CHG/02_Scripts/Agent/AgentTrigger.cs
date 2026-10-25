@@ -2,7 +2,7 @@ using System;
 using GGMLib.ModuleSystems;
 using UnityEngine;
 
-namespace Members.CHG._02_Scripts.Agent
+namespace CHG._02_Scripts.Agent
 {
     public class AgentTrigger : MonoBehaviour, IModule
     {

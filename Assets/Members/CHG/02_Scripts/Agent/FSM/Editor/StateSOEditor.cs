@@ -4,7 +4,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Members.CHG._02_Scripts.Agent.FSM.Editor
+namespace CHG._02_Scripts.Agent.FSM.Editor
 {
     [CustomEditor(typeof(StateSO))]
     public class StateSOEditor : UnityEditor.Editor

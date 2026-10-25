@@ -1,9 +1,9 @@
 using System;
-using Members.CHG._02_Scripts.Agent;
-using Members.CHG._02_Scripts.CombatSystem;
+using CHG._02_Scripts.Agent;
+using CHG._02_Scripts.CombatSystem;
 using UnityEngine;
 
-namespace Members.CHG._02_Scripts.Player.Combat
+namespace CHG._02_Scripts.Player.Combat
 {
     public abstract class AbstractPlayerSkill : MonoBehaviour, ISkill
     {

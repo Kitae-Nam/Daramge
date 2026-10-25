@@ -32,8 +32,8 @@
 ## 코딩 규칙
 
 ### 네임스페이스
-- `Members.CHG._02_Scripts.<폴더 경로>` 형식으로, 폴더 구조와 일치시킨다.
-  - 예: `02_Scripts/Player/Combat/` → `Members.CHG._02_Scripts.Player.Combat`
+- `CHG._02_Scripts.<폴더 경로>` 형식으로, 폴더 구조와 일치시킨다. (`Members.` 접두사는 붙이지 않는다.)
+  - 예: `02_Scripts/Player/Combat/` → `CHG._02_Scripts.Player.Combat`
 
 ### 필드 / 프로퍼티
 - 기본은 `private`.

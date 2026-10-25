@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Members.CHG.Graphic.DynamicMeshCutter.Scripts.Utility
+namespace CHG._05.Graphic.Asset.DynamicMeshCutter.Scripts.Utility
 {
     public static class MeshTargetShephard
     {

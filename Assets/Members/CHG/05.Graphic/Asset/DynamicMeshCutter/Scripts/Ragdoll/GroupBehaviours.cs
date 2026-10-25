@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Members.CHG.Graphic.DynamicMeshCutter.Scripts.Ragdoll
+namespace CHG._05.Graphic.Asset.DynamicMeshCutter.Scripts.Ragdoll
 {
     public enum Behaviour
     {

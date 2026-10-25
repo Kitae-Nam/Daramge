@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Members.CHG._02_Scripts.Agent;
+using CHG._02_Scripts.Agent;
 using NKT.Enemy.BT;
 using NKT.Enemy.BT.Events;
 using NKT.Enemy.Module;

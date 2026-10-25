@@ -1,8 +1,7 @@
 using GGMLib.ModuleSystems;
-using Members.CHG._02_Scripts.CoreSystem.DataSystem;
 using UnityEngine;
 
-namespace Members.CHG._02_Scripts.Player
+namespace CHG._02_Scripts.Player
 {
     public class PlayerMovement : MonoBehaviour, IModule, IControlMovement, IAfterInitModule
     {

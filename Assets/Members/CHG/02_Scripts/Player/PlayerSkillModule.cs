@@ -1,17 +1,17 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using CHG._02_Scripts.Agent;
+using CHG._02_Scripts.Agent.StatSystem;
+using CHG._02_Scripts.CombatSystem;
+using CHG._02_Scripts.CoreSystem.AnimationSystem;
+using CHG._02_Scripts.Player.Combat;
+using CHG._02_Scripts.Player.FSM;
 using GGMLib.EventSystem;
 using GGMLib.ModuleSystems;
-using Members.CHG._02_Scripts.Agent;
-using Members.CHG._02_Scripts.Agent.StatSystem;
-using Members.CHG._02_Scripts.CombatSystem;
-using Members.CHG._02_Scripts.CoreSystem.AnimationSystem;
-using Members.CHG._02_Scripts.Player.Combat;
-using Members.CHG._02_Scripts.Player.FSM;
 using UnityEngine;
 
-namespace Members.CHG._02_Scripts.Player
+namespace CHG._02_Scripts.Player
 {
     public class PlayerSkillModule : MonoBehaviour, IModule, ISkillModule, IAfterInitModule
     {

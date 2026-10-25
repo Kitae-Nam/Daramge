@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
-using Members.CHG.Graphic.DynamicMeshCutter.Scripts.Ragdoll;
+using CHG._05.Graphic.Asset.DynamicMeshCutter.Scripts.Ragdoll;
 using UnityEditor;
 using UnityEngine;
-using Behaviour = Members.CHG.Graphic.DynamicMeshCutter.Scripts.Ragdoll.Behaviour;
+using Behaviour = CHG._05.Graphic.Asset.DynamicMeshCutter.Scripts.Ragdoll.Behaviour;
 
-namespace Members.CHG.Graphic.DynamicMeshCutter.Scripts.Utility.Editor
+namespace CHG._05.Graphic.Asset.DynamicMeshCutter.Scripts.Utility.Editor
 {
     [CustomEditor(typeof(MeshTarget))]
     public class MeshTargetInspector : UnityEditor.Editor

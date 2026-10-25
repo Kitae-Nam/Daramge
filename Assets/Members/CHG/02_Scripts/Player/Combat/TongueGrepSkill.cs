@@ -1,8 +1,8 @@
 using System.Collections;
-using Members.CHG._02_Scripts.CoreSystem.AnimationSystem;
+using CHG._02_Scripts.CoreSystem.AnimationSystem;
 using UnityEngine;
 
-namespace Members.CHG._02_Scripts.Player.Combat
+namespace CHG._02_Scripts.Player.Combat
 {
     public class TongueGrepSkill : AbstractPlayerSkill
     {

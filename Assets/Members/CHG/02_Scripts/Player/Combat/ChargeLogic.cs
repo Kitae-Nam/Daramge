@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Members.CHG._02_Scripts.Player.Combat
+namespace CHG._02_Scripts.Player.Combat
 {
     [Serializable]
     public class ChargeLogic

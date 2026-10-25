@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Members.CHG.Graphic.DynamicMeshCutter.Scripts.Core
+namespace CHG._05.Graphic.Asset.DynamicMeshCutter.Scripts.Core
 {
     public class VirtualPlane
     {

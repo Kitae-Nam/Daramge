@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-namespace Members.CHG.Graphic.DynamicMeshCutter.Scripts.Ragdoll
+namespace CHG._05.Graphic.Asset.DynamicMeshCutter.Scripts.Ragdoll
 {
     //}
     public class DynamicRagdoll : MonoBehaviour , ISerializationCallbackReceiver
