@@ -14,6 +14,15 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
         private void Awake()
         {
             propertyBlock = new MaterialPropertyBlock();
+            if (_targetRenderer == null) _targetRenderer = GetComponent<Renderer>();
+            SetOpacity(0f);
+        }
+
+        /// <summary>소환체처럼 런타임에 생성한 표시도 같은 셰이더 제어 코드를 사용한다.</summary>
+        public void ConfigureRenderer(Renderer targetRenderer)
+        {
+            _targetRenderer = targetRenderer;
+            if (propertyBlock == null) propertyBlock = new MaterialPropertyBlock();
             SetOpacity(0f);
         }
 

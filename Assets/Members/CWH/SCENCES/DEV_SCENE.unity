@@ -3165,6 +3165,7 @@ GameObject:
   - component: {fileID: 482340663}
   - component: {fileID: 482340664}
   - component: {fileID: 482340665}
+  - component: {fileID: 482340666}
   m_Layer: 0
   m_Name: Test_Block
   m_TagString: Untagged
@@ -3362,6 +3363,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3da30dbe11ff436b96156d2eab0a41a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.KnockbackReceiver
+--- !u!114 &482340666
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 482340657}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67f186c517c449d5b3303677cf3f9c56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Memebers.CWH.SCRIPTS.TEST.TestDamageReceiver
+  _maxHealth: 500
+  _currentHealth: 500
 --- !u!1 &509024429
 GameObject:
   m_ObjectHideFlags: 0
@@ -4918,6 +4933,12 @@ GameObject:
   - component: {fileID: 1309669847}
   - component: {fileID: 1309669848}
   - component: {fileID: 1309669849}
+  - component: {fileID: 1309669850}
+  - component: {fileID: 1309669851}
+  - component: {fileID: 1309669852}
+  - component: {fileID: 1309669854}
+  - component: {fileID: 1309669853}
+  - component: {fileID: 1309669855}
   m_Layer: 0
   m_Name: The_King(Boss)
   m_TagString: Untagged
@@ -5131,7 +5152,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Patterns.RoarPattern
   _warningDuration: 1
   _recoveryDuration: 1
-  _cooldown: 5
+  _cooldown: 0.5
   _warningStarted:
     m_PersistentCalls:
       m_Calls: []
@@ -5139,9 +5160,114 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   _telegraph: {fileID: 617972995}
+  _areaTelegraph: {fileID: 0}
   _roarRadius: 7.7
   _knockbackSpeed: 80
   _knockbackDuration: 0.5
+--- !u!114 &1309669850
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1309669836}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e00633c3fcc4450ba10212a2cf3d803, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.BossDashMotor
+  _obstacleLayers:
+    serializedVersion: 2
+    m_Bits: 499
+  _wallPadding: 0.1
+--- !u!114 &1309669851
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1309669836}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3fa766548a974f8fbd3f7648454060f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.DashHitbox
+  _hitLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+--- !u!114 &1309669852
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1309669836}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71b9622c8762412693e25c4f2b9c27f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Patterns.DashPattern
+  _warningDuration: 1.2
+  _recoveryDuration: 0.8
+  _cooldown: 5
+  _warningStarted:
+    m_PersistentCalls:
+      m_Calls: []
+  _warningEnded:
+    m_PersistentCalls:
+      m_Calls: []
+  _telegraph: {fileID: 1842757486}
+  _dashDistance: 18
+  _dashSpeed: 30
+  _dashWidth: 4
+  _damage: 25
+  _knockbackSpeed: 12
+  _knockbackDuration: 0.35
+  _warningOpacity: 0.7
+--- !u!114 &1309669853
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1309669836}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6e9bd2cf86245a2b3b2f4fc3e9f99df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.PhaseOneBrain
+  _patterns:
+  - {fileID: 1309669849}
+  - {fileID: 1309669852}
+  _openingDelay: 3
+  _decisionInterval: 0.35
+--- !u!114 &1309669854
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1309669836}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef9871d6d1e3450bb4244031b3e593be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.BossPhaseController
+  _phaseTwoThreshold: 0.6
+--- !u!114 &1309669855
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1309669836}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbeb8aaa6e8148bf95c3f960d84a0c99, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.BossSwordController
+  _swordPrefab: {fileID: 0}
+  _breakBonusDamage: 100
 --- !u!1001 &1346066074
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7828,6 +7954,8 @@ GameObject:
   - component: {fileID: 1842757481}
   - component: {fileID: 1842757484}
   - component: {fileID: 1842757483}
+  - component: {fileID: 1842757485}
+  - component: {fileID: 1842757486}
   m_Layer: 0
   m_Name: DashTelegraphEffect
   m_TagString: Untagged
@@ -7907,6 +8035,32 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1842757480}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1842757485
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1842757480}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97283c54a67e4b86b07c67e3210caf40, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.BossTelegraphPresenter
+  _targetRenderer: {fileID: 1842757483}
+--- !u!114 &1842757486
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1842757480}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb5f84f590a34eaf86b7ed9e66560c07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.DashTelegraphPresenter
+  _heightOffset: 0.03
 --- !u!1 &2073999377
 GameObject:
   m_ObjectHideFlags: 0

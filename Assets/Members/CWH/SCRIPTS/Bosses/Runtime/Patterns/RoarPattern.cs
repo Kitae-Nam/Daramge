@@ -11,6 +11,7 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Patterns
     public class RoarPattern : BossPattern
     {
         [SerializeField] private BossTelegraphPresenter _telegraph;
+        [SerializeField] private AreaTelegraphPresenter _areaTelegraph;
         [SerializeField, Min(0f)] private float _roarRadius = 5f;
         [SerializeField, Min(0f)] private float _knockbackSpeed = 10f;
         [SerializeField, Min(0f)] private float _knockbackDuration = 0.4f;
@@ -29,7 +30,8 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Patterns
 
         public override void BeginWarning()
         {
-            if (_telegraph != null)
+            if (_areaTelegraph != null) _areaTelegraph.Show(transform.position, Vector3.forward, _roarRadius);
+            else if (_telegraph != null)
             {
                 _telegraph.SetProgress(0f);
                 _telegraph.SetOpacity(0.7f);
@@ -40,6 +42,7 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Patterns
 
         public override void EndWarning()
         {
+            if (_areaTelegraph != null) _areaTelegraph.Hide();
             if (_telegraph != null)
             {
                 _telegraph.SetOpacity(0f);
@@ -50,8 +53,8 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Patterns
 
         public override IEnumerator Execute()
         {
-            if (IsTargetInRange() &&
-                _target.Target.TryGetComponent<IKnockbackReceiver>(out var receiver))
+            IKnockbackReceiver receiver = _target.HasTarget ? _target.Target.GetComponentInParent<IKnockbackReceiver>() : null;
+            if (IsTargetInRange() && receiver != null)
             {
                 Vector3 direction = _target.Target.position - transform.position;
                 direction.y = 0f;
@@ -59,22 +62,28 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Patterns
                 receiver.ReceiveKnockBack(direction, _knockbackSpeed, _knockbackDuration);
             }
 
-            if (IsTargetInRange())
-                Debug.Log("범위 안에 있음");
-            else
-                Debug.Log("범위 밖에 있음");
-
+            GetComponent<BossCombatPresentation>()?.PlayImpact();
+            // 1페이즈 포효는 피해 없이 밀치고, 명중 여부와 관계없이 빈틈을 제공한다.
             _groggy.TryEnterGroggy();
             yield break;
         }
 
         public override void UpdateWarningProgress(float progress)
         {
+            if (_areaTelegraph != null) _areaTelegraph.SetProgress(progress);
             if (_telegraph != null)
             {
                 _telegraph.SetProgress(progress);
             }
         }
+
+        public override void Cleanup()
+        {
+            if (_areaTelegraph != null) _areaTelegraph.Hide();
+            if (_telegraph != null) _telegraph.SetOpacity(0f);
+        }
+
+        private void OnDisable() { if (runner != null && runner.CurrentPattern == this) runner.CancelCurrentPattern(); }
 
         private bool IsTargetInRange()
         {
@@ -92,8 +101,7 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Patterns
         [ContextMenu("테스트 / 로어 패턴 요청")]
         public void RoarPatternEditor()
         {
-            Debug.Log("크아앙");
-            runner.TryRun(this);
+            if (Application.isPlaying) runner.TryRun(this);
         }
 
         // 실제 판정과 같은 중심·반지름으로 수평 원을 표시한다.
