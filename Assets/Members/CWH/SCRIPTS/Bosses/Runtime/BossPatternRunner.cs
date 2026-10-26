@@ -5,7 +5,6 @@ using UnityEngine;
 
 namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
 {
-
     /// <summary>
     /// 패턴 선택과 분리된 단일 실행기. 경고와 휴식 시간을 공통으로 보장하고 중복 실행을 차단한다.
     /// 각 보스의 AI는 TryRun만 호출하므로 선택 규칙을 바꿔도 실행 흐름을 수정할 필요가 없다.
@@ -53,10 +52,7 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
 
         public bool TryRun(BossPattern pattern)
         {
-            if (!isActiveAndEnabled || _isFinishing || !ReferenceEquals(CurrentPattern, null) || _health.IsDead || _groggy.IsGroggy
-                || pattern == null || !pattern.isActiveAndEnabled || !pattern.CanExecute() || Time.time < _nextPatternTime)
-                return false;
-            if (_readyTimes.TryGetValue(pattern, out float readyTime) && Time.time < readyTime) return false;
+            if (!IsReadyFor(pattern)) return false;
 
             CurrentPattern = pattern;
             _cancelRequested = false;
@@ -64,6 +60,17 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
             _readyTimes[pattern] = Time.time + pattern.Cooldown;
             _routine = StartCoroutine(Run(pattern));
             return true;
+        }
+
+        /// <summary>AI가 선택 전에 실행 가능 여부만 조회한다. 조회는 쿨타임을 소비하지 않는다.</summary>
+        public bool IsReadyFor(BossPattern pattern)
+        {
+            if (!isActiveAndEnabled || _isFinishing || !ReferenceEquals(CurrentPattern, null) || _health.IsDead ||
+                _groggy.IsGroggy
+                || pattern == null || !pattern.isActiveAndEnabled || !pattern.CanExecute() ||
+                Time.time < _nextPatternTime)
+                return false;
+            return !_readyTimes.TryGetValue(pattern, out float readyTime) || Time.time >= readyTime;
         }
 
         public void CancelCurrentPattern()
@@ -75,6 +82,7 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
                 _cancelRequested = true;
                 return;
             }
+
             BossPattern pattern = CurrentPattern;
             Coroutine routine = _routine;
             _routine = null;
@@ -94,7 +102,36 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
                 if (CurrentPattern != pattern) yield break;
                 pattern.BeginWarning();
                 if (CurrentPattern != pattern) yield break;
-                yield return new WaitForSeconds(pattern.WarningDuration);
+                float elapsed = 0f;
+                float duration = pattern.WarningDuration;
+
+                while (elapsed < duration)
+                {
+                    // 경고 중 패턴이 사라지거나 취소되면 진행을 종료한다.
+                    if (pattern == null ||
+                        CurrentPattern != pattern ||
+                        !pattern.isActiveAndEnabled)
+                    {
+                        yield break;
+                    }
+
+                    pattern.UpdateWarningProgress(
+                        Mathf.Clamp01(elapsed / duration));
+
+                    // 진행도 전달 과정에서 취소됐을 가능성도 확인한다.
+                    if (CurrentPattern != pattern) yield break;
+
+                    yield return null;
+                    elapsed += Time.deltaTime;
+                }
+
+                if (pattern == null || CurrentPattern != pattern)
+                    yield break;
+
+                // 프레임 간격 때문에 마지막 값이 1에 못 미치는 것을 보완한다.
+                pattern.UpdateWarningProgress(1f);
+
+                if (CurrentPattern != pattern) yield break;
                 if (pattern == null || !pattern.isActiveAndEnabled || !pattern.CanExecute()) yield break;
 
                 HideWarning(pattern);
@@ -111,8 +148,15 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
                     IEnumerator iterator = _executionStack.Peek();
                     bool moved;
                     _isAdvancing = true;
-                    try { moved = iterator.MoveNext(); }
-                    finally { _isAdvancing = false; }
+                    try
+                    {
+                        moved = iterator.MoveNext();
+                    }
+                    finally
+                    {
+                        _isAdvancing = false;
+                    }
+
                     if (_cancelRequested || CurrentPattern != pattern) yield break;
                     if (!moved)
                     {
@@ -137,7 +181,8 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
         {
             // 파괴된 Unity 객체도 iterator는 정리해야 하므로 실제 C# null과 구분한다.
             // 이전 코루틴의 finally가 이벤트에서 시작한 새 패턴을 정리하지 않게 소유권도 확인한다.
-            if (_isFinishing || ReferenceEquals(CurrentPattern, null) || !ReferenceEquals(CurrentPattern, expectedPattern)) return;
+            if (_isFinishing || ReferenceEquals(CurrentPattern, null) ||
+                !ReferenceEquals(CurrentPattern, expectedPattern)) return;
             _isFinishing = true;
             BossPattern pattern = CurrentPattern;
             CurrentPattern = null;
@@ -149,11 +194,24 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
                 while (_executionStack.Count > 0)
                 {
                     IDisposable iterator = _executionStack.Pop() as IDisposable;
-                    try { iterator?.Dispose(); }
-                    catch (Exception exception) { Debug.LogException(exception, this); }
+                    try
+                    {
+                        iterator?.Dispose();
+                    }
+                    catch (Exception exception)
+                    {
+                        Debug.LogException(exception, this);
+                    }
                 }
-                try { HideWarning(pattern); }
-                finally { if (pattern != null) pattern.Cleanup(); }
+
+                try
+                {
+                    HideWarning(pattern);
+                }
+                finally
+                {
+                    if (pattern != null) pattern.Cleanup();
+                }
             }
             finally
             {
@@ -172,8 +230,18 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
         private BossActionState RestState() => _health.IsDead ? BossActionState.Dead
             : _groggy.IsGroggy ? BossActionState.Groggy : BossActionState.Idle;
 
-        private void OnDied() { CancelCurrentPattern(); SetState(BossActionState.Dead); }
-        private void OnGroggyEntered() { CancelCurrentPattern(); SetState(RestState()); }
+        private void OnDied()
+        {
+            CancelCurrentPattern();
+            SetState(BossActionState.Dead);
+        }
+
+        private void OnGroggyEntered()
+        {
+            CancelCurrentPattern();
+            SetState(RestState());
+        }
+
         private void OnGroggyExited() => SetState(RestState());
 
         private void SetState(BossActionState state)

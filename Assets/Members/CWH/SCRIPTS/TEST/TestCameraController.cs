@@ -1,20 +1,23 @@
+using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace Memebers.CWH.SCRIPTS.TEST
 {
-    [RequireComponent(typeof(Rigidbody))]
+    [RequireComponent(typeof(Rigidbody), typeof(KnockbackReceiver))]
     public class TestCameraController : MonoBehaviour
     {
         [SerializeField] private float moveSpeed = 5f;
         [SerializeField] private Transform cameraTransform;
 
         private Rigidbody _rigidbody;
+        private KnockbackReceiver _knockbackReceiver;
         private Vector2 _movementInput;
 
         private void Awake()
         {
             _rigidbody = GetComponent<Rigidbody>();
+            _knockbackReceiver = GetComponent<KnockbackReceiver>();
         }
 
         private void Update()
@@ -31,23 +34,28 @@ namespace Memebers.CWH.SCRIPTS.TEST
 
         private void FixedUpdate()
         {
-            Vector3 cameraForward = cameraTransform.forward;
-            Vector3 cameraRight = cameraTransform.right;
+            Vector3 horizontalVelocity;
+            if (_knockbackReceiver.IsKnockedBack)
+                horizontalVelocity = _knockbackReceiver.KnockBackVelocity;
+            else
+            {
+                Vector3 cameraForward = cameraTransform.forward;
+                Vector3 cameraRight = cameraTransform.right;
 
-            cameraForward.y = 0;
-            cameraRight.y = 0;
+                cameraForward.y = 0;
+                cameraRight.y = 0;
 
-            cameraForward.Normalize();
-            cameraRight.Normalize();
-
-            Vector3 moveDirection =
-                (cameraForward * _movementInput.y +
-                 cameraRight * _movementInput.x).normalized;
+                cameraForward.Normalize();
+                cameraRight.Normalize();
+                Vector3 moveDirection =
+                    (cameraForward * _movementInput.y +
+                     cameraRight * _movementInput.x).normalized;
+                horizontalVelocity = moveDirection * moveSpeed;
+            }
 
             Vector3 velocity = _rigidbody.linearVelocity;
-            velocity.x = moveDirection.x * moveSpeed;
-            velocity.z = moveDirection.z * moveSpeed;
-
+            velocity.x = horizontalVelocity.x;
+            velocity.z = horizontalVelocity.z;
             _rigidbody.linearVelocity = velocity;
         }
     }
