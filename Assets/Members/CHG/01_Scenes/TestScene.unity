@@ -629,6 +629,189 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 417886336}
   m_SourcePrefab: {fileID: 100100000, guid: 0f895ab6fa2a7e9419ef17d25c18bf9c, type: 3}
+--- !u!1 &397012921
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 397012922}
+  - component: {fileID: 397012923}
+  m_Layer: 0
+  m_Name: MeleeAttack Skill
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &397012922
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 397012921}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1466767994}
+  m_Father: {fileID: 2043320281}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &397012923
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 397012921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e293d1ee58bc4de4afa6b0b69e647954, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CHG._02_Scripts.Player.Combat.PlayerMeleeCombo
+  <SkillData>k__BackingField: {fileID: 11400000, guid: 3481a2950db0b12468ab968c794e0d30, type: 2}
+  slashVfxItem: {fileID: 0}
+  impactVfxItem: {fileID: 0}
+  comboClips:
+  - {fileID: 11400000, guid: df7b7923db1e77e42828087d5f92cfd0, type: 2}
+  - {fileID: 11400000, guid: beae1f5608e290f4d8bcd480457998fc, type: 2}
+  - {fileID: 11400000, guid: f341ceffac3f75f47bb2771277fd095d, type: 2}
+  comboCurves:
+  - serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: -0.0012702942
+      value: 0.2535553
+      inSlope: 2.3915405
+      outSlope: 2.3915405
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.32270357
+      value: 1.0283519
+      inSlope: 0.41281652
+      outSlope: 0.41281652
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.8698503
+      value: 0.17157085
+      inSlope: -1.1288232
+      outSlope: -1.1288232
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.30456555
+      outWeight: 0.23721401
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -1.3182576
+      outSlope: -1.3182576
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  - serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0.08785742
+      outSlope: 0.08785742
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.32270357
+      value: 1.0283519
+      inSlope: -0.73902506
+      outSlope: -0.73902506
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.8698503
+      value: 0.17157085
+      inSlope: -1.1288232
+      outSlope: -1.1288232
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.30456555
+      outWeight: 0.23721401
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -1.3182576
+      outSlope: -1.3182576
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  - serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0.08785742
+      outSlope: 0.08785742
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.32270357
+      value: 1.0283519
+      inSlope: -0.73902506
+      outSlope: -0.73902506
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.8698503
+      value: 0.17157085
+      inSlope: -1.1288232
+      outSlope: -1.1288232
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.30456555
+      outWeight: 0.23721401
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -1.3182576
+      outSlope: -1.3182576
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  comboDurations:
+  - 0.3
+  - 0.3
+  - 0.3
+  comboEffects: []
+  comboWindow: 0.4
+  _attackSpeed: 1
 --- !u!1 &410079327
 GameObject:
   m_ObjectHideFlags: 0
@@ -1690,6 +1873,59 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 45, z: 0}
+--- !u!1 &1466767993
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1466767994}
+  - component: {fileID: 1466767995}
+  m_Layer: 0
+  m_Name: RayDamageCaster
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1466767994
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1466767993}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 397012922}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1466767995
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1466767993}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e97354a993354bc3ac4def8fb54232e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CHG._02_Scripts.CombatSystem.RayDamageCaster
+  whatIsEnemy:
+    serializedVersion: 2
+    m_Bits: 128
+  castType: 1
+  boxSize: {x: 1, y: 1, z: 1}
+  castRadius: 1.102
+  casterInterpolation: 0.177
+  castingRange: 2.04
+  isDebug: 1
 --- !u!1 &1560157912
 GameObject:
   m_ObjectHideFlags: 0
@@ -4268,6 +4504,9 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 1400835742321235312, guid: 5ac3e1e223b21634b9fcae9b7fca2f92, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 397012922}
     - targetCorrespondingSourceObject: {fileID: 1400835742321235312, guid: 5ac3e1e223b21634b9fcae9b7fca2f92, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4100727534853977680}

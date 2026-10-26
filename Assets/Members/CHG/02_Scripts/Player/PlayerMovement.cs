@@ -1,3 +1,4 @@
+using CHG._02_Scripts.Agent.StatSystem;
 using GGMLib.ModuleSystems;
 using UnityEngine;
 
@@ -5,8 +6,7 @@ namespace CHG._02_Scripts.Player
 {
     public class PlayerMovement : MonoBehaviour, IModule, IControlMovement, IAfterInitModule
     {
-        
-        [SerializeField] private float moveSpeedStat;
+        [SerializeField] private StatSO moveSpeedStat;
         [SerializeField] private float gravity = -9.8f;
         
         private Vector3 _velocity;
@@ -14,8 +14,9 @@ namespace CHG._02_Scripts.Player
         private Vector3 _movementDirection;
         private CharacterController _characterController;
         private ModuleOwner _owner;
+        private IStatModule _statModule;
         private Vector3 _autoVelocity;
-        private float _moveSpeed = 8f; //변수 이동.
+        private float _moveSpeed = 8f;
 
         public bool CanManualMove { get; set; } = true;
         public bool CanUseGravity { get; set; } = true;
@@ -26,16 +27,24 @@ namespace CHG._02_Scripts.Player
         {
             _owner = owner;
             _characterController = owner.GetComponent<CharacterController>();
+            _statModule = owner.GetModule<IStatModule>();
+            Debug.Assert(_statModule != null, $"StatModule is null : {gameObject.name}");
+            Debug.Assert(moveSpeedStat != null, $"MoveSpeedStat is null : {gameObject.name}");
         }
         
         public void AfterInit()
         {
+            _moveSpeed = _statModule.SubscribeStat(moveSpeedStat.AssetIndex, HandleMoveSpeedChange, _moveSpeed);
         }
 
         private void OnDestroy()
         {
+            if (moveSpeedStat != null)
+                _statModule?.UnSubscribeStat(moveSpeedStat.AssetIndex, HandleMoveSpeedChange);
         }
 
+        private void HandleMoveSpeedChange(StatSO stat, float currentValue, float prevValue)
+            => _moveSpeed = currentValue;
 
         public void SetMovementVelocity(Vector3 velocity)
         {
@@ -101,6 +110,5 @@ namespace CHG._02_Scripts.Player
         {
             _characterController.Move(_velocity);
         }
-        
     }
 }

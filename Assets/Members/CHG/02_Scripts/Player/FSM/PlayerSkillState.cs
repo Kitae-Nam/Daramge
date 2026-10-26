@@ -16,6 +16,8 @@ namespace CHG._02_Scripts.Player.FSM
         public override void Enter(float transitionDuration, int layerIndex = 0)
         {
             _skillModule.OnCurrentSkillEnd += HandleSkillEnd;
+            _player.PlayerInput.OnMovementChange += HandleMovementChange;
+            _controlMovement.SetMovementDirection(_player.PlayerInput.Movement);
             _isSkillEnd = false;
         }
 
@@ -33,8 +35,12 @@ namespace CHG._02_Scripts.Player.FSM
         public override void Exit()
         {
             _skillModule.OnCurrentSkillEnd -= HandleSkillEnd;
+            _player.PlayerInput.OnMovementChange -= HandleMovementChange;
             base.Exit();
         }
+
+        private void HandleMovementChange(Vector2 movementInput)
+            => _controlMovement.SetMovementDirection(movementInput);
 
         private void HandleSkillEnd() => _isSkillEnd = true;
 

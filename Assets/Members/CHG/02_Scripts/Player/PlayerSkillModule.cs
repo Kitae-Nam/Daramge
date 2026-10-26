@@ -90,38 +90,23 @@ namespace CHG._02_Scripts.Player
 
         private void HandleAttackKeyPressed()
         {
-            if (CanUseSkill(0))
-            {
-                Player.ChangeState(PlayerState.SKILL, 0); 
-                UseSkill(0);
-            }
+            HandleInput(0);
         }
+
         
         private void HandleDashKeyPressed()
         {
-            if (CanUseSkill(1))
-            {
-                Player.ChangeState(PlayerState.SKILL, 0);
-                UseSkill(1);
-            }
+            HandleInput(1);
         }
         
         private void HandleFirstSkillKeyPressed()
         {
-            if (CanUseSkill(2))
-            {
-                Player.ChangeState(PlayerState.SKILL, 0);
-                UseSkill(2);
-            }
+            HandleInput(2);
         }
         
         private void HandleScendSkillKeyPressed()
         {
-            if (CanUseSkill(3))
-            {
-                Player.ChangeState(PlayerState.SKILL, 0);
-                UseSkill(3);
-            } 
+            HandleInput(3);
         }
         
         private void HandleChargeKeyReleased()
@@ -129,12 +114,23 @@ namespace CHG._02_Scripts.Player
             if (_currentSkill is IChargeSkill chargeSkill && chargeSkill.ChargeLogic.IsCharging)
                 chargeSkill.ReleaseCharge();
         }
+        
+        private void HandleInput(int skillIndex)
+        {
+            if (CanUseSkill(skillIndex))
+            {
+                Player.ChangeState(PlayerState.SKILL, 0); 
+                UseSkill(skillIndex);
+            }
+        }
+
 
         public bool CanUseSkill(int skillIndex, GameObject target = null)
         {
+            
             if (_currentSkill is { IsUsing: true })
                 return false; 
-
+            Debug.Log($"Current Skill: {_currentSkill is {IsUsing: true}}, is null? : {_currentSkill == null}");
             if (_skillDict.TryGetValue(skillIndex, out ISkill skill))
             {
                 return skill.CanUseSkill(target);
