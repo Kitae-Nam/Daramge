@@ -20,7 +20,6 @@ namespace NKT.Enemy
         public AgentTrigger AgentTrigger { get; private set; }
         public BehaviorGraphAgent BTAgent { get; private set; }
         public StateChannel  StateChannel { get; private set; }
-        public SkillEventRelay SkillEventRelay { get; private set; }
         public EnemySkillModule SkillModule { get; private set; }
         public Vector3 HomePoint => _homePoint;
 
@@ -33,7 +32,6 @@ namespace NKT.Enemy
             Renderer = GetModule<IRenderer>();
             AgentSensor = GetModule<AgentSensor>();
             AgentTrigger = GetModule<AgentTrigger>();
-            SkillEventRelay = GetModule<SkillEventRelay>();
             SkillModule = GetModule<EnemySkillModule>();
             
             BTAgent = GetComponent<BehaviorGraphAgent>();
@@ -63,7 +61,7 @@ namespace NKT.Enemy
             foreach (Collider c in GetComponents<Collider>())
                 c.enabled = false;
             if (SkillModule != null)
-                SkillModule.CancelCurrentSkill();
+                SkillModule.StopSkillIfNotFinished();
             StateChannel?.SendEventMessage(EnemyState.DEATH);
         }
         #region BT Helper
