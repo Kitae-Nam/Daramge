@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using Members.CHG._02_Scripts.Agent.StatSystem;
-using Members.CHG._02_Scripts.CombatSystem;
-using Members.CHG._02_Scripts.CoreSystem.AnimationSystem;
+using CHG._02_Scripts.Agent.StatSystem;
+using CHG._02_Scripts.CombatSystem;
+using CHG._02_Scripts.CoreSystem.AnimationSystem;
 using UnityEngine;
 
 namespace NKT.Enemy.Skill.Behaviours

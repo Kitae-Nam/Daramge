@@ -1,6 +1,6 @@
 using System;
+using CHG._02_Scripts.CoreSystem.AnimationSystem;
 using GGMLib.ModuleSystems;
-using Members.CHG._02_Scripts.CoreSystem.AnimationSystem;
 using UnityEngine;
 using Object = UnityEngine.Object;
 

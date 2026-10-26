@@ -101,7 +101,7 @@ MonoBehaviour:
   - rid: 2904886043840348401
   - rid: 2904886043840348421
   - rid: 2904886043840348444
-  m_VersionTimestamp: 639285526007600763
+  m_VersionTimestamp: 639286204262356284
   m_SerializedVersion: 3
   m_DebugInfo: {fileID: 3534078660946907753}
   m_RuntimeGraph: {fileID: 326827733141851238}
@@ -885,14 +885,6 @@ MonoBehaviour:
         - rid: 2904886043840348484
         - rid: 2904886043840348485
         - rid: 2904886043840348486
-    - rid: 2904886043840348222
-      type: {class: 'BlackboardVariable`1[[System.Single, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
-      data:
-        GUID:
-          m_Value0: 0
-          m_Value1: 0
-        Name: 
-        m_Value: 6
     - rid: 2904886043840348299
       type: {class: 'BlackboardVariable`1[[NKT.Enemy.BT.EnemyState, Assembly-CSharp]]', ns: Unity.Behavior, asm: Unity.Behavior}
       data:
@@ -1013,7 +1005,7 @@ MonoBehaviour:
           rid: 2904886043840348573
         m_Children:
         - rid: 2904886043840348576
-        - rid: 2904886043840348577
+        - rid: -2
         - rid: 2904886043840348578
         m_RegisteredObservers: []
     - rid: 2904886043840348575
@@ -1048,20 +1040,6 @@ MonoBehaviour:
         - rid: -2
         - rid: -2
         - rid: -2
-    - rid: 2904886043840348577
-      type: {class: MoveToRandomPositionAction, ns: NKT.Enemy.BT.Actions, asm: Assembly-CSharp}
-      data:
-        ID:
-          m_Value0: 10475391208003788389
-          m_Value1: 17377421665519613803
-        Graph:
-          rid: 2904886039649189949
-        m_Parent:
-          rid: 2904886043840348574
-        Enemy:
-          rid: 2904886043840348482
-        MaxMoveTime:
-          rid: 2904886043840348222
     - rid: 2904886043840348578
       type: {class: TriggerEventAction, ns: Unity.Behavior, asm: Unity.Behavior}
       data:

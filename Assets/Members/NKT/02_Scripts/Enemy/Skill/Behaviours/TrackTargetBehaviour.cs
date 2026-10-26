@@ -1,4 +1,4 @@
-using Members.CHG._02_Scripts.CoreSystem.AnimationSystem;
+using CHG._02_Scripts.CoreSystem.AnimationSystem;
 using UnityEngine;
 
 namespace NKT.Enemy.Skill.Behaviours

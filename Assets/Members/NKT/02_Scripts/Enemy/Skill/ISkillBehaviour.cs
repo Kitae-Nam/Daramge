@@ -1,4 +1,5 @@
-using Members.CHG._02_Scripts.CoreSystem.AnimationSystem;
+
+using CHG._02_Scripts.CoreSystem.AnimationSystem;
 
 namespace NKT.Enemy.Skill
 {
