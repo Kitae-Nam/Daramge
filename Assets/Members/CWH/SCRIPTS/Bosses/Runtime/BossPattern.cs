@@ -31,5 +31,12 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
         /// 반복 호출에도 안전하게 구현하고, 코루틴을 별도로 시작하지 말고 Execute에서 yield한다.
         /// </summary>
         public virtual void Cleanup() { }
+        
+        /// <summary>
+        /// 러너가 계산한 경고 진행도(0~1)를 전달받는다.
+        /// 표시가 필요한 패턴에서 재정의한다.
+        /// </summary>
+        /// <param name="progress"></param>
+        public virtual void UpdateWarningProgress(float progress) { }
     }
 }

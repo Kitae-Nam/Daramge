@@ -12,6 +12,7 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
         private BossPatternRunner _bossPatternRunner;
         private BossMovement _bossMovement;
         private BossFacing _bossFacing;
+        private bool _movementAllowed = true;
 
         private void Awake()
         {
@@ -38,11 +39,18 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
         private void HandleStateChange(BossActionState state)
         {
             
-            bool allowed = state == BossActionState.Idle;
+            bool allowed = _movementAllowed && state == BossActionState.Idle;
 
             _bossMovement.SetChaseEnabled(allowed);
             _bossFacing.SetFacingEnabled(allowed);
             
+        }
+
+        /// <summary>페이즈 종료처럼 패턴 바깥의 정지 사유도 Idle 전환으로 풀리지 않게 보존한다.</summary>
+        public void SetMovementAllowed(bool allowed)
+        {
+            _movementAllowed = allowed;
+            HandleStateChange(_bossPatternRunner.State);
         }
     }
 }
