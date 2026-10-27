@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace NKT.Enemy.Skill
 {
-    public class EnemyMeleeSkill : AbstractEnemySkill
+    public class CommonMeleeSkill : AbstractEnemySkill
     {
         [SerializeField] private AnimParamSO attackAnimParam;
         [SerializeField] private float crossFadeDuration = 0.15f;
