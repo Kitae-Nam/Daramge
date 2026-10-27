@@ -344,10 +344,10 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 3.5
-  m_Acceleration: 8
+  m_Speed: 1.7313242
+  m_Acceleration: 25
   avoidancePriority: 50
-  m_AngularSpeed: 800
+  m_AngularSpeed: 540
   m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
@@ -1329,8 +1329,8 @@ GameObject:
   m_Component:
   - component: {fileID: 543450653440490931}
   - component: {fileID: 5866666021615298505}
-  - component: {fileID: 5866666021615298507}
   - component: {fileID: 5866666021615298506}
+  - component: {fileID: 5866666021615298507}
   m_Layer: 0
   m_Name: Visual
   m_TagString: Untagged
@@ -3006,7 +3006,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: 077f839975b127c4b8b0b9464b79f847, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
-  m_ApplyRootMotion: 0
+  m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
@@ -3036,9 +3036,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 919132149455939337}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f14fd40fb56449feb8725b97295057a1, type: 3}
+  m_Script: {fileID: 11500000, guid: 9482362db6d063549b77010ac3341895, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Members.CHG._02_Scripts.Agent.AgentRenderer
+  m_EditorClassIdentifier: Assembly-CSharp::NKT.Enemy.Module.EnemyNavRenderer
+  speedParam: {fileID: 11400000, guid: 597db5bdd16a6ff4394447ad92bf140b, type: 2}
+  speedSmoothTime: 0.1
+  navMeshSampleDistance: 0.5
 --- !u!1 &5956783549366015617
 GameObject:
   m_ObjectHideFlags: 0
