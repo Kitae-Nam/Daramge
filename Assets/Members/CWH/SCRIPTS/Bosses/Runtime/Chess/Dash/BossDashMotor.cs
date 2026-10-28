@@ -30,6 +30,7 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
     {
         [SerializeField] private LayerMask _obstacleLayers = Physics.DefaultRaycastLayers;
         [SerializeField, Min(0f)] private float _wallPadding = 0.1f;
+        [SerializeField, Min(0.01f)] private float _bodyHalfDepth = 0.1f;
         private NavMeshAgent _agent;
         private bool _previousUpdatePosition;
         private bool _previousUpdateRotation;
@@ -93,7 +94,7 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
             float forward = Vector3.Dot(actual, direction);
             Vector3 sideways = actual - direction * forward;
             return allowed >= requestedDistance - 0.001f && forward >= requestedDistance - 0.01f
-                   && sideways.sqrMagnitude < 0.0025f;
+                                                         && sideways.sqrMagnitude < 0.0025f;
         }
 
         private float GetClearDistance(Vector3 start, Vector3 direction, float distance, float width)
@@ -104,7 +105,7 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
 
             // 바닥과 겹치지 않도록 몸체 하단에 여유를 둔 얇은 박스를 직선으로 쓸어 검사한다.
             Vector3 center = start + Vector3.up * (BodyHeight * 0.5f);
-            Vector3 halfSize = new Vector3(width * 0.5f, BodyHeight * 0.5f - 0.05f, 0.01f);
+            Vector3 halfSize = new Vector3(width * 0.5f, BodyHeight * 0.5f - 0.05f, _bodyHalfDepth);
             RaycastHit[] hits = Physics.BoxCastAll(center, halfSize, direction,
                 Quaternion.LookRotation(direction), distance, _obstacleLayers, QueryTriggerInteraction.Ignore);
             foreach (RaycastHit hit in hits)
@@ -115,6 +116,7 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
                     hit.collider.GetComponentInParent<IKnockbackReceiver>() != null) continue;
                 result = Mathf.Min(result, Mathf.Max(0f, hit.distance - _wallPadding));
             }
+
             return result;
         }
 
@@ -130,6 +132,7 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
                 Agent.ResetPath();
                 Agent.isStopped = _previousStopped;
             }
+
             Agent.updatePosition = _previousUpdatePosition;
             Agent.updateRotation = _previousUpdateRotation;
         }
