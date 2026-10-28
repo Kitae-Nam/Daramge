@@ -1,14 +1,12 @@
 using System;
+using CHG._02_Scripts.Agent.StatSystem;
 using GGMLib.ModuleSystems;
-using Members.CHG._02_Scripts.Agent.StatSystem;
 using UnityEngine;
 
-namespace Members.CHG._02_Scripts.CombatSystem
+namespace CHG._02_Scripts.CombatSystem
 {
-   public class HealthModule : MonoBehaviour, IModule, IAfterInitModule
+   public class HealthModule : AbstractHealthModule, IAfterInitModule
     {
-        public event Action OnDeath;
-        
         [SerializeField] private StatSO vitalStat;
         [SerializeField] private float baseMaxHealth;
         [SerializeField] private float maxHealth; 
@@ -22,7 +20,7 @@ namespace Members.CHG._02_Scripts.CombatSystem
         public float CurrentHealth => currentHealth;
         public float MaxHealth => maxHealth;
         
-        public void Initialize(ModuleOwner owner)
+        public override void Initialize(ModuleOwner owner)
         {
             _owner = owner;
             currentHealth = maxHealth;
@@ -59,14 +57,14 @@ namespace Members.CHG._02_Scripts.CombatSystem
             RaiseHealthChanged();
         }
 
-        public void ApplyDamage(float damageAmount)
+        public override void ApplyDamage(float damageAmount)
         {
             currentHealth -= damageAmount;
             RaiseHealthChanged();
             if (currentHealth <= 0)
             {
                 currentHealth = 0;
-                OnDeath?.Invoke();
+                RaiseDeath();
             }
         }
 

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Members.CHG._02_Scripts.CoreSystem.AnimationSystem
+namespace CHG._02_Scripts.CoreSystem.AnimationSystem
 {
     [CreateAssetMenu(fileName = "Anim param so", menuName = "System/Animator param", order = 20)]
     public class AnimParamSO : ScriptableObject

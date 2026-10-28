@@ -1,4 +1,4 @@
-namespace Members.CHG._02_Scripts.CoreSystem
+namespace CHG._02_Scripts.CoreSystem
 {
     public static class CodeFormat
     {

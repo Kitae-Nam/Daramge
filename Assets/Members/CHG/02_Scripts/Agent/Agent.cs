@@ -1,8 +1,8 @@
+using CHG._02_Scripts.CombatSystem;
 using GGMLib.ModuleSystems;
-using Members.CHG._02_Scripts.CombatSystem;
 using UnityEngine.Events;
 
-namespace Members.CHG._02_Scripts.Agent
+namespace CHG._02_Scripts.Agent
 {
     public abstract class Agent : ModuleOwner, IDamageable
     {
@@ -11,13 +11,13 @@ namespace Members.CHG._02_Scripts.Agent
         public UnityEvent OnHit;
         public UnityEvent OnDeath;
         
-        public HealthModule Health { get; private set; }
+        public AbstractHealthModule Health { get; private set; }
         public ActionDataModule ActionData { get; private set; }
 
         protected override void InitializeModules()
         {
             base.InitializeModules();
-            Health = GetModule<HealthModule>();
+            Health = GetModule<AbstractHealthModule>();
             ActionData = GetModule<ActionDataModule>();
         }
 

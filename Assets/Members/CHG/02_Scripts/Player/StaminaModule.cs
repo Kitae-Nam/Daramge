@@ -1,20 +1,22 @@
 using System;
+using CHG._02_Scripts.Agent.StatSystem;
 using GGMLib.ModuleSystems;
-using Members.CHG._02_Scripts.Agent.StatSystem;
 using UnityEngine;
 
-namespace Members.CHG._02_Scripts.Player
+namespace CHG._02_Scripts.Player
 {
-    public class StaminaModule : MonoBehaviour, IModule
+    public class StaminaModule : MonoBehaviour, IModule, IAfterInitModule
     {
         [SerializeField] private StatSO staminaStat;
         [SerializeField] private float staminaHeal;
+        [SerializeField] private float regenDelay = 1f;
         [SerializeField] private float baseMaxStamina;
         [SerializeField] private float maxStamina;
         [SerializeField] private float currentStamina;
 
         private ModuleOwner _owner;
         private IStatModule _statModule;
+        private float _lastUseTime;
         
         public event Action<float, float> OnStaminaChanged;
 
@@ -38,7 +40,7 @@ namespace Members.CHG._02_Scripts.Player
 
         private void Start()
         {
-            // RaiseHealthChanged();
+            RaiseStaminaChanged();
         }
 
         private void OnDestroy()
@@ -46,13 +48,22 @@ namespace Members.CHG._02_Scripts.Player
             _statModule?.UnSubscribeStat(staminaStat.AssetIndex, HandleStaminaChange);
         }
 
+        private void Update()
+        {
+            if (currentStamina >= maxStamina) return;
+            if (Time.time - _lastUseTime < regenDelay) return;
+            
+            currentStamina = Mathf.Min(maxStamina, currentStamina + staminaHeal *  Time.deltaTime);
+            RaiseStaminaChanged();
+        }
+
         private void HandleStaminaChange(StatSO stat, float currentValue, float prevValue)
         {
-            float beforeMaxHealth = maxStamina;
+            float beforeMaxStamina = maxStamina;
             maxStamina = baseMaxStamina + currentValue;
-            float delta = maxStamina - beforeMaxHealth;
+            float delta = maxStamina - beforeMaxStamina;
             currentStamina = Mathf.Clamp(currentStamina + delta, 1, maxStamina);
-            // RaiseHealthChanged();
+            RaiseStaminaChanged();
         }
 
         public bool TryUseStamina(float useAmount)
@@ -60,7 +71,8 @@ namespace Members.CHG._02_Scripts.Player
             if (CanUseStamina(useAmount))
             {
                 currentStamina -= useAmount;
-                // RaiseHealthChanged();
+                _lastUseTime = Time.time;
+                RaiseStaminaChanged();
                 return true;
             }
 

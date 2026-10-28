@@ -1,0 +1,78 @@
+:root {
+}
+
+.hud-root {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.hud-top-left {
+    position: absolute;
+    left: 32px;
+    top: 32px;
+}
+
+.hud-top-right {
+    position: absolute;
+    right: 32px;
+    top: 32px;
+}
+
+.hud-bottom-right {
+    position: absolute;
+    right: 32px;
+    bottom: 32px;
+}
+
+.heart-container {
+    flex-direction: row;
+}
+
+.heart {
+    width: 32px;
+    height: 32px;
+    margin-right: 4px;
+    background-image: url("project://database/Assets/Members/CHG/05.Graphic/Images/Hollow_heart.png?fileID=2800000&guid=8c5cbc375411e9544bf422bdb9accbe4&type=3#Hollow_heart");
+}
+
+.heart__fill {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    overflow: hidden;
+}
+
+.heart__fill-image {
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    background-image: url("project://database/Assets/Members/CHG/05.Graphic/Images/Fill_heart.png?fileID=2800000&guid=8b52b309f90c0ec4399e27163de8e1f2&type=3#Fill_heart");
+}
+
+.minimap {
+    width: 200px;
+    height: 200px;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.skill-container {
+    flex-direction: row;
+}
+
+.stamina-gauge {
+    position: absolute;
+    left: 32px;
+    top: 80px;
+    width: 64px;
+    height: 64px;
+    transition-property: opacity;
+    transition-duration: 0.3s;
+}
+
+.stamina-gauge--hidden {
+    opacity: 0;
+}

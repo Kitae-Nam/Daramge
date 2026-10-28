@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Members.CHG._02_Scripts.Agent
+namespace CHG._02_Scripts.Agent
 {
     [Flags]
     public enum AgentStatus

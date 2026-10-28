@@ -1,11 +1,10 @@
 using System.Collections;
-using Members.CHG._02_Scripts.Agent;
-using Members.CHG._02_Scripts.CombatSystem;
-using Members.CHG._02_Scripts.CoreSystem.AnimationSystem;
-using Members.CHG._02_Scripts.CoreSystem.DataSystem;
+using CHG._02_Scripts.Agent;
+using CHG._02_Scripts.CombatSystem;
+using CHG._02_Scripts.CoreSystem.AnimationSystem;
 using UnityEngine;
 
-namespace Members.CHG._02_Scripts.Player.Combat
+namespace CHG._02_Scripts.Player.Combat
 {
     public class PlayerDashSkill : AbstractPlayerSkill
     {

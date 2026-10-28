@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using GGMLib.DatabaseSystem.Runtime;
 using UnityEngine;
 
-namespace Members.CHG._02_Scripts.Agent.StatSystem
+namespace CHG._02_Scripts.Agent.StatSystem
 {
     [CreateAssetMenu(fileName = "Stat data", menuName = "Agent/Stat data", order = 15)]
     public class StatSO : IndexedAsset, ICloneable

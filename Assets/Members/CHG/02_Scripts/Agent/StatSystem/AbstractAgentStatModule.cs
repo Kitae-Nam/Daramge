@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
+using CHG._02_Scripts.CombatSystem;
 using GGMLib.ModuleSystems;
-using Members.CHG._02_Scripts.CombatSystem;
 using UnityEngine;
 
-namespace Members.CHG._02_Scripts.Agent.StatSystem
+namespace CHG._02_Scripts.Agent.StatSystem
 {
     public abstract class AbstractAgentStatModule : MonoBehaviour, IModule, IStatModule
     {

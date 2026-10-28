@@ -1,5 +1,5 @@
 
-namespace Members.CHG._02_Scripts.Player.FSM
+namespace CHG._02_Scripts.Player.FSM
 {
     public enum PlayerState
     {
