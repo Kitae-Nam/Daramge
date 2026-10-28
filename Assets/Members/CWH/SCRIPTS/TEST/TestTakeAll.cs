@@ -1,5 +1,7 @@
 using System;
 using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime;
+using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Combat;
+using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Health;
 using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Patterns;
 using UnityEngine;
 using UnityEngine.InputSystem;

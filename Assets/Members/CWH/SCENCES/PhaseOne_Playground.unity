@@ -524,6 +524,7 @@ GameObject:
   - component: {fileID: 555656423}
   - component: {fileID: 555656422}
   - component: {fileID: 555656421}
+  - component: {fileID: 555656425}
   m_Layer: 0
   m_Name: Arena floor
   m_TagString: Untagged
@@ -624,6 +625,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &555656425
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 555656420}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa8c0b89dfcc4e39ab1bc88ee765d50b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.ChessBoardGrid
+  _center: {x: 0, y: 0, z: 0}
+  _cellSize: 4.5
+  _columns: 8
+  _rows: 8
 --- !u!1 &667557193
 GameObject:
   m_ObjectHideFlags: 0
@@ -917,6 +934,9 @@ GameObject:
   - component: {fileID: 1418463962}
   - component: {fileID: 1418463961}
   - component: {fileID: 1418463960}
+  - component: {fileID: 1418463984}
+  - component: {fileID: 1418463983}
+  - component: {fileID: 1418463985}
   m_Layer: 0
   m_Name: White King - Phase One
   m_TagString: Untagged
@@ -1011,6 +1031,7 @@ MonoBehaviour:
       m_Calls: []
   _telegraph: {fileID: 1825629203}
   _impactRadius: 2.8
+  _maximumSelectionDistance: 24
 --- !u!114 &1418463964
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1040,6 +1061,7 @@ MonoBehaviour:
   _knockbackSpeed: 12
   _knockbackDuration: 0.35
   _warningOpacity: 0.7
+  _preferredMinimumDistance: 12
 --- !u!114 &1418463965
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1069,7 +1091,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.BossDashMotor
   _obstacleLayers:
     serializedVersion: 2
-    m_Bits: 4294967291
+    m_Bits: 499
   _wallPadding: 0.1
 --- !u!114 &1418463967
 MonoBehaviour:
@@ -1096,6 +1118,7 @@ MonoBehaviour:
   _knightPrefab: {fileID: 3679876647263537345, guid: b58b7fc28ea08e347b6a04a77d2722c6, type: 3}
   _firstWarning: {fileID: 2053207716}
   _secondWarning: {fileID: 1269583989}
+  _maximumSelectionDistance: 16
 --- !u!114 &1418463968
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1194,6 +1217,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56539dfb193e4d8ab1d701ef63b69b01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.BossMovementStateController
+  _movementDriver: {fileID: 1418463983}
 --- !u!114 &1418463974
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1338,6 +1362,64 @@ Transform:
   - {fileID: 187128694}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1418463983
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1418463959}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a4505ad1d054148a564a5b3747efc6c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.ChessKingGridMovement
+  _stepDuration: 0.35
+  _stepPause: 0.2
+  _stopDistance: 7
+  _obstacleLayers:
+    serializedVersion: 2
+    m_Bits: 499
+--- !u!114 &1418463984
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1418463959}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa8c0b89dfcc4e39ab1bc88ee765d50b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.ChessBoardGrid
+  _center: {x: 0, y: 0, z: 0}
+  _cellSize: 4.5
+  _columns: 8
+  _rows: 8
+--- !u!114 &1418463985
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1418463959}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d7fc6e3d531468f91bbdf5f7269608f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Patterns.SwordThrowPattern
+  _warningDuration: 1
+  _recoveryDuration: 1
+  _cooldown: 5
+  _warningStarted:
+    m_PersistentCalls:
+      m_Calls: []
+  _warningEnded:
+    m_PersistentCalls:
+      m_Calls: []
+  _telegraph: {fileID: 1825629203}
+  _impactRadius: 2.8
+  _maximumSelectionDistance: 24
 --- !u!1 &1437518834
 GameObject:
   m_ObjectHideFlags: 0
@@ -1553,6 +1635,8 @@ GameObject:
   - component: {fileID: 1450159434}
   - component: {fileID: 1450159436}
   - component: {fileID: 1450159435}
+  - component: {fileID: 1450159438}
+  - component: {fileID: 1450159437}
   m_Layer: 0
   m_Name: Visual
   m_TagString: Untagged
@@ -1632,6 +1716,35 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1450159433}
   m_Mesh: {fileID: -7973678451415581088, guid: b8d6e0eb81aca4ff0a4cef05507fea91, type: 3}
+--- !u!114 &1450159437
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1450159433}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e0bebfe3129478bba8e83a8fe243547, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.ThrownBossSword
+  _visual: {fileID: 1450159434}
+  _flightDuration: 0.18
+  _embeddedDuration: 7
+  _impactDamage: 25
+--- !u!114 &1450159438
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1450159433}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2152b3e75b9f4671ab6de2ba7981bbe0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Health.BreakableHealth
+  _maxHealth: 80
 --- !u!1 &1629108876
 GameObject:
   m_ObjectHideFlags: 0
@@ -2192,6 +2305,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2122326509}
   - component: {fileID: 2122326508}
+  - component: {fileID: 2122326510}
   m_Layer: 0
   m_Name: Directional Light
   m_TagString: Untagged
@@ -2279,6 +2393,35 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2122326510
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2122326507}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_CustomShadowLayers: 0
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
+  m_RenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_ShadowRenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_Version: 4
+  m_LightLayerMask: 1
+  m_ShadowLayerMask: 1
+  m_RenderingLayers: 1
+  m_ShadowRenderingLayers: 1
 --- !u!1 &2137619744
 GameObject:
   m_ObjectHideFlags: 0
