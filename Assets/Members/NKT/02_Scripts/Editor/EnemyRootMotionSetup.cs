@@ -12,7 +12,7 @@ using UnityEngine.AI;
 namespace NKT.Enemy.EditorTools
 {
     //적 루트모션 일괄 설정. 메뉴: Tools/NKT/Enemy Root Motion Setup
-    //열려있는 씬의 적을 기준으로 Animator 블렌드 트리, 이동 클립 임포트 설정, 렌더러 교체, 에이전트 값을 맞춘다.
+    //열려있는 씬의 적을 기준으로 Animator 블렌드 트리, 클립 임포트 설정, 렌더러 교체, 에이전트 값을 맞춘다.
     //여러 번 실행해도 같은 결과가 나온다.
     public static class EnemyRootMotionSetup
     {
@@ -26,7 +26,7 @@ namespace NKT.Enemy.EditorTools
         private static readonly (string moveState, string idleState)[] LocomotionStates =
         {
             ("RUN", "IDLE"),
-            ("ATTACKRUN", "MELEE_ATTACKIDLE"),
+            ("ATTACK_RUN", "ATTACK_IDLE"),
         };
 
         [MenuItem("Tools/NKT/Enemy Root Motion Setup")]
@@ -39,25 +39,39 @@ namespace NKT.Enemy.EditorTools
                 return;
             }
 
-            Animator firstAnimator = enemies[0].GetComponentInChildren<Animator>(true);
-            AnimatorController controller = firstAnimator != null
-                ? firstAnimator.runtimeAnimatorController as AnimatorController
-                : null;
-            if (controller == null)
-            {
-                Debug.LogError("[RootMotionSetup] 적의 Animator Controller를 찾을 수 없습니다.");
-                return;
-            }
-
             AnimParamSO speedParam = GetOrCreateSpeedParam();
-            float agentSpeed = SetupController(controller);
+
+            //적 종류마다 컨트롤러가 다르므로 컨트롤러별로 한 번씩 처리하고, 그 속도를 해당 적들에게 적용한다.
+            Dictionary<AnimatorController, float> speedByController = new Dictionary<AnimatorController, float>();
+            int setupCount = 0;
 
             foreach (AbstractEnemy enemy in enemies)
+            {
+                Animator animator = enemy.GetComponentInChildren<Animator>(true);
+                AnimatorController controller = animator != null
+                    ? animator.runtimeAnimatorController as AnimatorController
+                    : null;
+                if (controller == null)
+                {
+                    Debug.LogWarning($"[RootMotionSetup] {enemy.name}의 Animator Controller를 찾을 수 없어 건너뜁니다.", enemy);
+                    continue;
+                }
+
+                if (!speedByController.TryGetValue(controller, out float agentSpeed))
+                {
+                    Debug.Log($"[RootMotionSetup] 컨트롤러 처리: {controller.name}");
+                    agentSpeed = SetupController(controller);
+                    RemoveUnusedBlendTrees(controller);
+                    speedByController.Add(controller, agentSpeed);
+                }
+
                 SetupEnemy(enemy, speedParam, agentSpeed);
+                setupCount++;
+            }
 
             AssetDatabase.SaveAssets();
             EditorSceneManager.MarkAllScenesDirty();
-            Debug.Log($"[RootMotionSetup] 완료: 적 {enemies.Length}개, 에이전트 Speed {agentSpeed:0.00}. 씬을 저장하세요.");
+            Debug.Log($"[RootMotionSetup] 완료: 적 {setupCount}개, 컨트롤러 {speedByController.Count}개. 씬을 저장하세요.");
         }
 
         private static AnimParamSO GetOrCreateSpeedParam()
@@ -76,7 +90,8 @@ namespace NKT.Enemy.EditorTools
             return param;
         }
 
-        //이동 상태를 (대기 -> 이동) 블렌드 트리로 바꾸고, 가장 빠른 이동 클립 속도를 반환한다.
+        //이동/대기 상태에 루트모션용으로 설정한 클립을 연결하고, 가장 빠른 이동 클립 속도를 반환한다.
+        //Speed 파라미터는 EnemyNavRenderer가 매 프레임 넣으므로 컨트롤러에 남겨둔다(없으면 경고가 뜬다).
         private static float SetupController(AnimatorController controller)
         {
             if (controller.parameters.All(p => p.name != SpeedParamName))
@@ -103,7 +118,9 @@ namespace NKT.Enemy.EditorTools
                     continue;
                 }
 
-                moveClip = ConfigureRootMotionImport(moveClip);
+                //대기 클립은 제자리에서 반복, 이동 클립은 앞뒤 이동만 루트모션으로 남긴다.
+                idleClip = ConfigureClip(idleClip, isMoveClip: false);
+                moveClip = ConfigureClip(moveClip, isMoveClip: true);
 
                 float moveSpeed = moveClip.averageSpeed.magnitude;
                 if (moveSpeed < 0.1f)
@@ -112,24 +129,12 @@ namespace NKT.Enemy.EditorTools
                     moveSpeed = FallbackMoveSpeed;
                 }
 
-                BlendTree tree = new BlendTree
-                {
-                    name = $"{moveName} Blend",
-                    blendParameter = SpeedParamName,
-                    blendType = BlendTreeType.Simple1D,
-                    useAutomaticThresholds = false,
-                    hideFlags = HideFlags.HideInHierarchy
-                };
-                AssetDatabase.AddObjectToAsset(tree, controller);
-                tree.AddChild(idleClip, 0f);
-                tree.AddChild(moveClip, moveSpeed);
-
-                if (moveState.motion is BlendTree oldTree && AssetDatabase.IsSubAsset(oldTree))
-                    Object.DestroyImmediate(oldTree, true); //다시 실행했을 때 이전 트리 정리
-
-                moveState.motion = tree;
+                //대기<->이동 블렌드 트리는 클립 길이 차이 때문에 출발/정지 구간에서 걸음이 늘어지므로 쓰지 않는다.
+                //정지와 이동은 BT가 상태(IDLE/RUN)를 직접 바꾸고, 크로스페이드로 이어준다.
+                idleState.motion = idleClip; //재임포트된 클립으로 다시 연결
+                moveState.motion = moveClip; //이전 블렌드 트리는 RemoveUnusedBlendTrees에서 정리된다.
                 maxMoveSpeed = Mathf.Max(maxMoveSpeed, moveSpeed);
-                Debug.Log($"[RootMotionSetup] {moveName}: {idleClip.name}(0) -> {moveClip.name}({moveSpeed:0.00})");
+                Debug.Log($"[RootMotionSetup] {moveName}: {moveClip.name}({moveSpeed:0.00}), {idleName}: {idleClip.name}");
             }
 
             EditorUtility.SetDirty(controller);
@@ -144,16 +149,31 @@ namespace NKT.Enemy.EditorTools
             return null;
         }
 
-        //회전과 높이는 포즈에 굽고, 앞뒤 이동(XZ)만 루트모션으로 남긴다.
-        private static AnimationClip ConfigureRootMotionImport(AnimationClip clip)
+        //루프를 켜고, 회전과 높이는 포즈에 굽는다.
+        //이동 클립은 앞뒤 이동(XZ)을 루트모션으로 남기고, 대기 클립은 XZ도 굽어서 제자리에 있게 한다.
+        private static AnimationClip ConfigureClip(AnimationClip clip, bool isMoveClip)
         {
             string path = AssetDatabase.GetAssetPath(clip);
-            if (AssetImporter.GetAtPath(path) is not ModelImporter importer)
-            {
-                Debug.LogWarning($"[RootMotionSetup] {path}는 FBX가 아니라 임포트 설정을 바꾸지 않습니다.");
-                return clip;
-            }
 
+            if (AssetImporter.GetAtPath(path) is ModelImporter importer)
+                return ConfigureModelClip(importer, path, clip, isMoveClip);
+
+            //FBX가 아닌 .anim 파일
+            AnimationClipSettings settings = AnimationUtility.GetAnimationClipSettings(clip);
+            settings.loopTime = true;
+            settings.loopBlend = !isMoveClip;                 //Loop Pose
+            settings.loopBlendOrientation = true;             //Rotation: Bake Into Pose
+            settings.loopBlendPositionY = true;               //Position Y: Bake Into Pose
+            settings.keepOriginalPositionY = false;
+            settings.heightFromFeet = true;                   //Position Y: Based Upon Feet
+            settings.loopBlendPositionXZ = !isMoveClip;       //Position XZ: 대기 클립만 Bake
+            AnimationUtility.SetAnimationClipSettings(clip, settings);
+            EditorUtility.SetDirty(clip);
+            return clip;
+        }
+
+        private static AnimationClip ConfigureModelClip(ModelImporter importer, string path, AnimationClip clip, bool isMoveClip)
+        {
             ModelImporterClipAnimation[] clips = importer.clipAnimations;
             if (clips.Length == 0)
                 clips = importer.defaultClipAnimations;
@@ -164,11 +184,12 @@ namespace NKT.Enemy.EditorTools
                 if (clipAnimation.name != clip.name) continue;
 
                 clipAnimation.loopTime = true;
-                clipAnimation.lockRootRotation = true;      //Rotation: Bake Into Pose
-                clipAnimation.lockRootHeightY = true;       //Position Y: Bake Into Pose
+                if (!isMoveClip) clipAnimation.loopPose = true;
+                clipAnimation.lockRootRotation = true;           //Rotation: Bake Into Pose
+                clipAnimation.lockRootHeightY = true;            //Position Y: Bake Into Pose
                 clipAnimation.keepOriginalPositionY = false;
-                clipAnimation.heightFromFeet = true;        //Position Y: Based Upon Feet
-                clipAnimation.lockRootPositionXZ = false;   //Position XZ: 루트모션으로 사용
+                clipAnimation.heightFromFeet = true;             //Position Y: Based Upon Feet
+                clipAnimation.lockRootPositionXZ = !isMoveClip;  //Position XZ: 대기 클립만 Bake
                 isFound = true;
             }
 
@@ -181,10 +202,47 @@ namespace NKT.Enemy.EditorTools
             importer.clipAnimations = clips;
             importer.SaveAndReimport();
 
-            //재임포트 후 클립을 다시 불러와야 바뀐 이동 속도가 반영된다.
+            //재임포트 후 클립을 다시 불러와야 바뀐 설정과 이동 속도가 반영된다.
             return AssetDatabase.LoadAllAssetsAtPath(path)
                        .OfType<AnimationClip>()
                        .FirstOrDefault(a => a.name == clip.name) ?? clip;
+        }
+
+        //어떤 상태에서도 쓰이지 않는 블렌드 트리(이전 실행에서 남은 것)를 지운다.
+        private static void RemoveUnusedBlendTrees(AnimatorController controller)
+        {
+            HashSet<BlendTree> usedTrees = new HashSet<BlendTree>();
+            foreach (AnimatorControllerLayer layer in controller.layers)
+                CollectUsedTrees(layer.stateMachine, usedTrees);
+
+            string controllerPath = AssetDatabase.GetAssetPath(controller);
+            List<BlendTree> unusedTrees = AssetDatabase.LoadAllAssetsAtPath(controllerPath)
+                .OfType<BlendTree>()
+                .Where(tree => !usedTrees.Contains(tree))
+                .ToList();
+
+            foreach (BlendTree tree in unusedTrees)
+                Object.DestroyImmediate(tree, true);
+
+            if (unusedTrees.Count > 0)
+                Debug.Log($"[RootMotionSetup] 사용하지 않는 블렌드 트리 {unusedTrees.Count}개 정리");
+        }
+
+        private static void CollectUsedTrees(AnimatorStateMachine stateMachine, HashSet<BlendTree> usedTrees)
+        {
+            foreach (ChildAnimatorState child in stateMachine.states)
+                CollectTree(child.state.motion, usedTrees);
+
+            foreach (ChildAnimatorStateMachine sub in stateMachine.stateMachines)
+                CollectUsedTrees(sub.stateMachine, usedTrees);
+        }
+
+        private static void CollectTree(Motion motion, HashSet<BlendTree> usedTrees)
+        {
+            if (motion is not BlendTree tree || !usedTrees.Add(tree)) return;
+
+            foreach (ChildMotion child in tree.children)
+                CollectTree(child.motion, usedTrees); //블렌드 트리 안의 블렌드 트리
         }
 
         private static void SetupEnemy(AbstractEnemy enemy, AnimParamSO speedParam, float agentSpeed)
