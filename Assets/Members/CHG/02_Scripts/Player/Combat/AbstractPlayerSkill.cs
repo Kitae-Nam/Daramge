@@ -12,7 +12,7 @@ namespace CHG._02_Scripts.Player.Combat
 
         protected PlayerController _player;
         protected PlayerSkillModule _skillModule;
-        protected AgentRenderer _renderer;
+        protected IRenderer _renderer;
         protected IControlMovement _movement;
         protected float _lastUseTime;
         
@@ -23,13 +23,13 @@ namespace CHG._02_Scripts.Player.Combat
         public virtual void InitializeSkill(ISkillModule skillModule)
         {
             _skillModule = skillModule as PlayerSkillModule;
-            Debug.Assert(_skillModule != null, "플레이어 스킬은 반드시 플레이어 스킬 모듈의 자식이어야 함");
+            Debug.Assert(_skillModule != null, $"parentScript is not a PlayerSkillModule : {gameObject.name}");
             
             _player = _skillModule.Player;
-            _renderer = _player.GetModule<AgentRenderer>();
-            Debug.Assert(_renderer != null, "플레이어에 렌더러 모듈이 없습니다.");
+            _renderer = _player.GetModule<IRenderer>();
+            Debug.Assert(_renderer != null, $"renderer is null : {gameObject.name}");
             _movement = _player.GetModule<IControlMovement>();
-            Debug.Assert(_movement != null, "플레이어의 이동모듈이 없습니다.");
+            Debug.Assert(_movement != null, $"movement is null : {gameObject.name}");
             IsUsing = false;
         }
 

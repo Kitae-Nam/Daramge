@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using CHG._02_Scripts.Agent;
 using CHG._02_Scripts.CombatSystem;
@@ -10,24 +11,30 @@ using UnityEngine;
 
 namespace CHG._02_Scripts.Player.Combat
 {
+    [Serializable]
+    public struct MeleeComboStep
+    {  
+        public AnimParamSO comboClip;
+        public AnimationCurve comboCurve;
+        public float comboDuration;
+        public AssetNameSO comboEffect;
+    }
+    
     public class PlayerMeleeCombo : AbstractPlayerSkill
     {
         [SerializeField] private PoolItemSO slashVfxItem;
         [SerializeField] private PoolItemSO impactVfxItem;
-        
-        [SerializeField] private AnimParamSO[] comboClips;
-        [SerializeField] private AnimationCurve[] comboCurves;
-        [SerializeField] private float[] comboDurations;
-        [SerializeField] private AssetNameSO[] comboEffects;
+
+        [SerializeField] private MeleeComboStep[] comboSteps;
         
         [SerializeField] private float comboWindow = 0.4f;
 
         private AgentTrigger _trigger;
         private VfxModule _vfxModule;
         private AbstractDamageCaster _damageCaster;
-        
-        public float _attackSpeed = 1f;
-        public int ComboCounter { get; set; } = 0;
+
+        private Coroutine _curCoroutine;
+        private int _comboCounter = 0;
 
         public override void InitializeSkill(ISkillModule skillModule)  
         {
@@ -48,32 +55,30 @@ namespace CHG._02_Scripts.Player.Combat
         public override void UseSkill(GameObject target = null)
         {
             base.UseSkill(target);
-            bool comboCounterOver = ComboCounter >= comboClips.Length;
+            bool comboCounterOver = _comboCounter >= comboSteps.Length;
             bool comboWindowExhausted = Time.time >= _lastUseTime + comboWindow;
 
             if (comboCounterOver || comboWindowExhausted)
             {
-                ComboCounter = 0;
+                _comboCounter = 0;
             }
             
-            // if (comboEffects.Length < ComboCounter - 1)
+            // if (comboEffects.Length > ComboCounter)
                 // _vfxModule.PlayVfx(comboEffects[ComboCounter].AssetHash);
-            _renderer.PlayClip(comboClips[ComboCounter].ParamHash, 0f, 0.05f);
+            _renderer.PlayClip(comboSteps[_comboCounter].comboClip.ParamHash, 0f, 0.05f);
 
             Vector3 mousePosition = _player.PlayerInput.GetWorldMousePosition();
             Vector3 direction = mousePosition - _player.transform.position;
             _movement.RotateTo(direction.normalized);
-            
-            StartCoroutine(SwordComboCoroutine());
+            _trigger.OnAnimationEnd += HandleAnimationEnd;
+            _trigger.OnDamageCast += HandleDamageCast;
+            _curCoroutine = StartCoroutine(SwordComboCoroutine());
         }
 
         private IEnumerator SwordComboCoroutine()
         {
-            _trigger.OnAnimationEnd += HandleAnimationEnd;
-            _trigger.OnDamageCast += HandleDamageCast;
-            
-            AnimationCurve comboCurve = comboCurves[ComboCounter];
-            float comboDuration = comboDurations[ComboCounter];
+            AnimationCurve comboCurve = comboSteps[_comboCounter].comboCurve;
+            float comboDuration = comboSteps[_comboCounter].comboDuration / _skillModule.AttackSpeed;
             float currentDuration = 0f;
             Vector3 forward = _player.transform.forward;
             _movement.CanManualMove = false;
@@ -87,10 +92,6 @@ namespace CHG._02_Scripts.Player.Combat
                 yield return waitForFixedUpdate;
             }
             
-            
-            _movement.CanManualMove = true;
-            _trigger.OnDamageCast -= HandleDamageCast;
-            _trigger.OnAnimationEnd -= HandleAnimationEnd;
         }
         
         private void HandleDamageCast()
@@ -113,9 +114,25 @@ namespace CHG._02_Scripts.Player.Combat
 
         public override void StopSkill()
         {
-            ComboCounter++;
+            if (_curCoroutine != null)
+            {
+                StopCoroutine(_curCoroutine);
+                _curCoroutine = null;
+            }
+            _movement.CanManualMove = true;
+            _comboCounter++;
+            
+            _trigger.OnDamageCast -= HandleDamageCast;
             _trigger.OnAnimationEnd -= HandleAnimationEnd;
             base.StopSkill();
+        }
+
+        private void OnDestroy()
+        {
+            if (_trigger == null) return;
+            _trigger.OnAnimationEnd -= HandleAnimationEnd;
+            _trigger.OnDamageCast -= HandleDamageCast;
+            
         }
     }
 }

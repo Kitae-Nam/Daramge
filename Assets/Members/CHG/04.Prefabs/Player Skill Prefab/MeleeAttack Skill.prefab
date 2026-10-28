@@ -1,0 +1,240 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &55429472687458380
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8109547731022180595}
+  - component: {fileID: 5990869685347809276}
+  m_Layer: 0
+  m_Name: MeleeAttack Skill
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8109547731022180595
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 55429472687458380}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 5447861971396841217}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5990869685347809276
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 55429472687458380}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e293d1ee58bc4de4afa6b0b69e647954, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CHG._02_Scripts.Player.Combat.PlayerMeleeCombo
+  <SkillData>k__BackingField: {fileID: 11400000, guid: 3481a2950db0b12468ab968c794e0d30, type: 2}
+  slashVfxItem: {fileID: 0}
+  impactVfxItem: {fileID: 0}
+  comboStates:
+  - comboClips: {fileID: 11400000, guid: df7b7923db1e77e42828087d5f92cfd0, type: 2}
+    comboCurves:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: -0.0012702942
+        value: 0.04127121
+        inSlope: 1.1474142
+        outSlope: 1.1474142
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.61967015
+        value: 0.7537471
+        inSlope: -0.5862204
+        outSlope: -0.5862204
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.85971844
+        value: 0.19686992
+        inSlope: -1.1288232
+        outSlope: -1.1288232
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.30456555
+        outWeight: 0.23721401
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: -1.4033914
+        outSlope: -1.4033914
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    comboDurations: 0.3
+    comboEffects: {fileID: 0}
+  - comboClips: {fileID: 11400000, guid: beae1f5608e290f4d8bcd480457998fc, type: 2}
+    comboCurves:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: -0.0012702942
+        value: 0.04127121
+        inSlope: 1.1474142
+        outSlope: 1.1474142
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.61967015
+        value: 0.7537471
+        inSlope: -0.5862204
+        outSlope: -0.5862204
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.85971844
+        value: 0.19686992
+        inSlope: -1.1288232
+        outSlope: -1.1288232
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.30456555
+        outWeight: 0.23721401
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: -1.4033914
+        outSlope: -1.4033914
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    comboDurations: 0.3
+    comboEffects: {fileID: 0}
+  - comboClips: {fileID: 11400000, guid: f341ceffac3f75f47bb2771277fd095d, type: 2}
+    comboCurves:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: -0.0012702942
+        value: 0.04127121
+        inSlope: 1.1474142
+        outSlope: 1.1474142
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.61967015
+        value: 0.7537471
+        inSlope: -0.5862204
+        outSlope: -0.5862204
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.85971844
+        value: 0.19686992
+        inSlope: -1.1288232
+        outSlope: -1.1288232
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.30456555
+        outWeight: 0.23721401
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: -1.4033914
+        outSlope: -1.4033914
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    comboDurations: 0.3
+    comboEffects: {fileID: 0}
+  comboWindow: 0.4
+--- !u!1 &4996526607363828555
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5447861971396841217}
+  - component: {fileID: 3066858298051228278}
+  m_Layer: 0
+  m_Name: RayDamageCaster
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5447861971396841217
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4996526607363828555}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8109547731022180595}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3066858298051228278
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4996526607363828555}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e97354a993354bc3ac4def8fb54232e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CHG._02_Scripts.CombatSystem.RayDamageCaster
+  whatIsEnemy:
+    serializedVersion: 2
+    m_Bits: 128
+  castType: 1
+  boxSize: {x: 1, y: 1, z: 1}
+  castRadius: 1.102
+  casterInterpolation: 0.177
+  castingRange: 2.04
+  isDebug: 1

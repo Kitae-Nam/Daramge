@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5960606019709585294}
   - component: {fileID: 2256949278147322525}
   m_Layer: 0
-  m_Name: Rolling SKill
+  m_Name: Dash SKill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -52,35 +52,35 @@ MonoBehaviour:
     - serializedVersion: 3
       time: -0.013957977
       value: 0.71746063
-      inSlope: 0.9281822
-      outSlope: 0.9281822
+      inSlope: 0.5095262
+      outSlope: 0.5095262
       tangentMode: 34
       weightedMode: 0
       inWeight: 0
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.24402925
-      value: 0.9569198
-      inSlope: -0.16368261
-      outSlope: -0.16368261
+      time: 0.25028536
+      value: 0.85209954
+      inSlope: 0.030198663
+      outSlope: 0.030198663
       tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.8089372
-      value: 0.24765117
-      inSlope: -1.1288232
-      outSlope: -1.1288232
+      time: 0.7877275
+      value: 0.6107188
+      inSlope: -0.6244222
+      outSlope: -0.6244222
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.30456555
+      inWeight: 0.12615609
       outWeight: 0.23721401
     - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: -1.2961768
-      outSlope: -1.2961768
+      time: 1.7220194
+      value: 0.1625686
+      inSlope: -0.47966826
+      outSlope: -0.47966826
       tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334
@@ -88,5 +88,6 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  speed: 4
+  speed: 3
   dashDuration: 0.4
+  staminaUseAmount: 1

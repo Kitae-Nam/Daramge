@@ -1,4 +1,5 @@
 using System;
+using CHG._02_Scripts.Player.Combat;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -9,12 +10,8 @@ namespace CHG._02_Scripts.Player
     {
         
         public event Action<Vector2> OnMovementChange;
-        public event Action OnAttackKeyPressed;
-        public event Action OnDashKeyPressed;
-        public event Action OnFirstSkillKeyPressed;
-        public event Action OnFirstSkillKeyReleased;
-        public event Action OnScendSkillKeyPressed;
-        public event Action OnScendSkillKeyReleased;
+        public event Action<PlayerSkillSlot> OnSkillKeyPressed;
+        public event Action<PlayerSkillSlot> OnSkillKeyReleased;
         
 
         public Vector2 Movement { get; private set; }
@@ -63,7 +60,10 @@ namespace CHG._02_Scripts.Player
         public void OnAttack(InputAction.CallbackContext context)
         {
             if(context.performed)
-                OnAttackKeyPressed?.Invoke();
+                OnSkillKeyPressed?.Invoke(PlayerSkillSlot.Attack);
+            
+            if (context.canceled)   
+                OnSkillKeyReleased?.Invoke(PlayerSkillSlot.Attack);
         }
 
         public void OnInteract(InputAction.CallbackContext context)
@@ -74,19 +74,19 @@ namespace CHG._02_Scripts.Player
         public void OnFirstSkill(InputAction.CallbackContext context)
         {
             if(context.performed)
-                OnFirstSkillKeyPressed?.Invoke();
+                OnSkillKeyPressed?.Invoke(PlayerSkillSlot.FirstSkill);
             
             if (context.canceled)
-                OnFirstSkillKeyReleased?.Invoke();
+                OnSkillKeyReleased?.Invoke(PlayerSkillSlot.FirstSkill);
         }
         
         public void OnScendSkill(InputAction.CallbackContext context)
         {
             if(context.performed)
-                OnScendSkillKeyPressed?.Invoke();
+                OnSkillKeyPressed?.Invoke(PlayerSkillSlot.SecondSkill);
             
             if (context.canceled)
-                OnScendSkillKeyReleased?.Invoke();
+                OnSkillKeyReleased?.Invoke(PlayerSkillSlot.SecondSkill);
             
         }
 
@@ -98,7 +98,7 @@ namespace CHG._02_Scripts.Player
         public void OnDash(InputAction.CallbackContext context)
         {
             if(context.performed)
-                OnDashKeyPressed?.Invoke();
+                OnSkillKeyPressed?.Invoke(PlayerSkillSlot.Dash);
         }
 
         public Vector3 GetWorldMousePosition()

@@ -54,8 +54,10 @@ namespace CHG._02_Scripts.CombatSystem
 
 #if UNITY_EDITOR
 
+        [SerializeField] private bool isDebug = false;
         private void OnDrawGizmos()
         {
+            if (!isDebug) return;
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(transform.position, radius);
             Gizmos.color = Color.white;

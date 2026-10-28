@@ -9,10 +9,11 @@ namespace CHG._02_Scripts.Player.Combat
 {
     public class ChargeElectricitySkill : AbstractPlayerSkill, IChargeSkill
     {
+        public bool IsHolding => ChargeLogic.IsCharging;
         [field:SerializeField] public ChargeLogic ChargeLogic { get; private set; }
 
         [SerializeField] private AnimParamSO chargeParam;
-        [SerializeField] private AnimParamSO attackParam;
+        [SerializeField] private AnimParamSO impactParam;
         [SerializeField] private OverlapDamageCaster damageCaster;
         [SerializeField] private StatSO moveSpeedStat;
 
@@ -46,7 +47,8 @@ namespace CHG._02_Scripts.Player.Combat
 
         private void Update() => ChargeLogic.Tick(Time.deltaTime);
 
-        public void ReleaseCharge()
+
+        public void Release()
         {
             float power = ChargeLogic.Release();
             if (!ChargeLogic.IsValidCharge)
@@ -60,7 +62,7 @@ namespace CHG._02_Scripts.Player.Combat
 
         private IEnumerator SlamCoroutine(float power)
         {
-            _renderer.PlayClip(attackParam.ParamHash, 0f, 0.1f);
+            _renderer.PlayClip(impactParam.ParamHash, 0f, 0.1f);
             damageCaster.ResetHitCaster();
             
             float radius = Mathf.Lerp(minRadius, maxRadius, power);
