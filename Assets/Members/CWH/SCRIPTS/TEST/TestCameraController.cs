@@ -1,4 +1,5 @@
 using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime;
+using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Movement;
 using UnityEngine;
 using UnityEngine.InputSystem;
 

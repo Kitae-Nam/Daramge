@@ -574,6 +574,124 @@ PrefabInstance:
       addedObject: {fileID: 509024430}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 31270e9f38d5e7a448ae050b9633fce3, type: 3}
+--- !u!1 &304204497
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 304204498}
+  - component: {fileID: 304204502}
+  - component: {fileID: 304204501}
+  - component: {fileID: 304204500}
+  - component: {fileID: 304204499}
+  m_Layer: 0
+  m_Name: Melee warning
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &304204498
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 304204497}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -1, z: -0, w: 0}
+  m_LocalPosition: {x: -1.0833331, y: -0.47499993, z: -0.66666675}
+  m_LocalScale: {x: 0.83333325, y: 0.83333325, z: 0.83333325}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1309669837}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &304204499
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 304204497}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 385991cb6d7841618795b85547f8d85b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.AreaTelegraphPresenter
+  _heightOffset: 0.06
+--- !u!114 &304204500
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 304204497}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97283c54a67e4b86b07c67e3210caf40, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.BossTelegraphPresenter
+  _targetRenderer: {fileID: 304204501}
+--- !u!23 &304204501
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 304204497}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 78ec99af62d78a14699b08d5ee926491, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &304204502
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 304204497}
+  m_Mesh: {fileID: 0}
 --- !u!1 &352643682
 GameObject:
   m_ObjectHideFlags: 0
@@ -3580,8 +3698,9 @@ GameObject:
   - component: {fileID: 617972994}
   - component: {fileID: 617972993}
   - component: {fileID: 617972995}
+  - component: {fileID: 617972996}
   m_Layer: 0
-  m_Name: TelegraphEffect
+  m_Name: RoarTelegraphEffect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3672,6 +3791,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.BossTelegraphPresenter
   _targetRenderer: {fileID: 617972993}
+--- !u!114 &617972996
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 617972990}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 385991cb6d7841618795b85547f8d85b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.AreaTelegraphPresenter
+  _heightOffset: 0.06
 --- !u!1 &623787426
 GameObject:
   m_ObjectHideFlags: 0
@@ -4690,6 +4822,8 @@ PlayableDirector:
     value: {fileID: 2073999381}
   - key: {fileID: 8129244734324122322, guid: 79b3552e81b87e446a53efcf29294d6c, type: 2}
     value: {fileID: 784517737}
+  - key: {fileID: 8635485289179841661, guid: 79b3552e81b87e446a53efcf29294d6c, type: 2}
+    value: {fileID: 2117342039}
   m_ExposedReferences:
     m_References:
     - ae2f0cd506673af43ac5286b356d94de: {fileID: 1000013193084585}
@@ -4939,6 +5073,11 @@ GameObject:
   - component: {fileID: 1309669854}
   - component: {fileID: 1309669853}
   - component: {fileID: 1309669855}
+  - component: {fileID: 1309669856}
+  - component: {fileID: 2100000101}
+  - component: {fileID: 2100000102}
+  - component: {fileID: 2100000103}
+  - component: {fileID: 2100000104}
   m_Layer: 0
   m_Name: The_King(Boss)
   m_TagString: Untagged
@@ -4965,6 +5104,7 @@ Transform:
   - {fileID: 1452449709}
   - {fileID: 617972991}
   - {fileID: 1842757481}
+  - {fileID: 304204498}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!95 &1309669838
@@ -5089,7 +5229,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 1.6
-  m_Speed: 10
+  m_Speed: 2
   m_Acceleration: 30
   avoidancePriority: 50
   m_AngularSpeed: 120
@@ -5126,6 +5266,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.BossMovementEffect
   _stepParticle: {fileID: 1452449708}
+  _minimumSpeed: 0.1
 --- !u!114 &1309669848
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5138,6 +5279,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56539dfb193e4d8ab1d701ef63b69b01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.BossMovementStateController
+  _movementDriver: {fileID: 2100000104}
 --- !u!114 &1309669849
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5152,7 +5294,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Patterns.RoarPattern
   _warningDuration: 1
   _recoveryDuration: 1
-  _cooldown: 0.5
+  _cooldown: 30
   _warningStarted:
     m_PersistentCalls:
       m_Calls: []
@@ -5160,7 +5302,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   _telegraph: {fileID: 617972995}
-  _areaTelegraph: {fileID: 0}
+  _areaTelegraph: {fileID: 617972996}
   _roarRadius: 7.7
   _knockbackSpeed: 80
   _knockbackDuration: 0.5
@@ -5207,8 +5349,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71b9622c8762412693e25c4f2b9c27f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Patterns.DashPattern
-  _warningDuration: 1.2
-  _recoveryDuration: 0.8
+  _warningDuration: 0.5
+  _recoveryDuration: 0.2
   _cooldown: 5
   _warningStarted:
     m_PersistentCalls:
@@ -5217,13 +5359,14 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   _telegraph: {fileID: 1842757486}
-  _dashDistance: 18
-  _dashSpeed: 30
-  _dashWidth: 4
-  _damage: 25
-  _knockbackSpeed: 12
-  _knockbackDuration: 0.35
+  _dashDistance: 22
+  _dashSpeed: 120
+  _dashWidth: 7
+  _damage: 0
+  _knockbackSpeed: 33
+  _knockbackDuration: 0.3
   _warningOpacity: 0.7
+  _preferredMinimumDistance: 15
 --- !u!114 &1309669853
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5239,6 +5382,7 @@ MonoBehaviour:
   _patterns:
   - {fileID: 1309669849}
   - {fileID: 1309669852}
+  - {fileID: 1309669856}
   _openingDelay: 3
   _decisionInterval: 0.35
 --- !u!114 &1309669854
@@ -5268,6 +5412,36 @@ MonoBehaviour:
   m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.BossSwordController
   _swordPrefab: {fileID: 0}
   _breakBonusDamage: 100
+--- !u!114 &1309669856
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1309669836}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e157438b604486a91d837fc4913c5bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Patterns.MeleeComboPattern
+  _warningDuration: 1
+  _recoveryDuration: 1
+  _cooldown: 5
+  _warningStarted:
+    m_PersistentCalls:
+      m_Calls: []
+  _warningEnded:
+    m_PersistentCalls:
+      m_Calls: []
+  _telegraph: {fileID: 304204499}
+  _range: 9
+  _angle: 140
+  _damage: 20
+  _secondWarning: 0.7
+  _swingDuration: 0.35
+  _hitLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
 --- !u!1001 &1346066074
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8159,6 +8333,66 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &2100000101
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1309669836}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3766fa478301f4d4ca70ac57828c0030, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.BossCombatGate
+  _combatEnabled: 1
+--- !u!114 &2100000102
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1309669836}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66b36af8fa92ddd40b79b3076dfaf52c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.BossCutsceneGate
+  _director: {fileID: 1088628362}
+--- !u!114 &2100000103
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1309669836}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa8c0b89dfcc4e39ab1bc88ee765d50b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.ChessBoardGrid
+  _center: {x: 0, y: 0.53, z: 0}
+  _cellSize: 4.5
+  _columns: 8
+  _rows: 8
+--- !u!114 &2100000104
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1309669836}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a4505ad1d054148a564a5b3747efc6c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.ChessKingGridMovement
+  _stepDuration: 0.35
+  _stepPause: 0.5
+  _stopDistance: 7
+  _obstacleLayers:
+    serializedVersion: 2
+    m_Bits: 499
 --- !u!1 &2117342039
 GameObject:
   m_ObjectHideFlags: 0
