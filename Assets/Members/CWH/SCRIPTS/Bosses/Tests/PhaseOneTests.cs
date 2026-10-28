@@ -2,10 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime;
+using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Cinematics;
+using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Combat;
+using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Health;
+using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Movement;
+using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Telegraphs;
 using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Patterns;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Playables;
 using UnityEngine.TestTools;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -13,6 +19,11 @@ using UnityEditor;
 
 namespace Members.CWH.SCRIPTS.Bosses.Tests
 {
+    public sealed class GateTestPlayableAsset : PlayableAsset
+    {
+        public override double duration => 1d;
+        public override Playable CreatePlayable(PlayableGraph graph, GameObject owner) => Playable.Create(graph);
+    }
     /// <summary>조립된 실제 프리팹을 사용해 패턴 간 상호작용과 페이즈 경계를 검사한다.</summary>
     public sealed class PhaseOneTests
     {
@@ -38,6 +49,8 @@ namespace Members.CWH.SCRIPTS.Bosses.Tests
 #endif
             _objects.Add(_boss);
             _boss.GetComponent<PhaseOneBrain>().enabled = false;
+            // 패턴 검사에서는 추적을 끄고, 그리드 이동은 전용 시나리오에서 검사한다.
+            _boss.GetComponent<ChessKingGridMovement>()?.SetChaseEnabled(false);
             _boss.GetComponent<BossMovement>().SetChaseEnabled(false);
             _boss.GetComponent<NavMeshAgent>().Warp(Vector3.zero);
             _runner = _boss.GetComponent<BossPatternRunner>();
@@ -239,6 +252,8 @@ namespace Members.CWH.SCRIPTS.Bosses.Tests
         [UnityTest]
         public IEnumerator AutomaticBrainStartsEligiblePatterns()
         {
+            var gridMovement = _boss.GetComponent<ChessKingGridMovement>();
+            if (gridMovement != null) gridMovement.enabled = false;
             var brain = _boss.GetComponent<PhaseOneBrain>();
             Set(brain, "_openingDelay", 0f); brain.enabled = true;
             float deadline = Time.time + 1f;
@@ -300,15 +315,15 @@ namespace Members.CWH.SCRIPTS.Bosses.Tests
         }
 
         [UnityTest]
-        public IEnumerator RoarOutsideRangeStillGroggiesWithoutHittingPlayer()
+        public IEnumerator RoarOutsideRangeIsRejectedWithoutGroggy()
         {
             _player.transform.position = Vector3.forward * 30f;
             var roar = _boss.GetComponent<RoarPattern>(); Fast(roar);
-            Assert.That(_runner.TryRun(roar), Is.True);
-            yield return FinishPattern();
+            Assert.That(_runner.TryRun(roar), Is.False);
+            yield return null;
             Assert.That(_player.GetComponent<DashTestReceiver>().DamageCalls, Is.Zero);
             Assert.That(_player.GetComponent<DashTestReceiver>().KnockbackCalls, Is.Zero);
-            Assert.That(_boss.GetComponent<BossGroggyController>().IsGroggy, Is.True);
+            Assert.That(_boss.GetComponent<BossGroggyController>().IsGroggy, Is.False);
         }
 
         [Test]
@@ -317,6 +332,183 @@ namespace Members.CWH.SCRIPTS.Bosses.Tests
             _boss.GetComponent<BossHealth>().ReceiveDamage(395f);
             Assert.That(_boss.GetComponent<BossPhaseController>().CurrentPhase, Is.EqualTo(1));
             Assert.That(_boss.GetComponent<SummonPattern>().enabled, Is.True);
+        }
+
+        [Test]
+        public void FarTargetSelectsDashAndUsesThrowDuringDashCooldown()
+        {
+            _boss.GetComponent<ChessKingGridMovement>().enabled = false;
+            _player.transform.position = Vector3.forward * 20f;
+            var brain = _boss.GetComponent<PhaseOneBrain>();
+            Assert.That(brain.TrySelectPattern(out BossPattern selected), Is.True);
+            Assert.That(selected, Is.TypeOf<DashPattern>());
+            Assert.That(_runner.TryRun(selected), Is.True);
+            _runner.CancelCurrentPattern();
+            Assert.That(brain.TrySelectPattern(out selected), Is.True);
+            Assert.That(selected, Is.TypeOf<SwordThrowPattern>());
+        }
+
+        [UnityTest]
+        public IEnumerator GateCancelsWarningAndRejectsManualAttackUntilAllLocksAreReleased()
+        {
+            var gate = _boss.GetComponent<BossCombatGate>();
+            var roar = _boss.GetComponent<RoarPattern>();
+            Assert.That(_runner.TryRun(roar), Is.True);
+            yield return null; yield return null;
+            var first = new object(); var second = new object();
+            gate.Block(first); gate.Block(second);
+            Assert.That(_runner.CurrentPattern, Is.Null);
+            Assert.That(_runner.TryRun(roar), Is.False);
+            gate.Unblock(first);
+            Assert.That(gate.IsOpen, Is.False);
+            gate.Unblock(second);
+            Assert.That(gate.IsOpen, Is.True);
+            Assert.That(_boss.GetComponent<BossGroggyController>().IsGroggy, Is.False);
+        }
+
+        [UnityTest]
+        public IEnumerator CutscenePlayOnAwakeIsBlockedBeforeFirstFrameAndPauseKeepsLock()
+        {
+            var timeline = new GameObject("Cutscene test director"); _objects.Add(timeline);
+            var director = timeline.AddComponent<PlayableDirector>();
+            var asset = ScriptableObject.CreateInstance<GateTestPlayableAsset>();
+            director.playableAsset = asset; director.playOnAwake = true;
+            _boss.SetActive(false);
+            var bridge = _boss.GetComponent<BossCutsceneGate>();
+            Set(bridge, "_director", director);
+            _boss.SetActive(true);
+            var gate = _boss.GetComponent<BossCombatGate>();
+            Assert.That(gate.IsOpen, Is.False, "Director의 첫 Start 전부터 잠겨야 합니다.");
+            Assert.That(_runner.TryRun(_boss.GetComponent<RoarPattern>()), Is.False);
+            director.Play(); yield return null;
+            director.Pause(); yield return null;
+            Assert.That(gate.IsOpen, Is.False, "컷신 중간 일시정지는 전투 시작이 아닙니다.");
+            director.Stop();
+            Assert.That(gate.IsOpen, Is.True);
+            Object.DestroyImmediate(asset);
+        }
+
+        [UnityTest]
+        public IEnumerator GateClearsSummonsAndFlyingSwordWithoutReward()
+        {
+            var summon = _boss.GetComponent<SummonPattern>(); Fast(summon);
+            Assert.That(_runner.TryRun(summon), Is.True);
+            yield return FinishPattern();
+            var roster = _boss.GetComponent<BossSummonRoster>();
+            Assert.That(roster.LivingCount, Is.EqualTo(2));
+            var swords = _boss.GetComponent<BossSwordController>();
+            swords.Throw(_player.transform, Vector3.forward * 8f, 2f);
+            _boss.GetComponent<BossCombatGate>().Block(this);
+            Assert.That(roster.LivingCount, Is.Zero);
+            Assert.That(swords.HasSword, Is.False);
+            Assert.That(_boss.GetComponent<BossHealth>().CurrentHealth, Is.EqualTo(1000f));
+        }
+
+        [Test]
+        public void KingGridRoundTripAndBlockedDiagonalDetourStayWithinOneCell()
+        {
+            var grid = _boss.GetComponent<ChessBoardGrid>();
+            var from = new Vector2Int(3, 3); var target = new Vector2Int(6, 6);
+            Assert.That(grid.WorldToCell(grid.CellToWorld(from)), Is.EqualTo(from));
+            var blocked = new HashSet<Vector2Int> { new Vector2Int(4, 4), new Vector2Int(4, 3), new Vector2Int(3, 4) };
+            Assert.That(grid.TryFindKingStep(from, target, (a, b) => !blocked.Contains(b), out Vector2Int next), Is.True);
+            Assert.That(blocked.Contains(next), Is.False);
+            Assert.That(Mathf.Max(Mathf.Abs(next.x - from.x), Mathf.Abs(next.y - from.y)), Is.EqualTo(1));
+        }
+
+        [UnityTest]
+        public IEnumerator KingMovesOneCellAndPausesAtExactCenter()
+        {
+            var grid = _boss.GetComponent<ChessBoardGrid>(); var movement = _boss.GetComponent<ChessKingGridMovement>();
+            var from = new Vector2Int(2, 2);
+            _boss.GetComponent<NavMeshAgent>().Warp(grid.CellToWorld(from));
+            _player.transform.position = grid.CellToWorld(new Vector2Int(6, 6)) + Vector3.up;
+            movement.SetChaseEnabled(true);
+            float deadline = Time.time + 2f;
+            while (!movement.IsStepping && Time.time < deadline) yield return null;
+            Assert.That(movement.IsStepping, Is.True);
+            while (movement.IsStepping && Time.time < deadline) yield return null;
+            Vector2Int to = grid.WorldToCell(_boss.transform.position);
+            Assert.That(Mathf.Max(Mathf.Abs(to.x - from.x), Mathf.Abs(to.y - from.y)), Is.EqualTo(1));
+            Assert.That(movement.IsCentered, Is.True);
+            Assert.That(_boss.GetComponent<NavMeshAgent>().isStopped, Is.True);
+            Assert.That(_boss.GetComponent<NavMeshAgent>().updatePosition, Is.True);
+        }
+
+        [UnityTest]
+        public IEnumerator GateStopsGridStepImmediatelyWithoutSnapping()
+        {
+            var grid = _boss.GetComponent<ChessBoardGrid>(); var movement = _boss.GetComponent<ChessKingGridMovement>();
+            _boss.GetComponent<NavMeshAgent>().Warp(grid.CellToWorld(new Vector2Int(2, 2)));
+            _player.transform.position = grid.CellToWorld(new Vector2Int(6, 6)) + Vector3.up;
+            Set(movement, "_stepDuration", 0.5f); movement.SetChaseEnabled(true);
+            yield return new WaitForSeconds(0.1f);
+            Assert.That(movement.IsStepping, Is.True);
+            _boss.GetComponent<BossCombatGate>().Block(this);
+            Vector3 stopped = _boss.transform.position;
+            yield return new WaitForSeconds(0.15f);
+            Assert.That(movement.IsStepping, Is.False);
+            Assert.That(Vector3.Distance(_boss.transform.position, stopped), Is.LessThan(0.001f));
+            Assert.That(_boss.GetComponent<NavMeshAgent>().updatePosition, Is.True);
+        }
+
+        [UnityTest]
+        public IEnumerator GroggyStopsCurrentGridStepAndExitAllowsTrackingAgain()
+        {
+            var grid = _boss.GetComponent<ChessBoardGrid>();
+            var movement = _boss.GetComponent<ChessKingGridMovement>();
+            _boss.GetComponent<NavMeshAgent>().Warp(grid.CellToWorld(new Vector2Int(2, 2)));
+            _player.transform.position = grid.CellToWorld(new Vector2Int(6, 6)) + Vector3.up;
+            Set(movement, "_stepDuration", 0.5f);
+            movement.SetChaseEnabled(true);
+            yield return new WaitForSeconds(0.1f);
+            Assert.That(movement.IsStepping, Is.True);
+            var groggy = _boss.GetComponent<BossGroggyController>();
+            Assert.That(groggy.TryEnterGroggy(2f), Is.True);
+            Assert.That(movement.IsStepping, Is.False, "선택된 이동기는 그로기 알림 때 바로 멈춰야 합니다.");
+            Vector3 stopped = _boss.transform.position;
+            yield return new WaitForSeconds(0.15f);
+            Assert.That(Vector3.Distance(_boss.transform.position, stopped), Is.LessThan(0.001f));
+            Assert.That(_boss.GetComponent<NavMeshAgent>().updatePosition, Is.True);
+            groggy.ExitGroggy();
+            float deadline = Time.time + 1f;
+            while (!movement.IsStepping && Time.time < deadline) yield return null;
+            Assert.That(movement.IsStepping, Is.True, "그로기 종료 후에는 가까운 칸 중심 정렬/추적을 재개합니다.");
+        }
+
+        [UnityTest]
+        public IEnumerator GridRejectsGroggyMovementEvenWithoutStateControllerConnection()
+        {
+            _boss.GetComponent<BossMovementStateController>().enabled = false;
+            var grid = _boss.GetComponent<ChessBoardGrid>();
+            var movement = _boss.GetComponent<ChessKingGridMovement>();
+            _boss.GetComponent<NavMeshAgent>().Warp(grid.CellToWorld(new Vector2Int(2, 2)));
+            _player.transform.position = grid.CellToWorld(new Vector2Int(6, 6)) + Vector3.up;
+            Set(movement, "_stepDuration", 0.5f);
+            movement.SetChaseEnabled(true);
+            yield return new WaitForSeconds(0.1f);
+            Assert.That(movement.IsStepping, Is.True);
+            _boss.GetComponent<BossGroggyController>().TryEnterGroggy(2f);
+            Vector3 stopped = _boss.transform.position;
+            yield return new WaitForSeconds(0.15f);
+            Assert.That(movement.IsStepping, Is.False);
+            Assert.That(Vector3.Distance(_boss.transform.position, stopped), Is.LessThan(0.001f));
+        }
+
+        [UnityTest]
+        public IEnumerator FlyingSwordStaysOnStraightLineWithFixedBladeDirection()
+        {
+            var sword = _boss.GetComponent<BossSwordController>().Throw(_player.transform, Vector3.forward * 8f, 2f);
+            Set(sword, "_flightDuration", 0.4f);
+            Transform visual = (Transform)typeof(ThrownBossSword).GetField("_visual", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(sword);
+            Vector3 start = sword.transform.position;
+            Quaternion rotation = visual.rotation;
+            yield return new WaitForSeconds(0.05f);
+            Assert.That(sword.IsFlying, Is.True);
+            Vector3 path = Vector3.forward * 8f - start;
+            Assert.That(Vector3.Cross(path.normalized, sword.transform.position - start).magnitude, Is.LessThan(0.001f));
+            Assert.That(Quaternion.Angle(visual.rotation, rotation), Is.LessThan(0.001f));
+            Assert.That(Vector3.Dot(visual.up, path.normalized), Is.GreaterThan(0.999f));
         }
     }
 }

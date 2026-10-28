@@ -1,6 +1,9 @@
 #if UNITY_EDITOR
 using System.Collections;
 using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime;
+using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Combat;
+using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Patterns;
+using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Movement;
 using NUnit.Framework;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -15,7 +18,7 @@ namespace Members.CWH.SCRIPTS.Bosses.Tests
     {
         private Scene _loaded;
         [UnityTest]
-        public IEnumerator SavedDemoBootsWithTargetNavigationAndFivePatterns()
+        public IEnumerator SavedDemoBootsWithTargetNavigationAndRequiredPatterns()
         {
             _loaded = EditorSceneManager.LoadSceneInPlayMode("Assets/Members/CWH/SCENCES/PhaseOne_Playground.unity",
                 new LoadSceneParameters(LoadSceneMode.Additive));
@@ -25,8 +28,18 @@ namespace Members.CWH.SCRIPTS.Bosses.Tests
                 if (root.TryGetComponent(out BossTarget found)) target = found;
             Assert.That(target, Is.Not.Null);
             Assert.That(target.HasTarget, Is.True);
+            Assert.That(target.GetComponents<ChessKingGridMovement>().Length, Is.EqualTo(1));
+            var movementController = target.GetComponent<Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Movement.BossMovementStateController>();
+            var serialized = new UnityEditor.SerializedObject(movementController);
+            Assert.That(serialized.FindProperty("_movementDriver").objectReferenceValue,
+                Is.SameAs(target.GetComponent<ChessKingGridMovement>()), "테스트 씬도 실제 그리드 이동기를 제어해야 합니다.");
             Assert.That(target.GetComponent<NavMeshAgent>().isOnNavMesh, Is.True);
-            Assert.That(target.GetComponents<BossPattern>().Length, Is.EqualTo(5));
+            // 필수 다섯 종류를 검사하되, 별도로 추가한 기술 변형까지 금지하지 않는다.
+            Assert.That(target.GetComponent<MeleeComboPattern>(), Is.Not.Null);
+            Assert.That(target.GetComponent<SummonPattern>(), Is.Not.Null);
+            Assert.That(target.GetComponent<DashPattern>(), Is.Not.Null);
+            Assert.That(target.GetComponent<SwordThrowPattern>(), Is.Not.Null);
+            Assert.That(target.GetComponent<RoarPattern>(), Is.Not.Null);
             Assert.That(target.GetComponent<PhaseOneBrain>().enabled, Is.True);
             Assert.That(target.GetComponent<BossPhaseController>().CurrentPhase, Is.EqualTo(1));
             var runner = target.GetComponent<BossPatternRunner>();
