@@ -3,8 +3,6 @@ using System.Collections;
 using CHG._02_Scripts.Agent;
 using CHG._02_Scripts.CombatSystem;
 using CHG._02_Scripts.CoreSystem.AnimationSystem;
-using CHG._02_Scripts.CoreSystem.DataSystem;
-using CHG._02_Scripts.CoreSystem.EffectSystem;
 using CoreSystem.Events;
 using GGMLib.ObjectPool.Runtime;
 using UnityEngine;
@@ -17,11 +15,12 @@ namespace CHG._02_Scripts.Player.Combat
         public AnimParamSO comboClip;
         public AnimationCurve comboCurve;
         public float comboDuration;
-        public AssetNameSO comboEffect;
     }
     
     public class PlayerMeleeCombo : AbstractPlayerSkill
     {
+        [SerializeField] private AnimTriggerSO animationEndTrigger;
+        [SerializeField] private AnimTriggerSO damageCastTrigger;
         [SerializeField] private PoolItemSO slashVfxItem;
         [SerializeField] private PoolItemSO impactVfxItem;
 
@@ -30,7 +29,6 @@ namespace CHG._02_Scripts.Player.Combat
         [SerializeField] private float comboWindow = 0.4f;
 
         private AgentTrigger _trigger;
-        private VfxModule _vfxModule;
         private AbstractDamageCaster _damageCaster;
 
         private Coroutine _curCoroutine;
@@ -41,7 +39,6 @@ namespace CHG._02_Scripts.Player.Combat
             base.InitializeSkill(skillModule);
             _trigger = _player.GetModule<AgentTrigger>();
             Debug.Assert(_trigger != null, $"trigger is null : {gameObject.name}");
-            _vfxModule = _player.GetModule<VfxModule>();
             _damageCaster = GetComponentInChildren<AbstractDamageCaster>();
             Debug.Assert(_damageCaster != null, $"damageCaster is null : {gameObject.name}");
             _damageCaster.InitCaster(skillModule.Owner);
@@ -63,15 +60,13 @@ namespace CHG._02_Scripts.Player.Combat
                 _comboCounter = 0;
             }
             
-            // if (comboEffects.Length > ComboCounter)
-                // _vfxModule.PlayVfx(comboEffects[ComboCounter].AssetHash);
             _renderer.PlayClip(comboSteps[_comboCounter].comboClip.ParamHash, 0f, 0.05f);
 
             Vector3 mousePosition = _player.PlayerInput.GetWorldMousePosition();
             Vector3 direction = mousePosition - _player.transform.position;
             _movement.RotateTo(direction.normalized);
-            _trigger.OnAnimationEnd += HandleAnimationEnd;
-            _trigger.OnDamageCast += HandleDamageCast;
+            _trigger.Subscribe(animationEndTrigger, HandleAnimationEnd);
+            _trigger.Subscribe(damageCastTrigger, HandleDamageCast);
             _curCoroutine = StartCoroutine(SwordComboCoroutine());
         }
 
@@ -122,17 +117,16 @@ namespace CHG._02_Scripts.Player.Combat
             _movement.CanManualMove = true;
             _comboCounter++;
             
-            _trigger.OnDamageCast -= HandleDamageCast;
-            _trigger.OnAnimationEnd -= HandleAnimationEnd;
+            _trigger.UnSubscribe(damageCastTrigger, HandleDamageCast);
+            _trigger.UnSubscribe(animationEndTrigger, HandleAnimationEnd);
             base.StopSkill();
         }
 
         private void OnDestroy()
         {
             if (_trigger == null) return;
-            _trigger.OnAnimationEnd -= HandleAnimationEnd;
-            _trigger.OnDamageCast -= HandleDamageCast;
-            
+            _trigger.UnSubscribe(damageCastTrigger, HandleDamageCast);
+            _trigger.UnSubscribe(animationEndTrigger, HandleAnimationEnd);
         }
     }
 }

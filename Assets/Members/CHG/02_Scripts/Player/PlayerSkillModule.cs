@@ -102,23 +102,28 @@ namespace CHG._02_Scripts.Player
 
         public bool CanUseSkill(int skillIndex, GameObject target = null)
         {
-            
-            if (_currentSkill is { IsUsing: true })
-                return false; 
-            if (_skillDict.TryGetValue(skillIndex, out ISkill skill))
-            {
-                return skill.CanUseSkill(target);
-            }
+            if (!_skillDict.TryGetValue(skillIndex, out ISkill skill))
+                return false;
 
-            return false;
+            if (_currentSkill is { IsUsing: true } && !CanInterrupt(_currentSkill, skill))
+                return false;
+
+            return skill.CanUseSkill(target);
         }
+
+        private bool CanInterrupt(ISkill currentSkill, ISkill newSkill)
+            => newSkill.SkillData.CanInterrupt && currentSkill.SkillData.canBeInterrupted;
 
         public void UseSkill(int skillIndex, GameObject target = null)
         {
             if (_skillDict.TryGetValue(skillIndex, out ISkill skill))
             {
                 if (_currentSkill != null)
+                {
                     _currentSkill.OnSkillEnd -= HandleCurrentSkillEnd;
+                    if (_currentSkill.IsUsing)  
+                        _currentSkill.StopSkill();
+                }
                 _currentSkill = skill;
                 _currentSkill.OnSkillEnd += HandleCurrentSkillEnd;
                 _currentSkill.UseSkill(target);
