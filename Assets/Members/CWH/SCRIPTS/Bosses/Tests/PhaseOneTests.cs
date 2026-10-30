@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime;
+using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons;
 using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Cinematics;
 using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Combat;
 using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Health;
