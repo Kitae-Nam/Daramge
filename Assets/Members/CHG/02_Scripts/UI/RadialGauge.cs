@@ -37,7 +37,8 @@ namespace CHG._02_Scripts.UI
 
             painter.lineWidth = Thickness;
             painter.lineCap = LineCap.Butt;
-            
+
+            painter.strokeColor = TrackColor;
             painter.BeginPath();
             painter.Arc(rect.center, radius, Angle.Degrees(0f), Angle.Degrees(360f));
             painter.Stroke();

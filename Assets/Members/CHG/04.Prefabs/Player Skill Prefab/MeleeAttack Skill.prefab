@@ -48,32 +48,32 @@ MonoBehaviour:
   <SkillData>k__BackingField: {fileID: 11400000, guid: 3481a2950db0b12468ab968c794e0d30, type: 2}
   slashVfxItem: {fileID: 0}
   impactVfxItem: {fileID: 0}
-  comboStates:
-  - comboClips: {fileID: 11400000, guid: df7b7923db1e77e42828087d5f92cfd0, type: 2}
-    comboCurves:
+  comboSteps:
+  - comboClip: {fileID: 11400000, guid: df7b7923db1e77e42828087d5f92cfd0, type: 2}
+    comboCurve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: -0.0012702942
-        value: 0.04127121
-        inSlope: 1.1474142
-        outSlope: 1.1474142
+        time: 0.0038070679
+        value: 0.0031738281
+        inSlope: 1.1296225
+        outSlope: 1.1296225
         tangentMode: 34
         weightedMode: 0
         inWeight: 0
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 0.61967015
-        value: 0.7537471
-        inSlope: -0.5862204
-        outSlope: -0.5862204
+        time: 0.5727036
+        value: 0.64581215
+        inSlope: 0.15222901
+        outSlope: 0.15222901
         tangentMode: 34
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 0.85971844
-        value: 0.19686992
+        time: 0.9244157
+        value: 0.35559183
         inSlope: -1.1288232
         outSlope: -1.1288232
         tangentMode: 0
@@ -83,8 +83,8 @@ MonoBehaviour:
       - serializedVersion: 3
         time: 1
         value: 0
-        inSlope: -1.4033914
-        outSlope: -1.4033914
+        inSlope: -4.704573
+        outSlope: -4.704573
         tangentMode: 34
         weightedMode: 0
         inWeight: 0.33333334
@@ -92,33 +92,33 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    comboDurations: 0.3
-    comboEffects: {fileID: 0}
-  - comboClips: {fileID: 11400000, guid: beae1f5608e290f4d8bcd480457998fc, type: 2}
-    comboCurves:
+    comboDuration: 0.3
+    comboEffect: {fileID: 0}
+  - comboClip: {fileID: 11400000, guid: beae1f5608e290f4d8bcd480457998fc, type: 2}
+    comboCurve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: -0.0012702942
-        value: 0.04127121
-        inSlope: 1.1474142
-        outSlope: 1.1474142
+        time: 0.0038070679
+        value: 0.0031738281
+        inSlope: 1.1296225
+        outSlope: 1.1296225
         tangentMode: 34
         weightedMode: 0
         inWeight: 0
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 0.61967015
-        value: 0.7537471
-        inSlope: -0.5862204
-        outSlope: -0.5862204
+        time: 0.5727036
+        value: 0.64581215
+        inSlope: 0.15222901
+        outSlope: 0.15222901
         tangentMode: 34
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 0.85971844
-        value: 0.19686992
+        time: 0.9244157
+        value: 0.35559183
         inSlope: -1.1288232
         outSlope: -1.1288232
         tangentMode: 0
@@ -128,8 +128,8 @@ MonoBehaviour:
       - serializedVersion: 3
         time: 1
         value: 0
-        inSlope: -1.4033914
-        outSlope: -1.4033914
+        inSlope: -4.704573
+        outSlope: -4.704573
         tangentMode: 34
         weightedMode: 0
         inWeight: 0.33333334
@@ -137,33 +137,33 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    comboDurations: 0.3
-    comboEffects: {fileID: 0}
-  - comboClips: {fileID: 11400000, guid: f341ceffac3f75f47bb2771277fd095d, type: 2}
-    comboCurves:
+    comboDuration: 0.3
+    comboEffect: {fileID: 0}
+  - comboClip: {fileID: 11400000, guid: f341ceffac3f75f47bb2771277fd095d, type: 2}
+    comboCurve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: -0.0012702942
-        value: 0.04127121
-        inSlope: 1.1474142
-        outSlope: 1.1474142
+        time: 0.0038070679
+        value: 0.0031738281
+        inSlope: 1.1296225
+        outSlope: 1.1296225
         tangentMode: 34
         weightedMode: 0
         inWeight: 0
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 0.61967015
-        value: 0.7537471
-        inSlope: -0.5862204
-        outSlope: -0.5862204
+        time: 0.5727036
+        value: 0.64581215
+        inSlope: 0.15222901
+        outSlope: 0.15222901
         tangentMode: 34
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 0.85971844
-        value: 0.19686992
+        time: 0.9244157
+        value: 0.35559183
         inSlope: -1.1288232
         outSlope: -1.1288232
         tangentMode: 0
@@ -173,8 +173,8 @@ MonoBehaviour:
       - serializedVersion: 3
         time: 1
         value: 0
-        inSlope: -1.4033914
-        outSlope: -1.4033914
+        inSlope: -4.704573
+        outSlope: -4.704573
         tangentMode: 34
         weightedMode: 0
         inWeight: 0.33333334
@@ -182,8 +182,8 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    comboDurations: 0.3
-    comboEffects: {fileID: 0}
+    comboDuration: 0.3
+    comboEffect: {fileID: 0}
   comboWindow: 0.4
 --- !u!1 &4996526607363828555
 GameObject:
