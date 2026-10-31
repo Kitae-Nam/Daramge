@@ -1051,6 +1051,53 @@ Transform:
   - {fileID: 7298697467678248518}
   m_Father: {fileID: 6486381038740546215}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &3299266012021998048
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2714982250264670334}
+  - component: {fileID: 3597765508803697463}
+  m_Layer: 7
+  m_Name: Common Range Skill
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2714982250264670334
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3299266012021998048}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5122312914351357202}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3597765508803697463
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3299266012021998048}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6670a366a5544d98bd31c5ff9325be79, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NKT.Enemy.Skill.CommonRangeSkill
+  <SkillData>k__BackingField: {fileID: 11400000, guid: 4b26ea264b5e60444a9829f5621c8d86, type: 2}
+  attackAnimParam: {fileID: 11400000, guid: 1e35534a784eac44b8aeb3f127673184, type: 2}
+  crossFadeDuration: 0.15
 --- !u!1 &3313557547352307830
 GameObject:
   m_ObjectHideFlags: 0
@@ -2043,6 +2090,53 @@ Transform:
   - {fileID: 6037128598228180498}
   m_Father: {fileID: 7353294186231112112}
   m_LocalEulerAnglesHint: {x: 247.532, y: 163.59601, z: -161.398}
+--- !u!1 &7560999166581594637
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4650263248471890636}
+  - component: {fileID: 6146173951936360115}
+  m_Layer: 7
+  m_Name: Common JumpBack Skill
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4650263248471890636
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7560999166581594637}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5122312914351357202}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6146173951936360115
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7560999166581594637}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b45af337df3438290fbb6527432d9b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NKT.Enemy.Skill.EnemyJumpBackSkill
+  <SkillData>k__BackingField: {fileID: 11400000, guid: 6365356c153a4714faabb67c3f811b92, type: 2}
+  rollAnimParam: {fileID: 11400000, guid: 92540a01baf6ae1408d7e9747d98dc08, type: 2}
+  crossFadeDuration: 0.15
 --- !u!1 &7565183895662891478
 GameObject:
   m_ObjectHideFlags: 0
@@ -2436,8 +2530,8 @@ GameObject:
   - component: {fileID: 4286732586446373837}
   - component: {fileID: 1703182522468908686}
   - component: {fileID: 2343993729258848790}
-  - component: {fileID: 3769045396193084184}
   - component: {fileID: 1152650000196486483}
+  - component: {fileID: 3302348156968166224}
   m_Layer: 7
   m_Name: CommonRange Enemy
   m_TagString: Untagged
@@ -2499,6 +2593,8 @@ MonoBehaviour:
   m_Graph: {fileID: -3985497521993963810, guid: e2f9024a631adb045ac492d4cff35d2a, type: 2}
   m_BlackboardVariableOverridesList:
   - rid: 2904886052351378117
+  - rid: 2904886248893580095
+  - rid: 2904886254251802668
   m_OriginalGraph: {fileID: 0}
   m_IsInitialised: 0
   m_IsStarted: 0
@@ -2513,25 +2609,22 @@ MonoBehaviour:
           m_Value1: 0
         Name: Self
         m_Value: {fileID: 8666369999038614764}
---- !u!114 &3769045396193084184
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8666369999038614764}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b6cf4de68918436786e5b9a4acb738b6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::NKT.Enemy.CommonMeleeEnemy
-  OnHit:
-    m_PersistentCalls:
-      m_Calls: []
-  OnDeath:
-    m_PersistentCalls:
-      m_Calls: []
-  <EnemyData>k__BackingField: {fileID: 11400000, guid: 49ec5bb15171711419b3e63b54dbd8d9, type: 2}
+    - rid: 2904886248893580095
+      type: {class: 'BlackboardVariable`1[[System.Int32, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 6456625081386470508
+          m_Value1: 12391954136387488661
+        Name: DefaultSkillIndex
+        m_Value: 2
+    - rid: 2904886254251802668
+      type: {class: 'BlackboardVariable`1[[System.Int32, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 4738229228385564446
+          m_Value1: 4770077369519397008
+        Name: RunSkillIndex
+        m_Value: 3
 --- !u!136 &1152650000196486483
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -2555,6 +2648,26 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
+--- !u!114 &3302348156968166224
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8666369999038614764}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6272595acce4174adb7a75c520f103b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NKT.Enemy.CommonRangeEnemy
+  OnHit:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDeath:
+    m_PersistentCalls:
+      m_Calls: []
+  <EnemyData>k__BackingField: {fileID: 11400000, guid: 49ec5bb15171711419b3e63b54dbd8d9, type: 2}
+  <RangeData>k__BackingField: {fileID: 11400000, guid: 8d58e96a7abfdc043a481e52055679eb, type: 2}
 --- !u!1 &8679807477982585295
 GameObject:
   m_ObjectHideFlags: 0
@@ -2894,7 +3007,9 @@ PrefabInstance:
       propertyPath: m_Name
       value: M1Garand
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 6616222066465048514, guid: 41aec7fc9f0957241bfea0f679e66fd8, type: 3}
+    - {fileID: 8073804096631785003, guid: 41aec7fc9f0957241bfea0f679e66fd8, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -3082,7 +3197,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 4268085405640358880, guid: 6cc5a4c9aadc2e84ebb444c256509a52, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2714982250264670334}
+    - targetCorrespondingSourceObject: {fileID: 4268085405640358880, guid: 6cc5a4c9aadc2e84ebb444c256509a52, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4650263248471890636}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6cc5a4c9aadc2e84ebb444c256509a52, type: 3}
 --- !u!4 &5122312914351357202 stripped
