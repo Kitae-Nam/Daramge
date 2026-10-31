@@ -2,7 +2,7 @@ using GGMLib.EventSystem;
 using GGMLib.ObjectPool.Runtime;
 using UnityEngine;
 
-namespace CoreSystem.Events
+namespace CHG._02_Scripts.CoreSystem.Events
 {
     public static class CreateEvents
     {

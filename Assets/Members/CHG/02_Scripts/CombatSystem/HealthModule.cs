@@ -68,6 +68,12 @@ namespace CHG._02_Scripts.CombatSystem
             }
         }
 
+        public override void ResetHealth()
+        {
+            currentHealth = maxHealth;
+            RaiseHealthChanged();
+        }
+
         private void RaiseHealthChanged()
         {
             OnHealthChanged?.Invoke(currentHealth, maxHealth);

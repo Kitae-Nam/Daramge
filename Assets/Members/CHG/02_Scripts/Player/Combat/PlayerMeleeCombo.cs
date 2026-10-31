@@ -3,7 +3,7 @@ using System.Collections;
 using CHG._02_Scripts.Agent;
 using CHG._02_Scripts.CombatSystem;
 using CHG._02_Scripts.CoreSystem.AnimationSystem;
-using CoreSystem.Events;
+using CHG._02_Scripts.CoreSystem.Events;
 using GGMLib.ObjectPool.Runtime;
 using UnityEngine;
 
