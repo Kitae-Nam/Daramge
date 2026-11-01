@@ -1,5 +1,5 @@
 using System;
-using Members.CHG._02_Scripts.CoreSystem.AnimationSystem;
+using CHG._02_Scripts.CoreSystem.AnimationSystem;
 using Unity.Behavior;
 using Unity.Properties;
 using UnityEngine;

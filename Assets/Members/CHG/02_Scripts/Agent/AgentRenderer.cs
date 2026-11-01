@@ -1,7 +1,7 @@
 using GGMLib.ModuleSystems;
 using UnityEngine;
 
-namespace Members.CHG._02_Scripts.Agent
+namespace CHG._02_Scripts.Agent
 {
     [RequireComponent(typeof(Animator))]
     public class AgentRenderer : MonoBehaviour, IModule, IRenderer

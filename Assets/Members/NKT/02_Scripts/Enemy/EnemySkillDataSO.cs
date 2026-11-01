@@ -1,4 +1,4 @@
-using Members.CHG._02_Scripts.CombatSystem;
+using CHG._02_Scripts.CombatSystem;
 using UnityEngine;
 
 namespace NKT.Enemy

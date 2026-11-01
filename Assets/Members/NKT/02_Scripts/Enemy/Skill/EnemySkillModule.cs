@@ -1,75 +1,77 @@
+using System;
 using System.Collections.Generic;
+using CHG._02_Scripts.CombatSystem;
 using GGMLib.ModuleSystems;
 using UnityEngine;
 
 namespace NKT.Enemy.Skill
 {
-    public class EnemySkillModule : MonoBehaviour, IModule
+    public class EnemySkillModule : MonoBehaviour, IModule, ISkillModule
     {
-        [Tooltip("직전에 쓴 스킬의 가중치 배율 (같은 스킬 연속 사용 억제)")]
-        [SerializeField, Range(0f, 1f)] private float repeatWeightMultiplier = 0.3f;
+        public ModuleOwner Owner { get; private set; }
+        public AbstractEnemy Enemy { get; private set; }
+        public event Action OnCurrentSkillEnd;
 
-        public EnemySkill CurrentSkill { get; private set; }
-        public bool IsUsingSkill => CurrentSkill != null && CurrentSkill.IsUsing;
-        public bool IsArmored => IsUsingSkill && CurrentSkill.Data.armored;
+        //armored 스킬을 쓰는 중이면 맞아도 경직되지 않는다.
+        public bool IsArmored => _currentSkill is { IsUsing: true }
+                                 && _currentSkill.SkillData is EnemySkillDataSO { armored: true };
 
-        private AbstractEnemy _enemy;
-        private EnemySkill[] _skills;
-        private EnemySkill _lastSkill;
-        private readonly List<EnemySkill> _candidates = new();
+        private readonly Dictionary<int, ISkill> _skillDict = new();
+        private ISkill _currentSkill;
 
         public void Initialize(ModuleOwner owner)
         {
-            _enemy = owner as AbstractEnemy;
-            Debug.Assert(_enemy != null, $"EnemySkillModule은 AbstractEnemy에 있어야 합니다. {gameObject.name}");
+            Owner = owner;
+            Enemy = owner as AbstractEnemy;
+            Debug.Assert(Enemy != null, "적의 스킬 모듈은 AbstractEnemy의 자식이어야 합니다.");
 
-            _skills = owner.GetComponentsInChildren<EnemySkill>(true);
-            foreach (EnemySkill skill in _skills)
-                skill.Initialize(_enemy);
+            foreach (ISkill skill in GetComponentsInChildren<ISkill>(true))
+            {
+                if (!_skillDict.TryAdd(skill.SkillData.skillIndex, skill))
+                {
+                    Debug.LogError($"스킬 번호 {skill.SkillData.skillIndex}가 중복됩니다. {gameObject.name}");
+                    continue;
+                }
+                skill.InitializeSkill(this);
+            }
         }
 
-        public EnemySkill SelectSkill(Transform target)
+        public bool CanUseSkill(int skillIndex, GameObject target = null)
         {
-            _candidates.Clear();
-            float totalWeight = 0f;
+            if (_currentSkill is { IsUsing: true })
+                return false;
 
-            foreach (EnemySkill skill in _skills)
+            return _skillDict.TryGetValue(skillIndex, out ISkill skill) && skill.CanUseSkill(target);
+        }
+
+        public void UseSkill(int skillIndex, GameObject target = null)
+        {
+            if (!_skillDict.TryGetValue(skillIndex, out ISkill skill))
             {
-                if (!skill.IsReady || !skill.IsInRange(target)) continue;
-
-                float weight = GetWeight(skill);
-                if (weight <= 0f) continue;
-
-                _candidates.Add(skill);
-                totalWeight += weight;
+                Debug.LogError($"스킬 번호 {skillIndex}가 없습니다. {gameObject.name}");
+                return;
             }
 
-            if (_candidates.Count == 0) return null;
+            if (_currentSkill != null)
+                _currentSkill.OnSkillEnd -= InvokeSkillEnd;
 
-            float pick = Random.value * totalWeight;
-            foreach (EnemySkill skill in _candidates)
-            {
-                pick -= GetWeight(skill);
-                if (pick <= 0f) return skill;
-            }
-            return _candidates[^1];
+            _currentSkill = skill;
+            _currentSkill.OnSkillEnd += InvokeSkillEnd;
+            skill.UseSkill(target);
         }
 
-        public void UseSkill(EnemySkill skill, Transform target)
+        public void InvokeSkillEnd()
         {
-            if (IsUsingSkill) CurrentSkill.Cancel();
-
-            CurrentSkill = skill;
-            _lastSkill = skill;
-            skill.Use(target);
+            if (_currentSkill != null)
+                _currentSkill.OnSkillEnd -= InvokeSkillEnd;
+            _currentSkill = null;
+            OnCurrentSkillEnd?.Invoke();
         }
 
-        public void CancelCurrentSkill()
+        public void StopSkillIfNotFinished()
         {
-            if (IsUsingSkill) CurrentSkill.Cancel();
+            if (_currentSkill is { IsUsing: true })
+                _currentSkill.StopSkill();
         }
-
-        private float GetWeight(EnemySkill skill)
-            => skill == _lastSkill ? skill.Data.weight * repeatWeightMultiplier : skill.Data.weight;
     }
 }

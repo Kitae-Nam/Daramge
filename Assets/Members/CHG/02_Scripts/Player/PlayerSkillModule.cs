@@ -1,142 +1,129 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using CHG._02_Scripts.Agent;
+using CHG._02_Scripts.Agent.StatSystem;
+using CHG._02_Scripts.CombatSystem;
+using CHG._02_Scripts.CoreSystem.AnimationSystem;
+using CHG._02_Scripts.Player.Combat;
+using CHG._02_Scripts.Player.FSM;
 using GGMLib.EventSystem;
 using GGMLib.ModuleSystems;
-using Members.CHG._02_Scripts.Agent;
-using Members.CHG._02_Scripts.Agent.StatSystem;
-using Members.CHG._02_Scripts.CombatSystem;
-using Members.CHG._02_Scripts.CoreSystem.AnimationSystem;
-using Members.CHG._02_Scripts.Player.FSM;
 using UnityEngine;
 
-namespace Members.CHG._02_Scripts.Player
+namespace CHG._02_Scripts.Player
 {
     public class PlayerSkillModule : MonoBehaviour, IModule, ISkillModule, IAfterInitModule
     {
-        [field: SerializeField] public GameEventChannelSO CreateChannel { get; private set; }
-        [SerializeField] private AnimParamSO attackSpeedParam;
-        [SerializeField] private StatSO attackSpeedStat;
         
+        public float AttackSpeed { get; private set; } = 1f;
         public ModuleOwner Owner { get; private set; }
         public PlayerController Player { get; private set; }
         public event Action OnCurrentSkillEnd;
+        [field: SerializeField] public GameEventChannelSO CreateChannel { get; private set; }
+        
+        [SerializeField] private AnimParamSO attackSpeedParam;
+        [SerializeField] private StatSO attackSpeedStat;
 
         private IStatModule _statModule;
         private IRenderer _renderer;
-        
         private Dictionary<int, ISkill> _skillDict;
         private ISkill _currentSkill;
-        private float _atkSpeed = 1f;
         
         public void Initialize(ModuleOwner owner)
         {
             Owner = owner;
             Player = owner as PlayerController;
-            Debug.Assert(Player != null, "플레이어 스킬 모듈은 플레이어의 자식으로 존재해야 합니다.");
+            Debug.Assert(Player != null, $"this Object not Player child : {gameObject.name}");
 
-            _skillDict = GetComponentsInChildren<ISkill>()
-                .ToDictionary(skill => skill.SkillData.skillIndex);
-            
-            foreach(ISkill skill in _skillDict.Values)
+            _skillDict = new Dictionary<int, ISkill>();
+            foreach (ISkill skill in GetComponentsInChildren<ISkill>())
+            {
+                Debug.Assert(skill.SkillData != null, $"skill data is null : {gameObject.name}");
+                if (!_skillDict.TryAdd(skill.SkillData.skillIndex, skill))
+                {
+                    Debug.LogWarning($"skill is duplicated in child : {skill.SkillData.skillIndex}");
+                    continue;
+                }
                 skill.InitializeSkill(this);
+            }
             
             _statModule = Owner.GetModule<IStatModule>();
             _renderer = Owner.GetModule<IRenderer>();
-            Debug.Assert(_statModule != null && _renderer != null, "스킬 구동을 위한 필수 모듈 누락");
+            Debug.Assert(_statModule != null, $"statModule is null : {gameObject.name}");
+            Debug.Assert(_renderer != null, $"renderer is null : {gameObject.name}");
         }
 
         public void AfterInit()
         {
-            Player.PlayerInput.OnAttackKeyPressed += HandleAttackKeyPressed;
-            Player.PlayerInput.OnDashKeyPressed += HandleDashKeyPressed;
-            Player.PlayerInput.OnFirstSkillKeyPressed += HandleFirstSkillKeyPressed;
-            Player.PlayerInput.OnScendSkillKeyPressed += HandleScendSkillKeyPressed;
+            Player.PlayerInput.OnSkillKeyPressed += HandleSkillKeyPressed;
+            Player.PlayerInput.OnSkillKeyReleased += HandleSkillKeyReleased;
 
-            _atkSpeed = _statModule.SubscribeStat(attackSpeedStat.AssetIndex, HandleAttackSpeedChange,
+            AttackSpeed = _statModule.SubscribeStat(attackSpeedStat.AssetIndex, HandleAttackSpeedChange,
                 attackSpeedStat.BaseValue);
-            _renderer.Animator.SetFloat(attackSpeedParam.ParamHash, _atkSpeed);
+            _renderer.Animator.SetFloat(attackSpeedParam.ParamHash, AttackSpeed);
         }
+
         
+
         private void OnDestroy()
         {
             if (Player != null && Player.PlayerInput != null)
             {
-                Player.PlayerInput.OnAttackKeyPressed -= HandleAttackKeyPressed;
-                Player.PlayerInput.OnDashKeyPressed -= HandleDashKeyPressed;
-                Player.PlayerInput.OnFirstSkillKeyPressed -= HandleFirstSkillKeyPressed;
-                Player.PlayerInput.OnScendSkillKeyPressed -= HandleScendSkillKeyPressed;
-                
+                Player.PlayerInput.OnSkillKeyPressed -= HandleSkillKeyPressed;
+                Player.PlayerInput.OnSkillKeyReleased -= HandleSkillKeyReleased;
             }
 
             _statModule?.UnSubscribeStat(attackSpeedStat.AssetIndex, HandleAttackSpeedChange);
         }
-
-
-
-
+        
         private void HandleAttackSpeedChange(StatSO stat, float currentValue, float prevValue)
         {
-            _atkSpeed = currentValue;
-            _renderer.Animator.SetFloat(attackSpeedParam.ParamHash, _atkSpeed);
+            AttackSpeed = currentValue;
+            _renderer.Animator.SetFloat(attackSpeedParam.ParamHash, AttackSpeed);
         }
 
-
-        private void HandleAttackKeyPressed()
+        private void HandleSkillKeyPressed(PlayerSkillSlot slot)
         {
-            if (CanUseSkill(0))
+            if (CanUseSkill((int)slot))
             {
                 Player.ChangeState(PlayerState.SKILL, 0); 
-                UseSkill(0);
+                UseSkill((int)slot);
             }
         }
-        
-        private void HandleDashKeyPressed()
+
+        private void HandleSkillKeyReleased(PlayerSkillSlot slot)
         {
-            if (CanUseSkill(1))
-            {
-                Player.ChangeState(PlayerState.SKILL, 0);
-                UseSkill(1);
-            }
+            if (_currentSkill is IReleasable releasable 
+                && _currentSkill.SkillData.skillIndex == (int)slot
+                && releasable.IsHolding)
+                releasable.Release();
         }
         
-        private void HandleFirstSkillKeyPressed()
-        {
-            if (CanUseSkill(2))
-            {
-                Player.ChangeState(PlayerState.SKILL, 0);
-                UseSkill(2);
-            }
-        }
-        
-        private void HandleScendSkillKeyPressed()
-        {
-            if (CanUseSkill(3))
-            {
-                Player.ChangeState(PlayerState.SKILL, 0);
-                UseSkill(3);
-            } 
-        }
 
         public bool CanUseSkill(int skillIndex, GameObject target = null)
         {
-            if (_currentSkill is { IsUsing: true })
-                return false; 
+            if (!_skillDict.TryGetValue(skillIndex, out ISkill skill))
+                return false;
 
-            if (_skillDict.TryGetValue(skillIndex, out ISkill skill))
-            {
-                return skill.CanUseSkill(target);
-            }
+            if (_currentSkill is { IsUsing: true } && !CanInterrupt(_currentSkill, skill))
+                return false;
 
-            return false;
+            return skill.CanUseSkill(target);
         }
+
+        private bool CanInterrupt(ISkill currentSkill, ISkill newSkill)
+            => newSkill.SkillData.CanInterrupt && currentSkill.SkillData.canBeInterrupted;
 
         public void UseSkill(int skillIndex, GameObject target = null)
         {
             if (_skillDict.TryGetValue(skillIndex, out ISkill skill))
             {
                 if (_currentSkill != null)
+                {
                     _currentSkill.OnSkillEnd -= HandleCurrentSkillEnd;
+                    if (_currentSkill.IsUsing)  
+                        _currentSkill.StopSkill();
+                }
                 _currentSkill = skill;
                 _currentSkill.OnSkillEnd += HandleCurrentSkillEnd;
                 _currentSkill.UseSkill(target);

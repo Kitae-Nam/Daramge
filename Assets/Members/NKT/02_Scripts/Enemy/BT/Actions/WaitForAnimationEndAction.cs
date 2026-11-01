@@ -1,5 +1,5 @@
 using System;
-using Members.CHG._02_Scripts.Agent;
+using CHG._02_Scripts.Agent;
 using Unity.Behavior;
 using Unity.Properties;
 using UnityEngine;

@@ -1,10 +1,10 @@
+using CHG._02_Scripts.Agent.StatSystem;
+using CHG._02_Scripts.CombatSystem;
 using GGMLib.ModuleSystems;
-using Members.CHG._02_Scripts.Agent.StatSystem;
-using Members.CHG._02_Scripts.CombatSystem;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace Members.CHG._02_Scripts.Player
+namespace CHG._02_Scripts.Player
 {
     public class PlayerStatModule : AbstractAgentStatModule
     {

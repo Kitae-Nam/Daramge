@@ -1,12 +1,12 @@
 using System.IO;
 using System.Linq;
-using Members.CHG._02_Scripts.CoreSystem;
+using CHG._02_Scripts.CoreSystem;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Members.CHG._02_Scripts.Agent.FSM.Editor
+namespace CHG._02_Scripts.Agent.FSM.Editor
 {
     [CustomEditor(typeof(StateListSO))]
     public class StateListSOEditor : UnityEditor.Editor

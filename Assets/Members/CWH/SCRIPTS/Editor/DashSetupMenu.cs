@@ -1,6 +1,9 @@
 #if UNITY_EDITOR
 using System.Linq;
 using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime;
+using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Combat;
+using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Movement;
+using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Telegraphs;
 using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Patterns;
 using Memebers.CWH.SCRIPTS.TEST;
 using UnityEditor;

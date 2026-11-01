@@ -1,8 +1,8 @@
+using CHG._02_Scripts.Agent.StatSystem;
 using GGMLib.ModuleSystems;
-using Members.CHG._02_Scripts.Agent.StatSystem;
 using UnityEngine;
 
-namespace Members.CHG._02_Scripts.CombatSystem
+namespace CHG._02_Scripts.CombatSystem
 {
     public abstract class AbstractDamageCaster : MonoBehaviour
     {
@@ -18,6 +18,7 @@ namespace Members.CHG._02_Scripts.CombatSystem
         public virtual void InitCaster(ModuleOwner owner)
         {
             CasterOwner = owner;
+            StatModule = owner.GetModule<IStatModule>();
         }
 
         public abstract bool CastDamage(Vector3 position, Vector3 direction, SkillDataSO skillData);
