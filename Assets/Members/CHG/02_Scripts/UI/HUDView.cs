@@ -1,6 +1,6 @@
-using System;
 using CHG._02_Scripts.Player;
 using CHG._02_Scripts.UI.Presenter;
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -8,72 +8,93 @@ namespace CHG._02_Scripts.UI
 {
     public class HUDView : MonoBehaviour
     {
-        [SerializeField] private PanelRenderer panelRenderer;
         [SerializeField] private PlayerController player;
+        [SerializeField] private Camera worldCamera;
+        [SerializeField] private Vector2 staminaGaugeOffset;
         
+        [SerializeField] private VisualElementReference<VisualElement> heartContainer = new(); 
+        [SerializeField] private VisualElementReference<RadialGauge> staminaGauge = new();
         private VisualElement _root;
         private int _uiVersion = -1;
         private bool _isStarted;
 
+        private PlayerHealthModule _healthModule;
+        private StaminaModule _staminaModule;
         private HealthPresenter _healthPresenter;
         private StaminaPresenter _staminaPresenter;
+        private WorldFollower _staminaFollower;
 
         private void Awake()
         {
-            Debug.Assert(panelRenderer != null, $"panelRenderer is null : {gameObject.name}");
-            Debug.Assert(player != null, $"playerController is null : {gameObject.name}");
-            
-            panelRenderer.RegisterUIReloadCallback(HandleUiReload);
+            Debug.Assert(player != null, $"player is null : {gameObject.name}");
+            Debug.Assert(worldCamera != null, $"worldCamera is null : {gameObject.name}");
+            CinemachineCore.CameraUpdatedEvent.AddListener(HandleCameraUpdated);
         }
 
         private void Start()
         {
-            _isStarted = true;
-            BindPresenters();
+            _healthModule = player.GetModule<PlayerHealthModule>();
+            Debug.Assert(_healthModule != null, $"healthModule is null : {gameObject.name}");
+            _staminaModule = player.GetModule<StaminaModule>();
+            Debug.Assert(_staminaModule != null, $"staminaModule is null : {gameObject.name}");
+            
+            heartContainer.RegisterReferenceResolvedCallback(HandleHeartContainerResolved);
+            heartContainer.RegisterReferenceUnloadedCallback(HandleHeartContainerUnloaded);
+            staminaGauge.RegisterReferenceResolvedCallback(HandleStaminaGaugeResolved);
+            staminaGauge.RegisterReferenceUnloadedCallback(HandleStaminaGaugeUnloaded);
+            
         }
 
         private void OnDestroy()
         {
-            panelRenderer.UnregisterUIReloadCallback(HandleUiReload);
-            DisposePresenters();
+            CinemachineCore.CameraUpdatedEvent.RemoveListener(HandleCameraUpdated);
+            
+            heartContainer.UnregisterReferenceResolvedCallback(HandleHeartContainerResolved);
+            heartContainer.UnregisterReferenceUnloadedCallback(HandleHeartContainerUnloaded);
+            staminaGauge.UnregisterReferenceResolvedCallback(HandleStaminaGaugeResolved);
+            staminaGauge.UnregisterReferenceUnloadedCallback(HandleStaminaGaugeUnloaded);
+
+            DisposeHealthPresenter();
+            DisposeStaminaPresenter();
         }
 
-        private void HandleUiReload(PanelRenderer renderer, VisualElement root, int version)
+        private void HandleHeartContainerResolved(VisualElement container)
         {
-            if (_uiVersion == version) return;
-            
-            _uiVersion = version;
-            _root = root;
-            BindPresenters();
+            DisposeHealthPresenter();
+            _healthPresenter = new HealthPresenter(container, _healthModule);
         }
 
-        private void BindPresenters()
+        private void HandleHeartContainerUnloaded(VisualElement container)
+            => DisposeHealthPresenter();
+        
+        private void HandleStaminaGaugeResolved(RadialGauge gauge)
         {
-            if (!_isStarted || _root == null) return;
-
-            DisposePresenters();
-            
-            PlayerHealthModule healthModule = player.GetModule<PlayerHealthModule>();
-            Debug.Assert(healthModule != null, $"healthModule is null : {gameObject.name}");
-            
-            _healthPresenter = new HealthPresenter(_root.Q<VisualElement>("heart-container"), healthModule);
-            
-            StaminaModule staminaModule = player.GetModule<StaminaModule>();
-            Debug.Assert(staminaModule != null, $"staminaModule is null : {gameObject.name}");
-            
-            RadialGauge staminaGauge = _root.Q<RadialGauge>("stamina-gauge");
-            Debug.Assert(staminaGauge != null, $"staminaGauge is null : {gameObject.name}");
-            
-            _staminaPresenter = new StaminaPresenter(staminaGauge, staminaModule);
+            DisposeStaminaPresenter();
+            _staminaPresenter = new StaminaPresenter(gauge, _staminaModule);
+            _staminaFollower = new WorldFollower(gauge, player.transform, worldCamera, staminaGaugeOffset);
         }
 
-        private void DisposePresenters()
+        private void HandleStaminaGaugeUnloaded(RadialGauge gauge)
+            => DisposeStaminaPresenter();
+            
+        private void DisposeHealthPresenter()
         {
             _healthPresenter?.Dispose();
             _healthPresenter = null;
-            
+        }
+
+        private void DisposeStaminaPresenter()
+        {
             _staminaPresenter?.Dispose();
             _staminaPresenter = null;
+            _staminaFollower = null;
+        }
+        
+        private void HandleCameraUpdated(CinemachineBrain brain)
+        {
+            if (brain.OutputCamera != worldCamera) return;
+            
+            _staminaFollower?.Tick();
         }
     }
 }

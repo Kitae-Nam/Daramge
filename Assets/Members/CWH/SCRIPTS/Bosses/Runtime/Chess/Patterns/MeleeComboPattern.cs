@@ -1,7 +1,9 @@
 using System.Collections;
+using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons;
 using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Combat;
 using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Movement;
 using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Telegraphs;
+using UnityEditorInternal;
 using UnityEngine;
 
 namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Patterns
@@ -17,28 +19,39 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Patterns
         [SerializeField, Min(0.1f)] private float _secondWarning = 0.7f;
         [SerializeField, Min(0.1f)] private float _swingDuration = 0.35f;
         [SerializeField] private LayerMask _hitLayers = ~0;
+
+
         private BossTarget _target;
         private BossPatternRunner _runner;
         private BossCombatPresentation _presentation;
+        private BossSwordInventory _inventory;
+        private BossSword _heldSword;
         private Vector3 _forward;
         private bool _prepared;
+
         public override float GetSelectionScore(float targetDistance) => targetDistance <= _range ? 50f : 0f;
+
         private void Awake()
         {
             _target = GetComponent<BossTarget>();
             _runner = GetComponent<BossPatternRunner>();
             _presentation = GetComponent<BossCombatPresentation>();
+            _inventory = GetComponent<BossSwordInventory>();
         }
+
         public override bool CanExecute()
         {
             if (!base.CanExecute() || !_target.HasTarget || _telegraph == null) return false;
-            if (GetComponent<BossSwordController>()?.HasSword == true) return false;
+            if (_presentation == null || !_presentation.HasWeaponPivot) return false;
+            if (_inventory == null || !_inventory.HasOrbitingSword) return false;
+
             // 예고 후 대상이 멀어져도 저장된 범위에 휘두른다. 회피가 공격 취소로 바뀌지 않게 한다.
             if (_prepared) return true;
             Vector3 offset = _target.Target.position - transform.position;
             offset.y = 0f;
             return offset.sqrMagnitude <= _range * _range;
         }
+
         public override void BeginWarning()
         {
             _forward = _target.Target.position - transform.position;
@@ -50,34 +63,85 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Patterns
             ShowWarning();
             base.BeginWarning();
         }
+
         private void ShowWarning() => _telegraph.Show(transform.position, _forward, _range, _angle);
         public override void UpdateWarningProgress(float progress) => _telegraph.SetProgress(progress);
-        public override void EndWarning() { _telegraph.Hide(); base.EndWarning(); }
+
+        public override void EndWarning()
+        {
+            _telegraph.Hide();
+            base.EndWarning();
+        }
+
         public override IEnumerator Execute()
         {
-            for (int strike = 0; strike < 2; strike++)
+            if (!_target.HasTarget) yield break;
+            if (!_inventory.TryHoldSword(out _heldSword)) yield break;
+            try
             {
-                if (!_target.HasTarget) yield break;
-                if (strike > 0)
+                if (!_presentation.TryAttachSword(_heldSword.transform)) yield break;
+                for (int strike = 0; strike < 2; strike++)
                 {
-                    // 한 패턴 안의 두 번째 공격도 피할 시간을 보장한다.
-                    ShowWarning();
-                    for (float elapsed = 0f; elapsed < _secondWarning; elapsed += Time.deltaTime)
-                    { _telegraph.SetProgress(elapsed / _secondWarning); yield return null; }
-                    _telegraph.Hide();
+                    if (!_target.HasTarget) yield break;
+                    if (strike > 0)
+                    {
+                        // 한 패턴 안의 두 번째 공격도 피할 시간을 보장한다.
+                        ShowWarning();
+                        for (float elapsed = 0f; elapsed < _secondWarning; elapsed += Time.deltaTime)
+                        {
+                            _telegraph.SetProgress(elapsed / _secondWarning);
+                            yield return null;
+                        }
+
+                        _telegraph.Hide();
+                    }
+
+                    _presentation.PlayImpact();
+                    BossAttackQuery.ApplySector(transform, transform.position, _forward, _range, _angle, 7f,
+                        _damage, _hitLayers, targetRoot: _target.HasTarget ? _target.Target : null);
+                    for (float elapsed = 0f; elapsed < _swingDuration; elapsed += Time.deltaTime)
+                    {
+                        _presentation.SetSwing(elapsed / _swingDuration, strike);
+                        yield return null;
+                    }
+
+                    _presentation.SetSwing(1f, strike);
                 }
-                if (_presentation != null) _presentation.PlayImpact();
-                BossAttackQuery.ApplySector(transform, transform.position, _forward, _range, _angle, 7f,
-                    _damage, _hitLayers, targetRoot: _target.HasTarget ? _target.Target : null);
-                for (float elapsed = 0f; elapsed < _swingDuration; elapsed += Time.deltaTime)
-                { if (_presentation != null) _presentation.SetSwing(elapsed / _swingDuration, strike); yield return null; }
+            }
+            finally
+            {
+                ReleaseSword();
             }
         }
-        public override void Cleanup() { _prepared = false; if (_telegraph != null) _telegraph.Hide(); if (_presentation != null) _presentation.ResetWeapon(); }
-        private void OnDisable() { if (_runner != null && _runner.CurrentPattern == this) _runner.CancelCurrentPattern(); }
+
+        /// <summary>
+        /// 검의 계층을 복원하고 상태를 돌료 공전 코드에 제어권을 넘깁니다. 
+        /// </summary>
+        private void ReleaseSword()
+        {
+            if (_presentation != null) _presentation.DetachSword();
+            if (_heldSword != null) _heldSword.TryReturnFromHand();
+            
+            _heldSword = null;
+        }
+
+        public override void Cleanup()
+        {
+            _prepared = false;
+            if (_telegraph != null) _telegraph.Hide();
+            ReleaseSword();
+        }
+
+        private void OnDisable()
+        {
+            if (_runner != null && _runner.CurrentPattern == this) _runner.CancelCurrentPattern();
+        }
 #if UNITY_EDITOR
         [ContextMenu("테스트/2연격 요청")]
-        private void TestRun() { if (Application.isPlaying) _runner.TryRun(this); }
+        private void TestRun()
+        {
+            if (Application.isPlaying) _runner.TryRun(this);
+        }
 #endif
     }
 }

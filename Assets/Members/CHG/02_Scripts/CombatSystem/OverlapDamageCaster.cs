@@ -29,8 +29,11 @@ namespace CHG._02_Scripts.CombatSystem
         }
 
         public bool CastDamage(Vector3 position, SkillDataSO skillData, float multiplier)
+            => CastDamage(position, skillData, multiplier, radius);
+
+        public bool CastDamage(Vector3 position, SkillDataSO skillData, float multiplier, float castRadius)
         {
-            int count = Physics.OverlapSphereNonAlloc(position, radius, _hits, whatIsEnemy);
+            int count = Physics.OverlapSphereNonAlloc(position, castRadius, _hits, whatIsEnemy);
             bool isHit = false;
             for (int i = 0; i < count; i++)
             {
@@ -45,15 +48,16 @@ namespace CHG._02_Scripts.CombatSystem
                 damageData.HitPoint = _hits[i].ClosestPoint(position);
                 damageable.ApplyDamage(damageData);
                 isHit = true;
-                Debug.Log(isHit);
             }
             return isHit;
         }
 
 #if UNITY_EDITOR
 
+        [SerializeField] private bool isDebug = false;
         private void OnDrawGizmos()
         {
+            if (!isDebug) return;
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(transform.position, radius);
             Gizmos.color = Color.white;

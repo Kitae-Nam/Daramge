@@ -8,6 +8,8 @@ namespace CHG._02_Scripts.CombatSystem
         public int skillIndex;
         public string skillName;
         public float cooldown;
+        public bool CanInterrupt;
+        public bool canBeInterrupted;
         public float skillRange = 1f;
         
         public float baseDamage = 1f;

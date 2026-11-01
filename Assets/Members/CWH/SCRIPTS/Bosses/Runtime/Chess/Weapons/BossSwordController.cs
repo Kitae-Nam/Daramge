@@ -2,7 +2,7 @@ using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Combat;
 using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Health;
 using UnityEngine;
 
-namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
+namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons
 {
     /// <summary>필드에 있는 보스 검과 파괴 보상을 관리한다. 패턴 후딜이 끝나도 박힌 검은 유지한다.</summary>
     [RequireComponent(typeof(BossHealth), typeof(BossGroggyController))]

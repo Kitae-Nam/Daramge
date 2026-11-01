@@ -3,7 +3,8 @@ using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Combat;
 using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Health;
 using UnityEngine;
 
-namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
+namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons
+
 {
     /// <summary>검 한 개의 비행→박힘→회수 수명. 파괴 보상은 자연 회수와 구분해 한 번만 전달한다.</summary>
     [RequireComponent(typeof(BreakableHealth))]

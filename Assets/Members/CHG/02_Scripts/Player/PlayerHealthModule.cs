@@ -38,6 +38,12 @@ namespace CHG._02_Scripts.Player
                 RaiseDeath();
         }
 
+        public override void ResetHealth()
+        {
+            _currentHealth = maxHealth;
+            RaiseHealthChanged();
+        }
+
         private void RaiseHealthChanged() => OnHealthChanged?.Invoke(_currentHealth, maxHealth);
 
         [ContextMenu("Hit")]
