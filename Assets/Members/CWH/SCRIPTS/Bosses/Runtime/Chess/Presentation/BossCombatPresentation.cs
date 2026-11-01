@@ -1,4 +1,4 @@
-using System.ComponentModel;
+using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons;
 using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Health;
 using UnityEngine;
 using UnityEngine.Events;
@@ -17,11 +17,32 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
 
         [SerializeField] private Vector3 _heldLocalEulerAngles;
 
+        private SwordSwingMotion _motion;
+        private float _chargeStartAngle;
+        private SwordSwingTrail _swingTrail;
+
+        public void BeginCharge(int strike)
+        {
+            if (_weaponPivot == null) return;
+            _swingTrail?.StopAndClear();
+            _chargeStartAngle = Mathf.DeltaAngle(0f, _weaponPivot.localEulerAngles.y);
+            SetCharge(0f, strike);
+        }
+
+        /// <summary>경고 앞부분은 천천히 당기고 마지막 구간은 같은 자세로 버틴다.</summary>
+        public void SetCharge(float progress, int strike)
+        {
+            if (_weaponPivot == null) return;
+            float t = _motion.ChargeFraction(progress);
+            _weaponPivot.localRotation = Quaternion.Euler(0f,
+                Mathf.Lerp(_chargeStartAngle, _motion.ChargeAngle(strike), t), 0f);
+        }
+
+        public void BeginSlash() => _swingTrail?.Begin();
+        public void EndSlash() => _swingTrail?.End();
+
         private Transform _heldSword;
-        private Transform _originalParent;
-        private Vector3 _originalLocalPosition;
-        private Quaternion _originalLocalRotation;
-        private Vector3 _originalScale;
+        private SwordPoseBinding _binding;
 
         private Quaternion _bodyRotation;
         private Vector3 _bodyScale;
@@ -33,6 +54,7 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
 
         private void Awake()
         {
+            _motion = MeleeMotionSource.Resolve(gameObject);
             if (_bodyVisual != null)
             {
                 _bodyRotation = _bodyVisual.localRotation;
@@ -54,8 +76,7 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
         public void SetSwing(float progress, int strike)
         {
             if (_weaponPivot == null) return;
-            float angle = Mathf.Lerp(-75f, 75f, Mathf.SmoothStep(0f, 1f, progress));
-            _weaponPivot.localRotation = Quaternion.Euler(0f, strike % 2 == 0 ? angle : -angle, 0f);
+            _weaponPivot.localRotation = Quaternion.Euler(0f, _motion.Angle(progress, strike), 0f);
         }
 
         /// <summary>
@@ -65,12 +86,13 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
         public bool TryAttachSword(Transform sword)
         {
             if (_weaponPivot == null || sword == null || _heldSword != null) return false;
-
+            SwordPoseBinding binding = sword.GetComponent<SwordPoseBinding>();
+            if (binding == null) binding = sword.gameObject.AddComponent<SwordPoseBinding>();
+            if (!binding.TryCapture()) return false;
+            _binding = binding;
             _heldSword = sword;
-            _originalParent = sword.parent;
-            _originalLocalPosition = sword.localPosition;
-            _originalLocalRotation = sword.localRotation;
-            _originalScale = sword.localScale;
+            _swingTrail = sword.GetComponent<BossSword>()?.SwingTrail;
+            _swingTrail?.StopAndClear();
 
             _weaponPivot.gameObject.SetActive(true);
             ResetWeapon();
@@ -88,16 +110,12 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
         /// </summary>
         public void DetachSword()
         {
-            if (_heldSword != null)
-            {
-                _heldSword.SetParent(_originalParent, false);
-                _heldSword.localPosition = _originalLocalPosition;
-                _heldSword.localRotation = _originalLocalRotation;
-                _heldSword.localScale = _originalScale;
-            }
+            _swingTrail?.StopAndClear();
+            if (_binding != null) _binding.Restore();
 
             _heldSword = null;
-            _originalParent = null;
+            _swingTrail = null;
+            _binding = null;
             ResetWeapon();
         }
 

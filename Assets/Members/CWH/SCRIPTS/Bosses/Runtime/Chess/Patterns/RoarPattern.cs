@@ -25,21 +25,28 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Patterns
         private BossTarget _target;
         private BossGroggyController _groggy;
         private bool _prepared;
+        [SerializeField, Tooltip("IRoarTuningSource 구현체. 비우면 기본 설정을 사용한다.")]
+        private MonoBehaviour _tuningSource;
+        private IRoarTuningSource _profiles;
+        private RoarTuning Tuning => _profiles != null ? _profiles.GetRoar(_roarRadius, _knockbackSpeed, _knockbackDuration)
+            : RoarTuning.Normal(_roarRadius, _knockbackSpeed, _knockbackDuration);
+        private float Radius => Tuning.Radius;
 
         public override bool CanExecute() => base.CanExecute() && _target.HasTarget && (_prepared || IsTargetInRange());
-        public override float GetSelectionScore(float targetDistance) => targetDistance <= _roarRadius ? 35f : 0f;
+        public override float GetSelectionScore(float targetDistance) => targetDistance <= Radius ? 35f : 0f;
 
         private void Awake()
         {
             runner = GetComponent<BossPatternRunner>();
             _target = GetComponent<BossTarget>();
             _groggy = GetComponent<BossGroggyController>();
+            _profiles = _tuningSource as IRoarTuningSource ?? GetComponent<ChessCombatProfiles>();
         }
 
         public override void BeginWarning()
         {
             _prepared = true;
-            if (_areaTelegraph != null) _areaTelegraph.Show(transform.position, Vector3.forward, _roarRadius);
+            if (_areaTelegraph != null) _areaTelegraph.Show(transform.position, Vector3.forward, Radius);
             else if (_telegraph != null)
             {
                 _telegraph.SetProgress(0f);
@@ -68,7 +75,18 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Patterns
                 Vector3 direction = _target.Target.position - transform.position;
                 direction.y = 0f;
 
-                receiver.ReceiveKnockBack(direction, _knockbackSpeed, _knockbackDuration);
+                RoarTuning tuning = Tuning;
+                float duration = tuning.Duration;
+                float speed = tuning.Speed;
+                if (tuning.WallDamage > 0f && receiver is Component receiverComponent)
+                {
+                    Rigidbody body = receiverComponent.GetComponentInParent<Rigidbody>();
+                    GameObject root = body != null ? body.gameObject : receiverComponent.gameObject;
+                    RoarWallImpact impact = root.GetComponent<RoarWallImpact>();
+                    if (impact == null) impact = root.AddComponent<RoarWallImpact>();
+                    impact.Arm(transform, direction, duration, tuning.WallDamage, tuning.WallLayers);
+                }
+                receiver.ReceiveKnockBack(direction, speed, duration);
             }
 
             GetComponent<BossCombatPresentation>()?.PlayImpact();
@@ -102,7 +120,7 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Patterns
 
             Vector3 pos = _target.Target.position - transform.position;
             pos.y = 0;
-            if (pos.sqrMagnitude <= _roarRadius * _roarRadius)
+            if (pos.sqrMagnitude <= Radius * Radius)
                 return true;
             return false;
         }

@@ -73,7 +73,8 @@ namespace Memebers.CWH.SCRIPTS.TEST
             if (_boss == null) return;
             var style = new GUIStyle(GUI.skin.box) { fontSize = 18, alignment = TextAnchor.UpperLeft };
             int phase = _boss.GetComponent<BossPhaseController>().CurrentPhase;
-            string state = _deathHandled ? "PLAYER DEFEATED - press R" : phase == 2 ? "PHASE 1 CLEAR (phase 2 pending)" : _boss.GetComponent<BossPatternRunner>().State.ToString();
+            string state = _deathHandled ? "PLAYER DEFEATED - press R" :
+                $"PHASE {phase} | {_boss.GetComponent<BossPatternRunner>().State}";
             GUI.Box(new Rect(15, 15, 590, 150),
                 $"BOSS {_boss.CurrentHealth:0}/{_boss.MaxHealth:0}  |  PLAYER {_playerHealth.CurrentHealth:0}\n" +
                 $"{state}   Minions: {_boss.GetComponent<BossSummonRoster>().LivingCount}\n" +

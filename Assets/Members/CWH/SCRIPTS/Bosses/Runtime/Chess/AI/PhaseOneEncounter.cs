@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
 {
-    /// <summary>1페이즈 종료 시 여러 부품의 정리 순서를 조율한다. 2페이즈 공격은 별도 구현 지점이다.</summary>
+    /// <summary>기존 1페이즈 전용 씬의 종료를 지원한다. 2페이즈가 연결된 씬은 전환 조율자에 맡긴다.</summary>
     [RequireComponent(typeof(BossPhaseController), typeof(BossPatternRunner), typeof(BossMovementStateController))]
     public sealed class PhaseOneEncounter : MonoBehaviour
     {
@@ -19,6 +19,7 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
         private void HandlePhase(int phase)
         {
             if (phase == 1) return;
+            if (GetComponent<PhaseTwoEncounter>() != null) return;
             _runner.CancelCurrentPattern();
             _movement.SetMovementAllowed(false);
             foreach (BossPattern pattern in _phaseOnePatterns) if (pattern != null) pattern.enabled = false;

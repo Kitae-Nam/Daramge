@@ -48,7 +48,9 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
         public bool TrySelectPattern(out BossPattern selected)
         {
             selected = null;
-            if (_phase.CurrentPhase != 1 || !_target.HasTarget || (_combatGate != null && !_combatGate.IsOpen) ||
+            // 전환/컷신 여부는 공통 전투 게이트가 결정하므로 특정 페이즈 조율자를 참조하지 않는다.
+            if (_phase.CurrentPhase == 0 ||
+                !_target.HasTarget || (_combatGate != null && !_combatGate.IsOpen) ||
                 _runner.State != BossActionState.Idle || (_roster != null && _roster.IsAttackInProgress) ||
                 (_gridMovement != null && _gridMovement.isActiveAndEnabled && (_gridMovement.IsStepping || !_gridMovement.IsCentered))) return false;
             Vector3 offset = _target.Target.position - transform.position; offset.y = 0f;
