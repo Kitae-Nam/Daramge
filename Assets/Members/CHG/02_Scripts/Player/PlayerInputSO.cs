@@ -113,5 +113,10 @@ namespace Members.CHG._02_Scripts.Player
             }
             return _worldMousePosition;
         }
+
+        public void OnCameraToggle(InputAction.CallbackContext context)
+        {
+
+        }
     }
 }
