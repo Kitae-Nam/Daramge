@@ -1,14 +1,15 @@
+using System;
 using System.Collections;
-using Members.CHG._02_Scripts.Agent;
-using Members.CHG._02_Scripts.CombatSystem;
-using Members.CHG._02_Scripts.CoreSystem.AnimationSystem;
-using Members.CHG._02_Scripts.CoreSystem.DataSystem;
+using CHG._02_Scripts.Agent;
+using CHG._02_Scripts.CombatSystem;
+using CHG._02_Scripts.CoreSystem.AnimationSystem;
 using UnityEngine;
 
-namespace Members.CHG._02_Scripts.Player.Combat
+namespace CHG._02_Scripts.Player.Combat
 {
     public class PlayerDashSkill : AbstractPlayerSkill
     {
+        [SerializeField] private AnimTriggerSO animationEndTrigger;
         [SerializeField] private AnimParamSO dashParam;
         [SerializeField] private AnimationCurve dashCurve;
         [SerializeField] private float speed = 4f;
@@ -45,7 +46,7 @@ namespace Members.CHG._02_Scripts.Player.Combat
         private IEnumerator RollingCoroutine()
         {
             _renderer.PlayClip(dashParam.ParamHash, 0f, 0.01f);
-            _trigger.OnAnimationEnd += HandleAnimationEnd;
+            _trigger.Subscribe(animationEndTrigger, HandleAnimationEnd);
             _movement.CanManualMove = false;
             float currentDuration = 0f;
             Vector3 forward = _player.transform.forward;
@@ -58,11 +59,16 @@ namespace Members.CHG._02_Scripts.Player.Combat
                 yield return new WaitForFixedUpdate();
             }
             
-            _trigger.OnAnimationEnd -= HandleAnimationEnd;
+            _trigger.UnSubscribe(animationEndTrigger, HandleAnimationEnd);
             _movement.CanManualMove = true;
         }
 
         private void HandleAnimationEnd() => StopSkill();
 
+        private void OnDestroy()
+        {
+            if (_trigger == null) return;
+            _trigger.UnSubscribe(animationEndTrigger, HandleAnimationEnd);
+        }
     }
 }

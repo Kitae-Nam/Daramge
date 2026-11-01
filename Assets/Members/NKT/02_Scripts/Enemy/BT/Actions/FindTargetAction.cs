@@ -42,15 +42,6 @@ namespace NKT.Enemy.BT.Actions
             
             return TargetGameObject.Value == null ? Status.Failure : Status.Success;
         }
-
-        protected override Status OnUpdate()
-        {
-            return Status.Success;
-        }
-
-        protected override void OnEnd()
-        {
-        }
     }
 }
 

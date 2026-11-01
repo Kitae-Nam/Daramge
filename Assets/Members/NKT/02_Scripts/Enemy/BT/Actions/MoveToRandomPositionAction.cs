@@ -39,7 +39,7 @@ namespace NKT.Enemy.BT.Actions
         {
             if (_nav.IsArrived) return Status.Success;
             if(Time.time - _startTime > MaxMoveTime.Value) return Status.Failure;
-            return Status.Success;
+            return Status.Running;
         }
     }
 }

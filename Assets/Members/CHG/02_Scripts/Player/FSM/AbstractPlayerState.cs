@@ -1,7 +1,6 @@
-using Members.CHG._02_Scripts.Agent.FSM;
-using UnityEngine;
+using CHG._02_Scripts.Agent.FSM;
 
-namespace Members.CHG._02_Scripts.Player.FSM
+namespace CHG._02_Scripts.Player.FSM
 {
     public abstract class AbstractPlayerState : AgentState
     {

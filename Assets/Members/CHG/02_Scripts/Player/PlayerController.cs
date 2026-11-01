@@ -1,8 +1,8 @@
-using Members.CHG._02_Scripts.Agent.FSM;
-using Members.CHG._02_Scripts.Player.FSM;
+using CHG._02_Scripts.Agent.FSM;
+using CHG._02_Scripts.Player.FSM;
 using UnityEngine;
 
-namespace Members.CHG._02_Scripts.Player
+namespace CHG._02_Scripts.Player
 {
     public class PlayerController : Agent.Agent
     {
