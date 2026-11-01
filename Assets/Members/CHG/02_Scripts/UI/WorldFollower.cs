@@ -21,9 +21,11 @@ namespace CHG._02_Scripts.UI
         public void Tick()
         {
             if (_element.panel == null || _target == null) return;
+            float width = _element.resolvedStyle.width;
+            float height = _element.resolvedStyle.height;
             Vector2 panelPosition = RuntimePanelUtils.CameraTransformWorldToPanel(_element.panel, _target.position, _camera);
-            float x = panelPosition.x + _panelOffset.x - _element.resolvedStyle.width * 0.5f;
-            float y = panelPosition.y + _panelOffset.y - _element.resolvedStyle.height * 0.5f;
+            float x = panelPosition.x + _panelOffset.x - width * 0.5f;
+            float y = panelPosition.y + _panelOffset.y - height * 0.5f;
             _element.style.translate = new Translate(x, y);
         }
     }

@@ -10,7 +10,7 @@ namespace CHG._02_Scripts.CombatSystem
         
         public abstract void Initialize(ModuleOwner owner);
         public abstract void ApplyDamage(float damage);
-        
+        public abstract void ResetHealth();
         protected void RaiseDeath()  => OnDeath?.Invoke();
     }
 }
