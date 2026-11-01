@@ -22,7 +22,9 @@ namespace NKT.Enemy.BT.Conditions
 
             if (Target.Value == null) return false;
         
-            float distance = Vector3.Distance(Enemy.Value.transform.position, Target.Value.transform.position);
+            Vector3 diff = Target.Value.transform.position - Enemy.Value.transform.position;
+            diff.y = 0; //다른 거리 조건들과 같은 기준(높이 무시). 비행 적은 높이만큼 멀게 계산되는 것을 막는다.
+            float distance = diff.magnitude;
             float threshold = rangeEnemy.RangeData.GetFieldValue(Field.Value);
         
             return Operator.Value switch
