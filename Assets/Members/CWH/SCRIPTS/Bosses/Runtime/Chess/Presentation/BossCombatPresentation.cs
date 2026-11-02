@@ -1,5 +1,6 @@
 using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons;
 using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Health;
+using Unity.U2D.Physics;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -11,21 +12,42 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
         [SerializeField] private Transform _weaponPivot;
         [SerializeField] private Transform _bodyVisual;
         [SerializeField] private UnityEvent _impact = new UnityEvent();
+        [SerializeField] private UnityEvent _roarImpact = new UnityEvent();
 
-        [Header("근접 검 장착 자세")]  // 집에 가고 싶어요 샤ㅑㅑㅑㅑㅑ갈
-        [SerializeField] private Vector3 _heldLocalPosition;
+        [Header("근접 검 장착 자세")] // 집에 가고 싶어요 샤ㅑㅑㅑㅑㅑ갈 Tlqkf Tprtm
+        [SerializeField]
+        private Vector3 _heldLocalPosition;
 
         [SerializeField] private Vector3 _heldLocalEulerAngles;
 
+        [Header("근접 겁 크기 연출")] [SerializeField, Min(1f)]
+        private float _meleeSwordScaleMultiplier = 1.5f;
+        
+        [Header("포효 차징 연출")]
+        [SerializeField, Min(1f)] private float _roarScaleMultiplier = 1.5f;
+        
+        [Header("검 연출")]
+        [SerializeField] private UnityEvent _swordEmbedded = new UnityEvent();
+        [SerializeField] private UnityEvent _swordBroken = new UnityEvent();
+        
+        
         private SwordSwingMotion _motion;
-        private float _chargeStartAngle;
         private SwordSwingTrail _swingTrail;
+        private Vector3 _heldBaseScale;
+        private Vector3 _chargeStartScale;
+        private float _chargeStartAngle;
+        private float _roarChargeProgress;
 
+        public void PlaySwordEmbedded() => _swordEmbedded.Invoke();
+        public void PlaySwordBroken() => _swordBroken.Invoke();
+        
         public void BeginCharge(int strike)
         {
             if (_weaponPivot == null) return;
             _swingTrail?.StopAndClear();
             _chargeStartAngle = Mathf.DeltaAngle(0f, _weaponPivot.localEulerAngles.y);
+            if (_heldSword != null)
+                _chargeStartScale = _heldSword.localScale;
             SetCharge(0f, strike);
         }
 
@@ -36,6 +58,12 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
             float t = _motion.ChargeFraction(progress);
             _weaponPivot.localRotation = Quaternion.Euler(0f,
                 Mathf.Lerp(_chargeStartAngle, _motion.ChargeAngle(strike), t), 0f);
+            if (_heldSword != null)
+            {
+                Vector3 targetScale = _heldBaseScale * _meleeSwordScaleMultiplier;
+                _heldSword.localScale = Vector3.Lerp(_chargeStartScale, targetScale, t);
+                
+            }
         }
 
         public void BeginSlash() => _swingTrail?.Begin();
@@ -68,9 +96,15 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
         {
             if (_bodyVisual == null) return;
             _pulse = Mathf.MoveTowards(_pulse, 0f, Time.deltaTime * 3f);
-            _bodyVisual.localScale = _bodyScale * (1f + _pulse * 0.08f);
-            _bodyVisual.localRotation =
-                _bodyRotation * Quaternion.Euler(0f, 0f, _groggy != null && _groggy.IsGroggy ? 14f : 0f);
+
+            float roarScale = Mathf.Lerp(1f, _roarScaleMultiplier, _roarChargeProgress);
+            float impactScale = 1f + _pulse * 0.08f;
+            _bodyVisual.localScale = _bodyScale * (roarScale * impactScale);
+            // _bodyVisual.localScale = _bodyScale * (1f + _pulse * 0.08f);
+            // _bodyVisual.localRotation =
+            //     _bodyRotation * Quaternion.Euler(0f, 0f, _groggy != null && _groggy.IsGroggy ? 14f : 0f);
+            
+            
         }
 
         public void SetSwing(float progress, int strike)
@@ -100,6 +134,7 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
             sword.SetParent(_weaponPivot, false);
             sword.localPosition = _heldLocalPosition;
             sword.localRotation = Quaternion.Euler(_heldLocalEulerAngles);
+            _heldBaseScale = sword.localScale;
 
             return true;
         }
@@ -141,9 +176,21 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
             _impact.Invoke();
         }
 
+        public void SetRoarCharge(float progress)
+        {
+            _roarChargeProgress = Mathf.Clamp01(progress);
+        }
+
+        public void PlayRoarImpact()
+        {
+            PlayImpact();
+            _roarImpact.Invoke();
+        }
+
         private void OnDisable()
         {
             DetachSword();
+            SetRoarCharge(0f);
             if (_bodyVisual != null)
             {
                 _bodyVisual.localRotation = _bodyRotation;

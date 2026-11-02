@@ -27,6 +27,7 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons
         private float _timer;
         private bool _launched;
         private bool _finished;
+        public event Action<ThrownBossSword> Embedded;
         public bool IsFlying { get; private set; }
         public bool IsEmbedded => _launched && !IsFlying && !_finished;
         public event Action<ThrownBossSword, bool> Finished;
@@ -74,6 +75,7 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons
             _timer = 0f;
             _ownership.Embed();
             _hitbox.SetDamageable(true);
+            Embedded.Invoke(this);
             if (_target != null && _owner != null)
                 BossAttackQuery.ApplySector(_owner, _destination, Vector3.forward, _radius, 360f, 5f,
                     _impactDamage, ~0, targetRoot: _target);

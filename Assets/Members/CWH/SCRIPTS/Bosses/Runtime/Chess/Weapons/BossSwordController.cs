@@ -76,14 +76,25 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons
             }
             _active.Add(thrown);
             thrown.Finished += HandleFinished;
+            thrown.Embedded += HandleEmbedded;
             thrown.Launch(transform, target, start, destination, radius);
             return thrown;
         }
+
+        private void HandleEmbedded(ThrownBossSword sword)
+        {
+            if (!_active.Contains(sword)) return;
+            _presentation?.PlaySwordEmbedded();
+        }
+
         private void HandleFinished(ThrownBossSword sword, bool broken)
         {
             if (!_active.Remove(sword)) return;
             sword.Finished -= HandleFinished;
+            sword.Embedded -= HandleEmbedded;
             if (_inventory == null && _presentation != null) _presentation.SetWeaponVisible(true);
+            if(broken)
+                _presentation?.PlaySwordBroken();
             if (!broken || _health.IsDead || !isActiveAndEnabled) return;
             // 보너스 피해를 먼저 주므로 이 보상 자체에 새 그로기의 1.5배가 소급 적용되지는 않는다.
             _health.ReceiveDamage(_breakBonusDamage);

@@ -20,10 +20,11 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons
             _sword.transform.SetParent(null, true);
             return _sword.transform;
         }
+        // TODO : 2026.11.02 수정자 최원희 이유 : 검이 바닥에 박히고 우뚝 스지 않게 하기 위해서  
         public void Embed()
         {
             _sword.TryEmbed();
-            _sword.transform.rotation = Quaternion.FromToRotation(Vector3.up, Vector3.down);
+            // _sword.transform.rotation = Quaternion.FromToRotation(Vector3.up, Vector3.down);
         }
         public void Complete(bool broken, bool deferParenting)
         {
