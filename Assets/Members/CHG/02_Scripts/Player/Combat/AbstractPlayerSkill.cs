@@ -1,6 +1,7 @@
 using System;
 using CHG._02_Scripts.Agent;
 using CHG._02_Scripts.CombatSystem;
+using CHG._02_Scripts.CoreSystem.FeedbackSystem;
 using UnityEngine;
 
 namespace CHG._02_Scripts.Player.Combat
@@ -45,6 +46,13 @@ namespace CHG._02_Scripts.Player.Combat
             IsUsing = false;
             _lastUseTime = Time.time;
             OnSkillEnd?.Invoke();
+        }
+
+        protected void PlayFeedback(FeedbackPlayer feedbackPlayer, Vector3 hitPoint, Vector3 direction,
+            float intensity = 1f)
+        {
+            if (feedbackPlayer == null) return;
+            feedbackPlayer.PlayFeedback(new FeedbackContext(hitPoint, direction, intensity));
         }
     }
 }

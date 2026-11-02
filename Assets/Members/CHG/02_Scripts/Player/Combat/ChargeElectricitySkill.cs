@@ -3,6 +3,7 @@ using System.Collections;
 using CHG._02_Scripts.Agent.StatSystem;
 using CHG._02_Scripts.CombatSystem;
 using CHG._02_Scripts.CoreSystem.AnimationSystem;
+using CHG._02_Scripts.CoreSystem.FeedbackSystem;
 using UnityEngine;
 
 namespace CHG._02_Scripts.Player.Combat
@@ -22,6 +23,7 @@ namespace CHG._02_Scripts.Player.Combat
         [SerializeField] private AnimationCurve chargeDamageCurve;
         [SerializeField, Range(0f, 1f)] private float chargeSlowRatio = 0.4f;
         [SerializeField] private float recoveryTime = 0.4f;
+        [SerializeField] private FeedbackPlayer hitFeedback;
 
         private IStatModule _statModule;
 
@@ -67,8 +69,8 @@ namespace CHG._02_Scripts.Player.Combat
             
             float radius = Mathf.Lerp(minRadius, maxRadius, power);
             float multiplier = chargeDamageCurve.Evaluate(power);
-            damageCaster.CastDamage(damageCaster.transform.position, SkillData, multiplier, radius);
-            
+            bool isHit = damageCaster.CastDamage(damageCaster.transform.position, SkillData, multiplier, radius);
+            if (isHit) PlayFeedback(hitFeedback, damageCaster.transform.position, Vector3.down, power);
             yield return new WaitForSeconds(recoveryTime);
             if (IsUsing) StopSkill();
         }

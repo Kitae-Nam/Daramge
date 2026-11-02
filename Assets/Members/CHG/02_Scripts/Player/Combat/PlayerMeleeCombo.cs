@@ -4,6 +4,7 @@ using CHG._02_Scripts.Agent;
 using CHG._02_Scripts.CombatSystem;
 using CHG._02_Scripts.CoreSystem.AnimationSystem;
 using CHG._02_Scripts.CoreSystem.Events;
+using CHG._02_Scripts.CoreSystem.FeedbackSystem;
 using GGMLib.ObjectPool.Runtime;
 using UnityEngine;
 
@@ -15,6 +16,7 @@ namespace CHG._02_Scripts.Player.Combat
         public AnimParamSO comboClip;
         public AnimationCurve comboCurve;
         public float comboDuration;
+        public FeedbackPlayer hitFeedback;
     }
     
     public class PlayerMeleeCombo : AbstractPlayerSkill
@@ -102,6 +104,8 @@ namespace CHG._02_Scripts.Player.Combat
                 if (impactVfxItem != null)
                     _skillModule.CreateChannel.RaiseEvent(
                         CreateEvents.ShowPoolingEffect.InitData(impactVfxItem, _damageCaster.LastHitPosition, Quaternion.identity));
+                
+                PlayFeedback(comboSteps[_comboCounter].hitFeedback, _damageCaster.LastHitPosition, _player.transform.forward);
             }
         }
 
