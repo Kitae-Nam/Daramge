@@ -7,6 +7,39 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons
     /// </summary>
     public sealed class BossSword : MonoBehaviour
     {
+        public SwordSwingTrail SwingTrail { get; private set; }
+        public SwordPoseBinding PoseBinding { get; private set; }
+
+        private void Awake()
+        {
+            // 기존 씬의 검도 수정 없이 자식에 연결한 이펙트를 사용할 수 있게 어댑터를 확보한다.
+            SwingTrail = GetComponent<SwordSwingTrail>();
+            if (SwingTrail == null) SwingTrail = gameObject.AddComponent<SwordSwingTrail>();
+            PoseBinding = GetComponent<SwordPoseBinding>();
+            if (PoseBinding == null) PoseBinding = gameObject.AddComponent<SwordPoseBinding>();
+            PoseBinding.Returned += HandleReturned;
+        }
+
+        private void HandleReturned()
+        {
+            // 위치 복원이 끝난 뒤 상태를 바꿔 공전과 복귀 코드의 Transform 변경이 겹치지 않게 한다.
+            if (State == BossSwordState.Held) TryReturnFromHand();
+            else TryRecall();
+        }
+
+        private void OnDestroy()
+        {
+            if (PoseBinding != null) PoseBinding.Returned -= HandleReturned;
+        }
+
+        /// <summary>자연 회수/전투 중단은 파괴와 구분한다. 잃은 검은 이 경로로 재생하지 않는다.</summary>
+        public bool TryRecall()
+        {
+            if (State != BossSwordState.Flying && State != BossSwordState.Embedded) return false;
+            State = BossSwordState.Orbiting;
+            return true;
+        }
+
         public BossSwordState State { get; private set; }
             = BossSwordState.Orbiting;
 

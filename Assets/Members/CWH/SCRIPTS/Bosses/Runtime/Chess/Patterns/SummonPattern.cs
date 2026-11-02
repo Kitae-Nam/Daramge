@@ -20,14 +20,17 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Patterns
         private BossPatternRunner _runner;
         private Vector3[] _points;
         private ChessMinion _chosen;
+        private ChessSummonCatalog _catalog;
         public override float GetSelectionScore(float targetDistance) => targetDistance <= _maximumSelectionDistance ? 25f : 0f;
-        private void Awake() { _roster = GetComponent<BossSummonRoster>(); _target = GetComponent<BossTarget>(); _runner = GetComponent<BossPatternRunner>(); }
+        private void Awake() { _roster = GetComponent<BossSummonRoster>(); _target = GetComponent<BossTarget>(); _runner = GetComponent<BossPatternRunner>(); _catalog = GetComponent<ChessSummonCatalog>(); }
         public override bool CanExecute() => base.CanExecute() && _roster.LivingCount == 0 && _target.HasTarget &&
             _pawnPrefab != null && _knightPrefab != null && _firstWarning != null && _secondWarning != null;
         public override void BeginWarning()
         {
             if (!_roster.TryGetSpawnPoints(out _points)) { _runner.CancelCurrentPattern(); return; }
-            _chosen = Random.value < 0.5f ? _pawnPrefab : _knightPrefab;
+            // 후보 종류의 확장은 카탈로그가 맡고 패턴은 같은 종류 두 마리 소환만 조율한다.
+            _chosen = _catalog != null ? _catalog.Select(_pawnPrefab, _knightPrefab)
+                : (Random.value < 0.5f ? _pawnPrefab : _knightPrefab);
             _firstWarning.Show(_points[0], Vector3.forward, 1.6f);
             _secondWarning.Show(_points[1], Vector3.forward, 1.6f);
             base.BeginWarning();
