@@ -19,6 +19,7 @@ namespace NKT.Enemy.Skill
     {
         [SerializeField] private AimTelegraph telegraph;
         [SerializeField] private AnimParamSO attackAnimParam;
+        [SerializeField] private AnimParamSO fireAnimParam;
         [SerializeField] private float crossFadeDuration = 0.8f;
         [SerializeField] private float aimDuration = 0.8f;
         [SerializeField] private float lockDuration = 0.2f;
@@ -55,7 +56,7 @@ namespace NKT.Enemy.Skill
         {
             base.UseSkill(target);
             _target = target?.transform;
-            _phase = Phase.Aim;
+            SetPhase(Phase.Aim);
             _phaseStartTime = Time.time;
             _renderer.PlayClip(attackAnimParam.ParamHash, 0, crossFadeDuration);
             telegraph.Show();
@@ -74,7 +75,7 @@ namespace NKT.Enemy.Skill
                     float t = Mathf.Clamp01(elapsed / aimDuration);
                     RotateToTarget();
                     telegraph.ShapeUpdate(range, Mathf.Lerp(startAngle, 0f, narrowCurve.Evaluate(t)), t);
-                    if (t >= 1f) _phase = Phase.Lock;
+                    if (t >= 1f) SetPhase(Phase.Lock);
                     break;
                 }
                 case Phase.Lock:
@@ -88,22 +89,34 @@ namespace NKT.Enemy.Skill
 
         private void RotateToTarget()
         {
-            transform.rotation = Quaternion.LookRotation(_target.position - transform.position);
+            Transform owner = _ownerEnemy.transform;
+            Vector3 dir = _target.position - owner.position;
+            dir.y = 0;
+            if (dir.sqrMagnitude < 0.01f) return;
+
+            owner.rotation = Quaternion.RotateTowards(owner.rotation,
+                Quaternion.LookRotation(dir), trackSpeed * Time.deltaTime);
         }
 
         private void Fire()
         {
-            _phase = Phase.Fire;
+            SetPhase(Phase.Fire);
             telegraph.Hide();
             _fireDirection = _target.position - transform.position;
             _trigger.OnDamageCast += HandleDamageCast;
             _trigger.OnAnimationEnd += StopSkill;
             _renderer.PlayClip(attackAnimParam.ParamHash, 0f, 0.05f);
         }
+        private void SetPhase(Phase phase)
+        {
+            _phase = phase;
+            _phaseStartTime = Time.time;
+        }
 
         private void HandleDamageCast()
         {
-            //총알 생성
+            //총알 생성은 애니메이션 메서드로
+            _renderer.PlayClip(fireAnimParam.ParamHash, 0f, 0.05f);
         }
 
         public override void StopSkill()

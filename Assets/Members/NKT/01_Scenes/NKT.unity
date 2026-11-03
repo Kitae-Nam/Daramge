@@ -498,9 +498,13 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2117049828}
     - target: {fileID: 3597765508803697463, guid: 43ae8a6be2f66364ab81897e47cff517, type: 3}
-      propertyPath: attackAnimParam
+      propertyPath: fireAnimParam
       value: 
       objectReference: {fileID: 11400000, guid: 1e35534a784eac44b8aeb3f127673184, type: 2}
+    - target: {fileID: 3597765508803697463, guid: 43ae8a6be2f66364ab81897e47cff517, type: 3}
+      propertyPath: attackAnimParam
+      value: 
+      objectReference: {fileID: 11400000, guid: ffdfee1d0ad25a048a3d41b320d7e474, type: 2}
     - target: {fileID: 3597765508803697463, guid: 43ae8a6be2f66364ab81897e47cff517, type: 3}
       propertyPath: narrowCurve.m_Curve.Array.size
       value: 2
@@ -563,7 +567,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7116629213469166635, guid: 43ae8a6be2f66364ab81897e47cff517, type: 3}
       propertyPath: m_WarningMessage
-      value: "\nBinding warning: Some generic clip(s) animate transforms that are already bound by a Humanoid avatar. These transforms can only be changed by Humanoid clips.\n\tTransform 'Arm_L'\n\tTransform 'ForeArm_L'\n\tTransform 'Hand_L'\n\tTransform 'Arm_L'\n\tTransform 'ForeArm_L'\n\tTransform 'Hand_L'\n\tTransform 'Arm_L'\n\tTransform 'ForeArm_L'\n\tTransform 'Hand_L'"
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 7936102352848810785, guid: 43ae8a6be2f66364ab81897e47cff517, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1155,7 +1159,7 @@ Transform:
   m_GameObject: {fileID: 2117049825}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.397, z: 0}
+  m_LocalPosition: {x: 0.021, y: 1.397, z: 1.043}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1221,7 +1225,7 @@ LineRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.2854519
+        value: 0.082876205
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -1268,7 +1272,7 @@ LineRenderer:
     textureScale: {x: 1, y: 1}
     shadowBias: 0.5
     generateLightingData: 0
-  m_UseWorldSpace: 1
+  m_UseWorldSpace: 0
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
 --- !u!114 &2117049828
@@ -1285,7 +1289,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::NKT.Enemy.Visual.AimTelegraph
   segments: 24
   centerLine: {fileID: 2117049827}
-  coneColor: {r: 1, g: 0, b: 0, a: 1}
+  coneColor: {r: 1, g: 0.32941175, b: 0.3356886, a: 1}
   lineColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!23 &2117049829
 MeshRenderer:
