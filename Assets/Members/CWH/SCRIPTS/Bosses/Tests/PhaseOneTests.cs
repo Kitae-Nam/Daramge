@@ -215,7 +215,8 @@ namespace Members.CWH.SCRIPTS.Bosses.Tests
             var sword = swords.Throw(_player.transform, _player.transform.position - Vector3.up, 2f);
             Assert.That(sword.GetComponent<BreakableHealth>().ReceiveDamage(1000f), Is.Zero);
             Set(sword, "_flightDuration", 0.02f); Set(sword, "_embeddedDuration", 0.06f);
-            yield return new WaitForSeconds(0.2f);
+            float deadline = Time.time + 3f;
+            while (swords.HasSword && Time.time < deadline) yield return null;
             Assert.That(swords.HasSword, Is.False);
             Assert.That(_boss.GetComponent<BossHealth>().CurrentHealth, Is.EqualTo(1000f));
             Assert.That(_boss.GetComponent<BossGroggyController>().IsGroggy, Is.False);

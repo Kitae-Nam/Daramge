@@ -1,4 +1,5 @@
 using System.Collections;
+using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.AI;
 using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons;
 using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Combat;
 using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Movement;
@@ -14,7 +15,8 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Patterns
         [SerializeField] private AreaTelegraphPresenter _telegraph;
         [SerializeField, Min(0.1f)] private float _range = 9f;
         [SerializeField, Range(1f, 360f)] private float _angle = 140f;
-        [SerializeField, Min(0f)] private float _damage = 20f;
+        [SerializeField, Min(0f), Tooltip("페이즈 컨트롤러가 없는 독립 실행용 기본 피해. 보스 전투는 BossAttackDamage 규칙을 사용한다.")]
+        private float _damage = 1f;
         [SerializeField, Min(0.1f)] private float _secondWarning = 0.7f;
         [SerializeField, Min(0.03f)] private float _swingDuration = 0.15f;
         [SerializeField, Min(0f)] private float _finishHoldDuration = 0.1f;
@@ -100,7 +102,7 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Patterns
             int strikes = tuning.Strikes;
             float duration = tuning.SwingDuration;
             float comboWarning = tuning.ComboWarning;
-            float damage = _damage * tuning.DamageMultiplier;
+            float damage = BossAttackDamage.Resolve(transform, _damage * tuning.DamageMultiplier);
             try
             {
                 for (int strike = 0; strike < strikes; strike++)
