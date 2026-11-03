@@ -17,6 +17,7 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons
         private Vector3 _scale;
         private Renderer[] _renderers;
         private bool[] _visibility;
+        private bool _keepWorldPoseOnReturn;
         public bool IsCaptured { get; private set; }
         public bool IsReturnPending { get; private set; }
         public event Action Returned;
@@ -29,6 +30,7 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons
             _position = transform.localPosition;
             _rotation = transform.localRotation;
             _scale = transform.localScale;
+            _keepWorldPoseOnReturn = false;
             IsCaptured = true;
             return true;
         }
@@ -46,6 +48,12 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons
                 _renderers[i].enabled = false;
             }
         }
+        
+        public void KeepCurrentWorldPoseOnReturn()
+        {
+            if (IsCaptured && !IsReturnPending)
+                _keepWorldPoseOnReturn = true;
+        }
 
         private void Update()
         {
@@ -57,10 +65,15 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons
 
         private void CompleteReturn()
         {
+            Vector3 worldPosition = transform.position;
+            Quaternion worldRotation = transform.rotation;
             transform.SetParent(_parent, false);
             transform.localPosition = _position;
             transform.localRotation = _rotation;
             transform.localScale = _scale;
+            if (_keepWorldPoseOnReturn)
+                transform.SetPositionAndRotation(worldPosition, worldRotation);
+            _keepWorldPoseOnReturn = false;
             if (IsReturnPending)
                 for (int i = 0; i < _renderers.Length; i++)
                     if (_renderers[i] != null) _renderers[i].enabled = _visibility[i];

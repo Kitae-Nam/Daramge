@@ -13,6 +13,6 @@ public class BreakableWall : MonoBehaviour
 
         isBroken = true;
 
-        gameObject.SetActive(false);
+        Destroy(gameObject);
     }
 }
