@@ -8,10 +8,7 @@ namespace CHG._02_Scripts.Player
     {
         [SerializeField] private bool isCombat;
         public bool IsCombat => isCombat;
-        public void Initialize(ModuleOwner owner)
-        {
-            
-        }
+        public void Initialize(ModuleOwner owner) { }
 
         public void SetCombat(bool isCombat) => this.isCombat = isCombat;
     }
