@@ -7,7 +7,8 @@ namespace CHG._02_Scripts.CoreSystem.FeedbackSystem.Feedback
     [RequireComponent(typeof(CinemachineImpulseSource))]
     public class CameraShakeFeedback : MonoBehaviour, IFeedback
     {
-        [SerializeField] private float force = 0.2f;
+        [SerializeField] private float minForce = 0.1f;
+        [SerializeField] private float maxForce = 0.2f;
 
         private CinemachineImpulseSource _impulseSource;
 
@@ -15,6 +16,10 @@ namespace CHG._02_Scripts.CoreSystem.FeedbackSystem.Feedback
             => _impulseSource = GetComponent<CinemachineImpulseSource>();
 
         public void PlayFeedback(FeedbackContext context)
-            => _impulseSource.GenerateImpulseAtPositionWithVelocity(context.HitPoint, context.HitDirection * force);
+        {
+            float force = Mathf.Lerp(minForce, maxForce, context.Intensity);
+            _impulseSource.GenerateImpulseAtPositionWithVelocity(context.HitPoint, context.HitDirection * force);
+            
+        }
     }
 }

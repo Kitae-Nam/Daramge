@@ -53,6 +53,8 @@ namespace CHG._02_Scripts.Player.Combat
         {
             base.UseSkill(target);
             _isHolding = true;
+            _movement.CanManualMove = true;
+            _movement.CanAutoRotate = false;
             ApplyShotSlow();
             _shotCoroutine = StartCoroutine(ShotCoroutine());
         }
@@ -61,6 +63,7 @@ namespace CHG._02_Scripts.Player.Combat
         {
             while (IsHolding)
             {
+                AimToMouse();
                 if (Time.time >= _nextShotTime)
                 {
                     if (_currentAmmo <= 0)
@@ -78,6 +81,12 @@ namespace CHG._02_Scripts.Player.Combat
 
             _shotCoroutine = null;
             StopSkill();
+        }
+
+        private void AimToMouse()
+        {
+            Vector3 dir = _player.PlayerInput.GetWorldMousePosition() - _player.transform.position;
+            _movement.RotateTo(dir);
         }
 
         private void Shot()
@@ -111,7 +120,7 @@ namespace CHG._02_Scripts.Player.Combat
         private void ApplyShotSlow()
         {
             if (_statModule.TryGetStat(moveSpeedStat.AssetIndex, out StatSO stat))
-                _statModule.AddModifier(moveSpeedStat.AssetIndex, this, -stat.Value * moveSpeedSlow);
+                _statModule.AddModifier(moveSpeedStat.AssetIndex, this, -stat.BaseValue * moveSpeedSlow);
             
         }
 
@@ -128,6 +137,7 @@ namespace CHG._02_Scripts.Player.Combat
                 _shotCoroutine = null;
             }
             _isHolding = false;
+            _movement.CanAutoRotate = true;
             RemoveShotSlow();
             base.StopSkill();
         }

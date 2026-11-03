@@ -30,6 +30,10 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Patterns
         private DashHitbox _hitbox;
         private DashPath _path;
         private bool _prepared;
+        [SerializeField, Tooltip("IDashTuningSource 구현체. 비우면 기본 설정을 사용한다.")]
+        private MonoBehaviour _tuningSource;
+        private IDashTuningSource _profiles;
+        private DashScorchFactory _scorchFactory;
 
         public DashPath PlannedPath => _path;
         public override float GetSelectionScore(float targetDistance) => targetDistance >= _preferredMinimumDistance ? 100f : 10f;
@@ -40,13 +44,14 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Patterns
             _target = GetComponent<BossTarget>();
             _motor = GetComponent<BossDashMotor>();
             _hitbox = GetComponent<DashHitbox>();
+            _profiles = _tuningSource as IDashTuningSource ?? GetComponent<ChessCombatProfiles>();
+            _scorchFactory = GetComponent<DashScorchFactory>();
         }
 
         public override bool CanExecute()
         {
             // 준비 후에는 대상의 이동/소멸로 경로를 다시 조준하지 않는다.
             return base.CanExecute() && _telegraph != null && _motor.IsReady
-                   && GetComponent<BossSwordController>()?.HasSword != true
                    && (_prepared || (_target.HasTarget && _dashDistance > 0f && _dashSpeed > 0f && _dashWidth > 0f));
         }
 
@@ -81,6 +86,12 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Patterns
         public override IEnumerator Execute()
         {
             if (!_prepared || !_motor.Begin(_path)) yield break;
+            DashTuning tuning = _profiles != null ? _profiles.GetDash() : DashTuning.Normal;
+            float damage = _damage * tuning.DamageMultiplier;
+            float speed = _dashSpeed * tuning.SpeedMultiplier;
+            DashScorchField scorch = tuning.LeavesScorch && _scorchFactory != null
+                ? _scorchFactory.Spawn(_target.HasTarget ? _target.Target : null, _dashWidth, tuning.Scorch) : null;
+            bool completed = false;
             _hitbox.TargetRoot = _target.HasTarget ? _target.Target : null;
             _hitbox.Begin();
             try
@@ -88,25 +99,28 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Patterns
                 float travelled = 0f;
                 // 한 프레임에 멀리 가더라도 전체 이동 구간을 Sweep해 대상을 건너뛰지 않게 한다.
                 _hitbox.Sweep(transform.position, transform.position, _path.Direction, _dashWidth,
-                    _motor.BodyHeight, _damage, _knockbackSpeed, _knockbackDuration);
+                    _motor.BodyHeight, damage, _knockbackSpeed, _knockbackDuration);
                 while (travelled < _path.Distance && _motor.IsDashing)
                 {
-                    float step = Mathf.Min(_dashSpeed * Time.deltaTime, _path.Distance - travelled);
+                    float step = Mathf.Min(speed * Time.deltaTime, _path.Distance - travelled);
                     if (step <= 0f) { yield return null; continue; }
                     Vector3 before = transform.position;
                     bool canContinue = _motor.Step(_path.Direction, step, _dashWidth);
                     _hitbox.Sweep(before, transform.position, _path.Direction, _dashWidth,
-                        _motor.BodyHeight, _damage, _knockbackSpeed, _knockbackDuration);
+                        _motor.BodyHeight, damage, _knockbackSpeed, _knockbackDuration);
+                    if (scorch != null) scorch.ExtendTo(transform.position);
                     travelled += Mathf.Max(0f, Vector3.Dot(transform.position - before, _path.Direction));
                     if (!canContinue) break;
                     yield return null;
                 }
+                completed = true;
             }
             finally
             {
                 // 후딜이 시작되기 전에 판정을 끈다. Cleanup까지 켜 두면 후딜 중에도 맞을 수 있다.
                 _hitbox.Stop();
                 _motor.Stop();
+                if (!completed && scorch != null) scorch.Cancel();
             }
         }
 

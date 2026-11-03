@@ -7,9 +7,12 @@ namespace CHG._02_Scripts.CoreSystem.FeedbackSystem
 {
     public class HitStopController : MonoBehaviour 
     {
+        
+        
         private bool _isStopping;
         private float _stopEndTime;
         private float _stopTimeScale;
+        
         private void OnEnable() => EventBus<HitStopEvent>.Subscribe(HandleHitStop);
 
         private void OnDisable()
