@@ -112,9 +112,8 @@ namespace CHG._02_Scripts.Player.Combat
         private void UpdateRangeIndicator(float charge)
         {
             float power = ChargeLogic.IsValidCharge ? charge : 0f;
-            float diameter = Mathf.Lerp(minRadius, maxRadius, power) * 2f;
-            _rangeIndicator.SetSize(new Vector2(diameter, diameter));
-            _rangeIndicator.SetProgress(charge);
+            _rangeIndicator.SetSize(new Vector2(maxRadius * 2f, maxRadius * 2f));
+            _rangeIndicator.SetProgress(Mathf.Lerp(minRadius, maxRadius, power) / maxRadius);
         }
 
 #if UNITY_EDITOR

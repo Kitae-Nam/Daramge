@@ -115,9 +115,14 @@ namespace CHG._02_Scripts.Player.Combat
 
         private void UpdateRangeIndicator(float charge)
         {
-            float length = GetDashDistance(charge) + _castReach;
-            _rangeIndicator.SetSize(new Vector2(damageCaster.Radius * 2f, length));
-            _rangeIndicator.SetProgress(charge);
+            float max = GetReachLength(1f);
+            _rangeIndicator.SetSize(new Vector2(damageCaster.Radius * 2f, max));
+            _rangeIndicator.SetProgress(GetReachLength(charge) / max);
+        }
+
+        private float GetReachLength(float charge)
+        {
+            return GetDashDistance(charge) + _castReach;
         }
 
         private float GetDashDistance(float power)
