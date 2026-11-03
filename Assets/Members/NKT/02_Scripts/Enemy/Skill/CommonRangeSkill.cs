@@ -108,8 +108,10 @@ namespace NKT.Enemy.Skill
 
         public override void StopSkill()
         {
-            base.StopSkill();
+            telegraph.Hide();
+            _trigger.OnDamageCast -= HandleDamageCast;
             _trigger.OnAnimationEnd -= StopSkill;
+            base.StopSkill();
         }
     }
 }

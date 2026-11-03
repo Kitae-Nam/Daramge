@@ -11,6 +11,7 @@ namespace NKT.Enemy.Visual
         [SerializeField] private LineRenderer centerLine;
         [SerializeField] private Color coneColor = Color.red;
         [SerializeField] private Color lineColor = Color.red;
+        [SerializeField] private float height = 1f;
         
         private Mesh _mesh;
         private MeshRenderer _meshRenderer;
@@ -69,8 +70,8 @@ namespace NKT.Enemy.Visual
             Color line = lineColor;
             line.a *= progress;
             centerLine.startColor = centerLine.endColor = line;
-            centerLine.SetPosition(0, Vector3.zero);
-            centerLine.SetPosition(1, Vector3.forward * range);
+            centerLine.SetPosition(0, new Vector3(transform.position.x, height, transform.position.z));
+            centerLine.SetPosition(1, transform.forward * range+ new Vector3(0,height,0));
         }
     }
 }

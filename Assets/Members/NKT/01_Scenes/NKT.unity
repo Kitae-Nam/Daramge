@@ -500,7 +500,7 @@ PrefabInstance:
     - target: {fileID: 3597765508803697463, guid: 43ae8a6be2f66364ab81897e47cff517, type: 3}
       propertyPath: attackAnimParam
       value: 
-      objectReference: {fileID: 11400000, guid: 6a888031aaca74c44ad20441986c8d81, type: 2}
+      objectReference: {fileID: 11400000, guid: 1e35534a784eac44b8aeb3f127673184, type: 2}
     - target: {fileID: 3597765508803697463, guid: 43ae8a6be2f66364ab81897e47cff517, type: 3}
       propertyPath: narrowCurve.m_Curve.Array.size
       value: 2
@@ -563,7 +563,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7116629213469166635, guid: 43ae8a6be2f66364ab81897e47cff517, type: 3}
       propertyPath: m_WarningMessage
-      value: 
+      value: "\nBinding warning: Some generic clip(s) animate transforms that are already bound by a Humanoid avatar. These transforms can only be changed by Humanoid clips.\n\tTransform 'Arm_L'\n\tTransform 'ForeArm_L'\n\tTransform 'Hand_L'\n\tTransform 'Arm_L'\n\tTransform 'ForeArm_L'\n\tTransform 'Hand_L'\n\tTransform 'Arm_L'\n\tTransform 'ForeArm_L'\n\tTransform 'Hand_L'"
       objectReference: {fileID: 0}
     - target: {fileID: 7936102352848810785, guid: 43ae8a6be2f66364ab81897e47cff517, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1212,6 +1212,7 @@ LineRenderer:
   m_MaskInteraction: 0
   m_Positions:
   - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -1311,7 +1312,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: c0de7311236b07b45bb2ece69a916e6b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
