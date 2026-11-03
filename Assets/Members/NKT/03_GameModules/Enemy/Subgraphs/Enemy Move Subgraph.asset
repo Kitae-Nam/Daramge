@@ -22,12 +22,14 @@ MonoBehaviour:
     - rid: 2904886043840348224
     - rid: 2904886043489861635
     - rid: 2904886043489861657
-    - rid: 2904886043840348360
-    - rid: 2904886043840348178
+    - rid: -2
+    - rid: -2
   m_SharedBlackboardVariableGuids: []
   references:
     version: 2
     RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
     - rid: 2904886039649189946
       type: {class: 'BlackboardVariable`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
       data:
@@ -52,14 +54,6 @@ MonoBehaviour:
           m_Value1: 11619145589327463485
         Name: AnimationChannel
         m_Value: {fileID: 0}
-    - rid: 2904886043840348178
-      type: {class: 'BlackboardVariable`1[[CHG._02_Scripts.CoreSystem.AnimationSystem.AnimParamSO, Assembly-CSharp]]', ns: Unity.Behavior, asm: Unity.Behavior}
-      data:
-        GUID:
-          m_Value0: 5840488678328833099
-          m_Value1: 18199453956275645369
-        Name: RunClip
-        m_Value: {fileID: 0}
     - rid: 2904886043840348224
       type: {class: 'BlackboardVariable`1[[NKT.Enemy.AbstractEnemy, Assembly-CSharp]]', ns: Unity.Behavior, asm: Unity.Behavior}
       data:
@@ -67,14 +61,6 @@ MonoBehaviour:
           m_Value0: 7848845250832058936
           m_Value1: 6770288422890585406
         Name: Enemy
-        m_Value: {fileID: 0}
-    - rid: 2904886043840348360
-      type: {class: 'BlackboardVariable`1[[CHG._02_Scripts.CoreSystem.AnimationSystem.AnimParamSO, Assembly-CSharp]]', ns: Unity.Behavior, asm: Unity.Behavior}
-      data:
-        GUID:
-          m_Value0: 14683297210888919151
-          m_Value1: 8311673888138977850
-        Name: IdleClip
         m_Value: {fileID: 0}
 --- !u!114 &11400000
 MonoBehaviour:
@@ -868,7 +854,7 @@ MonoBehaviour:
         BlackboardGroupReferences: []
         Root:
           rid: 2904886132618559699
-        m_VersionTimestamp: 639286504151552040
+        m_VersionTimestamp: 639286504153054154
     - rid: 2904886039649189950
       type: {class: BlackboardReference, ns: Unity.Behavior, asm: Unity.Behavior}
       data:
