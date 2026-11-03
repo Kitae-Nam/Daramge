@@ -1,6 +1,7 @@
 using System.Collections;
 using CHG._02_Scripts.CombatSystem;
 using CHG._02_Scripts.CoreSystem.AnimationSystem;
+using CHG._02_Scripts.CoreSystem.FeedbackSystem;
 using UnityEngine;
 
 namespace CHG._02_Scripts.Player.Combat
@@ -20,6 +21,7 @@ namespace CHG._02_Scripts.Player.Combat
         [SerializeField] private float dashDuration = 0.3f;
         [SerializeField] private AnimationCurve damageByCharge = AnimationCurve.Linear(0, 0.5f, 1, 2f);
         [SerializeField] private bool stopOnHit = true;
+        [SerializeField] private FeedbackPlayer hitFeedback;
 
         public override void InitializeSkill(ISkillModule skillModule)
         {
@@ -69,6 +71,7 @@ namespace CHG._02_Scripts.Player.Combat
                 _movement.SetMovementVelocity(forward * dashCurve.Evaluate(percent) * speed);
 
                 bool hit = damageCaster.CastDamage(damageCaster.transform.position, SkillData, multiplier);
+                if (hit) PlayFeedback(hitFeedback, damageCaster.transform.position, forward, power);
                 if (hit && stopOnHit) break;
 
                 elapsed += Time.fixedDeltaTime;
