@@ -7,20 +7,20 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
     [Serializable]
     public sealed class ChessPhaseTwoSettings
     {
-        [Min(0.1f)] public float DamageMultiplier = 1.35f;
+        [Min(0.1f)] public float DamageMultiplier = 2f;
         [Range(2, 5)] public int MeleeStrikes = 3;
         [Min(0.03f)] public float SwingDuration = 0.13f;
         [Min(0.1f)] public float ComboWarning = 0.6f;
         [Min(0.1f)] public float DashSpeedMultiplier = 1.2f;
         [Min(0.1f)] public float DashHazardLifetime = 5f;
         [Min(0.05f)] public float DashHazardTickInterval = 0.75f;
-        [Min(0f)] public float DashHazardDamage = 10f;
+        [Min(0f)] public float DashHazardDamage = 1f;
         [Range(1, 8)] public int ThrowCount = 3;
         [Min(0f)] public float ThrowSpread = 3f;
-        [Min(0.1f)] public float RoarRadius = 8f;
+        [Min(0.1f)] public float RoarRadius = 5f;
         [Min(0f)] public float RoarPushSpeed = 16f;
         [Min(0.01f)] public float RoarPushDuration = 0.6f;
-        [Min(0f)] public float RoarWallDamage = 35f;
+        [Min(0f)] public float RoarWallDamage = 2f;
         public LayerMask WallLayers = Physics.DefaultRaycastLayers;
     }
 }
