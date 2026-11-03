@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using CHG._02_Scripts.Agent.StatSystem;
 using CHG._02_Scripts.CombatSystem;
+using CHG._02_Scripts.CombatSystem.Indicator;
 using CHG._02_Scripts.CoreSystem.AnimationSystem;
 using CHG._02_Scripts.CoreSystem.FeedbackSystem;
 using UnityEngine;
@@ -26,6 +27,7 @@ namespace CHG._02_Scripts.Player.Combat
         [SerializeField] private FeedbackPlayer hitFeedback;
 
         private IStatModule _statModule;
+        private ISkillRangeIndicator _rangeIndicator;
 
         public override void InitializeSkill(ISkillModule skillModule)
         {
@@ -33,6 +35,10 @@ namespace CHG._02_Scripts.Player.Combat
             _statModule = _player.GetModule<IStatModule>();
             Debug.Assert(_statModule != null, $"statModule is null : {gameObject.name}");
             damageCaster.InitCaster(_player);
+            
+            _rangeIndicator =  GetComponentInChildren<ISkillRangeIndicator>();
+            Debug.Assert(_rangeIndicator != null, $"rangeIndicator is null : {gameObject.name}");
+            ChargeLogic.OnChargeChanged += HandleChargeChanged;
         }
 
         public override bool CanUseSkill(GameObject target = null)
@@ -45,6 +51,8 @@ namespace CHG._02_Scripts.Player.Combat
             ChargeLogic.Begin();
             _movement.CanManualMove = true;
             ApplyChargeSlow(); 
+            _rangeIndicator.Show();
+            UpdateRangeIndicator(0f);
         }
 
         private void Update() => ChargeLogic.Tick(Time.deltaTime);
@@ -52,6 +60,7 @@ namespace CHG._02_Scripts.Player.Combat
 
         public void Release()
         {
+            _rangeIndicator.Hide();
             float power = ChargeLogic.Release();
             if (!ChargeLogic.IsValidCharge)
                 power = 0f;
@@ -79,6 +88,7 @@ namespace CHG._02_Scripts.Player.Combat
         {
             StopAllCoroutines();
             ChargeLogic.Cancel();
+            _rangeIndicator.Hide();
             RemoveChargeSlow();
             _movement.CanManualMove = true;
             base.StopSkill();
@@ -96,7 +106,17 @@ namespace CHG._02_Scripts.Player.Combat
             _statModule.RemoveModifier(moveSpeedStat.AssetIndex, this);
         }
 
-        
+        private void HandleChargeChanged(float charge)
+            => UpdateRangeIndicator(charge);
+
+        private void UpdateRangeIndicator(float charge)
+        {
+            float power = ChargeLogic.IsValidCharge ? charge : 0f;
+            float diameter = Mathf.Lerp(minRadius, maxRadius, power) * 2f;
+            _rangeIndicator.SetSize(new Vector2(diameter, diameter));
+            _rangeIndicator.SetProgress(charge);
+        }
+
 #if UNITY_EDITOR
         private void OnDrawGizmosSelected()
         {
