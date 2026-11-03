@@ -36,5 +36,41 @@ namespace NKT.Enemy.Visual
                 _triangles[i * 3 + 2] = i + 2;
             }
         }
+
+        public void Show()
+        {
+            _meshRenderer.enabled = true;
+            centerLine.enabled = true;
+        }
+
+        public void Hide()
+        {
+            _meshRenderer.enabled = false;
+            centerLine.enabled = false;
+        }
+
+        public void ShapeUpdate(float range, float angle, float progress)
+        {
+            _vertices[0] = Vector3.zero;
+            for (int i = 0; i < segments; i++)
+            {
+                float a = Mathf.Lerp(-angle * 0.5f, angle * 0.5f, i / (float)segments);
+                _vertices[1+i] = Quaternion.Euler(0f, a, 0f) * Vector3.forward;
+            }
+            _mesh.vertices = _vertices;
+            _mesh.triangles = _triangles;
+            _mesh.RecalculateBounds();
+
+            Color cone = coneColor;
+            cone.a = 1f - progress;
+            _block.SetColor(BaseColorId, cone);
+            _meshRenderer.SetPropertyBlock(_block);
+            
+            Color line = lineColor;
+            line.a *= progress;
+            centerLine.startColor = centerLine.endColor = line;
+            centerLine.SetPosition(0, Vector3.zero);
+            centerLine.SetPosition(1, Vector3.forward * range);
+        }
     }
 }
