@@ -50,6 +50,15 @@ namespace QuickOutline.Scripts
       }
     }
 
+    // 런타임 변경도 기존 머티리얼 갱신 경로를 사용해 Inspector 변경과 동일하게 반영한다.
+    public bool HideOccluded {
+      get { return hideOccluded; }
+      set {
+        hideOccluded = value;
+        needsUpdate = true;
+      }
+    }
+
     [Serializable]
     private class ListVector3 {
       public List<Vector3> data;
@@ -63,6 +72,11 @@ namespace QuickOutline.Scripts
 
     [SerializeField, Range(0f, 10f)]
     private float outlineWidth = 2f;
+
+    // 기본값을 false로 두어 기존 씬과 프리팹의 외곽선 표시 방식을 유지한다.
+    [SerializeField, Tooltip("켜면 Outline Mode보다 우선하여 보이는 부분의 외곽선만 표시합니다. "
+                             + "깊이 버퍼에 기록되는 벽이나 오브젝트에 가려진 부분은 표시하지 않습니다.")]
+    private bool hideOccluded;
 
     [Header("Optional")]
 
@@ -278,7 +292,11 @@ namespace QuickOutline.Scripts
       // Apply properties according to mode
       outlineFillMaterial.SetColor("_OutlineColor", outlineColor);
 
-      switch (outlineMode) {
+      // 기존 OutlineVisible의 깊이 판정을 재사용해 가려진 픽셀만 제외한다.
+      // 저장된 모드는 유지하므로 옵션을 끄면 원래 외곽선 모드로 돌아간다.
+      var effectiveMode = hideOccluded ? Mode.OutlineVisible : outlineMode;
+
+      switch (effectiveMode) {
         case Mode.OutlineAll:
           outlineMaskMaterial.SetFloat("_ZTest", (float)UnityEngine.Rendering.CompareFunction.Always);
           outlineFillMaterial.SetFloat("_ZTest", (float)UnityEngine.Rendering.CompareFunction.Always);

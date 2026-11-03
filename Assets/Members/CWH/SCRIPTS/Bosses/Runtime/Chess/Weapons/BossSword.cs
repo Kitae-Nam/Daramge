@@ -1,3 +1,4 @@
+using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Health;
 using UnityEngine;
 
 namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons
@@ -22,9 +23,12 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons
 
         private void HandleReturned()
         {
-            // 위치 복원이 끝난 뒤 상태를 바꿔 공전과 복귀 코드의 Transform 변경이 겹치지 않게 한다.
-            if (State == BossSwordState.Held) TryReturnFromHand();
-            else TryRecall();
+            GetComponent<BreakableHealth>()?.RestoreFull();
+
+            if (State == BossSwordState.Held)
+                TryReturnFromHand();
+            else
+                TryRecall();
         }
 
         private void OnDestroy()
