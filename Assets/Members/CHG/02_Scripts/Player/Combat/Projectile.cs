@@ -44,5 +44,7 @@ namespace CHG._02_Scripts.Player.Combat
             _isFlying = false;
             _direction = Vector3.zero;
         }
+        
+        
     }
 }
