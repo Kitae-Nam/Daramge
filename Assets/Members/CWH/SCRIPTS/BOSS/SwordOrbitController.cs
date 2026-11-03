@@ -6,7 +6,7 @@ namespace CWH.SCRIPTS.BOSS
     /// <summary>
     /// 검 회전 기능 스크립트
     /// </summary>
-    public class SwordOrbitController : MonoBehaviour
+    public class SwordOrbitController : MonoBehaviour,ISwordOrbitPoseProvider
     {
         [Header("공전 기준점")] [SerializeField] private Transform _orbitCenter;
 
@@ -48,29 +48,63 @@ namespace CWH.SCRIPTS.BOSS
                 
                 Transform sword = BossSword.transform;
                 
-                float angle = _currentAngle + i * (360f / _swords.Count);
-                float radians = angle * Mathf.Deg2Rad;
-                
-                float x = Mathf.Cos(radians) * _orbitRadius;
-                float z = Mathf.Sin(radians) * _orbitRadius;
+                CalculateOrbitPose(
+                    i,
+                    _swords.Count,
+                    out Vector3 position,
+                    out Quaternion rotation);
 
-                float height = _heightOffset +
-                               Mathf.Sin(radians * 2f + i) * _heightVariation;
-
-                sword.position = _orbitCenter.position 
-                    + new Vector3(x, height, z);
-
-                sword.rotation = Quaternion.Euler(
-                    _swordTilt,
-                    -angle + _swordRotationOffset,
-                    0f
-                    );
+                sword.SetPositionAndRotation(position, rotation);
             }
         }
 
         public void SetOrbiting(bool isOrbiting)
         {
             _isOrbiting = isOrbiting;
+        }
+
+        public bool TryGetOrbitPose(BossSword sword, out Vector3 position, out Quaternion rotation)
+        {
+            position = Vector3.zero;
+            rotation = Quaternion.identity;
+
+            if (sword == null || _orbitCenter == null || _inventory == null)
+                return false;
+
+            var swords = _inventory.Swords;
+
+            for (int i = 0; i < swords.Count; i++)
+            {
+                if (swords[i] != sword) continue;
+
+                CalculateOrbitPose(i, swords.Count, out position, out rotation);
+                return true;
+            }
+
+            return false;
+        }
+        
+        private void CalculateOrbitPose(
+            int index,
+            int count,
+            out Vector3 position,
+            out Quaternion rotation)
+        {
+            float angle = _currentAngle + index * (360f / count);
+            float radians = angle * Mathf.Deg2Rad;
+
+            float height = _heightOffset
+                           + Mathf.Sin(radians * 2f + index) * _heightVariation;
+
+            position = _orbitCenter.position + new Vector3(
+                Mathf.Cos(radians) * _orbitRadius,
+                height,
+                Mathf.Sin(radians) * _orbitRadius);
+
+            rotation = Quaternion.Euler(
+                _swordTilt,
+                -angle + _swordRotationOffset,
+                0f);
         }
     }
 }
