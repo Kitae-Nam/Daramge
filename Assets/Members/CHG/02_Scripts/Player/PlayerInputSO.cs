@@ -12,6 +12,7 @@ namespace CHG._02_Scripts.Player
         public event Action<Vector2> OnMovementChange;
         public event Action<PlayerSkillSlot> OnSkillKeyPressed;
         public event Action<PlayerSkillSlot> OnSkillKeyReleased;
+        public event Action OnInteractKeyPressed;
         
 
         public Vector2 Movement { get; private set; }
@@ -48,6 +49,9 @@ namespace CHG._02_Scripts.Player
         {
             _controls.Player.Disable();
         }
+        
+        public void EnableInput() => _controls.Player.Enable();
+        public void DisableInput() => _controls.Player.Disable();
 
         public void OnMove(InputAction.CallbackContext context)
         {
@@ -68,7 +72,8 @@ namespace CHG._02_Scripts.Player
 
         public void OnInteract(InputAction.CallbackContext context)
         {
-            
+            if (context.performed)
+                OnInteractKeyPressed?.Invoke();
         }
         
         public void OnFirstSkill(InputAction.CallbackContext context)

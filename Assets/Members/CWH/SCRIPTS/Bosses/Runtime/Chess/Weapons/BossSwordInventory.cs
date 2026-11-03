@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using System.Data;
-using Codice.Client.BaseCommands;
 using UnityEngine;
 
 namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons
@@ -22,6 +20,30 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons
         public bool HasOrbitingSword=> HasSwordInState(BossSwordState.Orbiting);
         public bool HasHeldSword => HasSwordInState(BossSwordState.Held);
 
+        public int OrbitingCount
+        {
+            get
+            {
+                int count = 0;
+                foreach (BossSword sword in _swords)
+                    if (sword != null && sword.isActiveAndEnabled && sword.State == BossSwordState.Orbiting) count++;
+                return count;
+            }
+        }
+
+        /// <summary>투척도 실제 검을 예약하여 근접 공격과 같은 중복 사용 방지 규칙을 쓴다.</summary>
+        public bool TryLaunchSword(out BossSword selectedSword)
+        {
+            selectedSword = null;
+            foreach (BossSword sword in _swords)
+            {
+                if (sword == null || !sword.isActiveAndEnabled || !sword.TryLaunch()) continue;
+                selectedSword = sword;
+                return true;
+            }
+            return false;
+        }
+
         /// <summary>
         /// 손에 들수 있는 첫번째 검을 선택합니다.
         /// 상태 변경 가능 여부는 각 검이 판단하도록 맡깁니다.
@@ -31,7 +53,7 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons
             selectSword = null;
             foreach (BossSword sword in _swords)
             {
-                if (sword == null) continue;
+                if (sword == null || !sword.isActiveAndEnabled) continue;
                 if (!sword.TryHold()) continue;
 
                 selectSword = sword;
@@ -45,7 +67,7 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons
         {
             foreach (BossSword sword in _swords)
             {
-                if (sword != null && sword.State == state) return true;
+                if (sword != null && sword.isActiveAndEnabled && sword.State == state) return true;
             }
 
             return false;
