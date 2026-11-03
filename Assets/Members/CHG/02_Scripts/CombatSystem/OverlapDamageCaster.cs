@@ -6,6 +6,8 @@ namespace CHG._02_Scripts.CombatSystem
 {
     public class OverlapDamageCaster : AbstractDamageCaster
     {
+        public float Radius => radius;
+        
         [SerializeField] private float radius;
         [SerializeField] private int maxCount;
 

@@ -26,6 +26,7 @@ namespace CHG._02_Scripts.Player
         public bool CanManualMove { get; set; } = true;
         public bool CanAutoRotate { get; set; } = true;
         public bool CanUseGravity { get; set; } = true;
+        public float MoveSpeed => _moveSpeed;
         public Vector3 Velocity => _velocity;
         public bool IsGround => _characterController.isGrounded;
         public bool IsLaunched => _isLaunched;
