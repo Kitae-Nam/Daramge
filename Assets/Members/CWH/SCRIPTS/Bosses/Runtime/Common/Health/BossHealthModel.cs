@@ -64,6 +64,13 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Health
             if (died) Died?.Invoke();
             return appliedDamage;
         }
+        public void RestoreFull()
+        {
+            if (IsDead || CurrentHealth >= MaxHealth) return;
+
+            CurrentHealth = MaxHealth;
+            HealthChanged?.Invoke(CurrentHealth, MaxHealth);
+        }
 
         private static void ValidateNonNegativeFinite(float value, string parameterName)
         {
