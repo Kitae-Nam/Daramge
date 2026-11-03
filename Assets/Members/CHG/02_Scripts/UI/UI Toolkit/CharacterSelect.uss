@@ -1,0 +1,45 @@
+:root {
+
+}
+.select-root {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    align-items: center;
+    justify-content: center;
+}
+
+.character-select {
+    min-width: 280px;
+    padding: 24px;
+    background-color: rgba(0, 0, 0, 0.75);
+    border-radius: 8px;
+}
+
+.character-select--hidden {
+    display: none;
+}
+
+.character-select__title {
+    margin-bottom: 16px;
+    font-size: 24px;
+    color: rgb(255, 255, 255);
+    -unity-text-align: middle-center;
+}
+
+.character-select__buttons {
+    flex-direction: column;
+}
+
+.character-select__button {
+    height: 48px;
+    margin-bottom: 8px;
+    font-size: 18px;
+}
+
+.character-select__cancel {
+    height: 40px;
+    margin-top: 8px;
+}

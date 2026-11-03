@@ -15,6 +15,7 @@ namespace CHG._02_Scripts.UI.Presenter
             _gauge = gauge;
             _model = model;
             _model.OnStaminaChanged += HandleStaminaChanged;
+            HandleStaminaChanged(_model.CurrentStamina, _model.MaxStamina);
         }
 
         private void HandleStaminaChanged(float current, float max)

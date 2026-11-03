@@ -64,6 +64,11 @@ namespace CHG._02_Scripts.UI.Presenter
         }
 
         public void Dispose()
-            => _model.OnHealthChanged -= HandleHealthChanged;
+        {
+            _model.OnHealthChanged -= HandleHealthChanged;
+            foreach (VisualElement fill in _fills)  
+                fill.parent.RemoveFromHierarchy();
+            _fills.Clear();
+        }
     }
 }

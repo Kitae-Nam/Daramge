@@ -12,7 +12,7 @@ namespace CHG._02_Scripts.CoreSystem.TimeSystem
         [SerializeField] private bool scaleFixedDeltaTime = true;
 
         private readonly Dictionary<object, float> _requests = new Dictionary<object, float>();
-        private float _defaultFixedDeltaTime = Time.fixedDeltaTime;
+        private float _defaultFixedDeltaTime;
         
         private void Awake()
             => _defaultFixedDeltaTime = Time.fixedDeltaTime;

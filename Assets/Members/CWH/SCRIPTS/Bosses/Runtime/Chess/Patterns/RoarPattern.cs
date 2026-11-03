@@ -20,58 +20,83 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Patterns
         [SerializeField, Min(0f)] private float _knockbackSpeed = 10f;
         [SerializeField, Min(0f)] private float _knockbackDuration = 0.4f;
 
+        [SerializeField, Tooltip("IRoarTuningSource 구현체. 비우면 기본 설정을 사용한다.")]
+        private MonoBehaviour _tuningSource;
+
 
         private BossPatternRunner runner;
         private BossTarget _target;
         private BossGroggyController _groggy;
+        private BossCombatPresentation _presentation;
+        private IRoarTuningSource _profiles;
         private bool _prepared;
 
+
+        private RoarTuning Tuning => _profiles != null
+            ? _profiles.GetRoar(_roarRadius, _knockbackSpeed, _knockbackDuration)
+            : RoarTuning.Normal(_roarRadius, _knockbackSpeed, _knockbackDuration);
+
+        private float Radius => Tuning.Radius;
         public override bool CanExecute() => base.CanExecute() && _target.HasTarget && (_prepared || IsTargetInRange());
-        public override float GetSelectionScore(float targetDistance) => targetDistance <= _roarRadius ? 35f : 0f;
+        public override float GetSelectionScore(float targetDistance) => targetDistance <= Radius ? 35f : 0f;
 
         private void Awake()
         {
             runner = GetComponent<BossPatternRunner>();
             _target = GetComponent<BossTarget>();
             _groggy = GetComponent<BossGroggyController>();
+            _profiles = _tuningSource as IRoarTuningSource ?? GetComponent<ChessCombatProfiles>();
+            _presentation = GetComponent<BossCombatPresentation>();
         }
 
         public override void BeginWarning()
         {
             _prepared = true;
-            if (_areaTelegraph != null) _areaTelegraph.Show(transform.position, Vector3.forward, _roarRadius);
+            if (_areaTelegraph != null) _areaTelegraph.Show(transform.position, Vector3.forward, Radius);
             else if (_telegraph != null)
             {
                 _telegraph.SetProgress(0f);
                 _telegraph.SetOpacity(0.7f);
             }
 
+            if (_presentation != null) _presentation?.SetRoarCharge(0f);
             base.BeginWarning();
         }
 
         public override void EndWarning()
         {
             if (_areaTelegraph != null) _areaTelegraph.Hide();
-            if (_telegraph != null)
-            {
-                _telegraph.SetOpacity(0f);
-            }
+            if (_telegraph != null) _telegraph.SetOpacity(0f);
+            if (_presentation != null) _presentation?.SetRoarCharge(0f);
 
             base.EndWarning();
         }
 
         public override IEnumerator Execute()
         {
-            IKnockbackReceiver receiver = _target.HasTarget ? _target.Target.GetComponentInParent<IKnockbackReceiver>() : null;
+            IKnockbackReceiver receiver =
+                _target.HasTarget ? _target.Target.GetComponentInParent<IKnockbackReceiver>() : null;
             if (IsTargetInRange() && receiver != null)
             {
                 Vector3 direction = _target.Target.position - transform.position;
                 direction.y = 0f;
 
-                receiver.ReceiveKnockBack(direction, _knockbackSpeed, _knockbackDuration);
+                RoarTuning tuning = Tuning;
+                float duration = tuning.Duration;
+                float speed = tuning.Speed;
+                if (tuning.WallDamage > 0f && receiver is Component receiverComponent)
+                {
+                    Rigidbody body = receiverComponent.GetComponentInParent<Rigidbody>();
+                    GameObject root = body != null ? body.gameObject : receiverComponent.gameObject;
+                    RoarWallImpact impact = root.GetComponent<RoarWallImpact>();
+                    if (impact == null) impact = root.AddComponent<RoarWallImpact>();
+                    impact.Arm(transform, direction, duration, tuning.WallDamage, tuning.WallLayers);
+                }
+
+                receiver.ReceiveKnockBack(direction, speed, duration);
             }
 
-            GetComponent<BossCombatPresentation>()?.PlayImpact();
+            _presentation?.PlayRoarImpact();
             // 1페이즈 포효는 피해 없이 밀치고, 명중 여부와 관계없이 빈틈을 제공한다.
             _groggy.TryEnterGroggy();
             yield break;
@@ -80,10 +105,8 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Patterns
         public override void UpdateWarningProgress(float progress)
         {
             if (_areaTelegraph != null) _areaTelegraph.SetProgress(progress);
-            if (_telegraph != null)
-            {
-                _telegraph.SetProgress(progress);
-            }
+            if (_telegraph != null) _telegraph.SetProgress(progress);
+            if (_presentation != null) _presentation.SetRoarCharge(progress);
         }
 
         public override void Cleanup()
@@ -91,9 +114,13 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Patterns
             _prepared = false;
             if (_areaTelegraph != null) _areaTelegraph.Hide();
             if (_telegraph != null) _telegraph.SetOpacity(0f);
+            if (_presentation != null) _presentation.SetRoarCharge(0f);
         }
 
-        private void OnDisable() { if (runner != null && runner.CurrentPattern == this) runner.CancelCurrentPattern(); }
+        private void OnDisable()
+        {
+            if (runner != null && runner.CurrentPattern == this) runner.CancelCurrentPattern();
+        }
 
         private bool IsTargetInRange()
         {
@@ -102,7 +129,7 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Patterns
 
             Vector3 pos = _target.Target.position - transform.position;
             pos.y = 0;
-            if (pos.sqrMagnitude <= _roarRadius * _roarRadius)
+            if (pos.sqrMagnitude <= Radius * Radius)
                 return true;
             return false;
         }
