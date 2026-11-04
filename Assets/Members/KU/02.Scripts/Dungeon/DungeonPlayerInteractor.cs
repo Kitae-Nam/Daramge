@@ -4,12 +4,12 @@ using UnityEngine.InputSystem;
 
 public class DungeonPlayerInteractor : MonoBehaviour
 {
-    [Header("Input")]
+    [Header("Input Settings")]
     [SerializeField]
-    private PlayerInput playerInput;
+    private bool useKeyboardInput = true;
 
     [SerializeField]
-    private string interactActionName = "Interact";
+    private Key interactKey = Key.E;
 
     [Header("Interaction Settings")]
     [SerializeField, Min(0.1f)]
@@ -18,60 +18,56 @@ public class DungeonPlayerInteractor : MonoBehaviour
     [SerializeField]
     private LayerMask interactionLayers = ~0;
 
-    private InputAction interactAction;
+    [Header("References")]
+    [SerializeField]
+    private Transform interactionOrigin;
 
     private void Awake()
     {
-        if (playerInput == null)
-            playerInput = GetComponent<PlayerInput>();
-    }
-
-    private void Start()
-    {
-        if (playerInput == null ||
-            playerInput.actions == null)
+        // 따로 설정하지 않으면 플레이어 위치 사용
+        if (interactionOrigin == null)
         {
-            Debug.LogWarning(
-                "PlayerInput을 연결해주세요.",
-                this
-            );
-
-            return;
-        }
-
-        interactAction = playerInput.actions.FindAction(
-            interactActionName,
-            false
-        );
-
-        if (interactAction == null)
-        {
-            Debug.LogWarning(
-                $"'{interactActionName}' 액션을 찾지 못했습니다.",
-                this
-            );
+            interactionOrigin = transform;
         }
     }
+
+    // --------------------------------
+    // Input
+    // --------------------------------
 
     private void Update()
     {
-        if (interactAction == null)
+        if (!useKeyboardInput)
             return;
 
-        if (interactAction.WasPressedThisFrame())
+        if (Keyboard.current == null)
+            return;
+
+        // PlayerInput 없이 E키 직접 감지
+        if (Keyboard.current[interactKey].wasPressedThisFrame)
+        {
             TryInteract();
+        }
     }
 
-    public void TryInteract()
+    // --------------------------------
+    // Interaction
+    // --------------------------------
+
+    // 팀원의 상호작용 시스템에서 직접 호출 가능
+    public bool TryInteract()
     {
+        Vector3 origin = interactionOrigin.position;
+
         Collider[] colliders = Physics.OverlapSphere(
-            transform.position,
+            origin,
             interactionRange,
             interactionLayers,
             QueryTriggerInteraction.Collide
         );
 
         DungeonEntranceInteractable nearest = null;
+
         float nearestDistance = float.MaxValue;
 
         foreach (Collider col in colliders)
@@ -80,14 +76,14 @@ public class DungeonPlayerInteractor : MonoBehaviour
                 col.GetComponentInParent<
                     DungeonEntranceInteractable>();
 
-            if (entrance == null)
+            if (entrance == null || !entrance.isActiveAndEnabled)
                 continue;
 
             Vector3 closestPoint =
-                col.ClosestPoint(transform.position);
+                col.ClosestPoint(origin);
 
             float distance = Vector3.Distance(
-                transform.position,
+                origin,
                 closestPoint
             );
 
@@ -98,18 +94,30 @@ public class DungeonPlayerInteractor : MonoBehaviour
             }
         }
 
-        if (nearest != null)
-        {
-            nearest.Interact();
-        }
+        // 상호작용 가능한 던전 입구가 없음
+        if (nearest == null)
+            return false;
+
+        // 기존 DungeonEntranceInteractable의
+        // Interact() 호출
+        return nearest.Interact();
     }
+
+    // --------------------------------
+    // Debug
+    // --------------------------------
 
     private void OnDrawGizmosSelected()
     {
+        Transform origin =
+            interactionOrigin != null
+                ? interactionOrigin
+                : transform;
+
         Gizmos.color = Color.yellow;
 
         Gizmos.DrawWireSphere(
-            transform.position,
+            origin.position,
             interactionRange
         );
     }

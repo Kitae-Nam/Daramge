@@ -3,30 +3,25 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Unity.Cinemachine;
+using CHG._02_Scripts.Player;
 
 public class PuzzleCameraController : MonoBehaviour
 {
     [Serializable]
-    public class PlayerCameraSetting
+    public class PlayerSetting
     {
+        [Header("Player")]
         public Transform playerTarget;
-        public PlayerInput playerInput;
-        public CinemachineCamera followCamera;
-
-        [Min(0.01f)]
-        public float cameraSize = 5f;
-
-        public float nearClip = -10f;
     }
 
-    [Header("Player Cameras")]
+    [Header("Character Change System")]
     [SerializeField]
-    private PlayerCameraSetting[] players =
-        new PlayerCameraSetting[3];
+    private CharacterChange characterChange;
 
-    [Header("Starting Player")]
+    [Header("Player References")]
     [SerializeField]
-    private int startingPlayerIndex = 0;
+    private PlayerSetting[] players =
+        new PlayerSetting[3];
 
     [Header("Puzzle Camera")]
     [SerializeField]
@@ -38,67 +33,88 @@ public class PuzzleCameraController : MonoBehaviour
     [SerializeField]
     private float puzzleNearClip = 0f;
 
-    [Header("Camera Priority")]
+    [Header("Puzzle Camera Priority")]
     [SerializeField]
-    private int inactivePriority = 10;
+    private int puzzleActivePriority = 100;
 
     [SerializeField]
-    private int activePriority = 20;
-
-    [SerializeField]
-    private int puzzlePriority = 30;
+    private int puzzleInactivePriority = -100;
 
     private PuzzleCameraZone currentZone;
-    private InputAction cameraToggleAction;
 
     private int activePlayerIndex = -1;
+
     private bool isPuzzleMode;
+    private bool wasChanging;
 
     public bool IsPuzzleMode => isPuzzleMode;
     public int ActivePlayerIndex => activePlayerIndex;
 
+    // --------------------------------
+    // Initialize
+    // --------------------------------
+
     private void Awake()
     {
-        if (players == null ||
-            players.Length == 0 ||
-            puzzleCamera == null)
+        if (characterChange == null ||
+            puzzleCamera == null ||
+            players == null ||
+            players.Length == 0)
         {
             Debug.LogError(
-                "카메라 참조를 설정해주세요.",
+                "PuzzleCameraController 참조를 확인해주세요.",
                 this
             );
+
             enabled = false;
             return;
         }
 
-        // 플레이어별 카메라 렌즈 설정
-        foreach (PlayerCameraSetting setting in players)
-        {
-            if (setting == null ||
-                setting.followCamera == null)
-                continue;
+        ApplyPuzzleLens();
 
-            ApplyLens(
-                setting.followCamera,
-                setting.cameraSize,
-                setting.nearClip
-            );
-        }
+        isPuzzleMode = false;
+        activePlayerIndex = -1;
 
-        // 퍼즐 카메라 렌즈 설정
-        ApplyLens(
-            puzzleCamera,
-            puzzleCameraSize,
-            puzzleNearClip
-        );
-
-        SetActivePlayer(startingPlayerIndex);
+        puzzleCamera.Priority =
+            puzzleInactivePriority;
     }
+
+    private void Start()
+    {
+        SyncCurrentPlayer();
+    }
+
+    // --------------------------------
+    // Update
+    // --------------------------------
 
     private void Update()
     {
-        if (cameraToggleAction != null &&
-            cameraToggleAction.WasPressedThisFrame())
+        // 팀원 시스템의 캐릭터 전환 상태 확인
+        if (characterChange.IsChanging)
+        {
+            if (!wasChanging)
+            {
+                wasChanging = true;
+
+                // 전환 시작 시 퍼즐 뷰 종료
+                ExitPuzzleMode();
+                ClearPuzzleZone();
+            }
+
+            // 전환 중에는 V키 사용하지 않음
+            return;
+        }
+
+        wasChanging = false;
+
+        // 현재 캐릭터가 변경되었는지 자동 확인
+        SyncCurrentPlayer();
+
+        if (Keyboard.current == null)
+            return;
+
+        if (Keyboard.current.vKey.wasPressedThisFrame)
         {
             ToggleCameraMode();
         }
@@ -110,63 +126,47 @@ public class PuzzleCameraController : MonoBehaviour
     }
 
     // --------------------------------
-    // Player Switching
+    // Character Detection
     // --------------------------------
 
-    // 캐릭터 전환 시스템에서 호출
-    public void SetActivePlayer(int index)
+    private void SyncCurrentPlayer()
     {
-        if (players == null ||
-            index < 0 ||
-            index >= players.Length)
+        if (characterChange == null ||
+            characterChange.IsChanging)
+            return;
+
+        int currentIndex = characterChange.CurrentIndex;
+
+        // 아직 팀원 시스템이 초기화되지 않음
+        if (currentIndex < 0)
+            return;
+
+        if (currentIndex >= players.Length)
         {
             Debug.LogWarning(
-                $"잘못된 플레이어 인덱스: {index}",
+                $"CharacterChange 인덱스 {currentIndex}가 " +
+                "Player References 배열 범위를 벗어났습니다.",
                 this
             );
             return;
         }
 
-        PlayerCameraSetting setting = players[index];
-
-        if (setting == null ||
-            setting.playerTarget == null ||
-            setting.playerInput == null ||
-            setting.followCamera == null ||
-            setting.playerInput.actions == null)
-        {
-            Debug.LogWarning(
-                $"플레이어 {index}의 카메라 설정이 불완전합니다.",
-                this
-            );
+        if (activePlayerIndex == currentIndex)
             return;
-        }
 
-        InputAction action =
-            setting.playerInput.actions.FindAction(
-                "CameraToggle",
-                false
-            );
+        OnActivePlayerChanged(currentIndex);
+    }
 
-        if (action == null)
-        {
-            Debug.LogWarning(
-                $"플레이어 {index}에 CameraToggle 액션이 없습니다.",
-                this
-            );
-        }
+    private void OnActivePlayerChanged(int newIndex)
+    {
+        // 이전 캐릭터의 퍼즐 상태 초기화
+        ExitPuzzleMode();
+        ClearPuzzleZone();
 
-        activePlayerIndex = index;
-        cameraToggleAction = action;
-
-        // 캐릭터가 변경되면 퍼즐 뷰 해제
-        isPuzzleMode = false;
-        currentZone = null;
-
-        UpdateCameraPriority();
+        activePlayerIndex = newIndex;
 
         Debug.Log(
-            $"활성 플레이어 변경: {index}",
+            $"현재 캐릭터 자동 감지: {activePlayerIndex}",
             this
         );
     }
@@ -175,28 +175,34 @@ public class PuzzleCameraController : MonoBehaviour
     // Lens Settings
     // --------------------------------
 
-    private void ApplyLens(
-        CinemachineCamera targetCamera,
-        float size,
-        float nearClip)
+    private void ApplyPuzzleLens()
     {
-        LensSettings lens = targetCamera.Lens;
+        LensSettings lens = puzzleCamera.Lens;
 
         lens.ModeOverride =
             LensSettings.OverrideModes.Orthographic;
 
-        lens.OrthographicSize = size;
-        lens.NearClipPlane = nearClip;
+        lens.OrthographicSize =
+            puzzleCameraSize;
 
-        targetCamera.Lens = lens;
+        lens.NearClipPlane =
+            puzzleNearClip;
+
+        puzzleCamera.Lens = lens;
     }
 
     // --------------------------------
-    // Puzzle Camera Toggle
+    // Puzzle Mode
     // --------------------------------
 
     private void ToggleCameraMode()
     {
+        if (characterChange.IsChanging)
+            return;
+
+        if (activePlayerIndex < 0)
+            return;
+
         if (currentZone == null ||
             currentZone.CameraPoint == null)
             return;
@@ -204,48 +210,55 @@ public class PuzzleCameraController : MonoBehaviour
         isPuzzleMode = !isPuzzleMode;
 
         if (isPuzzleMode)
+        {
             UpdatePuzzleCameraTransform();
 
-        UpdateCameraPriority();
-    }
+            puzzleCamera.Priority =
+                puzzleActivePriority;
 
-    // --------------------------------
-    // Camera Priority
-    // --------------------------------
-
-    private void UpdateCameraPriority()
-    {
-        // 모든 플레이어 카메라 우선순위 초기화
-        for (int i = 0; i < players.Length; i++)
-        {
-            if (players[i] == null ||
-                players[i].followCamera == null)
-                continue;
-
-            players[i].followCamera.Priority =
-                i == activePlayerIndex
-                    ? activePriority
-                    : inactivePriority;
+            Debug.Log(
+                "퍼즐 카메라 모드",
+                this
+            );
         }
+        else
+        {
+            puzzleCamera.Priority =
+                puzzleInactivePriority;
 
-        // 퍼즐 카메라 우선순위
-        puzzleCamera.Priority =
-            isPuzzleMode
-                ? puzzlePriority
-                : inactivePriority;
+            Debug.Log(
+                "플레이어 추적 카메라 복귀",
+                this
+            );
+        }
+    }
+
+    private void ExitPuzzleMode()
+    {
+        isPuzzleMode = false;
+
+        if (puzzleCamera != null)
+        {
+            puzzleCamera.Priority =
+                puzzleInactivePriority;
+        }
     }
 
     // --------------------------------
-    // Puzzle Camera Position
+    // Puzzle Camera Transform
     // --------------------------------
 
     private void UpdatePuzzleCameraTransform()
     {
         if (currentZone == null ||
-            currentZone.CameraPoint == null)
+            currentZone.CameraPoint == null ||
+            puzzleCamera == null)
+        {
             return;
+        }
 
-        Transform point = currentZone.CameraPoint;
+        Transform point =
+            currentZone.CameraPoint;
 
         puzzleCamera.transform.SetPositionAndRotation(
             point.position,
@@ -263,6 +276,13 @@ public class PuzzleCameraController : MonoBehaviour
             zone.CameraPoint == null)
             return;
 
+        if (characterChange == null ||
+            characterChange.IsChanging)
+            return;
+
+        if (activePlayerIndex < 0)
+            return;
+
         if (currentZone == zone)
             return;
 
@@ -270,7 +290,10 @@ public class PuzzleCameraController : MonoBehaviour
 
         UpdatePuzzleCameraTransform();
 
-        Debug.Log("퍼즐 구역 진입 - V키 사용 가능");
+        Debug.Log(
+            "퍼즐 구역 진입 - V키 사용 가능",
+            this
+        );
     }
 
     public void ExitPuzzleZone(PuzzleCameraZone zone)
@@ -279,11 +302,22 @@ public class PuzzleCameraController : MonoBehaviour
             return;
 
         currentZone = null;
-        isPuzzleMode = false;
 
-        UpdateCameraPriority();
+        ExitPuzzleMode();
 
-        Debug.Log("퍼즐 구역 이탈 - 추적 카메라 복귀");
+        Debug.Log(
+            "퍼즐 구역 이탈 - 추적 카메라 복귀",
+            this
+        );
+    }
+
+    private void ClearPuzzleZone()
+    {
+        if (currentZone == null)
+            return;
+
+        currentZone.ForgetTrackedPlayer();
+        currentZone = null;
     }
 
     // --------------------------------
@@ -293,24 +327,35 @@ public class PuzzleCameraController : MonoBehaviour
     public bool IsPlayerCollider(Collider other)
     {
         if (other == null ||
+            characterChange == null ||
+            characterChange.IsChanging ||
             activePlayerIndex < 0 ||
             activePlayerIndex >= players.Length)
+        {
             return false;
+        }
 
-        PlayerCameraSetting setting =
+        PlayerSetting setting =
             players[activePlayerIndex];
 
         if (setting == null ||
             setting.playerTarget == null)
+        {
             return false;
+        }
 
         Transform target = setting.playerTarget;
 
+        // CharacterController 포함
         if (other.transform == target ||
             other.transform.IsChildOf(target))
+        {
             return true;
+        }
 
-        Rigidbody body = other.attachedRigidbody;
+        // Rigidbody 플레이어도 지원
+        Rigidbody body =
+            other.attachedRigidbody;
 
         if (body != null)
         {
@@ -319,5 +364,11 @@ public class PuzzleCameraController : MonoBehaviour
         }
 
         return false;
+    }
+
+    private void OnDisable()
+    {
+        ExitPuzzleMode();
+        ClearPuzzleZone();
     }
 }

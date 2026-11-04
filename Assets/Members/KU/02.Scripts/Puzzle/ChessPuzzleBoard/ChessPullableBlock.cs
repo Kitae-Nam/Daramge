@@ -115,6 +115,30 @@ public class ChessPullableBlock : MonoBehaviour
         return goalPositions.Contains(cell);
     }
 
+
+    // --------------------------------
+    // Tongue Hit Interaction
+    // --------------------------------
+
+    /// <summary>
+    /// 개구리 혀에 맞았을 때 호출.
+    /// tongueOwnerPosition은 혀를 발사한
+    /// 개구리 플레이어의 월드 좌표.
+    /// </summary>
+    public bool ReceiveTongueHit(Vector3 tongueOwnerPosition)
+    {
+        if (!isInitialized || isSliding)
+            return false;
+
+        if (board == null)
+            return false;
+
+        return board.TryPullBlock(
+            this,
+            tongueOwnerPosition
+        );
+    }
+
     // --------------------------------
     // Slide
     // --------------------------------
