@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.AI;
 using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Combat;
 using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Health;
 using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Movement;
@@ -90,7 +91,8 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Patterns
                     GameObject root = body != null ? body.gameObject : receiverComponent.gameObject;
                     RoarWallImpact impact = root.GetComponent<RoarWallImpact>();
                     if (impact == null) impact = root.AddComponent<RoarWallImpact>();
-                    impact.Arm(transform, direction, duration, tuning.WallDamage, tuning.WallLayers);
+                    impact.Arm(transform, direction, duration,
+                        BossAttackDamage.Resolve(transform, tuning.WallDamage), tuning.WallLayers);
                 }
 
                 receiver.ReceiveKnockBack(direction, speed, duration);

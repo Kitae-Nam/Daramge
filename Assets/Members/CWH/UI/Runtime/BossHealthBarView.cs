@@ -62,9 +62,49 @@ namespace Daramge.BossUI
             // 살아 있는 보스의 체력이 반올림 때문에 0%로 보이지 않도록 올림한다.
             _percent.text = $"{Mathf.CeilToInt(current * 100f)}%";
         }
-
+        
+        
         public void SetVisible(bool visible) => _root.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
 
+        public void SetOpacity(float opacity)
+        {
+            _root.style.opacity = Mathf.Clamp01(opacity);
+        }
+
+        public void SetNameText(string text)
+        {
+            _name.text = text;
+        }
+
+        /// <summary>
+        /// 체력바 관련
+        /// </summary>
+        /// <param name="opacity"></param>
+        public void SetPercentVisible(bool visible)
+        {
+            _percent.style.visibility =
+                visible ? Visibility.Visible : Visibility.Hidden;
+        }
+
+        /// <summary>
+        /// 보스 이름 관련
+        /// </summary>
+        public void PrepareIntro()
+        {
+            SetOpacity(0f);
+            SetNameText(string.Empty);
+            SetHealth(0f, 0f);
+            SetPercentVisible(false);
+        }
+
+        public void CompleteIntro(string bossName, float healthRatio)
+        {
+            SetOpacity(1f);
+            SetNameText(bossName);
+            SetHealth(healthRatio, healthRatio);
+            SetPercentVisible(true);
+        }
+        
         private static T Require<T>(VisualElement root, string name) where T : VisualElement
         {
             // UXML 계약이 깨지면 누락된 요소를 명확하게 알린다.

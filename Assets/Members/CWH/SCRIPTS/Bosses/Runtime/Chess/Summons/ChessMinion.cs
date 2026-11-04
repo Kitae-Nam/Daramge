@@ -21,7 +21,7 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
         [SerializeField] private Material _warningMaterial;
         [SerializeField] private ChessMinionAttack _attack;
         [SerializeField, Min(0.1f)] private float _attackRadius = 2.5f;
-        [SerializeField, Min(0f)] private float _damage = 12f;
+        [SerializeField, Min(0f)] private float _damage = 1f;
         [SerializeField, Min(0.1f)] private float _warningTime = 1.3f;
         [SerializeField, Min(0.1f)] private float _restTime = 3f;
         // 기존 프리팹의 값은 어댑터를 통해 보존한다. 새 기물의 행동은 _attack에 직접 연결한다.
@@ -56,6 +56,9 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
         {
             _target = target;
             _ownerRunner = ownerRunner;
+            // 소환한 보스의 페이즈로 피해량을 결정하고, 독립 기물은 기존 설정을 사용한다.
+            float damage = BossAttackDamage.Resolve(ownerRunner != null ? ownerRunner.transform : null, _damage);
+            _attack.Initialize(_agent, _attackRadius, damage, _warning);
             _roster = ownerRunner != null ? ownerRunner.GetComponent<BossSummonRoster>() : null;
             _initialized = true;
             _timer = delay;

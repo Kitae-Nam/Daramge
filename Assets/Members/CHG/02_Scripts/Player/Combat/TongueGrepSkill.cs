@@ -1,4 +1,5 @@
 using System.Collections;
+using CHG._02_Scripts.CombatSystem;
 using CHG._02_Scripts.CoreSystem.AnimationSystem;
 using UnityEngine;
 
@@ -8,7 +9,6 @@ namespace CHG._02_Scripts.Player.Combat
     {
         [SerializeField] private AnimParamSO grepParam;
         [SerializeField] private AnimParamSO dragParam;
-        [SerializeField] private AnimParamSO dragEndParam;
         [SerializeField] private LineRenderer tongueLine;
         [SerializeField] private Transform startTrm;
         [SerializeField] private LayerMask hitLayer;
@@ -18,8 +18,26 @@ namespace CHG._02_Scripts.Player.Combat
         [SerializeField] private float tipRadius = 0.3f;
         [SerializeField] private float endPointOffset = 0.5f;
         [SerializeField] private float maxPullTime = 2f;
+        [SerializeField] private OverlapDamageCaster damageCaster;
         
-        
+        private ICombatState _combatState;
+        private bool _isWaitingPull;
+        private bool _isPullConfirmed;
+
+        public override void InitializeSkill(ISkillModule skillModule)
+        {
+            base.InitializeSkill(skillModule);
+            _combatState = _player.GetModule<ICombatState>();
+            Debug.Assert(_combatState != null, $"CombatState is null : {gameObject.name}");
+            Debug.Assert(damageCaster != null, $"DamageCaster is null : {gameObject.name}");
+            damageCaster.InitCaster(_player);
+        }
+
+        private void OnDestroy()
+        {
+            UnsubscribeWaitInput();
+        }
+
         public override bool CanUseSkill(GameObject target = null)
         {
             return NormalizedCooldown >= 1f && !IsUsing;
@@ -57,6 +75,8 @@ namespace CHG._02_Scripts.Player.Combat
                 {
                     anchor = hit.transform;
                     localHit = anchor.InverseTransformPoint(hit.point);
+                    damageCaster.ResetHitCaster();
+                    damageCaster.CastDamage(hit.point, SkillData, 1f);
                     break;
                 }
 
@@ -66,6 +86,21 @@ namespace CHG._02_Scripts.Player.Combat
                 yield return null;
             }
 
+            if (anchor != null && !_combatState.IsCombat)
+            {
+                _isPullConfirmed = false;
+                _isWaitingPull = true;
+                SubscribeWaitInput();
+                while (_isWaitingPull && anchor != null)
+                {
+                    tip = anchor.TransformPoint(localHit);
+                    UpdateLine(tip);
+                    yield return null;
+                }
+                UnsubscribeWaitInput();
+                if (!_isPullConfirmed) anchor = null;
+            }
+            
             if (anchor != null)
             {
                 _renderer.PlayClip(dragParam.ParamHash, 0f, 0.01f);
@@ -75,11 +110,11 @@ namespace CHG._02_Scripts.Player.Combat
                     tip = anchor.TransformPoint(localHit);
                     Vector3 toTip = tip - _player.transform.position;
                     if (toTip.magnitude <= endPointOffset) break;
-                    
+            
                     _movement.SetMovementVelocity(toTip.normalized * pullSpeed);
                     UpdateLine(tip);
                     t += Time.deltaTime;
-                    
+            
                     yield return null;
                 }
             }
@@ -93,17 +128,60 @@ namespace CHG._02_Scripts.Player.Combat
                 }
             }
             
+            StopSkill();
+        }
+
+        public override void StopSkill()
+        {
+            StopAllCoroutines();
+            UnsubscribeWaitInput();
             _movement.SetMovementVelocity(Vector3.zero);
             tongueLine.enabled = false;
             _movement.CanManualMove = true;
             _movement.CanUseGravity = true;
-            StopSkill();
+            base.StopSkill();
         }
 
         private void UpdateLine(Vector3 tip)
         {
             tongueLine.SetPosition(0, startTrm.position);            
             tongueLine.SetPosition(1, tip);
+        }
+
+        private void SubscribeWaitInput()
+        {
+            _player.PlayerInput.OnSkillKeyPressed += HandleSkillKeyPressed;
+            _player.PlayerInput.OnMovementChange += HandleMovementKeyPressed;
+            _player.PlayerInput.OnInteractKeyPressed += HandleInteractKeyPressed;
+        }
+        
+        private void UnsubscribeWaitInput()
+        {
+            if (_player == null || _player.PlayerInput == null) return;
+            _player.PlayerInput.OnSkillKeyPressed -= HandleSkillKeyPressed;
+            _player.PlayerInput.OnMovementChange -= HandleMovementKeyPressed;
+            _player.PlayerInput.OnInteractKeyPressed -= HandleInteractKeyPressed;
+        }
+
+        private void HandleSkillKeyPressed(PlayerSkillSlot slot)
+            => EndWaitPull((int)slot == SkillData.skillIndex);
+            
+        private void HandleMovementKeyPressed(Vector2 movement)
+        {
+            if (movement.sqrMagnitude > 0f)
+                EndWaitPull(false);
+        }
+
+        private void HandleInteractKeyPressed()
+        {
+            EndWaitPull(false);
+        }
+
+        private void EndWaitPull(bool isConfirmed)
+        {
+            if (!_isWaitingPull) return;
+            _isWaitingPull = false;
+            _isPullConfirmed = isConfirmed;
         }
     }
 }

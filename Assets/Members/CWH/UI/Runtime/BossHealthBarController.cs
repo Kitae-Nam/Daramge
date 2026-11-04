@@ -1,4 +1,5 @@
 using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime;
+using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Cinematics;
 using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Health;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -21,13 +22,36 @@ namespace Daramge.BossUI
         [SerializeField, Min(0f)] private float _lagDelay = 0.25f;
         [Tooltip("잔상이 전체 게이지 100%를 이동하는 데 걸리는 시간(초)")]
         [SerializeField, Min(0.01f)] private float _catchUpDuration = 0.8f;
+        [Header("등장 컷신")]
+        [SerializeField] private BossCutsceneGate _introCutscene;
+        [Header("체력바 등장 연출")]
+        [SerializeField, Min(0.01f)] private float _introFadeDuration = 0.3f;
+        [SerializeField, Min(0.01f)] private float _introCharacterInterval = 0.06f;
+        [SerializeField, Min(0.01f)] private float _introFillDuration = 0.8f;
 
-        private readonly HealthBarLag _lag = new HealthBarLag();
+
+        private bool ShouldShow
+        {
+            get
+            {
+#if UNITY_EDITOR
+                if (_testIntroPlaying && _boss != null) return true;
+#endif
+                return _boss != null && (_introCutscene == null || _introCutscene.HasFinishedFirstCutscene);
+            }
+        }
+
+#if UNITY_EDITOR
+        private bool _testIntroPlaying;
+#endif
+
+        private BossHealthBarIntro _intro;
         private PanelRenderer _panelRenderer;
         private VisualElement _boundRoot;
         private int _uiVersion;
         private BossHealthBarView _view;
         private BossHealth _subscribedBoss;
+        private readonly HealthBarLag _lag = new HealthBarLag();
 
         private void OnEnable()
         {
@@ -53,14 +77,52 @@ namespace Daramge.BossUI
         {
             if (_view == null) return;
 
-            // Unity에서 파괴된 보스도 숨겨 다음 보스를 Bind할 때까지 오래된 HUD가 남지 않게 한다.
-            _view.SetVisible(_boss != null);
-            _lag.Tick(Time.unscaledDeltaTime, _catchUpDuration);
-            _view.SetHealth(_lag.Current, _lag.Trail);
+            if (!ShouldShow)
+            {
+                RenderHealthBar();
+                return;
+            }
+
+            if (_intro == null)
+            {
+                _intro = new BossHealthBarIntro(
+                    (_bossName ?? string.Empty).Length,
+                    _introFadeDuration,
+                    _introCharacterInterval,
+                    _introFillDuration);
+            }
+
+            if (!_intro.IsComplete)
+            {
+                _intro.Tick(Time.unscaledDeltaTime);
+
+                if (_intro.IsComplete)
+                    _lag.SetTarget(_boss.HealthRatio, 0f, true);
+            }
+            else
+            {
+                _lag.Tick(Time.unscaledDeltaTime, _catchUpDuration);
+            }
+
+            RenderHealthBar();
+
+#if UNITY_EDITOR
+            // 미리보기만 종료하고, 실제 컷신 뒤의 등장 연출은 다시 시작할 수 있게 남긴다.
+            if (_testIntroPlaying && _intro.IsComplete)
+            {
+                _testIntroPlaying = false;
+                if (_introCutscene != null && !_introCutscene.HasFinishedFirstCutscene)
+                    _intro = null;
+            }
+#endif
         }
 
         private void OnDisable()
         {
+#if UNITY_EDITOR
+            if (_testIntroPlaying) _intro = null;
+            _testIntroPlaying = false;
+#endif
             // 비활성 컨트롤러가 리로드 콜백으로 다시 연결되지 않도록 구독을 함께 해제한다.
             if (_panelRenderer != null)
                 _panelRenderer.UnregisterUIReloadCallback(OnUIReloaded);
@@ -75,6 +137,7 @@ namespace Daramge.BossUI
         public void Bind(BossHealth boss, string bossName, Sprite portrait, int phaseCount, int currentPhase = 1)
         {
             Unsubscribe();
+            _intro = null;
             _boss = boss;
             _bossName = bossName;
             _portrait = portrait;
@@ -111,22 +174,22 @@ namespace Daramge.BossUI
         {
             _lag.SetTarget(maximum > 0f ? current / maximum : 0f, _lagDelay);
             // 실제 체력은 이벤트 시 즉시 표시하고 잔상만 Update에서 지연시킨다.
-            _view?.SetHealth(_lag.Current, _lag.Trail);
+            RenderHealthBar();
         }
 
         private void SynchronizeHealth()
         {
             _lag.SetTarget(_boss == null ? 0f : _boss.HealthRatio, 0f, true);
-            _view?.SetHealth(_lag.Current, _lag.Trail);
+            RenderHealthBar();
         }
 
         private void RefreshPresentation()
         {
             if (_view == null) return;
+
             _view.SetIdentity(_bossName, _portrait);
             _view.SetPhases(_phaseCount, _currentPhase);
-            _view.SetVisible(_boss != null);
-            _view.SetHealth(_lag.Current, _lag.Trail);
+            RenderHealthBar();
         }
 
         private void OnValidate()
@@ -138,5 +201,54 @@ namespace Daramge.BossUI
             // 플레이 중 Inspector에서 표시 설정을 조절할 수 있게 한다.
             RefreshPresentation();
         }
+        
+        private void RenderHealthBar()
+        {
+            if (_view == null) return;
+
+            _view.SetVisible(ShouldShow);
+            if (!ShouldShow) return;
+
+            if (_intro == null)
+            {
+                _view.PrepareIntro();
+                return;
+            }
+
+            string name = _bossName ?? string.Empty;
+
+            if (_intro.IsComplete)
+            {
+                _view.CompleteIntro(name, _lag.Current);
+                _view.SetHealth(_lag.Current, _lag.Trail);
+                return;
+            }
+
+            int characters = Mathf.Min(_intro.VisibleCharacters, name.Length);
+            float displayedHealth = _lag.Current * _intro.FillProgress;
+
+            _view.SetOpacity(_intro.Opacity);
+            _view.SetNameText(name.Substring(0, characters));
+            _view.SetHealth(displayedHealth, displayedHealth);
+            _view.SetPercentVisible(_intro.IsFilling);
+        }
+
+#if UNITY_EDITOR
+        [ContextMenu("테스트/체력바 등장 연출")]
+        private void TestIntro()
+        {
+            if (!Application.isPlaying || !isActiveAndEnabled || _boss == null || _view == null)
+            {
+                Debug.LogWarning("플레이 중 활성화된 체력바에서 보스와 UI 연결을 확인한 뒤 실행하세요.", this);
+                return;
+            }
+
+            // 컷신/전투 상태를 변경하지 않고 UI의 연출 진행도만 초기화한다.
+            _testIntroPlaying = true;
+            _intro = null;
+            _lag.SetTarget(_boss.HealthRatio, 0f, true);
+            RefreshPresentation();
+        }
+#endif
     }
 }
