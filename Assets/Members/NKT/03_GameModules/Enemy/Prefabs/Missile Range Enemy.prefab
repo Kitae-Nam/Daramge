@@ -129,7 +129,7 @@ MonoBehaviour:
           m_Value0: 6456625081386470508
           m_Value1: 12391954136387488661
         Name: DefaultSkillIndex
-        m_Value: 2
+        m_Value: 4
     - rid: 2904886254251802668
       type: {class: 'BlackboardVariable`1[[System.Int32, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
       data:
@@ -417,9 +417,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Members.CHG._02_Scripts.CombatSystem.HealthModule
   vitalStat: {fileID: 11400000, guid: b196cf950956488439c94a54e0b161e4, type: 2}
-  baseMaxHealth: 5
-  maxHealth: 5
-  currentHealth: 5
+  baseMaxHealth: 20
+  maxHealth: 20
+  currentHealth: 20
 --- !u!1 &1401066197253036337
 GameObject:
   m_ObjectHideFlags: 0
@@ -1418,7 +1418,7 @@ Animator:
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
-  m_WarningMessage: "\nBinding warning: Some generic clip(s) animate transforms that are already bound by a Humanoid avatar. These transforms can only be changed by Humanoid clips.\n\tTransform 'Arm_L'\n\tTransform 'ForeArm_L'\n\tTransform 'Hand_L'\n\tTransform 'Arm_L'\n\tTransform 'ForeArm_L'\n\tTransform 'Hand_L'\n\tTransform 'Arm_L'\n\tTransform 'ForeArm_L'\n\tTransform 'Hand_L'"
+  m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -2213,10 +2213,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00ad68ba406f4db8be4eb7c9ead8db5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NKT.Enemy.Skill.MissileFireSkill
-  <SkillData>k__BackingField: {fileID: 0}
-  attackAnimParam: {fileID: 0}
+  <SkillData>k__BackingField: {fileID: 11400000, guid: c6375c19b25af5b49a9a9ffbbffa5d46, type: 2}
+  attackAnimParam: {fileID: 11400000, guid: 1e35534a784eac44b8aeb3f127673184, type: 2}
   crossFadeDuration: 0.15
-  projectileCaster: {fileID: 0}
+  projectileCaster: {fileID: 6282827441045147517}
   muzzle: {fileID: 217969298338742166}
 --- !u!1 &6270189664012103943
 GameObject:
@@ -3256,7 +3256,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   poolManager: {fileID: 11400000, guid: 92296aa6ec4919547ad0f46e694a8444, type: 2}
-  projectile: {fileID: 0}
+  projectile: {fileID: 11400000, guid: 4973c86946bced6438a0c24c7a5bc84b, type: 2}
 --- !u!4 &8841080689640217780 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8157143692118709531, guid: e23340e8e428d2246a6baa2281ac4eb7, type: 3}

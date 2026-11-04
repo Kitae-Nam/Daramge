@@ -57,6 +57,11 @@ namespace NKT.Enemy
             if (IsDead) return;
             if (SkillModule != null && SkillModule.IsArmored) return; //데미지는 들어가고 경직만 무시
 
+            //쓰던 스킬의 애니메이션 이벤트 구독을 끊어야, 맞는 중에 공격 판정/발사가 나가거나
+            //HIT 클립의 끝 이벤트로 스킬 종료가 불리지 않는다.
+            if (SkillModule != null)
+                SkillModule.StopSkillIfNotFinished();
+
             StateChannel?.SendEventMessage(EnemyState.HIT);
         }
 
