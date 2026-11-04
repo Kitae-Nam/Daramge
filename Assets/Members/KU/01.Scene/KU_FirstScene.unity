@@ -389,7 +389,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: d28dd75d02246964eba732c36dbf5b25, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2062,7 +2062,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: d28dd75d02246964eba732c36dbf5b25, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -16237,7 +16237,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: d28dd75d02246964eba732c36dbf5b25, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -37925,6 +37925,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4047503882683654, guid: e0d3f8289f60e1e49a5d66d5eb8582f3, type: 3}
   m_PrefabInstance: {fileID: 1019790354}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1019827116 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8842763329535829412, guid: c49cf1837bb874b48990503932a5c15f, type: 3}
+  m_PrefabInstance: {fileID: 1556795636}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1022723245
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -56356,13 +56361,13 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 4112347703684707439, guid: c49cf1837bb874b48990503932a5c15f, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1915741167}
     - targetCorrespondingSourceObject: {fileID: 1229420729019175169, guid: c49cf1837bb874b48990503932a5c15f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1851815305}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8842763329535829412, guid: c49cf1837bb874b48990503932a5c15f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1556795643}
   m_SourcePrefab: {fileID: 100100000, guid: c49cf1837bb874b48990503932a5c15f, type: 3}
 --- !u!4 &1556795637 stripped
 Transform:
@@ -56379,12 +56384,24 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 217595602134348685, guid: c49cf1837bb874b48990503932a5c15f, type: 3}
   m_PrefabInstance: {fileID: 1556795636}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1019827116}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 576e5d2eaa0543af904d9361a0c106d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Members.CHG._02_Scripts.Player.PlayerController
+--- !u!114 &1556795643
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1019827116}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3da30dbe11ff436b96156d2eab0a41a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Movement.KnockbackReceiver
 --- !u!1001 &1563215692
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -62283,7 +62300,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: d28dd75d02246964eba732c36dbf5b25, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -69269,50 +69286,6 @@ Transform:
   - {fileID: 102839431}
   m_Father: {fileID: 543464747}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1915741166
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1915741167}
-  - component: {fileID: 1915741168}
-  m_Layer: 0
-  m_Name: KnockBackReceiver
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1915741167
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1915741166}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1556795637}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1915741168
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1915741166}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3da30dbe11ff436b96156d2eab0a41a8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Movement.KnockbackReceiver
 --- !u!1001 &1923246271
 PrefabInstance:
   m_ObjectHideFlags: 0
