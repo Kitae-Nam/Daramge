@@ -60,8 +60,8 @@ namespace CHG._02_Scripts.UI
 
         private void HandleHeartContainerResolved(VisualElement container)
         {
-            _heartContainer = null;
-            DisposeHealthPresenter();
+            _heartContainer = container;
+            RebuildHealthPresenter();
         }
 
         private void HandleHeartContainerUnloaded(VisualElement container)

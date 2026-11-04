@@ -12690,6 +12690,7 @@ GameObject:
   - component: {fileID: 7418545127813923506}
   - component: {fileID: 8273933246244435687}
   - component: {fileID: 4359740845744923715}
+  - component: {fileID: 5628426837085842320}
   - component: {fileID: -2158953491051892634}
   - component: {fileID: 2488203261493466007}
   - component: {fileID: 5889572090002313684}
@@ -12834,6 +12835,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.BossHealth
   _maxHealth: 1000
+--- !u!114 &5628426837085842320
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2346691917327231199}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cac03bedc6174a5bacedbfc3c10ca65f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CWH.SCRIPTS.BOSS.ChgDamageAdapter
+  _receiverComponent: {fileID: 4359740845744923715}
 --- !u!114 &-2158953491051892634
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28029,18 +28043,6 @@ PrefabInstance:
       value: Sword (1)
       objectReference: {fileID: 0}
     - target: {fileID: 6030440720845073576, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.8
-      objectReference: {fileID: 0}
-    - target: {fileID: 6030440720845073576, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0.6153842
-      objectReference: {fileID: 0}
-    - target: {fileID: 6030440720845073576, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.8
-      objectReference: {fileID: 0}
-    - target: {fileID: 6030440720845073576, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -28080,115 +28082,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 180
       objectReference: {fileID: 0}
-    - target: {fileID: 6030440720845073576, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
-      propertyPath: m_ConstrainProportionsScale
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 6030440720845073576, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 542838374317207624}
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5139045277658150859, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 7177638279624058532}
-    - targetCorrespondingSourceObject: {fileID: 5139045277658150859, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 5050220472609115877}
-    - targetCorrespondingSourceObject: {fileID: 5139045277658150859, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 4099785869396051448}
-    - targetCorrespondingSourceObject: {fileID: 5139045277658150859, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 4151906329905798079}
-    - targetCorrespondingSourceObject: {fileID: 5139045277658150859, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 4332597545806037946}
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
---- !u!1 &4824255395929132039 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5139045277658150859, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
-  m_PrefabInstance: {fileID: 406094497544960972}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &7177638279624058532
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4824255395929132039}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2152b3e75b9f4671ab6de2ba7981bbe0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Health.BreakableHealth
-  _maxHealth: 80
---- !u!114 &5050220472609115877
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4824255395929132039}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5e0bebfe3129478bba8e83a8fe243547, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons.ThrownBossSword
-  _visual: {fileID: 6202249613859952484}
-  _flightDuration: 0.03
-  _embeddedDuration: 7
-  _impactDamage: 1
-  _embedBackOffset: 1.8
---- !u!114 &4099785869396051448
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4824255395929132039}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2672e4e2cfc74ca5a2c4dccafbed5f98, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons.ThrownSwordHitbox
---- !u!114 &4151906329905798079
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4824255395929132039}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Outline
-  outlineMode: 0
-  outlineColor: {r: 1, g: 0, b: 0, a: 1}
-  outlineWidth: 3
-  hideOccluded: 1
-  precomputeOutline: 0
-  bakeKeys: []
-  bakeValues: []
---- !u!114 &4332597545806037946
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4824255395929132039}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c670aab4f5d6402ea1046ae80c3310f8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons.SwordRecallMotion
-  _extractDistance: 2
-  _extractDuration: 0.4
-  _uprightDuration: 0.5
-  _returnDuration: 1
 --- !u!4 &6202249613859952484 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6030440720845073576, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
@@ -28199,136 +28097,12 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8467886809492656382, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
   m_PrefabInstance: {fileID: 406094497544960972}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4824255395929132039}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 682e30de6e004926854de5bfd5a332a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons.BossSword
---- !u!1001 &742852014067887352
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 2151662516955224312}
-    m_Modifications:
-    - target: {fileID: 603038543741733866, guid: 3679feaccda599d4c80be59deb040c93, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 603038543741733866, guid: 3679feaccda599d4c80be59deb040c93, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 2.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 603038543741733866, guid: 3679feaccda599d4c80be59deb040c93, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 603038543741733866, guid: 3679feaccda599d4c80be59deb040c93, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 603038543741733866, guid: 3679feaccda599d4c80be59deb040c93, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 603038543741733866, guid: 3679feaccda599d4c80be59deb040c93, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 603038543741733866, guid: 3679feaccda599d4c80be59deb040c93, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 603038543741733866, guid: 3679feaccda599d4c80be59deb040c93, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 603038543741733866, guid: 3679feaccda599d4c80be59deb040c93, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 603038543741733866, guid: 3679feaccda599d4c80be59deb040c93, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7179722427621981323, guid: 3679feaccda599d4c80be59deb040c93, type: 3}
-      propertyPath: m_Name
-      value: Boos Slash Trail Effect
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 3679feaccda599d4c80be59deb040c93, type: 3}
---- !u!4 &148987832141834002 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 603038543741733866, guid: 3679feaccda599d4c80be59deb040c93, type: 3}
-  m_PrefabInstance: {fileID: 742852014067887352}
-  m_PrefabAsset: {fileID: 0}
---- !u!1001 &1141346930102172578
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 6202249613859952484}
-    m_Modifications:
-    - target: {fileID: 603038543741733866, guid: 3679feaccda599d4c80be59deb040c93, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 603038543741733866, guid: 3679feaccda599d4c80be59deb040c93, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 2.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 603038543741733866, guid: 3679feaccda599d4c80be59deb040c93, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 603038543741733866, guid: 3679feaccda599d4c80be59deb040c93, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 603038543741733866, guid: 3679feaccda599d4c80be59deb040c93, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 603038543741733866, guid: 3679feaccda599d4c80be59deb040c93, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 603038543741733866, guid: 3679feaccda599d4c80be59deb040c93, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 603038543741733866, guid: 3679feaccda599d4c80be59deb040c93, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 603038543741733866, guid: 3679feaccda599d4c80be59deb040c93, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 603038543741733866, guid: 3679feaccda599d4c80be59deb040c93, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7179722427621981323, guid: 3679feaccda599d4c80be59deb040c93, type: 3}
-      propertyPath: m_Name
-      value: Boos Slash Trail Effect
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 3679feaccda599d4c80be59deb040c93, type: 3}
---- !u!4 &542838374317207624 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 603038543741733866, guid: 3679feaccda599d4c80be59deb040c93, type: 3}
-  m_PrefabInstance: {fileID: 1141346930102172578}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &3800951156877563780
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -28342,18 +28116,6 @@ PrefabInstance:
       value: Sword
       objectReference: {fileID: 0}
     - target: {fileID: 6030440720845073576, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.8
-      objectReference: {fileID: 0}
-    - target: {fileID: 6030440720845073576, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0.6153842
-      objectReference: {fileID: 0}
-    - target: {fileID: 6030440720845073576, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.8
-      objectReference: {fileID: 0}
-    - target: {fileID: 6030440720845073576, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -28393,39 +28155,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 180
       objectReference: {fileID: 0}
-    - target: {fileID: 6030440720845073576, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
-      propertyPath: m_ConstrainProportionsScale
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 6030440720845073576, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 6846181799807940219}
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5139045277658150859, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 8434976661842656066}
-    - targetCorrespondingSourceObject: {fileID: 5139045277658150859, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 4104052484443916153}
-    - targetCorrespondingSourceObject: {fileID: 5139045277658150859, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 549451319454694861}
-    - targetCorrespondingSourceObject: {fileID: 5139045277658150859, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 4697466565516409507}
-    - targetCorrespondingSourceObject: {fileID: 5139045277658150859, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 8835594646515209487}
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
 --- !u!114 &4700714301244737402 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8467886809492656382, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
   m_PrefabInstance: {fileID: 3800951156877563780}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8353683093751226447}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 682e30de6e004926854de5bfd5a332a1, type: 3}
@@ -28436,88 +28176,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6030440720845073576, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
   m_PrefabInstance: {fileID: 3800951156877563780}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &8353683093751226447 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5139045277658150859, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
-  m_PrefabInstance: {fileID: 3800951156877563780}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &8434976661842656066
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8353683093751226447}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2152b3e75b9f4671ab6de2ba7981bbe0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Health.BreakableHealth
-  _maxHealth: 80
---- !u!114 &4104052484443916153
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8353683093751226447}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5e0bebfe3129478bba8e83a8fe243547, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons.ThrownBossSword
-  _visual: {fileID: 7426397383548304172}
-  _flightDuration: 0.03
-  _embeddedDuration: 7
-  _impactDamage: 1
-  _embedBackOffset: 1.8
---- !u!114 &549451319454694861
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8353683093751226447}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2672e4e2cfc74ca5a2c4dccafbed5f98, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons.ThrownSwordHitbox
---- !u!114 &4697466565516409507
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8353683093751226447}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Outline
-  outlineMode: 0
-  outlineColor: {r: 1, g: 0, b: 0, a: 1}
-  outlineWidth: 3
-  hideOccluded: 1
-  precomputeOutline: 0
-  bakeKeys: []
-  bakeValues: []
---- !u!114 &8835594646515209487
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8353683093751226447}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c670aab4f5d6402ea1046ae80c3310f8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons.SwordRecallMotion
-  _extractDistance: 2
-  _extractDuration: 0.4
-  _uprightDuration: 0.5
-  _returnDuration: 1
 --- !u!1001 &4607693505864709902
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -28531,18 +28189,6 @@ PrefabInstance:
       value: Sword (3)
       objectReference: {fileID: 0}
     - target: {fileID: 6030440720845073576, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.8
-      objectReference: {fileID: 0}
-    - target: {fileID: 6030440720845073576, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0.6153842
-      objectReference: {fileID: 0}
-    - target: {fileID: 6030440720845073576, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.8
-      objectReference: {fileID: 0}
-    - target: {fileID: 6030440720845073576, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -28582,39 +28228,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 180
       objectReference: {fileID: 0}
-    - target: {fileID: 6030440720845073576, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
-      propertyPath: m_ConstrainProportionsScale
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 6030440720845073576, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 4723571323259189647}
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5139045277658150859, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1638914364626438835}
-    - targetCorrespondingSourceObject: {fileID: 5139045277658150859, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 5411938027545963907}
-    - targetCorrespondingSourceObject: {fileID: 5139045277658150859, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 4336333412706605287}
-    - targetCorrespondingSourceObject: {fileID: 5139045277658150859, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 506644169793134950}
-    - targetCorrespondingSourceObject: {fileID: 5139045277658150859, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 8824543970733994933}
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
 --- !u!114 &5364397267123316720 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8467886809492656382, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
   m_PrefabInstance: {fileID: 4607693505864709902}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8692051354216480965}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 682e30de6e004926854de5bfd5a332a1, type: 3}
@@ -28624,150 +28248,6 @@ MonoBehaviour:
 Transform:
   m_CorrespondingSourceObject: {fileID: 6030440720845073576, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
   m_PrefabInstance: {fileID: 4607693505864709902}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &8692051354216480965 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5139045277658150859, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
-  m_PrefabInstance: {fileID: 4607693505864709902}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1638914364626438835
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8692051354216480965}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2152b3e75b9f4671ab6de2ba7981bbe0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Health.BreakableHealth
-  _maxHealth: 80
---- !u!114 &5411938027545963907
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8692051354216480965}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5e0bebfe3129478bba8e83a8fe243547, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons.ThrownBossSword
-  _visual: {fileID: 7800724070147152806}
-  _flightDuration: 0.03
-  _embeddedDuration: 7
-  _impactDamage: 1
-  _embedBackOffset: 1.8
---- !u!114 &4336333412706605287
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8692051354216480965}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2672e4e2cfc74ca5a2c4dccafbed5f98, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons.ThrownSwordHitbox
---- !u!114 &506644169793134950
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8692051354216480965}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Outline
-  outlineMode: 0
-  outlineColor: {r: 1, g: 0, b: 0, a: 1}
-  outlineWidth: 3
-  hideOccluded: 1
-  precomputeOutline: 0
-  bakeKeys: []
-  bakeValues: []
---- !u!114 &8824543970733994933
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8692051354216480965}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c670aab4f5d6402ea1046ae80c3310f8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons.SwordRecallMotion
-  _extractDistance: 2
-  _extractDuration: 0.4
-  _uprightDuration: 0.5
-  _returnDuration: 1
---- !u!1001 &5319616800979006053
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 7800724070147152806}
-    m_Modifications:
-    - target: {fileID: 603038543741733866, guid: 3679feaccda599d4c80be59deb040c93, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 603038543741733866, guid: 3679feaccda599d4c80be59deb040c93, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 2.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 603038543741733866, guid: 3679feaccda599d4c80be59deb040c93, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 603038543741733866, guid: 3679feaccda599d4c80be59deb040c93, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 603038543741733866, guid: 3679feaccda599d4c80be59deb040c93, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 603038543741733866, guid: 3679feaccda599d4c80be59deb040c93, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 603038543741733866, guid: 3679feaccda599d4c80be59deb040c93, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 603038543741733866, guid: 3679feaccda599d4c80be59deb040c93, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 603038543741733866, guid: 3679feaccda599d4c80be59deb040c93, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 603038543741733866, guid: 3679feaccda599d4c80be59deb040c93, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7179722427621981323, guid: 3679feaccda599d4c80be59deb040c93, type: 3}
-      propertyPath: m_Name
-      value: Boos Slash Trail Effect
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 3679feaccda599d4c80be59deb040c93, type: 3}
---- !u!4 &4723571323259189647 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 603038543741733866, guid: 3679feaccda599d4c80be59deb040c93, type: 3}
-  m_PrefabInstance: {fileID: 5319616800979006053}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5650979912050734160
 PrefabInstance:
@@ -28782,18 +28262,6 @@ PrefabInstance:
       value: Sword (2)
       objectReference: {fileID: 0}
     - target: {fileID: 6030440720845073576, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.8
-      objectReference: {fileID: 0}
-    - target: {fileID: 6030440720845073576, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0.6153842
-      objectReference: {fileID: 0}
-    - target: {fileID: 6030440720845073576, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.8
-      objectReference: {fileID: 0}
-    - target: {fileID: 6030440720845073576, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -28833,115 +28301,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 180
       objectReference: {fileID: 0}
-    - target: {fileID: 6030440720845073576, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
-      propertyPath: m_ConstrainProportionsScale
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 6030440720845073576, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 148987832141834002}
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5139045277658150859, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1078822259568691813}
-    - targetCorrespondingSourceObject: {fileID: 5139045277658150859, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 374325071999634567}
-    - targetCorrespondingSourceObject: {fileID: 5139045277658150859, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 4090733495127732847}
-    - targetCorrespondingSourceObject: {fileID: 5139045277658150859, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 2607062735141924360}
-    - targetCorrespondingSourceObject: {fileID: 5139045277658150859, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 4232585016102311575}
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
---- !u!1 &665932660372177819 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5139045277658150859, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
-  m_PrefabInstance: {fileID: 5650979912050734160}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1078822259568691813
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 665932660372177819}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2152b3e75b9f4671ab6de2ba7981bbe0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Health.BreakableHealth
-  _maxHealth: 80
---- !u!114 &374325071999634567
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 665932660372177819}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5e0bebfe3129478bba8e83a8fe243547, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons.ThrownBossSword
-  _visual: {fileID: 2151662516955224312}
-  _flightDuration: 0.03
-  _embeddedDuration: 7
-  _impactDamage: 1
-  _embedBackOffset: 1.8
---- !u!114 &4090733495127732847
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 665932660372177819}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2672e4e2cfc74ca5a2c4dccafbed5f98, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons.ThrownSwordHitbox
---- !u!114 &2607062735141924360
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 665932660372177819}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Outline
-  outlineMode: 0
-  outlineColor: {r: 1, g: 0, b: 0, a: 1}
-  outlineWidth: 3
-  hideOccluded: 1
-  precomputeOutline: 0
-  bakeKeys: []
-  bakeValues: []
---- !u!114 &4232585016102311575
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 665932660372177819}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c670aab4f5d6402ea1046ae80c3310f8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons.SwordRecallMotion
-  _extractDistance: 2
-  _extractDuration: 0.4
-  _uprightDuration: 0.5
-  _returnDuration: 1
 --- !u!4 &2151662516955224312 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6030440720845073576, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
@@ -28952,71 +28316,9 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8467886809492656382, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
   m_PrefabInstance: {fileID: 5650979912050734160}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 665932660372177819}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 682e30de6e004926854de5bfd5a332a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons.BossSword
---- !u!1001 &6295164005469371793
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 7426397383548304172}
-    m_Modifications:
-    - target: {fileID: 603038543741733866, guid: 3679feaccda599d4c80be59deb040c93, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 603038543741733866, guid: 3679feaccda599d4c80be59deb040c93, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 2.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 603038543741733866, guid: 3679feaccda599d4c80be59deb040c93, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 603038543741733866, guid: 3679feaccda599d4c80be59deb040c93, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 603038543741733866, guid: 3679feaccda599d4c80be59deb040c93, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 603038543741733866, guid: 3679feaccda599d4c80be59deb040c93, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 603038543741733866, guid: 3679feaccda599d4c80be59deb040c93, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 603038543741733866, guid: 3679feaccda599d4c80be59deb040c93, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 603038543741733866, guid: 3679feaccda599d4c80be59deb040c93, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 603038543741733866, guid: 3679feaccda599d4c80be59deb040c93, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7179722427621981323, guid: 3679feaccda599d4c80be59deb040c93, type: 3}
-      propertyPath: m_Name
-      value: Boos Slash Trail Effect
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 3679feaccda599d4c80be59deb040c93, type: 3}
---- !u!4 &6846181799807940219 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 603038543741733866, guid: 3679feaccda599d4c80be59deb040c93, type: 3}
-  m_PrefabInstance: {fileID: 6295164005469371793}
-  m_PrefabAsset: {fileID: 0}
