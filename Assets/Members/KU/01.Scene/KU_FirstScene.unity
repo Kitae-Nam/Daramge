@@ -7288,7 +7288,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4112347703684707439, guid: c49cf1837bb874b48990503932a5c15f, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.9946759
       objectReference: {fileID: 0}
     - target: {fileID: 4112347703684707439, guid: c49cf1837bb874b48990503932a5c15f, type: 3}
       propertyPath: m_LocalRotation.x
@@ -7296,7 +7296,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4112347703684707439, guid: c49cf1837bb874b48990503932a5c15f, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: 0.103052944
       objectReference: {fileID: 0}
     - target: {fileID: 4112347703684707439, guid: c49cf1837bb874b48990503932a5c15f, type: 3}
       propertyPath: m_LocalRotation.z
@@ -7308,7 +7308,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4112347703684707439, guid: c49cf1837bb874b48990503932a5c15f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: 11.83
       objectReference: {fileID: 0}
     - target: {fileID: 4112347703684707439, guid: c49cf1837bb874b48990503932a5c15f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -12823,7 +12823,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 355185408}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
@@ -24886,6 +24886,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Reward_02
       objectReference: {fileID: 0}
+    - target: {fileID: 1462628346617961631, guid: 64a58a9af4561a54188d425086c576d2, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -29227,6 +29231,76 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3811999107799762400, guid: dfed90b8171dbeb448d90e3061595161, type: 3}
   m_PrefabInstance: {fileID: 929516008}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &932033028
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 932033029}
+  - component: {fileID: 932033031}
+  - component: {fileID: 932033030}
+  m_Layer: 0
+  m_Name: EntryTrigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &932033029
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 932033028}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.31, y: 0, z: -6.07}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2119891760}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &932033030
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 932033028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 460acd4fa1cd52a44a783edd54923013, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonEntryTrigger
+  dungeonRoom: {fileID: 2119891761}
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 256
+--- !u!65 &932033031
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 932033028}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 14.5}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &936479178
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -30796,7 +30870,7 @@ GameObject:
   - component: {fileID: 970810564}
   - component: {fileID: 970810563}
   - component: {fileID: 970810565}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Player_WallE
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -46654,7 +46728,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1467296163}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
@@ -46766,7 +46840,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1468487652}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
@@ -52249,13 +52323,25 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2100000, guid: 9a1664c5d04b5ec40b3e01802c81dfe6, type: 2}
     - target: {fileID: 2300006, guid: e1afa110f0fff8e47b78dd15fb8361e6, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2300006, guid: e1afa110f0fff8e47b78dd15fb8361e6, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: c433ccf9eef611d48858ddec661fa626, type: 2}
     - target: {fileID: 2300008, guid: e1afa110f0fff8e47b78dd15fb8361e6, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2300008, guid: e1afa110f0fff8e47b78dd15fb8361e6, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: c433ccf9eef611d48858ddec661fa626, type: 2}
+    - target: {fileID: 2300010, guid: e1afa110f0fff8e47b78dd15fb8361e6, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2300010, guid: e1afa110f0fff8e47b78dd15fb8361e6, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -55943,6 +56029,10 @@ PrefabInstance:
     - target: {fileID: 3188030307432901757, guid: c4ff23f4507e38145b0b89ccc2385ff2, type: 3}
       propertyPath: m_Name
       value: Reward_03
+      objectReference: {fileID: 0}
+    - target: {fileID: 3980853163092086184, guid: c4ff23f4507e38145b0b89ccc2385ff2, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -65269,7 +65359,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2033132418}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
@@ -68361,6 +68451,7 @@ Transform:
   - {fileID: 903457352}
   - {fileID: 504332702}
   - {fileID: 1911715344}
+  - {fileID: 932033029}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2119891761
@@ -68378,6 +68469,7 @@ MonoBehaviour:
   entranceDoor: {fileID: 532783832}
   exitDoor: {fileID: 1847840005}
   entranceOpenDelay: 2
+  enemySpawnDelay: 0.5
   onSpawnEnemies:
     m_PersistentCalls:
       m_Calls:
