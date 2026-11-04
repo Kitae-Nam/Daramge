@@ -77,6 +77,14 @@ namespace CHG._02_Scripts.Player.Combat
                     localHit = anchor.InverseTransformPoint(hit.point);
                     damageCaster.ResetHitCaster();
                     damageCaster.CastDamage(hit.point, SkillData, 1f);
+                    
+                    ChessPullableBlock block =
+                        hit.collider.GetComponentInParent<ChessPullableBlock>();
+
+                    if (block != null)
+                    {
+                        block.ReceiveTongueHit(transform.position);
+                    }
                     break;
                 }
 
