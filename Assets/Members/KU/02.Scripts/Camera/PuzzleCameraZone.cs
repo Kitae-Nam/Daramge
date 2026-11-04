@@ -5,15 +5,14 @@ using UnityEngine;
 [RequireComponent(typeof(BoxCollider))]
 public class PuzzleCameraZone : MonoBehaviour
 {
-    [Header("Camera")]
+    [Header("References")]
     [SerializeField]
     private PuzzleCameraController cameraController;
 
     [SerializeField]
     private Transform cameraPoint;
 
-    private readonly HashSet<Collider> playerColliders =
-        new HashSet<Collider>();
+    private readonly HashSet<Collider> playerColliders = new();
 
     public Transform CameraPoint => cameraPoint;
 
@@ -24,6 +23,16 @@ public class PuzzleCameraZone : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        CheckPlayer(other);
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        CheckPlayer(other);
+    }
+
+    private void CheckPlayer(Collider other)
+    {
         if (cameraController == null)
             return;
 
@@ -31,27 +40,25 @@ public class PuzzleCameraZone : MonoBehaviour
             return;
 
         playerColliders.Add(other);
-
-        // 플레이어가 처음 진입했을 때만 처리
-        if (playerColliders.Count == 1)
-        {
-            cameraController.EnterPuzzleZone(this);
-        }
+        cameraController.EnterPuzzleZone(this);
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (cameraController == null)
-            return;
-
         if (!playerColliders.Remove(other))
             return;
 
-        // 플레이어의 모든 Collider가 나갔을 때 처리
-        if (playerColliders.Count == 0)
+        if (playerColliders.Count == 0 &&
+            cameraController != null)
         {
             cameraController.ExitPuzzleZone(this);
         }
+    }
+
+    // 캐릭터 전환 시 이전 플레이어 감지 정보 제거
+    public void ForgetTrackedPlayer()
+    {
+        playerColliders.Clear();
     }
 
     private void OnDisable()
@@ -59,8 +66,6 @@ public class PuzzleCameraZone : MonoBehaviour
         playerColliders.Clear();
 
         if (cameraController != null)
-        {
             cameraController.ExitPuzzleZone(this);
-        }
     }
 }
