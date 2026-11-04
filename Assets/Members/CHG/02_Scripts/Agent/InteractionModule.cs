@@ -161,7 +161,7 @@ namespace CHG._02_Scripts.Agent
             Gizmos.DrawWireSphere(transform.position, pickupRange);
         }
         
-                private void HandlePickupTrigger() 
+        private void HandlePickupTrigger() 
         {
             if (!_isWaitingTrigger || _heldCrate != null) return;
 
