@@ -29,7 +29,7 @@ namespace NKT.Enemy.Skill
             {
                 if (!_skillDict.TryAdd(skill.SkillData.skillIndex, skill))
                 {
-                    Debug.LogError($"스킬 번호 {skill.SkillData.skillIndex}가 중복됩니다. {gameObject.name}");
+                    Debug.LogError($"스킬 번호 {skill.SkillData.skillIndex}번호가 중복됩니다. {gameObject.name}");
                     continue;
                 }
                 skill.InitializeSkill(this);

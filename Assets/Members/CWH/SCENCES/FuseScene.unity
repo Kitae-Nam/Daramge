@@ -1808,6 +1808,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 644024887152658485, guid: 7bc9e62302c53a24587cb06f8833f062, type: 3}
   m_PrefabInstance: {fileID: 34312394}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &35086670 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3269441842003620616, guid: cf5a40ede8e3be94eb6f2b493aeb7dde, type: 3}
+  m_PrefabInstance: {fileID: 1923878177}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &36325996
 GameObject:
   m_ObjectHideFlags: 0
@@ -14039,7 +14044,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a054efb85c243c1ad41a31d94188b33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CHG._02_Scripts.UI.CharacterSelectView
-  characterChange: {fileID: 0}
+  characterChange: {fileID: 1431466028}
   cancelAction: {fileID: 7727032971491509709, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   selectPanel:
     m_PanelRenderer: {fileID: 427233964}
@@ -14420,6 +14425,10 @@ MonoBehaviour:
   _currentPhase: 1
   _lagDelay: 0.5
   _catchUpDuration: 2
+  _introCutscene: {fileID: 0}
+  _introFadeDuration: 0.3
+  _introCharacterInterval: 0.06
+  _introFillDuration: 0.8
 --- !u!1931382934 &436083811
 PanelRenderer:
   m_ObjectHideFlags: 0
@@ -38422,6 +38431,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4112347703684707439, guid: c49cf1837bb874b48990503932a5c15f, type: 3}
   m_PrefabInstance: {fileID: 1227973202}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1227973205 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 217595602134348685, guid: c49cf1837bb874b48990503932a5c15f, type: 3}
+  m_PrefabInstance: {fileID: 1227973202}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 576e5d2eaa0543af904d9361a0c106d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Members.CHG._02_Scripts.Player.PlayerController
 --- !u!1 &1230480803
 GameObject:
   m_ObjectHideFlags: 0
@@ -44534,6 +44554,152 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1426553302}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1431466027
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1431466033}
+  - component: {fileID: 1431466032}
+  - component: {fileID: 1431466031}
+  - component: {fileID: 1431466030}
+  - component: {fileID: 1431466028}
+  - component: {fileID: 1431466029}
+  m_Layer: 0
+  m_Name: Cube (3)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1431466028
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1431466027}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ecb33c7c89545698c67de2ed280e2ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CHG._02_Scripts.Player.CharacterChange
+  settings:
+  - displayName: Flog
+    player: {fileID: 1227973205}
+    camera: {fileID: 1050980428}
+  startIndex: 0
+  activePriority: 1
+  inactivePriority: 0
+  blendTimeout: 2
+--- !u!114 &1431466029
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1431466027}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e869b78429ac4e98b19fe5ab15bc5cc3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CHG._02_Scripts.Player.CharacterChangePoint
+--- !u!65 &1431466030
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1431466027}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2, y: 2, z: 2}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!23 &1431466031
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1431466027}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &1431466032
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1431466027}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &1431466033
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1431466027}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.09, y: 0.78, z: -0.59}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1440343161
 GameObject:
   m_ObjectHideFlags: 0
@@ -57640,7 +57806,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0db38a2bdb744fbbc2f2fdfd3e55a82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CHG._02_Scripts.UI.HUDView
-  worldCamera: {fileID: 0}
+  worldCamera: {fileID: 936561004}
   staminaGaugeOffset: {x: -70, y: 0}
   heartContainer:
     m_PanelRenderer: {fileID: 1849944755}
@@ -60243,11 +60409,23 @@ PrefabInstance:
       propertyPath: _range
       value: 3.5
       objectReference: {fileID: 0}
+    - target: {fileID: 9148642132300159557, guid: cf5a40ede8e3be94eb6f2b493aeb7dde, type: 3}
+      propertyPath: m_Height
+      value: 3.11
+      objectReference: {fileID: 0}
+    - target: {fileID: 9148642132300159557, guid: cf5a40ede8e3be94eb6f2b493aeb7dde, type: 3}
+      propertyPath: m_Radius
+      value: 0.75
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 802992670679011131, guid: cf5a40ede8e3be94eb6f2b493aeb7dde, type: 3}
+    - {fileID: 2438808125767109040, guid: cf5a40ede8e3be94eb6f2b493aeb7dde, type: 3}
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3269441842003620616, guid: cf5a40ede8e3be94eb6f2b493aeb7dde, type: 3}
+      insertIndex: 5
+      addedObject: {fileID: 1923878247}
   m_SourcePrefab: {fileID: 100100000, guid: cf5a40ede8e3be94eb6f2b493aeb7dde, type: 3}
 --- !u!95 &1923878178 stripped
 Animator:
@@ -60259,7 +60437,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5287657117788435394, guid: cf5a40ede8e3be94eb6f2b493aeb7dde, type: 3}
   m_PrefabInstance: {fileID: 1923878177}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 35086670}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1f4449b3ab7c42aa933a5a0144dc9ea9, type: 3}
@@ -60270,7 +60448,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3196828483268453319, guid: cf5a40ede8e3be94eb6f2b493aeb7dde, type: 3}
   m_PrefabInstance: {fileID: 1923878177}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 35086670}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7d16e6809cb44891aaa9230cbcbc983d, type: 3}
@@ -60281,12 +60459,24 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7106415414704107451, guid: cf5a40ede8e3be94eb6f2b493aeb7dde, type: 3}
   m_PrefabInstance: {fileID: 1923878177}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 35086670}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3aea0b3af03e4b56a4e89a9272e38ab4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.BossHealth
+--- !u!114 &1923878247
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 35086670}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad8be4d381134f84be236f12862fa99e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Combat.BossDeathCleanup
 --- !u!1001 &1924551483
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -67467,6 +67657,7 @@ SceneRoots:
   - {fileID: 543464747}
   - {fileID: 1417698881}
   - {fileID: 242929504}
+  - {fileID: 1431466033}
   - {fileID: 1208473948}
   - {fileID: 1053713943}
   - {fileID: 985165639}
