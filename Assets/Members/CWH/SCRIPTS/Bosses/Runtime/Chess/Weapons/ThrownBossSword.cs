@@ -16,7 +16,7 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons
         [SerializeField] private Transform _visual;
         [SerializeField, Min(0.03f)] private float _flightDuration = 0.18f;
         [SerializeField, Min(0.1f)] private float _embeddedDuration = 7f;
-        [SerializeField, Min(0f)] private float _impactDamage = 25f;
+        [SerializeField, Min(0f)] private float _impactDamage = 1f;
         [SerializeField, Min(0f)] private float _embedBackOffset = 0.7f;
 
         
@@ -34,6 +34,7 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons
         private MonoBehaviour _orbitSource;
         
         private float _radius;
+        private float _launchDamage;
         private float _timer;
         private bool _launched;
         private bool _finished;
@@ -65,6 +66,8 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons
             _hitbox.SetDamageable(false);
             _visual = _ownership.Prepare();
             _owner = owner; _target = target; _start = start; _destination = destination; _radius = radius;
+            // 착지 전에 페이즈가 바뀌더라도 던진 공격의 피해량을 유지한다.
+            _launchDamage = BossAttackDamage.Resolve(owner, _impactDamage);
             transform.position = start;
             // 칼끝(+Y)을 목표 방향에 맞춘 뒤 직선 비행 동안 방향을 유지한다.
             if (_visual != null && (destination - start).sqrMagnitude > 0.0001f)
@@ -108,7 +111,7 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons
             Embedded?.Invoke(this);
             if (_target != null && _owner != null)
                 BossAttackQuery.ApplySector(_owner, _destination, Vector3.forward, _radius, 360f, 5f,
-                    _impactDamage, ~0, targetRoot: _target);
+                    _launchDamage, ~0, targetRoot: _target);
         }
 
         private void HandleBroken() { if (IsEmbedded) Finish(true); }

@@ -219,4 +219,13 @@ public class CoopChairPuzzle : MonoBehaviour
 
         Gizmos.DrawLine(startWorld, endWorld);
     }
+    
+    #if UNITY_EDITOR
+    [ContextMenu("테스트")]
+    public void TestCom()
+    {
+        onChairMoved?.Invoke();
+        
+    }
+    #endif 
 }

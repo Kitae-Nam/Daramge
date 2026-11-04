@@ -9,9 +9,15 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Cinematics
     public sealed class BossCutsceneGate : MonoBehaviour
     {
         [SerializeField] private PlayableDirector _director;
+        [SerializeField] private bool _waitForFirstCutscene = true;
+        
         private BossCombatGate _gate;
         private bool _hasPlayed;
+        private bool _firstCutsceneFinished;
+        public bool HasFinishedFirstCutscene => _firstCutsceneFinished;
+        
         private void Awake() => _gate = GetComponent<BossCombatGate>();
+        
         private void OnEnable()
         {
             if (_director == null) return;
@@ -19,14 +25,43 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Cinematics
             _director.stopped += OnStopped;
             _hasPlayed = _director.state == PlayState.Playing || _director.time > 0d;
             // Director의 Start보다 먼저 잠가 Play On Awake 첫 프레임의 공격도 막는다.
-            if (_director.isActiveAndEnabled && _director.playableAsset != null &&
-                (_director.playOnAwake || _director.state == PlayState.Playing)) _gate.Block(this);
+            bool waitingForFirstCutscene =
+                _waitForFirstCutscene && !_firstCutsceneFinished;
+
+            bool playingOrStarting =
+                _director.isActiveAndEnabled
+                && _director.playableAsset != null
+                && (_director.playOnAwake || _director.state == PlayState.Playing);
+
+            if (waitingForFirstCutscene || playingOrStarting)
+                _gate.Block(this);
         }
         private void OnPlayed(PlayableDirector director) { _hasPlayed = true; _gate.Block(this); }
-        private void OnStopped(PlayableDirector director) { _hasPlayed = false; _gate.Unblock(this); }
+
+        private void OnStopped(PlayableDirector director)
+        {
+            _firstCutsceneFinished = true;
+            _hasPlayed = false;
+            _gate.Unblock(this);
+        }
         private void Update()
         {
-            if (_director == null || !_director.isActiveAndEnabled) { _gate.Unblock(this); return; }
+            if (_director == null)
+            {
+                _gate.Unblock(this);
+                return;
+            }
+
+            if (!_director.isActiveAndEnabled)
+            {
+                if (_waitForFirstCutscene && !_firstCutsceneFinished)
+                    _gate.Block(this);
+                else
+                    _gate.Unblock(this);
+
+                return;
+            }
+            
             // Hold 완료는 stopped 알림 없이 Paused가 될 수 있다. 중간 Pause는 컷신으로 유지한다.
             if (_hasPlayed && _director.state != PlayState.Playing &&
                 _director.extrapolationMode != DirectorWrapMode.Loop &&

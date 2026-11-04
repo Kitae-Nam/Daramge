@@ -9606,6 +9606,198 @@ MonoBehaviour:
     DissipationDistance: 100
     PropagationSpeed: 343
   DefaultVelocity: {x: 0, y: -1, z: 0}
+--- !u!1 &2276343978297512931
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7045193780394263548}
+  - component: {fileID: 2924641047898701235}
+  - component: {fileID: 7961310224538964391}
+  m_Layer: 0
+  m_Name: BackGround
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &7045193780394263548
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2276343978297512931}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 7322331566435944830}
+  m_Father: {fileID: 6654886705080895092}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &2924641047898701235
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2276343978297512931}
+  m_CullTransparentMesh: 1
+--- !u!114 &7961310224538964391
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2276343978297512931}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!1 &2438808125767109040
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6654886705080895092}
+  - component: {fileID: 2230181305444735667}
+  - component: {fileID: 4922539950945479769}
+  - component: {fileID: 3972979471068715538}
+  - component: {fileID: 4570992426269424180}
+  m_Layer: 0
+  m_Name: SwordHealthCanvas
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &6654886705080895092
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2438808125767109040}
+  m_LocalRotation: {x: -1, y: -0, z: -0, w: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 5.6769223}
+  m_LocalScale: {x: 0.6410256, y: 0.83333325, z: 0.6410256}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 7045193780394263548}
+  m_Father: {fileID: 6411173278107026796}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 616.2179, y: -444.48495}
+  m_SizeDelta: {x: 1920, y: 1080}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!223 &2230181305444735667
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2438808125767109040}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 2
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 0
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
+  m_UseReflectionProbes: 0
+  m_AdditionalShaderChannelsFlag: 0
+  m_UpdateRectTransformForStandalone: 0
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+  m_TargetDisplay: 0
+--- !u!114 &4922539950945479769
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2438808125767109040}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.CanvasScaler
+  m_UiScaleMode: 0
+  m_ReferencePixelsPerUnit: 100
+  m_ScaleFactor: 1
+  m_ReferenceResolution: {x: 800, y: 600}
+  m_ScreenMatchMode: 0
+  m_MatchWidthOrHeight: 0
+  m_PhysicalUnit: 3
+  m_FallbackScreenDPI: 96
+  m_DefaultSpriteDPI: 96
+  m_DynamicPixelsPerUnit: 1
+  m_PresetInfoIsWorld: 1
+--- !u!114 &3972979471068715538
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2438808125767109040}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.GraphicRaycaster
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+--- !u!225 &4570992426269424180
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2438808125767109040}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &2646301081718850813
 GameObject:
   m_ObjectHideFlags: 0
@@ -12227,6 +12419,7 @@ MonoBehaviour:
   outlineMode: 0
   outlineColor: {r: 1, g: 1, b: 1, a: 1}
   outlineWidth: 3
+  hideOccluded: 0
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
@@ -12275,6 +12468,7 @@ GameObject:
   - component: {fileID: 5426907226158197975}
   - component: {fileID: 335436049160081673}
   - component: {fileID: 3172685831011236018}
+  - component: {fileID: 7300000000000000000}
   m_Layer: 0
   m_Name: The_King(Boss)
   m_TagString: Untagged
@@ -12299,7 +12493,6 @@ Transform:
   - {fileID: 6935931407909939417}
   - {fileID: 6863406783172759020}
   - {fileID: 3790832336868515390}
-  - {fileID: 7541547966863665179}
   - {fileID: 8473430712856817664}
   - {fileID: 7801668302155542443}
   - {fileID: 854301092234588101}
@@ -12576,7 +12769,7 @@ MonoBehaviour:
   _dashDistance: 22
   _dashSpeed: 120
   _dashWidth: 7
-  _damage: 0
+  _damage: 1
   _knockbackSpeed: 33
   _knockbackDuration: 0.3
   _warningOpacity: 0.7
@@ -12652,7 +12845,7 @@ MonoBehaviour:
   _telegraph: {fileID: 6602008292686254867}
   _range: 9
   _angle: 200
-  _damage: 20
+  _damage: 1
   _secondWarning: 0.7
   _swingDuration: 0.15
   _finishHoldDuration: 0.1
@@ -12904,20 +13097,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.ChessCombatProfiles
   _phaseTwo:
-    DamageMultiplier: 1.35
+    DamageMultiplier: 2
     MeleeStrikes: 3
     SwingDuration: 0.13
     ComboWarning: 0.6
     DashSpeedMultiplier: 1.2
     DashHazardLifetime: 5
     DashHazardTickInterval: 0.75
-    DashHazardDamage: 10
+    DashHazardDamage: 1
     ThrowCount: 3
     ThrowSpread: 3
     RoarRadius: 10
     RoarPushSpeed: 35
     RoarPushDuration: 0.6
-    RoarWallDamage: 35
+    RoarWallDamage: 2
     WallLayers:
       serializedVersion: 2
       m_Bits: 499
@@ -13020,16 +13213,16 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3351602930758810496}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 2.45, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.2250004, z: 0}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6411173278107026796}
   - {fileID: 7007244989626868327}
   - {fileID: 2413209139458781767}
   - {fileID: 1898189042353168095}
-  m_Father: {fileID: 3589916333201453215}
+  m_Father: {fileID: 3790832336868515390}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4025579461138060955
 GameObject:
@@ -13070,6 +13263,7 @@ Transform:
   - {fileID: 4610001314388012278}
   - {fileID: 4358027228890136078}
   - {fileID: 26174108730295065}
+  - {fileID: 7541547966863665179}
   m_Father: {fileID: 3589916333201453215}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &2324621015666976290
@@ -13166,6 +13360,7 @@ MonoBehaviour:
   outlineMode: 0
   outlineColor: {r: 1, g: 0, b: 0, a: 1}
   outlineWidth: 3
+  hideOccluded: 0
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
@@ -27915,6 +28110,81 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.AreaTelegraphPresenter
   _heightOffset: 0.06
+--- !u!1 &8292665156155324017
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7322331566435944830}
+  - component: {fileID: 8178165312901662821}
+  - component: {fileID: 2398258225640881864}
+  m_Layer: 0
+  m_Name: Fill
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &7322331566435944830
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8292665156155324017}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7045193780394263548}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &8178165312901662821
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8292665156155324017}
+  m_CullTransparentMesh: 1
+--- !u!114 &2398258225640881864
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8292665156155324017}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &8335477791158571090
 GameObject:
   m_ObjectHideFlags: 0
@@ -28107,6 +28377,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6030440720845073576, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8981676674574802635}
+    - targetCorrespondingSourceObject: {fileID: 6030440720845073576, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6654886705080895092}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 5139045277658150859, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
       insertIndex: -1
@@ -28117,6 +28390,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5139045277658150859, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6744718268101381445}
+    - targetCorrespondingSourceObject: {fileID: 5139045277658150859, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2589462479036193609}
+    - targetCorrespondingSourceObject: {fileID: 5139045277658150859, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8282328903240635907}
   m_SourcePrefab: {fileID: 100100000, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
 --- !u!1 &5483400490634501647 stripped
 GameObject:
@@ -28149,9 +28428,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons.ThrownBossSword
   _visual: {fileID: 6411173278107026796}
-  _flightDuration: 0.1
+  _flightDuration: 0.03
   _embeddedDuration: 7
-  _impactDamage: 25
+  _impactDamage: 1
+  _embedBackOffset: 1.8
 --- !u!114 &6744718268101381445
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28164,6 +28444,41 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2672e4e2cfc74ca5a2c4dccafbed5f98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons.ThrownSwordHitbox
+--- !u!114 &2589462479036193609
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5483400490634501647}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Outline
+  outlineMode: 0
+  outlineColor: {r: 1, g: 0, b: 0, a: 1}
+  outlineWidth: 3
+  hideOccluded: 1
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
+--- !u!114 &8282328903240635907
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5483400490634501647}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c670aab4f5d6402ea1046ae80c3310f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons.SwordRecallMotion
+  _extractDistance: 2
+  _extractDuration: 0.4
+  _uprightDuration: 0.5
+  _returnDuration: 1
 --- !u!4 &6411173278107026796 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6030440720845073576, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
@@ -28388,6 +28703,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5139045277658150859, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1753867982900622461}
+    - targetCorrespondingSourceObject: {fileID: 5139045277658150859, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6228825816311884127}
+    - targetCorrespondingSourceObject: {fileID: 5139045277658150859, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7367849113380795466}
   m_SourcePrefab: {fileID: 100100000, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
 --- !u!114 &5119796608029662769 stripped
 MonoBehaviour:
@@ -28436,9 +28757,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons.ThrownBossSword
   _visual: {fileID: 7007244989626868327}
-  _flightDuration: 0.1
+  _flightDuration: 0.03
   _embeddedDuration: 7
-  _impactDamage: 25
+  _impactDamage: 1
+  _embedBackOffset: 1.8
 --- !u!114 &1753867982900622461
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28451,6 +28773,41 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2672e4e2cfc74ca5a2c4dccafbed5f98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons.ThrownSwordHitbox
+--- !u!114 &6228825816311884127
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8493612564698855684}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Outline
+  outlineMode: 0
+  outlineColor: {r: 1, g: 0, b: 0, a: 1}
+  outlineWidth: 3
+  hideOccluded: 1
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
+--- !u!114 &7367849113380795466
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8493612564698855684}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c670aab4f5d6402ea1046ae80c3310f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons.SwordRecallMotion
+  _extractDistance: 2
+  _extractDuration: 0.4
+  _uprightDuration: 0.5
+  _returnDuration: 1
 --- !u!1001 &5325459289173308023
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -28535,6 +28892,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5139045277658150859, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7767365994696442747}
+    - targetCorrespondingSourceObject: {fileID: 5139045277658150859, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8017582795729015107}
+    - targetCorrespondingSourceObject: {fileID: 5139045277658150859, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2316223694378876104}
   m_SourcePrefab: {fileID: 100100000, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
 --- !u!1 &1060135306663871932 stripped
 GameObject:
@@ -28567,9 +28930,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons.ThrownBossSword
   _visual: {fileID: 1898189042353168095}
-  _flightDuration: 0.1
+  _flightDuration: 0.03
   _embeddedDuration: 7
-  _impactDamage: 25
+  _impactDamage: 1
+  _embedBackOffset: 1.8
 --- !u!114 &7767365994696442747
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28582,6 +28946,41 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2672e4e2cfc74ca5a2c4dccafbed5f98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons.ThrownSwordHitbox
+--- !u!114 &8017582795729015107
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1060135306663871932}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Outline
+  outlineMode: 0
+  outlineColor: {r: 1, g: 0, b: 0, a: 1}
+  outlineWidth: 3
+  hideOccluded: 1
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
+--- !u!114 &2316223694378876104
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1060135306663871932}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c670aab4f5d6402ea1046ae80c3310f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons.SwordRecallMotion
+  _extractDistance: 2
+  _extractDuration: 0.4
+  _uprightDuration: 0.5
+  _returnDuration: 1
 --- !u!4 &1898189042353168095 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6030440720845073576, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
@@ -28744,6 +29143,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5139045277658150859, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8483029919973604785}
+    - targetCorrespondingSourceObject: {fileID: 5139045277658150859, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3923537928723817717}
+    - targetCorrespondingSourceObject: {fileID: 5139045277658150859, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4656737711736978812}
   m_SourcePrefab: {fileID: 100100000, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
 --- !u!114 &526612466451959313 stripped
 MonoBehaviour:
@@ -28792,9 +29197,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons.ThrownBossSword
   _visual: {fileID: 2413209139458781767}
-  _flightDuration: 0.1
+  _flightDuration: 0.03
   _embeddedDuration: 7
-  _impactDamage: 25
+  _impactDamage: 1
+  _embedBackOffset: 1.8
 --- !u!114 &8483029919973604785
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28807,6 +29213,41 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2672e4e2cfc74ca5a2c4dccafbed5f98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons.ThrownSwordHitbox
+--- !u!114 &3923537928723817717
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3863124743181412644}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Outline
+  outlineMode: 0
+  outlineColor: {r: 1, g: 0, b: 0, a: 1}
+  outlineWidth: 3
+  hideOccluded: 1
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
+--- !u!114 &4656737711736978812
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3863124743181412644}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c670aab4f5d6402ea1046ae80c3310f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons.SwordRecallMotion
+  _extractDistance: 2
+  _extractDuration: 0.4
+  _uprightDuration: 0.5
+  _returnDuration: 1
 --- !u!1001 &8429400420189279521
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -28869,3 +29310,15 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 603038543741733866, guid: 3679feaccda599d4c80be59deb040c93, type: 3}
   m_PrefabInstance: {fileID: 8429400420189279521}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7300000000000000000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3269441842003620616}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e95c97d815645104891778b3278e1f56, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::CWH.BossIntegration.BossPlayerHealthBinding

@@ -491,6 +491,7 @@ GameObject:
   - component: {fileID: 6200000000000000002}
   - component: {fileID: 6200000000000000003}
   - component: {fileID: 6200000000000000004}
+  - component: {fileID: 7300000000000000000}
   m_Layer: 0
   m_Name: PhaseOneBoss
   m_TagString: Untagged
@@ -743,7 +744,7 @@ MonoBehaviour:
   _telegraph: {fileID: 7731709980603834941}
   _range: 9
   _angle: 140
-  _damage: 20
+  _damage: 1
   _secondWarning: 0.7
   _swingDuration: 0.15
   _finishHoldDuration: 0.1
@@ -834,7 +835,7 @@ MonoBehaviour:
   _dashDistance: 18
   _dashSpeed: 30
   _dashWidth: 4
-  _damage: 25
+  _damage: 1
   _knockbackSpeed: 12
   _knockbackDuration: 0.35
   _warningOpacity: 0.7
@@ -1053,20 +1054,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.ChessCombatProfiles
   _phaseTwo:
-    DamageMultiplier: 1.35
+    DamageMultiplier: 2
     MeleeStrikes: 3
     SwingDuration: 0.13
     ComboWarning: 0.6
     DashSpeedMultiplier: 1.2
     DashHazardLifetime: 5
     DashHazardTickInterval: 0.75
-    DashHazardDamage: 10
+    DashHazardDamage: 1
     ThrowCount: 3
     ThrowSpread: 3
     RoarRadius: 10
     RoarPushSpeed: 35
     RoarPushDuration: 0.6
-    RoarWallDamage: 35
+    RoarWallDamage: 2
     WallLayers:
       serializedVersion: 2
       m_Bits: 499
@@ -2268,3 +2269,15 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 603038543741733866, guid: 3679feaccda599d4c80be59deb040c93, type: 3}
   m_PrefabInstance: {fileID: 6100000000000001006}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7300000000000000000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3015192471013021950}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e95c97d815645104891778b3278e1f56, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::CWH.BossIntegration.BossPlayerHealthBinding

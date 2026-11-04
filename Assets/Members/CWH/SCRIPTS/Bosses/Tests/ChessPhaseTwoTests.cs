@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime;
+using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.AI;
 using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons;
 using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Combat;
 using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Health;
@@ -152,7 +153,10 @@ namespace Members.CWH.SCRIPTS.Bosses.Tests
             Assert.That(_boss.GetComponent<MeleeComboPattern>().CanExecute(), Is.True);
             Set(thrown, "_flightDuration", 0.02f);
             Set(thrown, "_embeddedDuration", 0.03f);
-            yield return new WaitForSeconds(0.2f);
+            // 자연 회수는 이제 뽑기/세우기/복귀 연출을 기다린다. 즉시 복귀를 가정하지 않는다.
+            float deadline = Time.time + 3f;
+            while (physical != null && physical.State != BossSwordState.Orbiting && Time.time < deadline)
+                yield return null;
             Assert.That(physical != null, Is.True);
             Assert.That(physical.State, Is.EqualTo(BossSwordState.Orbiting));
             Assert.That(Inventory.OrbitingCount, Is.EqualTo(4));
