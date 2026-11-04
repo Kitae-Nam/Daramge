@@ -111,6 +111,11 @@ public class CoopChairPuzzle : MonoBehaviour
     // Tongue Interaction
     // --------------------------------
 
+    public void PullChair()
+    {
+        TryPullChair();
+    }
+    
     public bool TryPullChair()
     {
         if (isMoving || isCompleted)

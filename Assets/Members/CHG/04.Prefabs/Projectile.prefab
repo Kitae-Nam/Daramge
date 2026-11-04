@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 5952344636585099825}
   - component: {fileID: 4250476595080749504}
   - component: {fileID: 8265938671683374528}
-  - component: {fileID: 843868144783756620}
   - component: {fileID: 680538500281494218}
   m_Layer: 0
   m_Name: Projectile
@@ -92,27 +91,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &843868144783756620
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2110909829975681142}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &680538500281494218
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -128,3 +106,7 @@ MonoBehaviour:
   <PoolItem>k__BackingField: {fileID: 11400000, guid: 53fefd3ad79e4a94dba41979787e78b3, type: 2}
   speed: 15
   lifeTime: 3
+  radius: 0
+  whatIsEnemy:
+    serializedVersion: 2
+    m_Bits: 128

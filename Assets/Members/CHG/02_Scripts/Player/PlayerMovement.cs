@@ -13,7 +13,6 @@ namespace CHG._02_Scripts.Player
         
         private Vector3 _velocity;
         private float _verticalVelocity;
-        private Vector3 _movementDirection;
         private CharacterController _characterController;
         private ModuleOwner _owner;
         private IStatModule _statModule;
@@ -21,6 +20,9 @@ namespace CHG._02_Scripts.Player
         private float _moveSpeed = 8f;
         private bool _isLaunched;
         private Vector3 _launchHorizontalVelocity;
+        private Vector2 _movementInput;
+        private Transform _cameraTrm;
+        
         public event Action OnLanded;
 
         public bool CanManualMove { get; set; } = true;
@@ -31,6 +33,16 @@ namespace CHG._02_Scripts.Player
         public bool IsGround => _characterController.isGrounded;
         public bool IsLaunched => _isLaunched;
         public float Gravity => gravity;
+        
+        private Transform CameraTransform
+        {
+            get
+            {
+                if (_cameraTrm == null && Camera.main != null)
+                    _cameraTrm = Camera.main.transform;
+                return _cameraTrm;
+            }
+        }
 
         public void Initialize(ModuleOwner owner)
         {
@@ -62,11 +74,21 @@ namespace CHG._02_Scripts.Player
 
         public void SetMovementDirection(Vector2 movementInput)
         {
-            _movementDirection = ToWorldDirection(movementInput);
+            _movementInput = movementInput;
         }
 
         public Vector3 ToWorldDirection(Vector2 movementInput)
-            => Quaternion.Euler(0, -45f, 0) * new Vector3(movementInput.x, 0, movementInput.y).normalized;
+        {
+            Vector3 inputDirection = new Vector3(movementInput.x, 0, movementInput.y).normalized; 
+            Transform cam = CameraTransform; 
+            if (cam == null) return inputDirection; 
+
+            Vector3 forward = Vector3.ProjectOnPlane(cam.forward, Vector3.up); 
+            if (forward.sqrMagnitude < 0.001f) 
+                forward = Vector3.ProjectOnPlane(cam.up, Vector3.up); 
+
+            return Quaternion.LookRotation(forward) * inputDirection; 
+        }
 
         public void RotateTo(Vector3 direction)
         {
@@ -93,7 +115,7 @@ namespace CHG._02_Scripts.Player
                 return;
             }
 
-            _velocity = CanManualMove ? _movementDirection : _autoVelocity;
+            _velocity = CanManualMove ? ToWorldDirection(_movementInput) : _autoVelocity;
             
             _velocity *= _moveSpeed * Time.fixedDeltaTime;
             if (CanAutoRotate && _velocity.sqrMagnitude > 0)
