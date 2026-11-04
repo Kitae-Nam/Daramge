@@ -9,17 +9,25 @@ public class DungeonRoomController : MonoBehaviour
     {
         Waiting,
         Opening,
+        EntranceOpen,
         Combat,
         Cleared
     }
 
     [Header("Dungeon Doors")]
-    [SerializeField] private PuzzleDoorView entranceDoor;
-    [SerializeField] private PuzzleDoorView exitDoor;
+    [SerializeField]
+    private PuzzleDoorView entranceDoor;
+
+    [SerializeField]
+    private PuzzleDoorView exitDoor;
 
     [Header("Entrance Settings")]
     [SerializeField, Min(0f)]
     private float entranceOpenDelay = 2f;
+
+    [Header("Combat Settings")]
+    [SerializeField, Min(0f)]
+    private float enemySpawnDelay = 0.5f;
 
     [Header("Dungeon Events")]
     [SerializeField]
@@ -28,7 +36,11 @@ public class DungeonRoomController : MonoBehaviour
     [SerializeField]
     private UnityEvent onDungeonCleared;
 
-    private DungeonState currentState = DungeonState.Waiting;
+    private DungeonState currentState =
+        DungeonState.Waiting;
+
+    private Coroutine entranceCoroutine;
+    private Coroutine combatCoroutine;
 
     public DungeonState CurrentState => currentState;
 
@@ -39,7 +51,6 @@ public class DungeonRoomController : MonoBehaviour
     {
         currentState = DungeonState.Waiting;
 
-        // 시작할 때 두 문 모두 닫힌 상태
         if (entranceDoor != null)
             entranceDoor.SetOpen(false);
 
@@ -53,26 +64,27 @@ public class DungeonRoomController : MonoBehaviour
 
     public bool TryEnterDungeon()
     {
-        // 최초 상호작용만 허용
         if (currentState != DungeonState.Waiting)
             return false;
 
         currentState = DungeonState.Opening;
 
-        Debug.Log("던전 입장 시작!", this);
+        Debug.Log("던전 입구 문 열기", this);
 
-        StartCoroutine(OpenDungeonRoutine());
+        entranceCoroutine = StartCoroutine(
+            OpenEntranceRoutine()
+        );
 
         return true;
     }
 
-    private IEnumerator OpenDungeonRoutine()
+    private IEnumerator OpenEntranceRoutine()
     {
         // 입구 문 열기
         if (entranceDoor != null)
             entranceDoor.SetOpen(true);
 
-        // 문이 열리는 애니메이션 대기
+        // 입구 문이 열리는 동안 대기
         if (entranceOpenDelay > 0f)
         {
             yield return new WaitForSeconds(
@@ -80,24 +92,62 @@ public class DungeonRoomController : MonoBehaviour
             );
         }
 
-        // 적 생성 전에 전투 상태로 변경
+        currentState = DungeonState.EntranceOpen;
+
+        entranceCoroutine = null;
+
+        Debug.Log("던전 입장 가능", this);
+    }
+
+    // --------------------------------
+    // Player Entry
+    // --------------------------------
+
+    // DungeonEntryTrigger에서 호출
+    public void NotifyPlayerEntered()
+    {
+        if (currentState != DungeonState.EntranceOpen)
+            return;
+
         currentState = DungeonState.Combat;
 
-        Debug.Log("던전 전투 시작!", this);
+        Debug.Log(
+            "플레이어 입장 확인 - 입구 문 닫기",
+            this
+        );
 
-        // 팀원의 적 생성 메서드 호출
+        // 입구 문 닫기
+        if (entranceDoor != null)
+            entranceDoor.SetOpen(false);
+
+        combatCoroutine = StartCoroutine(
+            BeginCombatRoutine()
+        );
+    }
+
+    private IEnumerator BeginCombatRoutine()
+    {
+        // 문이 닫히는 시간을 고려하여 적 생성
+        if (enemySpawnDelay > 0f)
+        {
+            yield return new WaitForSeconds(
+                enemySpawnDelay
+            );
+        }
+
+        Debug.Log("던전 적 생성 시작", this);
+
         onSpawnEnemies?.Invoke();
+
+        combatCoroutine = null;
     }
 
     // --------------------------------
     // Enemy Clear Callback
     // --------------------------------
 
-    // 팀원 스크립트에서
-    // 모든 적이 죽었을 때 호출하면 된다.
     public void NotifyAllEnemiesDefeated()
     {
-        // 전투 중일 때만 클리어 가능
         if (currentState != DungeonState.Combat)
             return;
 
@@ -105,11 +155,9 @@ public class DungeonRoomController : MonoBehaviour
 
         Debug.Log("던전 클리어!", this);
 
-        // 출구 문 열기
         if (exitDoor != null)
             exitDoor.SetOpen(true);
 
-        // 클리어 후 추가 이벤트
         onDungeonCleared?.Invoke();
     }
 }
