@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 2883984433866736810}
   - component: {fileID: 6126483847035732814}
   - component: {fileID: 8610166367790590368}
+  - component: {fileID: 1022861448980494087}
   m_Layer: 0
   m_Name: Visual
   m_TagString: Untagged
@@ -245,6 +246,19 @@ MonoBehaviour:
     DissipationDistance: 100
     PropagationSpeed: 343
   DefaultVelocity: {x: 0, y: -1, z: 0}
+--- !u!114 &1022861448980494087
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 269364661520550298}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cac03bedc6174a5bacedbfc3c10ca65f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CWH.SCRIPTS.BOSS.DamageAdapter
+  _receiverComponent: {fileID: 4359740845744923715}
 --- !u!1 &432916497919467053
 GameObject:
   m_ObjectHideFlags: 0
@@ -12690,7 +12704,6 @@ GameObject:
   - component: {fileID: 7418545127813923506}
   - component: {fileID: 8273933246244435687}
   - component: {fileID: 4359740845744923715}
-  - component: {fileID: 5628426837085842320}
   - component: {fileID: -2158953491051892634}
   - component: {fileID: 2488203261493466007}
   - component: {fileID: 5889572090002313684}
@@ -12835,19 +12848,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.BossHealth
   _maxHealth: 1000
---- !u!114 &5628426837085842320
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2346691917327231199}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cac03bedc6174a5bacedbfc3c10ca65f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CWH.SCRIPTS.BOSS.ChgDamageAdapter
-  _receiverComponent: {fileID: 4359740845744923715}
 --- !u!114 &-2158953491051892634
 MonoBehaviour:
   m_ObjectHideFlags: 0
