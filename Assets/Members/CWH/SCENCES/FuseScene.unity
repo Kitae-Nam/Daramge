@@ -7831,6 +7831,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4034755705472140416, guid: b9f1d9b8aebcb9848985eafb1b174d7e, type: 3}
   m_PrefabInstance: {fileID: 192583416}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &194984341 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5431010369262632917, guid: cf5a40ede8e3be94eb6f2b493aeb7dde, type: 3}
+  m_PrefabInstance: {fileID: 1923878177}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2152b3e75b9f4671ab6de2ba7981bbe0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Health.BreakableHealth
 --- !u!1001 &202731862
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -24841,6 +24852,17 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 804525463}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &805764985 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5505468243104147736, guid: cf5a40ede8e3be94eb6f2b493aeb7dde, type: 3}
+  m_PrefabInstance: {fileID: 1923878177}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2152b3e75b9f4671ab6de2ba7981bbe0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Health.BreakableHealth
 --- !u!1001 &805868219
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -28482,18 +28504,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 207793f3e7a055d448ec33d4ae12c727, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PuzzleCameraController
-  playerTarget: {fileID: 970810561}
-  playerInput: {fileID: 970810562}
-  followOffset: {x: 0, y: 0, z: 0}
-  followSmoothTime: 0.15
-  followCameraSize: 5
-  followNearClip: -10
+  characterChange: {fileID: 0}
+  players:
+  - playerTarget: {fileID: 0}
+  - playerTarget: {fileID: 0}
+  - playerTarget: {fileID: 0}
+  puzzleCamera: {fileID: 0}
   puzzleCameraSize: 6
   puzzleNearClip: 0
-  transitionSmoothTime: 0.35
-  rotationSpeed: 6
-  zoomSpeed: 4
-  nearClipSpeed: 4
+  puzzleActivePriority: 100
+  puzzleInactivePriority: -100
 --- !u!114 &936561008
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32932,6 +32952,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4627341629087420424, guid: 3523d5d96ea6d744e8dbbca5f3e22353, type: 3}
   m_PrefabInstance: {fileID: 1037665245}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1042901679 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8693492196393474784, guid: cf5a40ede8e3be94eb6f2b493aeb7dde, type: 3}
+  m_PrefabInstance: {fileID: 1923878177}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2152b3e75b9f4671ab6de2ba7981bbe0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Health.BreakableHealth
 --- !u!1001 &1044750909
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -47324,6 +47355,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1512645008 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5025160768694141935, guid: cf5a40ede8e3be94eb6f2b493aeb7dde, type: 3}
+  m_PrefabInstance: {fileID: 1923878177}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2152b3e75b9f4671ab6de2ba7981bbe0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Health.BreakableHealth
 --- !u!1001 &1515526283
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -60145,6 +60187,10 @@ PrefabInstance:
       propertyPath: _maximumSelectionDistance
       value: 15
       objectReference: {fileID: 0}
+    - target: {fileID: 412274186517084427, guid: cf5a40ede8e3be94eb6f2b493aeb7dde, type: 3}
+      propertyPath: _receiverComponent
+      value: 
+      objectReference: {fileID: 1042901679}
     - target: {fileID: 487664387110774604, guid: cf5a40ede8e3be94eb6f2b493aeb7dde, type: 3}
       propertyPath: m_LocalPosition.y
       value: 0
@@ -60277,10 +60323,18 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4508799482044650899, guid: cf5a40ede8e3be94eb6f2b493aeb7dde, type: 3}
+      propertyPath: _receiverComponent
+      value: 
+      objectReference: {fileID: 194984341}
     - target: {fileID: 5094506294779524034, guid: cf5a40ede8e3be94eb6f2b493aeb7dde, type: 3}
       propertyPath: _director
       value: 
       objectReference: {fileID: 1511831953}
+    - target: {fileID: 5122310146367546040, guid: cf5a40ede8e3be94eb6f2b493aeb7dde, type: 3}
+      propertyPath: _receiverComponent
+      value: 
+      objectReference: {fileID: 805764985}
     - target: {fileID: 5287657117788435394, guid: cf5a40ede8e3be94eb6f2b493aeb7dde, type: 3}
       propertyPath: _roarRadius
       value: 4
@@ -60409,6 +60463,10 @@ PrefabInstance:
       propertyPath: _range
       value: 3.5
       objectReference: {fileID: 0}
+    - target: {fileID: 9138285099438982579, guid: cf5a40ede8e3be94eb6f2b493aeb7dde, type: 3}
+      propertyPath: _receiverComponent
+      value: 
+      objectReference: {fileID: 1512645008}
     - target: {fileID: 9148642132300159557, guid: cf5a40ede8e3be94eb6f2b493aeb7dde, type: 3}
       propertyPath: m_Height
       value: 3.11
