@@ -165,10 +165,6 @@ public class PuzzleCameraController : MonoBehaviour
 
         activePlayerIndex = newIndex;
 
-        Debug.Log(
-            $"현재 캐릭터 자동 감지: {activePlayerIndex}",
-            this
-        );
     }
 
     // --------------------------------
@@ -216,20 +212,13 @@ public class PuzzleCameraController : MonoBehaviour
             puzzleCamera.Priority =
                 puzzleActivePriority;
 
-            Debug.Log(
-                "퍼즐 카메라 모드",
-                this
-            );
+
         }
         else
         {
             puzzleCamera.Priority =
                 puzzleInactivePriority;
 
-            Debug.Log(
-                "플레이어 추적 카메라 복귀",
-                this
-            );
         }
     }
 
@@ -290,10 +279,7 @@ public class PuzzleCameraController : MonoBehaviour
 
         UpdatePuzzleCameraTransform();
 
-        Debug.Log(
-            "퍼즐 구역 진입 - V키 사용 가능",
-            this
-        );
+        
     }
 
     public void ExitPuzzleZone(PuzzleCameraZone zone)
@@ -304,11 +290,7 @@ public class PuzzleCameraController : MonoBehaviour
         currentZone = null;
 
         ExitPuzzleMode();
-
-        Debug.Log(
-            "퍼즐 구역 이탈 - 추적 카메라 복귀",
-            this
-        );
+        
     }
 
     private void ClearPuzzleZone()
