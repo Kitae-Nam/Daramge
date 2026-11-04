@@ -23,7 +23,6 @@ namespace CHG._02_Scripts.Player.Combat
         
         [SerializeField] private float reloadTime; //나중에 스탯으로?
         [SerializeField] private int maxAmmo = 30;
-        [SerializeField] private float damage = 3;
         
         private IStatModule _statModule;
         private AgentTrigger _trigger;
@@ -95,8 +94,9 @@ namespace CHG._02_Scripts.Player.Combat
             _renderer.PlayClip(shotParam.ParamHash, 0, 0.01f);
             Projectile projectile = poolManager.Pop<Projectile>(projectileItem);
             Debug.Assert(projectile != null, $"projectile is null : {gameObject.name}");
-            
-            projectile.Fire(poolManager, muzzleTrm.position, _player.transform.forward);
+
+            DamageData data = _statModule.CalculateDamage(SkillData);
+            projectile.Fire(poolManager, muzzleTrm.position, _player.transform.forward, data);
         }
 
         private void Reload()
