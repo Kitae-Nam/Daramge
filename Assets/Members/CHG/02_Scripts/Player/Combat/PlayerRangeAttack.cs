@@ -12,7 +12,6 @@ namespace CHG._02_Scripts.Player.Combat
     {
         public bool IsHolding => _isHolding;
         
-        
         [SerializeField] private StatSO moveSpeedStat;
         [SerializeField] private AnimParamSO shotParam;
         [SerializeField] private AnimParamSO reloadParam;
@@ -95,7 +94,9 @@ namespace CHG._02_Scripts.Player.Combat
             _renderer.PlayClip(shotParam.ParamHash, 0, 0.01f);
             Projectile projectile = poolManager.Pop<Projectile>(projectileItem);
             Debug.Assert(projectile != null, $"projectile is null : {gameObject.name}");
-            projectile.Fire(poolManager, muzzleTrm.position, _player.transform.forward);
+
+            DamageData data = _statModule.CalculateDamage(SkillData);
+            projectile.Fire(poolManager, muzzleTrm.position, _player.transform.forward, data);
         }
 
         private void Reload()

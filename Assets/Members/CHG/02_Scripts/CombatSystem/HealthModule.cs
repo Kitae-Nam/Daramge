@@ -7,6 +7,9 @@ namespace CHG._02_Scripts.CombatSystem
 {
    public class HealthModule : AbstractHealthModule, IAfterInitModule
     {
+        private const float VITAL_HEALTH_SCALE = 5f; 
+        private const float VITAL_DIMINISH_RATE = 0.01f; 
+        
         [SerializeField] private StatSO vitalStat;
         [SerializeField] private float baseMaxHealth;
         [SerializeField] private float maxHealth; 
@@ -33,8 +36,7 @@ namespace CHG._02_Scripts.CombatSystem
             {
                 float vital = _statModule.SubscribeStat(vitalStat.AssetIndex, HandleVitalChange, vitalStat.BaseValue);
 
-                float k = 0.01f;
-                currentHealth = maxHealth = baseMaxHealth + 5 * vital / (1 + k * vital);
+                currentHealth = maxHealth = CalculateMaxHealth(vital);                
             }
         }
 
@@ -51,11 +53,14 @@ namespace CHG._02_Scripts.CombatSystem
         private void HandleVitalChange(StatSO stat, float currentValue, float prevValue)
         {
             float beforeMaxHealth = maxHealth;
-            maxHealth = baseMaxHealth + currentValue;
+            maxHealth = CalculateMaxHealth(currentValue);
             float delta = maxHealth - beforeMaxHealth;
             currentHealth = Mathf.Clamp(currentHealth + delta, 1, maxHealth);
             RaiseHealthChanged();
         }
+
+        private float CalculateMaxHealth(float vital)
+            => baseMaxHealth + VITAL_HEALTH_SCALE * vital / (1 + VITAL_DIMINISH_RATE * vital);
 
         public override void ApplyDamage(float damageAmount)
         {
