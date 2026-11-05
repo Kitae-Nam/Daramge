@@ -24,7 +24,8 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Health
 
         private void Awake() { Model.Died += OnBroken; }
         private void OnBroken() => Broken?.Invoke();
-        public float ReceiveDamage(float damage) => CanTakeDamage && isActiveAndEnabled ? Model.ReceiveDamage(damage) : 0f;
+        public float ReceiveDamage(float damage) 
+            => CanTakeDamage && isActiveAndEnabled ? Model.ReceiveDamage(damage) : 0f;
         public void RestoreFull()
         {
             Model.RestoreFull();
@@ -32,7 +33,11 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Health
 
 #if UNITY_EDITOR
         [ContextMenu("테스트/파괴")]
-        private void TestBreak() { if (Application.isPlaying) ReceiveDamage(float.MaxValue); }
+        private void TestBreak()
+        {
+            if (Application.isPlaying)
+                ReceiveDamage(float.MaxValue);
+        }
 #endif
     }
 }
