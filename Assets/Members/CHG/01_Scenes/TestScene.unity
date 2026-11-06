@@ -1961,6 +1961,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cdf5d3a52c94043b0a8dbc523b9c642, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CHG._02_Scripts.CoreSystem.FeedbackSystem.FeedbackPlayer
+  feelPlayer: {fileID: 0}
+  minIntensity: 0.5
 --- !u!1001 &993280236
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3374,6 +3376,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cdf5d3a52c94043b0a8dbc523b9c642, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CHG._02_Scripts.CoreSystem.FeedbackSystem.FeedbackPlayer
+  feelPlayer: {fileID: 0}
+  minIntensity: 0.5
 --- !u!1001 &1492769390
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3678,6 +3682,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 704531256681732788, guid: 7e611c99fb00d674dba64143699d1115, type: 3}
   m_PrefabInstance: {fileID: 1787718629}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1801373655 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1554731928132845060, guid: f2ec2ac560ea30c4d8b07ab8bfe4f054, type: 3}
+  m_PrefabInstance: {fileID: 1160913874026896537}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6cdf5d3a52c94043b0a8dbc523b9c642, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CHG._02_Scripts.CoreSystem.FeedbackSystem.FeedbackPlayer
 --- !u!1 &1867506504
 GameObject:
   m_ObjectHideFlags: 0
@@ -4220,6 +4235,14 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5949185554262883447, guid: c49cf1837bb874b48990503932a5c15f, type: 3}
+      propertyPath: aimingParam
+      value: 
+      objectReference: {fileID: 11400000, guid: 5e351a79c197d514cb29d8e9807d74c8, type: 2}
+    - target: {fileID: 5949185554262883447, guid: c49cf1837bb874b48990503932a5c15f, type: 3}
+      propertyPath: chargeParam
+      value: 
+      objectReference: {fileID: 11400000, guid: 8753623b7ca67774583435751dee9bf8, type: 2}
+    - target: {fileID: 5949185554262883447, guid: c49cf1837bb874b48990503932a5c15f, type: 3}
       propertyPath: damageCaster
       value: 
       objectReference: {fileID: 1087604815}
@@ -4227,6 +4250,70 @@ PrefabInstance:
       propertyPath: _damageCaster
       value: 
       objectReference: {fileID: 1087604815}
+    - target: {fileID: 5949185554262883447, guid: c49cf1837bb874b48990503932a5c15f, type: 3}
+      propertyPath: aimColor.key0.a
+      value: 0.37254903
+      objectReference: {fileID: 0}
+    - target: {fileID: 5949185554262883447, guid: c49cf1837bb874b48990503932a5c15f, type: 3}
+      propertyPath: aimColor.key0.b
+      value: 0.22016844
+      objectReference: {fileID: 0}
+    - target: {fileID: 5949185554262883447, guid: c49cf1837bb874b48990503932a5c15f, type: 3}
+      propertyPath: aimColor.key0.g
+      value: 0.02064779
+      objectReference: {fileID: 0}
+    - target: {fileID: 5949185554262883447, guid: c49cf1837bb874b48990503932a5c15f, type: 3}
+      propertyPath: aimColor.key0.r
+      value: 0.72955966
+      objectReference: {fileID: 0}
+    - target: {fileID: 5949185554262883447, guid: c49cf1837bb874b48990503932a5c15f, type: 3}
+      propertyPath: aimColor.key1.a
+      value: 0.37254903
+      objectReference: {fileID: 0}
+    - target: {fileID: 5949185554262883447, guid: c49cf1837bb874b48990503932a5c15f, type: 3}
+      propertyPath: aimColor.key1.b
+      value: 0.22016844
+      objectReference: {fileID: 0}
+    - target: {fileID: 5949185554262883447, guid: c49cf1837bb874b48990503932a5c15f, type: 3}
+      propertyPath: aimColor.key1.g
+      value: 0.02064779
+      objectReference: {fileID: 0}
+    - target: {fileID: 5949185554262883447, guid: c49cf1837bb874b48990503932a5c15f, type: 3}
+      propertyPath: aimColor.key1.r
+      value: 0.72955966
+      objectReference: {fileID: 0}
+    - target: {fileID: 5949185554262883447, guid: c49cf1837bb874b48990503932a5c15f, type: 3}
+      propertyPath: tongueColor.key0.b
+      value: 0.22016844
+      objectReference: {fileID: 0}
+    - target: {fileID: 5949185554262883447, guid: c49cf1837bb874b48990503932a5c15f, type: 3}
+      propertyPath: tongueColor.key0.g
+      value: 0.02064779
+      objectReference: {fileID: 0}
+    - target: {fileID: 5949185554262883447, guid: c49cf1837bb874b48990503932a5c15f, type: 3}
+      propertyPath: tongueColor.key0.r
+      value: 0.72955966
+      objectReference: {fileID: 0}
+    - target: {fileID: 5949185554262883447, guid: c49cf1837bb874b48990503932a5c15f, type: 3}
+      propertyPath: tongueColor.key1.b
+      value: 0.22016844
+      objectReference: {fileID: 0}
+    - target: {fileID: 5949185554262883447, guid: c49cf1837bb874b48990503932a5c15f, type: 3}
+      propertyPath: tongueColor.key1.g
+      value: 0.02064779
+      objectReference: {fileID: 0}
+    - target: {fileID: 5949185554262883447, guid: c49cf1837bb874b48990503932a5c15f, type: 3}
+      propertyPath: tongueColor.key1.r
+      value: 0.72955966
+      objectReference: {fileID: 0}
+    - target: {fileID: 5949185554262883447, guid: c49cf1837bb874b48990503932a5c15f, type: 3}
+      propertyPath: aimColor.m_ColorSpace
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5949185554262883447, guid: c49cf1837bb874b48990503932a5c15f, type: 3}
+      propertyPath: tongueColor.m_ColorSpace
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8842763329535829412, guid: c49cf1837bb874b48990503932a5c15f, type: 3}
       propertyPath: m_Name
       value: Flog
@@ -4796,10 +4883,19 @@ PrefabInstance:
       propertyPath: m_Name
       value: Dummy
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 3718457833781208186, guid: f2ec2ac560ea30c4d8b07ab8bfe4f054, type: 3}
-    - {fileID: 2680480234750030337, guid: f2ec2ac560ea30c4d8b07ab8bfe4f054, type: 3}
-    - {fileID: 4735458416775642482, guid: f2ec2ac560ea30c4d8b07ab8bfe4f054, type: 3}
+    - target: {fileID: 4415183652661065509, guid: f2ec2ac560ea30c4d8b07ab8bfe4f054, type: 3}
+      propertyPath: hitFeedback
+      value: 
+      objectReference: {fileID: 1801373655}
+    - target: {fileID: 8924837405492349538, guid: f2ec2ac560ea30c4d8b07ab8bfe4f054, type: 3}
+      propertyPath: managedReferences[8926579900121350245].Velocity.z
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8924837405492349538, guid: f2ec2ac560ea30c4d8b07ab8bfe4f054, type: 3}
+      propertyPath: managedReferences[8926579900121350245].ClearImpulseOnStop
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
