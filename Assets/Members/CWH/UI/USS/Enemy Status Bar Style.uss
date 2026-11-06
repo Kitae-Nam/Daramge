@@ -1,0 +1,61 @@
+.status-bar {
+    width: 200px;
+}
+
+.status-bar__health-bar {
+    height: 16px;
+    background-color: var(--color-health-track);
+    border-top-width: 2px;
+    border-right-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+    border-top-color: var(--color-frame);
+    border-right-color: var(--color-frame);
+    border-bottom-color: var(--color-frame);
+    border-left-color: var(--color-frame);
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    overflow: hidden;
+}
+
+.health-bar__lag {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: var(--color-health-lag);
+    transform-origin: left;
+    scale: 0.74 1;
+}
+
+.health-bar__fill {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: var(--color-health-fill);
+    transform-origin: left;
+    scale: 0.6 1;
+}
+
+.status-bar__poise-bar {
+    height: 7px;
+    background-color: var(--color-poise-track);
+    border-top-width: 0;
+    border-right-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+    border-top-color: var(--color-frame);
+    border-right-color: var(--color-frame);
+    border-bottom-color: var(--color-frame);
+    border-left-color: var(--color-frame);
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    overflow: hidden;
+}
+
+.poise-bar__fill {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transform-origin: left;
+    background-color: var(--color-poise-fill);
+}
