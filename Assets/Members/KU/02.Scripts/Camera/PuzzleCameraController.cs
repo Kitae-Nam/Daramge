@@ -26,6 +26,9 @@ public class PuzzleCameraController : MonoBehaviour
     [Header("Puzzle Camera")]
     [SerializeField]
     private CinemachineCamera puzzleCamera;
+    [Header("Auto Camera Settings")]
+    [SerializeField]
+    private bool autoSwitchOnEnter = true;
 
     [SerializeField, Min(0.01f)]
     private float puzzleCameraSize = 7f;
@@ -259,6 +262,7 @@ public class PuzzleCameraController : MonoBehaviour
     // Puzzle Zone
     // --------------------------------
 
+
     public void EnterPuzzleZone(PuzzleCameraZone zone)
     {
         if (zone == null ||
@@ -272,15 +276,26 @@ public class PuzzleCameraController : MonoBehaviour
         if (activePlayerIndex < 0)
             return;
 
+        // 이미 들어와 있는 구역이면 중복 실행 방지
         if (currentZone == zone)
             return;
 
+        // 현재 퍼즐 구역 등록
         currentZone = zone;
 
+        // 퍼즐 카메라 위치 먼저 설정
         UpdatePuzzleCameraTransform();
 
-        
+        // 자동 전환 옵션이 켜져 있다면
+        if (autoSwitchOnEnter)
+        {
+            isPuzzleMode = true;
+
+            puzzleCamera.Priority =
+                puzzleActivePriority;
+        }
     }
+
 
     public void ExitPuzzleZone(PuzzleCameraZone zone)
     {
