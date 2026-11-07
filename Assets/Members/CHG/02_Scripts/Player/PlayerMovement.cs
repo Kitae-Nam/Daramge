@@ -22,6 +22,8 @@ namespace CHG._02_Scripts.Player
         private Vector3 _launchHorizontalVelocity;
         private Vector2 _movementInput;
         private Transform _cameraTrm;
+        private float _riseGravityScale = 1f; 
+        private float _fallGravityScale = 1f; 
         
         public event Action OnLanded;
 
@@ -139,21 +141,25 @@ namespace CHG._02_Scripts.Player
             }
             else
             {
-                _verticalVelocity += gravity * Time.fixedDeltaTime;
+                _verticalVelocity += gravity * GetGravityScale() * Time.fixedDeltaTime;
             }
 
             _velocity.y = _verticalVelocity * Time.fixedDeltaTime;
         }
+        private float GetGravityScale() 
+            => !_isLaunched ? 1f : _verticalVelocity > 0f ? _riseGravityScale : _fallGravityScale;
 
         private void Move()
         {
             _characterController.Move(_velocity);
         }
 
-        public void Launch(Vector3 launchVelocity)
+        public void Launch(Vector3 launchVelocity, float riseGravityScale = 1f, float fallGravityScale = 1f)
         {
             _launchHorizontalVelocity = new Vector3(launchVelocity.x, 0f, launchVelocity.z);
             _verticalVelocity = launchVelocity.y;
+            _riseGravityScale = riseGravityScale; 
+            _fallGravityScale = fallGravityScale; 
             _isLaunched = true;
         }
 
@@ -161,6 +167,8 @@ namespace CHG._02_Scripts.Player
         {
             _isLaunched = false;
             _launchHorizontalVelocity = Vector3.zero;
+            _riseGravityScale = 1f; 
+            _fallGravityScale = 1f; 
         }
 
         private void CheckLanding()

@@ -44,8 +44,15 @@ namespace CHG._02_Scripts.Player
             RaiseHealthChanged();
         }
 
+        public void IncreaseMaxHealth(int amount)
+        {
+            maxHealth += amount;
+            _currentHealth += amount;
+            RaiseHealthChanged();
+        }
+        
         private void RaiseHealthChanged() => OnHealthChanged?.Invoke(_currentHealth, maxHealth);
-
+        
         [ContextMenu("Hit")]
         private void Hit() => ApplyDamage(1f);
     }

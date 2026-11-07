@@ -491,7 +491,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CHG._02_Scripts.CombatSystem.Indicator.CircleRangeIndicator
   anchorAtStart: 0
-  opacity: 0.7
+  opacity: 0.306
+  flashOpacity: 1
 --- !u!4 &147620411 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4112347703684707439, guid: c49cf1837bb874b48990503932a5c15f, type: 3}
@@ -1504,6 +1505,68 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 9009609577340890412, guid: 394fafc2107334a4bbd76c61ac6fcb56, type: 3}
   m_PrefabInstance: {fileID: 684024808}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &699240208
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1177162478}
+    m_Modifications:
+    - target: {fileID: 5559198549292137789, guid: 812dd81fcac97c040ad73057500500ea, type: 3}
+      propertyPath: m_Name
+      value: Jump Skill
+      objectReference: {fileID: 0}
+    - target: {fileID: 7687763840651937081, guid: 812dd81fcac97c040ad73057500500ea, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 3.00906
+      objectReference: {fileID: 0}
+    - target: {fileID: 7687763840651937081, guid: 812dd81fcac97c040ad73057500500ea, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7687763840651937081, guid: 812dd81fcac97c040ad73057500500ea, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1.67262
+      objectReference: {fileID: 0}
+    - target: {fileID: 7687763840651937081, guid: 812dd81fcac97c040ad73057500500ea, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7687763840651937081, guid: 812dd81fcac97c040ad73057500500ea, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7687763840651937081, guid: 812dd81fcac97c040ad73057500500ea, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7687763840651937081, guid: 812dd81fcac97c040ad73057500500ea, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7687763840651937081, guid: 812dd81fcac97c040ad73057500500ea, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7687763840651937081, guid: 812dd81fcac97c040ad73057500500ea, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7687763840651937081, guid: 812dd81fcac97c040ad73057500500ea, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 812dd81fcac97c040ad73057500500ea, type: 3}
+--- !u!4 &699240209 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7687763840651937081, guid: 812dd81fcac97c040ad73057500500ea, type: 3}
+  m_PrefabInstance: {fileID: 699240208}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &784059033 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3074700511659421981, guid: 0b2b04a34bf26904588bdb88ebd0bacd, type: 3}
@@ -2344,6 +2407,11 @@ MonoBehaviour:
     m_PanelRenderer: {fileID: 1124271032}
     m_AuthoringPath:
       m_PathIds: 52b6082ei
+--- !u!4 &1177162478 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 633546494710493672, guid: c49cf1837bb874b48990503932a5c15f, type: 3}
+  m_PrefabInstance: {fileID: 108413692425992072}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1212269043
 GameObject:
   m_ObjectHideFlags: 0
@@ -2553,6 +2621,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CHG._02_Scripts.CombatSystem.Indicator.RectangleRangeIndicator
   anchorAtStart: 1
   opacity: 0.7
+  flashOpacity: 1
 --- !u!1 &1255325731
 GameObject:
   m_ObjectHideFlags: 0
@@ -4323,11 +4392,15 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 658310369814042206, guid: c49cf1837bb874b48990503932a5c15f, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 4112347703684707439, guid: c49cf1837bb874b48990503932a5c15f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1439666576}
+    - targetCorrespondingSourceObject: {fileID: 633546494710493672, guid: c49cf1837bb874b48990503932a5c15f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 699240209}
     - targetCorrespondingSourceObject: {fileID: 1229420729019175169, guid: c49cf1837bb874b48990503932a5c15f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1087604814}

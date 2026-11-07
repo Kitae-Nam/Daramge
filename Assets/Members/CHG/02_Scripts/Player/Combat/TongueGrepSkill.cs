@@ -120,6 +120,7 @@ namespace CHG._02_Scripts.Player.Combat
             {
                 //맞았을 때 이동
                 _renderer.PlayClip(dragParam.ParamHash, 0f, 0.01f);
+                _movement.CanUseGravity = false;
                 float t = 0f;
                 while (anchor != null && t < maxPullTime)
                 {
@@ -157,7 +158,9 @@ namespace CHG._02_Scripts.Player.Combat
             _movement.CanUseGravity = true;
             base.StopSkill();
         }
-
+#if UNITY_EDITOR
+        
+#endif
         private void UpdateLine(Vector3 tip, Gradient color)
         {
             tongueLine.colorGradient = color;
