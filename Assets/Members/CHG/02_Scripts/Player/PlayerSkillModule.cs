@@ -58,7 +58,7 @@ namespace CHG._02_Scripts.Player
             Player.PlayerInput.OnSkillKeyPressed += HandleSkillKeyPressed;
             Player.PlayerInput.OnSkillKeyReleased += HandleSkillKeyReleased;
 
-            AttackSpeed = _statModule.SubscribeStat(attackSpeedStat.AssetIndex, HandleAttackSpeedChange,
+            AttackSpeed = _statModule.SubscribeStat(attackSpeedStat, HandleAttackSpeedChange,
                 attackSpeedStat.BaseValue);
             _renderer.Animator.SetFloat(attackSpeedParam.ParamHash, AttackSpeed);
         }
@@ -73,10 +73,10 @@ namespace CHG._02_Scripts.Player
                 Player.PlayerInput.OnSkillKeyReleased -= HandleSkillKeyReleased;
             }
 
-            _statModule?.UnSubscribeStat(attackSpeedStat.AssetIndex, HandleAttackSpeedChange);
+            _statModule?.UnSubscribeStat(attackSpeedStat, HandleAttackSpeedChange);
         }
         
-        private void HandleAttackSpeedChange(StatSO stat, float currentValue, float prevValue)
+        private void HandleAttackSpeedChange(Stat stat, float currentValue, float prevValue)
         {
             AttackSpeed = currentValue;
             _renderer.Animator.SetFloat(attackSpeedParam.ParamHash, AttackSpeed);

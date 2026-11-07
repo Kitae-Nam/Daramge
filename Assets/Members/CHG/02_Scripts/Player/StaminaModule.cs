@@ -33,7 +33,7 @@ namespace CHG._02_Scripts.Player
         {
             if (_statModule != null)
             {
-                float stamina = _statModule.SubscribeStat(staminaStat.AssetIndex, HandleStaminaChange, staminaStat.BaseValue);
+                float stamina = _statModule.SubscribeStat(staminaStat, HandleStaminaChange, staminaStat.BaseValue);
                 currentStamina = maxStamina = baseMaxStamina + stamina;
             }
         }
@@ -45,7 +45,7 @@ namespace CHG._02_Scripts.Player
 
         private void OnDestroy()
         {
-            _statModule?.UnSubscribeStat(staminaStat.AssetIndex, HandleStaminaChange);
+            _statModule?.UnSubscribeStat(staminaStat, HandleStaminaChange);
         }
 
         private void Update()
@@ -57,7 +57,7 @@ namespace CHG._02_Scripts.Player
             RaiseStaminaChanged();
         }
 
-        private void HandleStaminaChange(StatSO stat, float currentValue, float prevValue)
+        private void HandleStaminaChange(Stat stat, float currentValue, float prevValue)
         {
             float beforeMaxStamina = maxStamina;
             maxStamina = baseMaxStamina + currentValue;
