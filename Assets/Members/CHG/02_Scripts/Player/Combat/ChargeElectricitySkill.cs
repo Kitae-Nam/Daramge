@@ -99,17 +99,11 @@ namespace CHG._02_Scripts.Player.Combat
             base.StopSkill();
         }
 
-        private void ApplyChargeSlow()
-        {
-            if (_statModule.TryGetStat(moveSpeedStat.AssetIndex, out StatSO stat))
-                _statModule.AddModifier(moveSpeedStat.AssetIndex, this, -stat.Value * chargeSlowRatio);
-            
-        }
+        private void ApplyChargeSlow() 
+            => _statModule.AddModifier(moveSpeedStat, this, -chargeSlowRatio, StatModifierType.PercentAdd); 
 
-        private void RemoveChargeSlow()
-        {
-            _statModule.RemoveModifier(moveSpeedStat.AssetIndex, this);
-        }
+        private void RemoveChargeSlow() 
+            => _statModule.RemoveModifier(moveSpeedStat, this); 
 
         private void HandleChargeChanged(float charge)
         {

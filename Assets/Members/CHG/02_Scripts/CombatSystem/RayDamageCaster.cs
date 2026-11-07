@@ -33,7 +33,7 @@ namespace CHG._02_Scripts.CombatSystem
 
             if (isHit && hit.collider != null && hit.collider.TryGetComponent(out IDamageable damageable))
             {
-                DamageData damageData = StatModule?.CalculateDamage(skillData) ?? new DamageData
+                DamageData damageData = DamageCalculator?.CalculateDamage(skillData) ?? new DamageData
                 {
                     Attacker = CasterOwner, IsCritical = false, DamageAmount = skillData.baseDamage
                 };

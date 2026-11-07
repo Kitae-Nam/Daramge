@@ -57,16 +57,16 @@ namespace CHG._02_Scripts.Player
         
         public void AfterInit()
         {
-            _moveSpeed = _statModule.SubscribeStat(moveSpeedStat.AssetIndex, HandleMoveSpeedChange, _moveSpeed);
+            _moveSpeed = _statModule.SubscribeStat(moveSpeedStat, HandleMoveSpeedChange, _moveSpeed);
         }
 
         private void OnDestroy()
         {
             if (moveSpeedStat != null)
-                _statModule?.UnSubscribeStat(moveSpeedStat.AssetIndex, HandleMoveSpeedChange);
+                _statModule?.UnSubscribeStat(moveSpeedStat, HandleMoveSpeedChange);
         }
 
-        private void HandleMoveSpeedChange(StatSO stat, float currentValue, float prevValue)
+        private void HandleMoveSpeedChange(Stat stat, float currentValue, float prevValue)
             => _moveSpeed = currentValue;
 
         public void SetMovementVelocity(Vector3 velocity)
