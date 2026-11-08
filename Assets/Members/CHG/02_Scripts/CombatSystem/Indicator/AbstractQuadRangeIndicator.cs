@@ -10,11 +10,16 @@ namespace CHG._02_Scripts.CombatSystem.Indicator
 
         [SerializeField] private bool anchorAtStart;
         [SerializeField, Range(0f, 1f)] private float opacity = 0.7f;
+        [SerializeField, Range(0f, 1f)] private float flashOpacity = 1f;
 
         private Renderer _quadRenderer;
         private MaterialPropertyBlock _propertyBlock;
         private Vector3 _originLocalPosition;
         private Vector2 _coverage;
+        private float _fadeDuration;
+        private float _fadeTimeLeft;
+        private float _fadeTargetOpacity;
+        private bool _hideAfterFade;
 
         private void Awake()
         {
@@ -25,14 +30,49 @@ namespace CHG._02_Scripts.CombatSystem.Indicator
             Hide();
         }
 
+        private void Update()
+        {
+            if (_fadeTimeLeft <= 0f) return;
+
+            _fadeTimeLeft -= Time.deltaTime;
+            float percent = 1f - Mathf.Clamp01(_fadeTimeLeft / _fadeDuration);
+            SetFloat(OpacityId, Mathf.Lerp(flashOpacity, _fadeTargetOpacity, percent));
+            
+            if (_fadeTimeLeft <= 0f && _hideAfterFade)
+                Hide();
+        }
+
         public void Show()
         {
+            _fadeTimeLeft = 0f;
             SetFloat(OpacityId, opacity);
             SetProgress(0f);
             _quadRenderer.enabled = true;
         }
 
-        public void Hide() => _quadRenderer.enabled = false;
+        public void Hide()
+        {
+            _fadeTimeLeft = 0f;
+            _quadRenderer.enabled = false;
+        }
+
+        public void Pulse(float duration) => StartFade(opacity, duration, false); 
+
+        public void Flash(float duration) 
+        {
+            SetProgress(1f);
+            _quadRenderer.enabled = true;
+            StartFade(0f, duration, true);
+        }
+
+        private void StartFade(float targetOpacity, float duration, bool hideAfterFade) 
+        {
+            _fadeDuration = Mathf.Max(duration, 0.01f);
+            _fadeTimeLeft = _fadeDuration;
+            _fadeTargetOpacity = targetOpacity;
+            _hideAfterFade = hideAfterFade;
+            SetFloat(OpacityId, flashOpacity);
+        }
         
         public void SetSize(Vector2 size)
         {

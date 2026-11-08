@@ -8,7 +8,7 @@ namespace CHG._02_Scripts.Player
         event Action OnLanded;
         bool IsLaunched { get; }
         float Gravity { get; }
-        void Launch(Vector3 launchVelocity);
+        void Launch(Vector3 launchVelocity, float riseGravityScale = 1f, float fallGravityScale = 1f);
         void CancelLaunch();
     }
 }

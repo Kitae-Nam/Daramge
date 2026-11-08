@@ -1,7 +1,7 @@
-using System;
 using System.Collections;
 using CHG._02_Scripts.CombatSystem;
 using CHG._02_Scripts.CoreSystem.AnimationSystem;
+using CHG._02_Scripts.CoreSystem.FeedbackSystem;
 using UnityEngine;
 
 namespace CHG._02_Scripts.Player.Combat
@@ -11,12 +11,15 @@ namespace CHG._02_Scripts.Player.Combat
         public bool IsHolding => ChargeLogic.IsCharging;
         [field: SerializeField] public ChargeLogic ChargeLogic { get; private set; }
 
+        [SerializeField] private FeedbackPlayer landingFeedback;
         [SerializeField] private AnimParamSO chargeParam;
         [SerializeField] private AnimParamSO jumpParam;
         [SerializeField] private AnimParamSO landParam;
         [SerializeField] private OverlapDamageCaster damageCaster;
 
         [SerializeField] private float landingRecoveryTime = 0.2f;
+        [SerializeField, Min(0.1f)] private float riseGravityScale = 3f; 
+        [SerializeField, Min(0.1f)] private float fallGravityScale = 4f;
         
         [Header("Field Jump")]
         [SerializeField] private float minFieldHeight = 1f;
@@ -28,10 +31,11 @@ namespace CHG._02_Scripts.Player.Combat
         [SerializeField] private float combatHeight = 2f;
         [SerializeField] private float combatMaxDistance = 6f;
         [SerializeField] private float landingRadius = 2.5f;
-
+        
         private ILaunchMovement _launchMovement;
         private ICombatState _combatState;
         private bool _isCombatJump;
+        private float _landingPower;
 
         public override void InitializeSkill(ISkillModule skillModule)
         {
@@ -82,7 +86,8 @@ namespace CHG._02_Scripts.Player.Combat
             float power = ChargeLogic.Release();
             if (!ChargeLogic.IsValidCharge)
                 power = 0f;
-            
+
+            _landingPower = power;
             float height = Mathf.Lerp(minFieldHeight, maxFieldHeight, power);
             float distance = Mathf.Lerp(minFieldDistance, maxFieldDistance, power);
             StartJump(GetInputDirection() * distance, height);
@@ -94,6 +99,7 @@ namespace CHG._02_Scripts.Player.Combat
             toMouse.y = 0f;
             Vector3 displacement = Vector3.ClampMagnitude(toMouse, combatMaxDistance);
             _movement.RotateTo(displacement);
+            _landingPower = 1f;
             StartJump(displacement, combatHeight);
         }
 
@@ -101,14 +107,18 @@ namespace CHG._02_Scripts.Player.Combat
         {
             _renderer.PlayClip(jumpParam.ParamHash, 0f, 0.05f);
             _launchMovement.OnLanded += HandleLanded;
-            _launchMovement.Launch(CalculateLaunchVelocity(displacement, height));
+            _launchMovement.Launch(CalculateLaunchVelocity(displacement, height), riseGravityScale, fallGravityScale);
         }
 
         private Vector3 CalculateLaunchVelocity(Vector3 displacement, float height)
         {
-            float gravityAbs = Mathf.Abs(_launchMovement.Gravity);
-            float verticalSpeed = Mathf.Sqrt(2f * gravityAbs * Mathf.Max(height, 0.01f));
-            float flightTime = 2f * verticalSpeed / gravityAbs;
+            float baseGravity = Mathf.Abs(_launchMovement.Gravity); 
+            float riseGravity = baseGravity * riseGravityScale; 
+            float fallGravity = baseGravity * fallGravityScale; 
+            float safeHeight = Mathf.Max(height, 0.01f); 
+
+            float verticalSpeed = Mathf.Sqrt(2f * riseGravity * safeHeight); 
+            float flightTime = verticalSpeed / riseGravity + Mathf.Sqrt(2f * safeHeight / fallGravity); 
 
             displacement.y = 0f;
             Vector3 horizontalVelocity = displacement / flightTime;
@@ -119,6 +129,7 @@ namespace CHG._02_Scripts.Player.Combat
         {
             _launchMovement.OnLanded -= HandleLanded;
             _renderer.PlayClip(landParam.ParamHash, 0f, 0.05f);
+            PlayFeedback(landingFeedback, _player.transform.position, Vector3.down, _landingPower);
 
             if (_isCombatJump)
             {
