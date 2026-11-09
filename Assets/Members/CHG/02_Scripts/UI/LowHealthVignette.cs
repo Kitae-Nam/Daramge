@@ -29,7 +29,7 @@ namespace CHG._02_Scripts.UI
 
         private void OnDestroy()
         {
-            EventBus<CharacterChangeStartEvent>.Subscribe(HandleCharacterChangeStarted);
+            EventBus<CharacterChangeStartEvent>.Unsubscribe(HandleCharacterChangeStarted);
             if (_healthModule != null)
                 _healthModule.OnHealthChanged -= HandleHealthChanged;
         }

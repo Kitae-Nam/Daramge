@@ -28,9 +28,9 @@
 | --- | --- |
 | `01_Scenes` | 테스트 씬 |
 | `02_Scripts` | C# 스크립트 |
-| `03.Datas` | ScriptableObject 데이터, Input 에셋, Animator Controller |
-| `04.Prefabs` | 모듈 / 스킬 프리팹 |
-| `05.Graphic` | 모델, 애니메이션, 에셋 팩, 머티리얼, 셰이더 |
+| `03_Datas` | ScriptableObject 데이터, Input 에셋, Animator Controller |
+| `04_Prefabs` | 모듈 / 스킬 프리팹 |
+| `05_Graphic` | 모델, 애니메이션, 에셋 팩, 머티리얼, 셰이더 |
 
 ## 코딩 규칙
 
