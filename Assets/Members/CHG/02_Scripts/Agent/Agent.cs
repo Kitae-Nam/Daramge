@@ -1,4 +1,5 @@
 using CHG._02_Scripts.CombatSystem;
+using CHG._02_Scripts.CoreSystem.EventBusSystem;
 using GGMLib.ModuleSystems;
 using UnityEngine.Events;
 
@@ -59,6 +60,7 @@ namespace CHG._02_Scripts.Agent
             if (Health != null)
             {
                 Health.ApplyDamage(damageData.DamageAmount);
+                EventBus<DamageTakenEvent>.Raise(new DamageTakenEvent(this, damageData.DamageAmount));
             }
             
             OnHit?.Invoke();

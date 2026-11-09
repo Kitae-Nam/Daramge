@@ -34,7 +34,7 @@ namespace CHG._02_Scripts.CombatSystem
         {
             if (_statModule != null)
             {
-                float vital = _statModule.SubscribeStat(vitalStat.AssetIndex, HandleVitalChange, vitalStat.BaseValue);
+                float vital = _statModule.SubscribeStat(vitalStat, HandleVitalChange, vitalStat.BaseValue);
 
                 currentHealth = maxHealth = CalculateMaxHealth(vital);                
             }
@@ -47,10 +47,10 @@ namespace CHG._02_Scripts.CombatSystem
 
         private void OnDestroy()
         {
-            _statModule?.UnSubscribeStat(vitalStat.AssetIndex, HandleVitalChange);
+            _statModule?.UnSubscribeStat(vitalStat, HandleVitalChange);
         }
 
-        private void HandleVitalChange(StatSO stat, float currentValue, float prevValue)
+        private void HandleVitalChange(Stat stat, float currentValue, float prevValue)
         {
             float beforeMaxHealth = maxHealth;
             maxHealth = CalculateMaxHealth(currentValue);
