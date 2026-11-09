@@ -1,6 +1,6 @@
 using System;
 
-namespace Daramge.BossUI
+namespace Daramge.BossUI.Members.CWH.SCRIPTS.UI
 {
     /// <summary>잔상 시간 계산만 담당한다. UI와 Unity 시간에 의존하지 않아 독립 검증이 가능하다.</summary>
     public sealed class HealthBarLag

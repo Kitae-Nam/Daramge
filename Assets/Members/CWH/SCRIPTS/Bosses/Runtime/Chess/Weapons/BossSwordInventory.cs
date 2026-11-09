@@ -17,7 +17,7 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons
         /// </summary>
         public IReadOnlyList<BossSword> Swords => _swords;
 
-        public bool HasOrbitingSword=> HasSwordInState(BossSwordState.Orbiting);
+        public bool HasOrbitingSword => HasSwordInState(BossSwordState.Orbiting);
         public bool HasHeldSword => HasSwordInState(BossSwordState.Held);
 
         public int OrbitingCount
@@ -26,7 +26,8 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons
             {
                 int count = 0;
                 foreach (BossSword sword in _swords)
-                    if (sword != null && sword.isActiveAndEnabled && sword.State == BossSwordState.Orbiting) count++;
+                    if (sword != null && sword.isActiveAndEnabled && sword.State == BossSwordState.Orbiting)
+                        count++;
                 return count;
             }
         }
@@ -41,6 +42,24 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons
                 selectedSword = sword;
                 return true;
             }
+
+            return false;
+        }
+
+        public bool TryPrepareThrowSword(out BossSword selectedSword)
+        {
+            selectedSword = null;
+            foreach (BossSword sword in _swords)
+            {
+                if (sword == null || !sword.isActiveAndEnabled)
+                    continue;
+                if (!sword.TryThrowPrepare())
+                    continue;
+                
+                selectedSword = sword;
+                return true;
+            }
+
             return false;
         }
 

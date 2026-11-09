@@ -1,10 +1,9 @@
-using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime;
 using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Cinematics;
 using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Health;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Daramge.BossUI
+namespace Daramge.BossUI.Members.CWH.SCRIPTS.UI
 {
     /// <summary>보스 이벤트를 View와 잔상 모델에 전달한다. 체력 계산과 페이즈 전환 규칙은 보스가 소유한다.</summary>
     [DisallowMultipleComponent]

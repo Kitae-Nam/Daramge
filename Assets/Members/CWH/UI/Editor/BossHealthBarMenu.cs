@@ -1,5 +1,6 @@
 using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime;
 using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Health;
+using Daramge.BossUI.Members.CWH.SCRIPTS.UI;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;

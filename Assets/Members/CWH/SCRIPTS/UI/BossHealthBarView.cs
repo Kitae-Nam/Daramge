@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Daramge.BossUI
+namespace Daramge.BossUI.Members.CWH.SCRIPTS.UI
 {
     /// <summary>UXML 표시만 담당한다. 보스 컴포넌트와 전투 규칙은 알지 않는다(SRP).</summary>
     public sealed class BossHealthBarView

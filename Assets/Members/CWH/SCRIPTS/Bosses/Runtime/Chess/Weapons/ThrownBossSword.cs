@@ -19,12 +19,13 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons
         [SerializeField, Min(0f)] private float _impactDamage = 1f;
         [SerializeField, Min(0f)] private float _embedBackOffset = 0.7f;
 
-        
+
         private BreakableHealth _health;
         private ThrownSwordHitbox _hitbox;
         private IThrownSwordOwnership _ownership;
         private SwordRecallMotion _recallMotion;
-        
+        private SwordThrowFlightMotion _flightMotion;
+
         private Transform _owner;
         private Transform _target;
         private Vector3 _start;
@@ -32,7 +33,7 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons
         private Vector3 _landingPosition;
         private Coroutine _recallRoutine;
         private MonoBehaviour _orbitSource;
-        
+
         private float _radius;
         private float _launchDamage;
         private float _timer;
@@ -40,7 +41,7 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons
         private bool _finished;
         public event Action<ThrownBossSword> Embedded;
         public bool IsFlying { get; private set; }
-        public bool IsEmbedded => _launched && !IsFlying && !IsRecalling  && !_finished;
+        public bool IsEmbedded => _launched && !IsFlying && !IsRecalling && !_finished;
         public event Action<ThrownBossSword, bool> Finished;
         public bool IsRecalling { get; private set; }
 
@@ -49,15 +50,19 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons
             _health = GetComponent<BreakableHealth>();
             _hitbox = GetComponent<ThrownSwordHitbox>();
             _recallMotion = GetComponent<SwordRecallMotion>();
+            _flightMotion = GetComponent<SwordThrowFlightMotion>();
             BossSword physical = GetComponent<BossSword>();
-            
+
             if (_hitbox == null) _hitbox = gameObject.AddComponent<ThrownSwordHitbox>();
             if (_recallMotion == null) _recallMotion = gameObject.AddComponent<SwordRecallMotion>();
             // 소유 방식 선택은 조립 시 한 번만 수행한다. 비행 코드에는 실물/일회용 분기가 없다.
             _ownership = physical != null
                 ? (IThrownSwordOwnership)new InventorySwordOwnership(physical)
                 : new TransientSwordOwnership(gameObject, _visual);
+            if (_flightMotion == null)
+                _flightMotion = gameObject.AddComponent<SwordThrowFlightMotion>();
         }
+
         private void OnEnable() => _health.Broken += HandleBroken;
 
         public void Launch(Transform owner, Transform target, Vector3 start, Vector3 destination, float radius)
@@ -65,15 +70,20 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons
             _finished = false;
             _hitbox.SetDamageable(false);
             _visual = _ownership.Prepare();
-            _owner = owner; _target = target; _start = start; _destination = destination; _radius = radius;
+            _owner = owner;
+            _target = target;
+            _start = start;
+            _destination = destination;
+            _radius = radius;
             // 착지 전에 페이즈가 바뀌더라도 던진 공격의 피해량을 유지한다.
             _launchDamage = BossAttackDamage.Resolve(owner, _impactDamage);
+
             transform.position = start;
             // 칼끝(+Y)을 목표 방향에 맞춘 뒤 직선 비행 동안 방향을 유지한다.
-            if (_visual != null && (destination - start).sqrMagnitude > 0.0001f)
-                _visual.rotation = Quaternion.FromToRotation(Vector3.up, (destination - start).normalized);
-            Vector3 flightDirection = (destination - start).normalized;
-            _landingPosition = destination - flightDirection * _embedBackOffset;
+            _landingPosition = destination + Vector3.up * _embedBackOffset;
+            _flightMotion.Begin(start, _landingPosition, _visual, _flightDuration);
+
+
             _timer = 0f;
             _launched = IsFlying = true;
 
@@ -101,9 +111,9 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons
                 if (_timer >= _embeddedDuration) BeginNaturalRecall();
                 return;
             }
-            float progress = Mathf.Clamp01(_timer / Mathf.Max(0.01f, _flightDuration));
-            transform.position = Vector3.Lerp(_start, _landingPosition, progress);
-            if (progress < 1f) return;
+
+            if (!_flightMotion.Tick(_timer)) return;
+            
             IsFlying = false;
             _timer = 0f;
             _ownership.Embed();
@@ -114,8 +124,13 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons
                     _launchDamage, ~0, targetRoot: _target);
         }
 
-        private void HandleBroken() { if (IsEmbedded) Finish(true); }
+        private void HandleBroken()
+        {
+            if (IsEmbedded) Finish(true);
+        }
+
         public void Recall(bool deferParenting = false) => Finish(false, deferParenting);
+
         private void Finish(bool broken, bool deferParenting = false)
         {
             if (_finished) return;
@@ -125,6 +140,7 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons
                 StopCoroutine(_recallRoutine);
                 _recallRoutine = null;
             }
+
             IsRecalling = false;
             IsFlying = false;
             _hitbox.SetDamageable(false);
@@ -136,11 +152,12 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons
         private void BeginNaturalRecall()
         {
             if (_finished || IsRecalling) return;
-            
+
             IsRecalling = true;
             _hitbox.SetDamageable(false);
             _recallRoutine = StartCoroutine(RecallSequence());
         }
+
         private IEnumerator RecallSequence()
         {
             yield return _recallMotion.ExtractAndStand(_visual);
@@ -158,7 +175,7 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons
             _recallRoutine = null;
             Finish(false);
         }
-        
+
         private void OnDisable()
         {
             _health.Broken -= HandleBroken;
