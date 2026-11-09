@@ -1,0 +1,9 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/Members/NKT/03_GameModules/UI/EnemyStatusStyle.uss?fileID=7433441132597879392&amp;guid=521dc1b4f630ff644a292e4770711c2f&amp;type=3#EnemyStatusStyle"/>
+    <ui:VisualElement name="enemy-status">
+        <ui:VisualElement name="hp-bar" class="status-bar__hp-bar">
+            <ui:VisualElement name="hp-lag-fill" class="hp-bar__lag-fill"/>
+            <ui:VisualElement name="hp-fill" class="hp-bar__fill"/>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
