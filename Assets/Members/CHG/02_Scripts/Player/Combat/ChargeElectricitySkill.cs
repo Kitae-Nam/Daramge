@@ -21,6 +21,8 @@ namespace CHG._02_Scripts.Player.Combat
 
         [SerializeField] private float minRadius = 1.5f;
         [SerializeField] private float maxRadius = 4f;
+        [SerializeField] private float maxChargePulseDuration = 0.15f;
+        [SerializeField] private float rangeFlashDuration = 0.2f;
         [SerializeField] private AnimationCurve chargeDamageCurve;
         [SerializeField, Range(0f, 1f)] private float chargeSlowRatio = 0.4f;
         [SerializeField] private float recoveryTime = 0.4f;
@@ -28,6 +30,7 @@ namespace CHG._02_Scripts.Player.Combat
 
         private IStatModule _statModule;
         private ISkillRangeIndicator _rangeIndicator;
+        private bool _isMaxChargeNotified;
 
         public override void InitializeSkill(ISkillModule skillModule)
         {
@@ -51,6 +54,7 @@ namespace CHG._02_Scripts.Player.Combat
             ChargeLogic.Begin();
             _movement.CanManualMove = true;
             ApplyChargeSlow(); 
+            _isMaxChargeNotified = false;
             _rangeIndicator.Show();
             UpdateRangeIndicator(0f);
         }
@@ -60,7 +64,6 @@ namespace CHG._02_Scripts.Player.Combat
 
         public void Release()
         {
-            _rangeIndicator.Hide();
             float power = ChargeLogic.Release();
             if (!ChargeLogic.IsValidCharge)
                 power = 0f;
@@ -78,6 +81,8 @@ namespace CHG._02_Scripts.Player.Combat
             
             float radius = Mathf.Lerp(minRadius, maxRadius, power);
             float multiplier = chargeDamageCurve.Evaluate(power);
+            _rangeIndicator.SetSize(new Vector2(radius * 2f, radius * 2f));
+            _rangeIndicator.Flash(rangeFlashDuration);
             bool isHit = damageCaster.CastDamage(damageCaster.transform.position, SkillData, multiplier, radius);
             if (isHit) PlayFeedback(hitFeedback, damageCaster.transform.position, Vector3.down, power);
             yield return new WaitForSeconds(recoveryTime);
@@ -94,20 +99,20 @@ namespace CHG._02_Scripts.Player.Combat
             base.StopSkill();
         }
 
-        private void ApplyChargeSlow()
-        {
-            if (_statModule.TryGetStat(moveSpeedStat.AssetIndex, out StatSO stat))
-                _statModule.AddModifier(moveSpeedStat.AssetIndex, this, -stat.Value * chargeSlowRatio);
-            
-        }
+        private void ApplyChargeSlow() 
+            => _statModule.AddModifier(moveSpeedStat, this, -chargeSlowRatio, StatModifierType.PercentAdd); 
 
-        private void RemoveChargeSlow()
-        {
-            _statModule.RemoveModifier(moveSpeedStat.AssetIndex, this);
-        }
+        private void RemoveChargeSlow() 
+            => _statModule.RemoveModifier(moveSpeedStat, this); 
 
         private void HandleChargeChanged(float charge)
-            => UpdateRangeIndicator(charge);
+        {
+            UpdateRangeIndicator(charge);
+            if (_isMaxChargeNotified || charge < 1f) return;
+            
+            _isMaxChargeNotified = true;
+            _rangeIndicator.Pulse(maxChargePulseDuration);
+        }
 
         private void UpdateRangeIndicator(float charge)
         {

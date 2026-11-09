@@ -26,7 +26,10 @@ namespace CHG._02_Scripts.Agent
         private Transform _ownerTrm; 
         private PushableCrate _heldCrate; 
         private Vector3 _carryVelocity; 
-        private bool _isDropping; 
+        private bool _isDropping;
+        // 상자를 집었을 때 플레이어와 상자의 상대 회전값
+        private Quaternion _carryRotationOffset = Quaternion.identity;
+
         [Header("Animation")] 
         [SerializeField] private AnimParamSO pickupParam; 
         [SerializeField] private AnimParamSO carryParam; 
@@ -178,8 +181,13 @@ namespace CHG._02_Scripts.Agent
 
             _heldCrate = crate;
             _carryVelocity = Vector3.zero;
-            _heldCrate.PickUp();
 
+            // 상자를 집는 순간 플레이어 기준 상대 회전 저장
+            _carryRotationOffset =
+                Quaternion.Inverse(_ownerTrm.rotation)
+                * _heldCrate.transform.rotation;
+
+            _heldCrate.PickUp();
             Debug.Log("상자를 집었습니다.");
         }
 
@@ -240,6 +248,10 @@ namespace CHG._02_Scripts.Agent
             if (_heldCrate == null || _isDropping) return;
 
             Vector3 targetPosition = GetCarryPosition();
+
+            // 플레이어 회전에 맞춰 상자도 함께 회전
+            _heldCrate.transform.rotation =
+                _ownerTrm.rotation * _carryRotationOffset;
 
             // 상자를 처음 들어 올릴 때만 부드럽게 보간
             if (_heldCrate.IsTransitioning)
