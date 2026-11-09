@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
+namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.AI
 {
     /// <summary>
     /// 현재 페이즈에 맞는 공격별 수치만 제공한다. 전환 시간, 외형, 프리팹, 이펙트 생성은 담당하지 않는다.

@@ -12,5 +12,6 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons
         Flying,     // 투척 되어 날아가는 중
         Embedded,   // 바닥에 박힘
         Destroyed,  // Destroy 파괴 된 상태
+        PreparingThrow, // 투척에 사용할 검을 선택한 상태
     }
 }

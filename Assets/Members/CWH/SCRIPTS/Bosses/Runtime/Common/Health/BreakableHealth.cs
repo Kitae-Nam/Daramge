@@ -14,15 +14,30 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Health
         public bool CanTakeDamage { get; set; } = true;
         public bool IsDead => Model.IsDead;
         public float CurrentHealth => Model.CurrentHealth;
+        public float MaxHealth => Model.MaxHealth;
         public event Action Broken;
+        public event Action<float, float> HealthChanged
+        {
+            add => Model.HealthChanged += value;
+            remove => Model.HealthChanged -= value;
+        }
 
         private void Awake() { Model.Died += OnBroken; }
         private void OnBroken() => Broken?.Invoke();
-        public float ReceiveDamage(float damage) => CanTakeDamage && isActiveAndEnabled ? Model.ReceiveDamage(damage) : 0f;
+        public float ReceiveDamage(float damage) 
+            => CanTakeDamage && isActiveAndEnabled ? Model.ReceiveDamage(damage) : 0f;
+        public void RestoreFull()
+        {
+            Model.RestoreFull();
+        }
 
 #if UNITY_EDITOR
         [ContextMenu("테스트/파괴")]
-        private void TestBreak() { if (Application.isPlaying) ReceiveDamage(float.MaxValue); }
+        private void TestBreak()
+        {
+            if (Application.isPlaying)
+                ReceiveDamage(float.MaxValue);
+        }
 #endif
     }
 }

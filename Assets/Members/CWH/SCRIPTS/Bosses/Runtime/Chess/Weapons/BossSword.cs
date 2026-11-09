@@ -1,3 +1,4 @@
+using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Health;
 using UnityEngine;
 
 namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons
@@ -22,9 +23,14 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons
 
         private void HandleReturned()
         {
-            // 위치 복원이 끝난 뒤 상태를 바꿔 공전과 복귀 코드의 Transform 변경이 겹치지 않게 한다.
-            if (State == BossSwordState.Held) TryReturnFromHand();
-            else TryRecall();
+            GetComponent<BreakableHealth>()?.RestoreFull();
+
+            if (State == BossSwordState.Held)
+                TryReturnFromHand();
+            else if(State == BossSwordState.PreparingThrow)
+                TryCancelThrowPrepare();
+            else
+                TryRecall();
         }
 
         private void OnDestroy()
@@ -79,7 +85,8 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons
         /// </summary>
         public bool TryLaunch()
         {
-            if (State != BossSwordState.Orbiting)
+            if (State != BossSwordState.Orbiting &&
+                State != BossSwordState.PreparingThrow)
             {
                 return false;
             }
@@ -115,6 +122,28 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons
             }
 
             State = BossSwordState.Destroyed;
+            return true;
+        }
+        /// <summary>
+        /// 공전 중인 검에서 투척에 사용할 검을 선택
+        /// </summary>
+        public bool TryThrowPrepare()
+        {
+            if (State != BossSwordState.Orbiting)
+                return false;
+
+            State = BossSwordState.PreparingThrow;
+            return true;
+        }
+        /// <summary>
+        /// 투척 준비 상태만 취소한다.
+        /// </summary>
+        public bool TryCancelThrowPrepare()
+        {
+            if(State != BossSwordState.PreparingThrow)
+                return false;
+
+            State = BossSwordState.Orbiting;
             return true;
         }
 #if UNITY_EDITOR

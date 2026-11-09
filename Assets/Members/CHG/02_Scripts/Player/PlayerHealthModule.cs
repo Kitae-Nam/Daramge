@@ -1,5 +1,6 @@
 using System;
 using CHG._02_Scripts.CombatSystem;
+using CHG._02_Scripts.CoreSystem.EventBusSystem;
 using GGMLib.ModuleSystems;
 using UnityEngine;
 
@@ -19,7 +20,10 @@ namespace CHG._02_Scripts.Player
         public override void Initialize(ModuleOwner owner)
         {
             _currentHealth = maxHealth;
+            EventBus<MaxHealthIncreaseEvent>.Subscribe(HandleMaxHealthIncrease);
         }
+
+        private void OnDestroy() => EventBus<MaxHealthIncreaseEvent>.Unsubscribe(HandleMaxHealthIncrease);
 
         private void Start()
         {
@@ -44,8 +48,15 @@ namespace CHG._02_Scripts.Player
             RaiseHealthChanged();
         }
 
+        private void HandleMaxHealthIncrease(MaxHealthIncreaseEvent evt)
+        {
+            maxHealth += evt.Amount;
+            _currentHealth += evt.Amount;
+            RaiseHealthChanged();
+        }
+        
         private void RaiseHealthChanged() => OnHealthChanged?.Invoke(_currentHealth, maxHealth);
-
+        
         [ContextMenu("Hit")]
         private void Hit() => ApplyDamage(1f);
     }

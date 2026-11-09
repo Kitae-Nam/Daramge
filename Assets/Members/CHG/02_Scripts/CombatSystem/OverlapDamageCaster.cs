@@ -6,6 +6,8 @@ namespace CHG._02_Scripts.CombatSystem
 {
     public class OverlapDamageCaster : AbstractDamageCaster
     {
+        public float Radius => radius;
+        
         [SerializeField] private float radius;
         [SerializeField] private int maxCount;
 
@@ -40,7 +42,7 @@ namespace CHG._02_Scripts.CombatSystem
                 if (!_hits[i].TryGetComponent(out IDamageable damageable)) continue;
                 if (!_hitSet.Add(damageable)) continue;
 
-                DamageData damageData = StatModule?.CalculateDamage(skillData) ?? new DamageData
+                DamageData damageData = DamageCalculator?.CalculateDamage(skillData) ?? new DamageData
                 {
                     Attacker = CasterOwner, IsCritical = false, DamageAmount = skillData.baseDamage
                 };

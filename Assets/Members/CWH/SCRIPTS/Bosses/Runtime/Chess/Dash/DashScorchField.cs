@@ -28,7 +28,8 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
             _health = owner.GetComponent<BossHealth>();
             _start = _end = owner.position;
             _width = width;
-            _settings = settings;
+            _settings = new ScorchSettings(settings.Lifetime, settings.TickInterval,
+                BossAttackDamage.ResolveHazard(owner, settings.Damage));
             _visual = visual;
             _nextDamage = Time.time + settings.TickInterval;
             ExtendTo(owner.position);

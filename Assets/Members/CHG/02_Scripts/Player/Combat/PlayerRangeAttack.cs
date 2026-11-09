@@ -12,7 +12,6 @@ namespace CHG._02_Scripts.Player.Combat
     {
         public bool IsHolding => _isHolding;
         
-        
         [SerializeField] private StatSO moveSpeedStat;
         [SerializeField] private AnimParamSO shotParam;
         [SerializeField] private AnimParamSO reloadParam;
@@ -32,6 +31,8 @@ namespace CHG._02_Scripts.Player.Combat
         private int _currentAmmo;
         private  float _nextShotTime;
         private Coroutine _shotCoroutine;
+        private IDamageCalculator _damageCalculator;
+        
         public override void InitializeSkill(ISkillModule skillModule)
         {
             base.InitializeSkill(skillModule);
@@ -39,6 +40,8 @@ namespace CHG._02_Scripts.Player.Combat
             Debug.Assert(_trigger != null, $"trigger is null : {gameObject.name}");
             _statModule = _player.GetModule<IStatModule>();
             Debug.Assert(_statModule != null, $"statModule is null : {gameObject.name}");
+            _damageCalculator = _player.GetModule<IDamageCalculator>(); 
+            Debug.Assert(_damageCalculator != null, $"damageCalculator is null : {gameObject.name}"); 
             
             _currentAmmo = maxAmmo;
             
@@ -95,7 +98,9 @@ namespace CHG._02_Scripts.Player.Combat
             _renderer.PlayClip(shotParam.ParamHash, 0, 0.01f);
             Projectile projectile = poolManager.Pop<Projectile>(projectileItem);
             Debug.Assert(projectile != null, $"projectile is null : {gameObject.name}");
-            projectile.Fire(poolManager, muzzleTrm.position, _player.transform.forward);
+
+            DamageData data = _damageCalculator.CalculateDamage(SkillData);
+            projectile.Fire(poolManager, muzzleTrm.position, _player.transform.forward, data);
         }
 
         private void Reload()
@@ -117,17 +122,11 @@ namespace CHG._02_Scripts.Player.Combat
             _isHolding = false;
         }
         
-        private void ApplyShotSlow()
-        {
-            if (_statModule.TryGetStat(moveSpeedStat.AssetIndex, out StatSO stat))
-                _statModule.AddModifier(moveSpeedStat.AssetIndex, this, -stat.BaseValue * moveSpeedSlow);
-            
-        }
+        private void ApplyShotSlow() 
+            => _statModule.AddModifier(moveSpeedStat, this, -moveSpeedSlow, StatModifierType.PercentAdd); 
 
-        private void RemoveShotSlow()
-        {
-            _statModule.RemoveModifier(moveSpeedStat.AssetIndex, this);
-        }
+        private void RemoveShotSlow() 
+            => _statModule.RemoveModifier(moveSpeedStat, this); 
 
         public override void StopSkill()
         {

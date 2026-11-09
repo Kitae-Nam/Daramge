@@ -13,7 +13,6 @@ namespace CHG._02_Scripts.Player
         
         private Vector3 _velocity;
         private float _verticalVelocity;
-        private Vector3 _movementDirection;
         private CharacterController _characterController;
         private ModuleOwner _owner;
         private IStatModule _statModule;
@@ -21,15 +20,31 @@ namespace CHG._02_Scripts.Player
         private float _moveSpeed = 8f;
         private bool _isLaunched;
         private Vector3 _launchHorizontalVelocity;
+        private Vector2 _movementInput;
+        private Transform _cameraTrm;
+        private float _riseGravityScale = 1f; 
+        private float _fallGravityScale = 1f; 
+        
         public event Action OnLanded;
 
         public bool CanManualMove { get; set; } = true;
         public bool CanAutoRotate { get; set; } = true;
         public bool CanUseGravity { get; set; } = true;
+        public float MoveSpeed => _moveSpeed;
         public Vector3 Velocity => _velocity;
         public bool IsGround => _characterController.isGrounded;
         public bool IsLaunched => _isLaunched;
         public float Gravity => gravity;
+        
+        private Transform CameraTransform
+        {
+            get
+            {
+                if (_cameraTrm == null && Camera.main != null)
+                    _cameraTrm = Camera.main.transform;
+                return _cameraTrm;
+            }
+        }
 
         public void Initialize(ModuleOwner owner)
         {
@@ -42,16 +57,16 @@ namespace CHG._02_Scripts.Player
         
         public void AfterInit()
         {
-            _moveSpeed = _statModule.SubscribeStat(moveSpeedStat.AssetIndex, HandleMoveSpeedChange, _moveSpeed);
+            _moveSpeed = _statModule.SubscribeStat(moveSpeedStat, HandleMoveSpeedChange, _moveSpeed);
         }
 
         private void OnDestroy()
         {
             if (moveSpeedStat != null)
-                _statModule?.UnSubscribeStat(moveSpeedStat.AssetIndex, HandleMoveSpeedChange);
+                _statModule?.UnSubscribeStat(moveSpeedStat, HandleMoveSpeedChange);
         }
 
-        private void HandleMoveSpeedChange(StatSO stat, float currentValue, float prevValue)
+        private void HandleMoveSpeedChange(Stat stat, float currentValue, float prevValue)
             => _moveSpeed = currentValue;
 
         public void SetMovementVelocity(Vector3 velocity)
@@ -61,11 +76,21 @@ namespace CHG._02_Scripts.Player
 
         public void SetMovementDirection(Vector2 movementInput)
         {
-            _movementDirection = ToWorldDirection(movementInput);
+            _movementInput = movementInput;
         }
 
         public Vector3 ToWorldDirection(Vector2 movementInput)
-            => Quaternion.Euler(0, -45f, 0) * new Vector3(movementInput.x, 0, movementInput.y).normalized;
+        {
+            Vector3 inputDirection = new Vector3(movementInput.x, 0, movementInput.y).normalized; 
+            Transform cam = CameraTransform; 
+            if (cam == null) return inputDirection; 
+
+            Vector3 forward = Vector3.ProjectOnPlane(cam.forward, Vector3.up); 
+            if (forward.sqrMagnitude < 0.001f) 
+                forward = Vector3.ProjectOnPlane(cam.up, Vector3.up); 
+
+            return Quaternion.LookRotation(forward) * inputDirection; 
+        }
 
         public void RotateTo(Vector3 direction)
         {
@@ -92,7 +117,7 @@ namespace CHG._02_Scripts.Player
                 return;
             }
 
-            _velocity = CanManualMove ? _movementDirection : _autoVelocity;
+            _velocity = CanManualMove ? ToWorldDirection(_movementInput) : _autoVelocity;
             
             _velocity *= _moveSpeed * Time.fixedDeltaTime;
             if (CanAutoRotate && _velocity.sqrMagnitude > 0)
@@ -116,21 +141,25 @@ namespace CHG._02_Scripts.Player
             }
             else
             {
-                _verticalVelocity += gravity * Time.fixedDeltaTime;
+                _verticalVelocity += gravity * GetGravityScale() * Time.fixedDeltaTime;
             }
 
             _velocity.y = _verticalVelocity * Time.fixedDeltaTime;
         }
+        private float GetGravityScale() 
+            => !_isLaunched ? 1f : _verticalVelocity > 0f ? _riseGravityScale : _fallGravityScale;
 
         private void Move()
         {
             _characterController.Move(_velocity);
         }
 
-        public void Launch(Vector3 launchVelocity)
+        public void Launch(Vector3 launchVelocity, float riseGravityScale = 1f, float fallGravityScale = 1f)
         {
             _launchHorizontalVelocity = new Vector3(launchVelocity.x, 0f, launchVelocity.z);
             _verticalVelocity = launchVelocity.y;
+            _riseGravityScale = riseGravityScale; 
+            _fallGravityScale = fallGravityScale; 
             _isLaunched = true;
         }
 
@@ -138,6 +167,8 @@ namespace CHG._02_Scripts.Player
         {
             _isLaunched = false;
             _launchHorizontalVelocity = Vector3.zero;
+            _riseGravityScale = 1f; 
+            _fallGravityScale = 1f; 
         }
 
         private void CheckLanding()

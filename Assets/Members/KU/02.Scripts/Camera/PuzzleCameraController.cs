@@ -1,57 +1,71 @@
 
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Unity.Cinemachine;
+using CHG._02_Scripts.Player;
 
-[RequireComponent(typeof(Camera))]
 public class PuzzleCameraController : MonoBehaviour
 {
-    [Header("References")]
-    [SerializeField] private Transform playerTarget;
-    [SerializeField] private PlayerInput playerInput;
+    [Serializable]
+    public class PlayerSetting
+    {
+        [Header("Player")]
+        public Transform playerTarget;
+    }
 
-    [Header("Follow Camera")]
+    [Header("Character Change System")]
     [SerializeField]
-    private Vector3 followOffset =
-        new Vector3(0f, 10f, -8f);
+    private CharacterChange characterChange;
 
-    [SerializeField] private float followSmoothTime = 0.15f;
-
-    [SerializeField] private float followCameraSize = 5f;
-
-    [SerializeField] private float followNearClip = -10f;
+    [Header("Player References")]
+    [SerializeField]
+    private PlayerSetting[] players =
+        new PlayerSetting[3];
 
     [Header("Puzzle Camera")]
-    [SerializeField] private float puzzleCameraSize = 7f;
+    [SerializeField]
+    private CinemachineCamera puzzleCamera;
+    [Header("Auto Camera Settings")]
+    [SerializeField]
+    private bool autoSwitchOnEnter = true;
 
-    [SerializeField] private float puzzleNearClip = 0f;
+    [SerializeField, Min(0.01f)]
+    private float puzzleCameraSize = 7f;
 
-    [Header("Camera Transition")]
-    [SerializeField] private float transitionSmoothTime = 0.35f;
-    [SerializeField] private float rotationSpeed = 6f;
-    [SerializeField] private float zoomSpeed = 4f;
+    [SerializeField]
+    private float puzzleNearClip = 0f;
 
-    [SerializeField] private float nearClipSpeed = 4f;
+    [Header("Puzzle Camera Priority")]
+    [SerializeField]
+    private int puzzleActivePriority = 100;
 
-    private Camera cam;
-    private InputAction cameraToggleAction;
+    [SerializeField]
+    private int puzzleInactivePriority = -100;
 
     private PuzzleCameraZone currentZone;
 
-    private Vector3 cameraVelocity;
-    private Quaternion followRotation;
+    private int activePlayerIndex = -1;
 
     private bool isPuzzleMode;
+    private bool wasChanging;
 
     public bool IsPuzzleMode => isPuzzleMode;
+    public int ActivePlayerIndex => activePlayerIndex;
+
+    // --------------------------------
+    // Initialize
+    // --------------------------------
 
     private void Awake()
     {
-        cam = GetComponent<Camera>();
-
-        if (playerTarget == null || playerInput == null)
+        if (characterChange == null ||
+            puzzleCamera == null ||
+            players == null ||
+            players.Length == 0)
         {
             Debug.LogError(
-                "PuzzleCameraController의 참조를 설정해주세요.",
+                "PuzzleCameraController 참조를 확인해주세요.",
                 this
             );
 
@@ -59,49 +73,51 @@ public class PuzzleCameraController : MonoBehaviour
             return;
         }
 
-        if (playerInput.actions == null)
-        {
-            Debug.LogError(
-                "PlayerInput에 Input Actions가 없습니다.",
-                this
-            );
+        ApplyPuzzleLens();
 
-            enabled = false;
-            return;
-        }
+        isPuzzleMode = false;
+        activePlayerIndex = -1;
 
-        cameraToggleAction =
-            playerInput.actions.FindAction("CameraToggle");
-
-        if (cameraToggleAction == null)
-        {
-            Debug.LogError(
-                "CameraToggle 액션을 찾지 못했습니다.",
-                this
-            );
-
-            enabled = false;
-            return;
-        }
-
-        // 시작 시 추적 카메라 각도 저장
-        followRotation = transform.rotation;
-
-        // 시작 위치 설정
-        transform.position =
-            playerTarget.position + followOffset;
-
-        // Orthographic 카메라 설정
-        cam.orthographic = true;
-
-        // 추적 모드 기본값
-        cam.orthographicSize = followCameraSize;
-        cam.nearClipPlane = followNearClip;
+        puzzleCamera.Priority =
+            puzzleInactivePriority;
     }
+
+    private void Start()
+    {
+        SyncCurrentPlayer();
+    }
+
+    // --------------------------------
+    // Update
+    // --------------------------------
 
     private void Update()
     {
-        if (cameraToggleAction.WasPressedThisFrame())
+        // 팀원 시스템의 캐릭터 전환 상태 확인
+        if (characterChange.IsChanging)
+        {
+            if (!wasChanging)
+            {
+                wasChanging = true;
+
+                // 전환 시작 시 퍼즐 뷰 종료
+                ExitPuzzleMode();
+                ClearPuzzleZone();
+            }
+
+            // 전환 중에는 V키 사용하지 않음
+            return;
+        }
+
+        wasChanging = false;
+
+        // 현재 캐릭터가 변경되었는지 자동 확인
+        SyncCurrentPlayer();
+
+        if (Keyboard.current == null)
+            return;
+
+        if (Keyboard.current.vKey.wasPressedThisFrame)
         {
             ToggleCameraMode();
         }
@@ -109,121 +125,136 @@ public class PuzzleCameraController : MonoBehaviour
 
     private void LateUpdate()
     {
-        UpdateCameraPosition();
-        UpdateCameraSize();
-        UpdateNearClippingPlane();
+        UpdatePuzzleCameraTransform();
     }
 
     // --------------------------------
-    // Camera Toggle
+    // Character Detection
+    // --------------------------------
+
+    private void SyncCurrentPlayer()
+    {
+        if (characterChange == null ||
+            characterChange.IsChanging)
+            return;
+
+        int currentIndex = characterChange.CurrentIndex;
+
+        // 아직 팀원 시스템이 초기화되지 않음
+        if (currentIndex < 0)
+            return;
+
+        if (currentIndex >= players.Length)
+        {
+            Debug.LogWarning(
+                $"CharacterChange 인덱스 {currentIndex}가 " +
+                "Player References 배열 범위를 벗어났습니다.",
+                this
+            );
+            return;
+        }
+
+        if (activePlayerIndex == currentIndex)
+            return;
+
+        OnActivePlayerChanged(currentIndex);
+    }
+
+    private void OnActivePlayerChanged(int newIndex)
+    {
+        // 이전 캐릭터의 퍼즐 상태 초기화
+        ExitPuzzleMode();
+        ClearPuzzleZone();
+
+        activePlayerIndex = newIndex;
+
+    }
+
+    // --------------------------------
+    // Lens Settings
+    // --------------------------------
+
+    private void ApplyPuzzleLens()
+    {
+        LensSettings lens = puzzleCamera.Lens;
+
+        lens.ModeOverride =
+            LensSettings.OverrideModes.Orthographic;
+
+        lens.OrthographicSize =
+            puzzleCameraSize;
+
+        lens.NearClipPlane =
+            puzzleNearClip;
+
+        puzzleCamera.Lens = lens;
+    }
+
+    // --------------------------------
+    // Puzzle Mode
     // --------------------------------
 
     private void ToggleCameraMode()
     {
-        if (currentZone == null)
+        if (characterChange.IsChanging)
             return;
 
-        if (currentZone.CameraPoint == null)
+        if (activePlayerIndex < 0)
+            return;
+
+        if (currentZone == null ||
+            currentZone.CameraPoint == null)
             return;
 
         isPuzzleMode = !isPuzzleMode;
 
-        cameraVelocity = Vector3.zero;
-
-        Debug.Log(
-            isPuzzleMode
-                ? "퍼즐 카메라 모드"
-                : "플레이어 추적 모드"
-        );
-    }
-
-    // --------------------------------
-    // Camera Position
-    // --------------------------------
-
-    private void UpdateCameraPosition()
-    {
-        if (playerTarget == null)
-            return;
-
-        Vector3 targetPosition;
-        Quaternion targetRotation;
-        float smoothTime;
-
-        if (isPuzzleMode &&
-            currentZone != null &&
-            currentZone.CameraPoint != null)
+        if (isPuzzleMode)
         {
-            Transform point = currentZone.CameraPoint;
+            UpdatePuzzleCameraTransform();
 
-            targetPosition = point.position;
-            targetRotation = point.rotation;
+            puzzleCamera.Priority =
+                puzzleActivePriority;
 
-            smoothTime = transitionSmoothTime;
+
         }
         else
         {
-            targetPosition =
-                playerTarget.position + followOffset;
+            puzzleCamera.Priority =
+                puzzleInactivePriority;
 
-            targetRotation = followRotation;
+        }
+    }
 
-            smoothTime = followSmoothTime;
+    private void ExitPuzzleMode()
+    {
+        isPuzzleMode = false;
+
+        if (puzzleCamera != null)
+        {
+            puzzleCamera.Priority =
+                puzzleInactivePriority;
+        }
+    }
+
+    // --------------------------------
+    // Puzzle Camera Transform
+    // --------------------------------
+
+    private void UpdatePuzzleCameraTransform()
+    {
+        if (currentZone == null ||
+            currentZone.CameraPoint == null ||
+            puzzleCamera == null)
+        {
+            return;
         }
 
-        transform.position = Vector3.SmoothDamp(
-            transform.position,
-            targetPosition,
-            ref cameraVelocity,
-            Mathf.Max(smoothTime, 0.01f)
-        );
+        Transform point =
+            currentZone.CameraPoint;
 
-        transform.rotation = Quaternion.Slerp(
-            transform.rotation,
-            targetRotation,
-            1f - Mathf.Exp(
-                -rotationSpeed * Time.deltaTime
-            )
-        );
-    }
-
-    // --------------------------------
-    // Orthographic Size
-    // --------------------------------
-
-    private void UpdateCameraSize()
-    {
-        float targetSize =
-            isPuzzleMode
-                ? puzzleCameraSize
-                : followCameraSize;
-
-        cam.orthographicSize = Mathf.Lerp(
-            cam.orthographicSize,
-            targetSize,
-            1f - Mathf.Exp(
-                -zoomSpeed * Time.deltaTime
-            )
-        );
-    }
-
-    // --------------------------------
-    // Near Clipping Plane
-    // --------------------------------
-
-    private void UpdateNearClippingPlane()
-    {
-        float targetNearClip =
-            isPuzzleMode
-                ? puzzleNearClip
-                : followNearClip;
-
-        cam.nearClipPlane = Mathf.Lerp(
-            cam.nearClipPlane,
-            targetNearClip,
-            1f - Mathf.Exp(
-                -nearClipSpeed * Time.deltaTime
-            )
+        puzzleCamera.transform.SetPositionAndRotation(
+            point.position,
+            point.rotation
         );
     }
 
@@ -231,17 +262,40 @@ public class PuzzleCameraController : MonoBehaviour
     // Puzzle Zone
     // --------------------------------
 
+
     public void EnterPuzzleZone(PuzzleCameraZone zone)
     {
-        if (zone == null)
+        if (zone == null ||
+            zone.CameraPoint == null)
             return;
 
+        if (characterChange == null ||
+            characterChange.IsChanging)
+            return;
+
+        if (activePlayerIndex < 0)
+            return;
+
+        // 이미 들어와 있는 구역이면 중복 실행 방지
+        if (currentZone == zone)
+            return;
+
+        // 현재 퍼즐 구역 등록
         currentZone = zone;
 
-        Debug.Log(
-            "퍼즐 구역 진입 - V키 사용 가능"
-        );
+        // 퍼즐 카메라 위치 먼저 설정
+        UpdatePuzzleCameraTransform();
+
+        // 자동 전환 옵션이 켜져 있다면
+        if (autoSwitchOnEnter)
+        {
+            isPuzzleMode = true;
+
+            puzzleCamera.Priority =
+                puzzleActivePriority;
+        }
     }
+
 
     public void ExitPuzzleZone(PuzzleCameraZone zone)
     {
@@ -250,12 +304,17 @@ public class PuzzleCameraController : MonoBehaviour
 
         currentZone = null;
 
-        isPuzzleMode = false;
-        cameraVelocity = Vector3.zero;
+        ExitPuzzleMode();
+        
+    }
 
-        Debug.Log(
-            "퍼즐 구역 이탈 - 추적 모드 복귀"
-        );
+    private void ClearPuzzleZone()
+    {
+        if (currentZone == null)
+            return;
+
+        currentZone.ForgetTrackedPlayer();
+        currentZone = null;
     }
 
     // --------------------------------
@@ -264,24 +323,49 @@ public class PuzzleCameraController : MonoBehaviour
 
     public bool IsPlayerCollider(Collider other)
     {
-        if (other == null || playerTarget == null)
+        if (other == null ||
+            characterChange == null ||
+            characterChange.IsChanging ||
+            activePlayerIndex < 0 ||
+            activePlayerIndex >= players.Length)
+        {
             return false;
+        }
 
-        if (other.transform == playerTarget ||
-            other.transform.IsChildOf(playerTarget))
+        PlayerSetting setting =
+            players[activePlayerIndex];
+
+        if (setting == null ||
+            setting.playerTarget == null)
+        {
+            return false;
+        }
+
+        Transform target = setting.playerTarget;
+
+        // CharacterController 포함
+        if (other.transform == target ||
+            other.transform.IsChildOf(target))
         {
             return true;
         }
 
-        if (other.attachedRigidbody != null)
-        {
-            Transform body =
-                other.attachedRigidbody.transform;
+        // Rigidbody 플레이어도 지원
+        Rigidbody body =
+            other.attachedRigidbody;
 
-            return body == playerTarget ||
-                   body.IsChildOf(playerTarget);
+        if (body != null)
+        {
+            return body.transform == target ||
+                   body.transform.IsChildOf(target);
         }
 
         return false;
+    }
+
+    private void OnDisable()
+    {
+        ExitPuzzleMode();
+        ClearPuzzleZone();
     }
 }

@@ -1,4 +1,5 @@
 using System.Collections;
+using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.AI;
 using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons;
 using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Combat;
 using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Movement;
@@ -19,7 +20,8 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Patterns
         [SerializeField, Min(0.1f)] private float _dashDistance = 18f;
         [SerializeField, Min(0.1f)] private float _dashSpeed = 30f;
         [SerializeField, Min(0.1f)] private float _dashWidth = 4f;
-        [SerializeField, Min(0f)] private float _damage = 25f;
+        [SerializeField, Min(0f), Tooltip("페이즈 컨트롤러가 없는 독립 실행용 기본 피해. 보스 전투는 BossAttackDamage 규칙을 사용한다.")]
+        private float _damage = 1f;
         [SerializeField, Min(0f)] private float _knockbackSpeed = 12f;
         [SerializeField, Min(0f)] private float _knockbackDuration = 0.35f;
         [SerializeField, Range(0f, 1f)] private float _warningOpacity = 0.7f;
@@ -87,7 +89,7 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Patterns
         {
             if (!_prepared || !_motor.Begin(_path)) yield break;
             DashTuning tuning = _profiles != null ? _profiles.GetDash() : DashTuning.Normal;
-            float damage = _damage * tuning.DamageMultiplier;
+            float damage = BossAttackDamage.Resolve(transform, _damage * tuning.DamageMultiplier);
             float speed = _dashSpeed * tuning.SpeedMultiplier;
             DashScorchField scorch = tuning.LeavesScorch && _scorchFactory != null
                 ? _scorchFactory.Spawn(_target.HasTarget ? _target.Target : null, _dashWidth, tuning.Scorch) : null;
