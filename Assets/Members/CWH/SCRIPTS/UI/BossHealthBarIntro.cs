@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Daramge.BossUI
+namespace Daramge.BossUI.Members.CWH.SCRIPTS.UI
 {
     public sealed class BossHealthBarIntro
     {

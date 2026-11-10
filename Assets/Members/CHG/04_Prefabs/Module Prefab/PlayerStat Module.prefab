@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3783374936969348301}
   - component: {fileID: 1320940246786079568}
+  - component: {fileID: 7451414588246826046}
   m_Layer: 0
   m_Name: PlayerStat Module
   m_TagString: Untagged
@@ -63,9 +64,18 @@ MonoBehaviour:
   - <StatData>k__BackingField: {fileID: 11400000, guid: 15072dec85f9bdc489bb2a6dfa0692ef, type: 2}
     isUseOverride: 1
     overrideValue: 3
+--- !u!114 &7451414588246826046
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3400183595922088878}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 273725c15a974153bf64d40ef1e80ef3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CHG._02_Scripts.Player.PlayerDamageCalculator
   strStat: {fileID: 11400000, guid: a5a5af4605c7a94449cea3626219feb0, type: 2}
   criStat: {fileID: 11400000, guid: 889130eddb47e8543967de31f0eb68f6, type: 2}
   cDmgStat: {fileID: 11400000, guid: f689e62043436d046abf59ede7815855, type: 2}
-  attackSpeedStat: {fileID: 11400000, guid: a752df98cd6e95e4ea3f2a696c3d7dcd, type: 2}
-  moveSpeedStat: {fileID: 11400000, guid: 69ce85c277017b24080269cb9e423490, type: 2}
-  staminaStat: {fileID: 11400000, guid: 15072dec85f9bdc489bb2a6dfa0692ef, type: 2}
