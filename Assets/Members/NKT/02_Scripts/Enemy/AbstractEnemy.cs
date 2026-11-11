@@ -27,7 +27,7 @@ namespace NKT.Enemy
         public Vector3 HomePoint => _homePoint;
         public float HeightOffset => _heightOffset;
 
-        private float _heightOffset = 2;
+        [SerializeField] private float _heightOffset = 2;
         private Vector3 _homePoint;
         
         protected override void InitializeModules()

@@ -44,7 +44,8 @@ namespace NKT.Enemy.UI
         private void OnHpBarResolved(VisualElement obj)
         {
             _hpBarElement = obj;
-            _hpBarElement.dataSource = _realHealthVM;
+            if(_realHealthVM != null)
+                _hpBarElement.dataSource = _realHealthVM;
         }
 
         private void OnRootLabelResolved(VisualElement obj)
@@ -76,6 +77,8 @@ namespace NKT.Enemy.UI
         {
             _enemyOwner = owner as AbstractEnemy;
             _realHealthVM = Instantiate(healthTemplate);
+            if(_hpBarElement != null)
+                _hpBarElement.dataSource = _realHealthVM;
         }
         
         public void AfterInit()
