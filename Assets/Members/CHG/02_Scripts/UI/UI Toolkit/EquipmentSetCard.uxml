@@ -1,0 +1,14 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Style src="Equipment.uss"/>
+    <ui:VisualElement name="set-card" class="equipment-set">
+        <ui:VisualElement class="equipment-set__header">
+            <ui:Label name="set-name" class="equipment-set__name"/>
+            <ui:Label name="set-badge" class="equipment-set__badge"/>
+        </ui:VisualElement>
+        <ui:VisualElement class="equipment-set__progress">
+            <ui:VisualElement name="set-pips" class="equipment-set__pips"/>
+            <ui:Label name="set-progress-text" class="equipment-set__progress-text"/>
+        </ui:VisualElement>
+        <ui:VisualElement name="set-tiers"/>
+    </ui:VisualElement>
+</ui:UXML>

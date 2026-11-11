@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using CHG._02_Scripts.Agent.StatSystem;
@@ -8,6 +9,9 @@ namespace CHG._02_Scripts.Player.Equipment
 {
     public class EquipmentSetBonusModule : MonoBehaviour, IModule
     {
+        public event Action OnSetCountChanged;
+        public IReadOnlyDictionary<EquipmentSetSO, int> CountBySet => _countBySet;
+        
         private readonly Dictionary<EquipmentSetSO, int> _countBySet = new();
         private readonly HashSet<EquipmentSetTier> _activeTiers = new();
         private readonly HashSet<EquipmentSetTier> _nextActiveTiers = new();
@@ -36,6 +40,7 @@ namespace CHG._02_Scripts.Player.Equipment
             CountSetPieces();
             CollectActiveTiers();
             ApplyTierChanges();
+            OnSetCountChanged?.Invoke();
         }
 
         private void CountSetPieces()
