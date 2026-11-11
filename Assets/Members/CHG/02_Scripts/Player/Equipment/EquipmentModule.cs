@@ -30,7 +30,7 @@ namespace CHG._02_Scripts.Player.Equipment
             if (equipment == null) return;
 
             EquipmentSO prev = GetEquipment(equipment.Part);
-            if (prev != null) return;
+            if (prev == equipment) return;
 
             if (prev != null)
                 _statModule.RemoveBonuses(prev, prev.Bonuses);

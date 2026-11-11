@@ -9,5 +9,9 @@ namespace CHG._02_Scripts.Player.Equipment
         [field: SerializeField] public EquipmentPart Part { get; private set; }
         [field: SerializeField] public EquipmentSetSO[] Set { get; private set; }
         [field: SerializeField] public StatBonus[] Bonuses { get; private set; }
+        
+        [field: SerializeField] public string DisplayName { get; private set; }
+        [field: SerializeField] public Sprite Icon { get; private set; }
+        
     }
 }

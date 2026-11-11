@@ -1,0 +1,8 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Style src="Equipment.uss"/>
+    <ui:VisualElement name="tier" class="equipment-tier">
+        <ui:Label name="tier-need" class="equipment-tier__need"/>
+        <ui:Label name="tier-effect" class="equipment-tier__effect"/>
+        <ui:Label name="tier-note" class="equipment-tier__note"/>
+    </ui:VisualElement>
+</ui:UXML>

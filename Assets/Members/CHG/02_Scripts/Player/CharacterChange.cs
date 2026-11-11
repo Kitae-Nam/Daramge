@@ -127,5 +127,7 @@ namespace CHG._02_Scripts.Player
             player.RemoveStatus(AgentStatus.Invincible);
             player.PlayerInput.EnableInput();
         }
+        
+        public PlayerController GetPlayer(int index) => settings[index].player; 
     }
 }
