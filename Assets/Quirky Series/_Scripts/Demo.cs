@@ -19,7 +19,6 @@ public class Demo : MonoBehaviour {
 												"Idle_A", "Idle_B", "Idle_C",
 												"Jump",
 												"Roll",
-												"Lay",
 												"Run",
 												"Sit",
 												"Spin/Splash",
@@ -165,7 +164,7 @@ public class Demo : MonoBehaviour {
 			int index = dropdownAnimation.value;
 			
 			// If Spin/Splash animation
-			if(index == 16)
+			if(index == 15)
 			{
 				if(animator.HasState(0, Animator.StringToHash("Spin")))
 				{

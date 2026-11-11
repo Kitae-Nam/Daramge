@@ -1,0 +1,78 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/Members/CHG/02_Scripts/UI/UI%20Toolkit/Equipment.uss?fileID=7433441132597879392&amp;guid=491aa12fae318f247831d3b7a76edf26&amp;type=3#Equipment"/>
+    <ui:VisualElement name="equipment-root" picking-mode="Ignore" class="equipment-root">
+        <ui:VisualElement name="equipment-window" authoring-id="400733083" class="equipment equipment--hidden">
+            <ui:VisualElement class="equipment__header">
+                <ui:Label text="장비" class="equipment__title"/>
+                <ui:VisualElement name="character-tabs" class="equipment__tabs"/>
+            </ui:VisualElement>
+            <ui:VisualElement class="equipment__body">
+                <ui:VisualElement class="equipment-panel">
+                    <ui:VisualElement class="equipment-panel__header">
+                        <ui:Label text="맞춰진 조합" class="equipment-panel__title"/>
+                        <ui:Label name="set-count" class="equipment-panel__count"/>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="set-empty" class="equipment-panel__empty">
+                        <ui:Label text="맞춰진 조합 없음" class="equipment-panel__empty-title"/>
+                        <ui:Label text="같은 조합의 장비를 필요한 개수만큼 끼우면 여기에 표시됩니다" class="equipment-panel__empty-text"/>
+                    </ui:VisualElement>
+                    <ui:ScrollView name="set-cards" class="equipment-panel__scroll"/>
+                </ui:VisualElement>
+                <ui:VisualElement class="equipment__stage">
+                    <ui:VisualElement name="character-preview" picking-mode="Ignore" class="equipment__preview"/>
+                    <ui:Button name="slot-LeftArm" class="equipment-slot equipment-slot--left equipment-slot--arm">
+                        <ui:VisualElement picking-mode="Ignore" class="equipment-slot__line"/>
+                        <ui:Label text="왼팔" picking-mode="Ignore" class="equipment-slot__part"/>
+                        <ui:Label name="slot-part" picking-mode="Ignore" class="equipment-slot__part"/>
+                        <ui:VisualElement picking-mode="Ignore" class="equipment-slot__content">
+                            <ui:VisualElement name="slot-icon" picking-mode="Ignore" class="equipment-slot__icon"/>
+                            <ui:Label name="slot-item" picking-mode="Ignore" class="equipment-slot__item"/>
+                        </ui:VisualElement>
+                    </ui:Button>
+                    <ui:Button name="slot-RightArm" class="equipment-slot equipment-slot--right equipment-slot--arm">
+                        <ui:VisualElement picking-mode="Ignore" class="equipment-slot__line"/>
+                        <ui:Label text="오른팔" picking-mode="Ignore" class="equipment-slot__part"/>
+                        <ui:Label name="slot-part" picking-mode="Ignore" class="equipment-slot__part"/>
+                        <ui:VisualElement picking-mode="Ignore" class="equipment-slot__content">
+                            <ui:VisualElement name="slot-icon" picking-mode="Ignore" class="equipment-slot__icon"/>
+                            <ui:Label name="slot-item" picking-mode="Ignore" class="equipment-slot__item"/>
+                        </ui:VisualElement>
+                    </ui:Button>
+                    <ui:Button name="slot-LeftLeg" class="equipment-slot equipment-slot--left equipment-slot--leg">
+                        <ui:VisualElement picking-mode="Ignore" class="equipment-slot__line"/>
+                        <ui:Label text="왼다리" picking-mode="Ignore" class="equipment-slot__part"/>
+                        <ui:Label name="slot-part" picking-mode="Ignore" class="equipment-slot__part"/>
+                        <ui:VisualElement picking-mode="Ignore" class="equipment-slot__content">
+                            <ui:VisualElement name="slot-icon" picking-mode="Ignore" class="equipment-slot__icon"/>
+                            <ui:Label name="slot-item" picking-mode="Ignore" class="equipment-slot__item"/>
+                        </ui:VisualElement>
+                    </ui:Button>
+                    <ui:Button name="slot-RightLeg" class="equipment-slot equipment-slot--right equipment-slot--leg">
+                        <ui:VisualElement picking-mode="Ignore" class="equipment-slot__line"/>
+                        <ui:Label text="오른다리" picking-mode="Ignore" class="equipment-slot__part"/>
+                        <ui:Label name="slot-part" picking-mode="Ignore" class="equipment-slot__part"/>
+                        <ui:VisualElement picking-mode="Ignore" class="equipment-slot__content">
+                            <ui:VisualElement name="slot-icon" picking-mode="Ignore" class="equipment-slot__icon"/>
+                            <ui:Label name="slot-item" picking-mode="Ignore" class="equipment-slot__item"/>
+                        </ui:VisualElement>
+                    </ui:Button>
+                </ui:VisualElement>
+                <ui:VisualElement class="equipment-panel">
+                    <ui:VisualElement name="list-empty" class="equipment-panel__empty">
+                        <ui:Label text="칸을 선택하세요" class="equipment-panel__empty-title"/>
+                        <ui:Label text="팔이나 다리 칸을 누르면 그 칸에 끼울 수 있는 장비가 나옵니다" class="equipment-panel__empty-text"/>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="list-content" class="equipment-panel__content equipment--hidden">
+                        <ui:VisualElement class="equipment-panel__header">
+                            <ui:Label name="list-title" class="equipment-panel__title"/>
+                            <ui:Label name="list-count" class="equipment-panel__count"/>
+                        </ui:VisualElement>
+                        <ui:Label name="list-description" class="equipment-panel__description"/>
+                        <ui:ScrollView name="list-rows" class="equipment-panel__scroll"/>
+                        <ui:Label text="장착 중인 장비를 다시 누르면 해제됩니다" class="equipment-panel__description"/>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
