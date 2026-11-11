@@ -1,4 +1,4 @@
-namespace Members.CHG._02_Scripts.Agent.FSM
+namespace CHG._02_Scripts.Agent.FSM
 {
     public abstract class AgentState
     {

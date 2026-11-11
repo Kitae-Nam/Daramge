@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Members.CHG._02_Scripts.Player.Combat
+namespace CHG._02_Scripts.Player.Combat
 {
     [Serializable]
     public class ChargeLogic
@@ -25,8 +25,8 @@ namespace Members.CHG._02_Scripts.Player.Combat
         public void Tick(float dt)
         {
             if (!IsCharging) return;
-            _elapsed += Mathf.Min(_elapsed + dt, maxChargeTime);
-            OnChargeChanged?.Invoke(_elapsed);
+            _elapsed = Mathf.Min(_elapsed + dt, maxChargeTime);
+            OnChargeChanged?.Invoke(NormalizedCharge);
         }
 
         public float Release()

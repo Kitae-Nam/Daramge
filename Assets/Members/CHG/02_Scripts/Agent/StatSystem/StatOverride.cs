@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Members.CHG._02_Scripts.Agent.StatSystem
+namespace CHG._02_Scripts.Agent.StatSystem
 {
     [Serializable]
     public class StatOverride

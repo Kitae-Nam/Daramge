@@ -1,20 +1,18 @@
 using System;
+using CHG._02_Scripts.Player.Combat;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace Members.CHG._02_Scripts.Player
+namespace CHG._02_Scripts.Player
 {
      [CreateAssetMenu(fileName = "Player Input", menuName = "SO/PlayerInput", order = 0)]
     public class PlayerInputSO : ScriptableObject, Controls.IPlayerActions
     {
         
         public event Action<Vector2> OnMovementChange;
-        public event Action OnAttackKeyPressed;
-        public event Action OnDashKeyPressed;
-        public event Action OnFirstSkillKeyPressed;
-        public event Action OnFirstSkillKeyReleased;
-        public event Action OnScendSkillKeyPressed;
-        public event Action OnScendSkillKeyReleased;
+        public event Action<PlayerSkillSlot> OnSkillKeyPressed;
+        public event Action<PlayerSkillSlot> OnSkillKeyReleased;
+        public event Action OnInteractKeyPressed;
         
 
         public Vector2 Movement { get; private set; }
@@ -51,6 +49,9 @@ namespace Members.CHG._02_Scripts.Player
         {
             _controls.Player.Disable();
         }
+        
+        public void EnableInput() => _controls.Player.Enable();
+        public void DisableInput() => _controls.Player.Disable();
 
         public void OnMove(InputAction.CallbackContext context)
         {
@@ -63,30 +64,34 @@ namespace Members.CHG._02_Scripts.Player
         public void OnAttack(InputAction.CallbackContext context)
         {
             if(context.performed)
-                OnAttackKeyPressed?.Invoke();
+                OnSkillKeyPressed?.Invoke(PlayerSkillSlot.Attack);
+            
+            if (context.canceled)   
+                OnSkillKeyReleased?.Invoke(PlayerSkillSlot.Attack);
         }
 
         public void OnInteract(InputAction.CallbackContext context)
         {
-            
+            if (context.performed)
+                OnInteractKeyPressed?.Invoke();
         }
         
         public void OnFirstSkill(InputAction.CallbackContext context)
         {
             if(context.performed)
-                OnFirstSkillKeyPressed?.Invoke();
+                OnSkillKeyPressed?.Invoke(PlayerSkillSlot.FirstSkill);
             
             if (context.canceled)
-                OnFirstSkillKeyReleased?.Invoke();
+                OnSkillKeyReleased?.Invoke(PlayerSkillSlot.FirstSkill);
         }
         
         public void OnScendSkill(InputAction.CallbackContext context)
         {
             if(context.performed)
-                OnScendSkillKeyPressed?.Invoke();
+                OnSkillKeyPressed?.Invoke(PlayerSkillSlot.SecondSkill);
             
             if (context.canceled)
-                OnScendSkillKeyReleased?.Invoke();
+                OnSkillKeyReleased?.Invoke(PlayerSkillSlot.SecondSkill);
             
         }
 
@@ -98,7 +103,7 @@ namespace Members.CHG._02_Scripts.Player
         public void OnDash(InputAction.CallbackContext context)
         {
             if(context.performed)
-                OnDashKeyPressed?.Invoke();
+                OnSkillKeyPressed?.Invoke(PlayerSkillSlot.Dash);
         }
 
         public Vector3 GetWorldMousePosition()
@@ -112,6 +117,11 @@ namespace Members.CHG._02_Scripts.Player
                 _worldMousePosition = hit.point;
             }
             return _worldMousePosition;
+        }
+
+        public void OnCameraToggle(InputAction.CallbackContext context)
+        {
+
         }
     }
 }

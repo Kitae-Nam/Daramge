@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Members.CHG._02_Scripts.Agent.FSM
+namespace CHG._02_Scripts.Agent.FSM
 {
     public class StateMachine
     {

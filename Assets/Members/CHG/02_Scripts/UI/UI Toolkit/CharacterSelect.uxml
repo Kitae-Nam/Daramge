@@ -1,0 +1,10 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/Members/CHG/02_Scripts/UI/UI%20Toolkit/CharacterSelect.uss?fileID=7433441132597879392&amp;guid=357bf47d62108124db04af06ba912958&amp;type=3#CharacterSelect"/>
+    <ui:VisualElement name="select-root" picking-mode="Ignore" class="select-root">
+        <ui:VisualElement name="select-panel" authoring-id="-2025660526" class="character-select character-select--hidden">
+            <ui:Label name="title" text="캐릭터 선택" class="character-select__title"/>
+            <ui:VisualElement name="character-button-container" class="character-select__buttons"/>
+            <ui:Button name="cancel-button" text="취소" class="character-select__cancel"/>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

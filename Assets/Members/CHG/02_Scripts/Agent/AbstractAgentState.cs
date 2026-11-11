@@ -1,4 +1,4 @@
-namespace Members.CHG._02_Scripts.Agent
+namespace CHG._02_Scripts.Agent
 {
     public abstract class AbstractAgentState
     {

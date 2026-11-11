@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Members.CHG._02_Scripts.CombatSystem
+namespace CHG._02_Scripts.CombatSystem
 {
     [CreateAssetMenu(fileName = "Skill data", menuName = "Agent/Skill data", order = 25)]
     public class SkillDataSO : ScriptableObject
@@ -8,6 +8,8 @@ namespace Members.CHG._02_Scripts.CombatSystem
         public int skillIndex;
         public string skillName;
         public float cooldown;
+        public bool CanInterrupt;
+        public bool canBeInterrupted;
         public float skillRange = 1f;
         
         public float baseDamage = 1f;

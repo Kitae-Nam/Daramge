@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Members.CHG._02_Scripts.Player.FSM
+namespace CHG._02_Scripts.Player.FSM
 {
     public class PlayerRunState : AbstractPlayerState
     {
