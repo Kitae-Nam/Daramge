@@ -25,7 +25,9 @@ namespace NKT.Enemy
         public EnemySkillModule SkillModule { get; private set; }
         public AbstractHealthModule HealthModule { get; private set; }
         public Vector3 HomePoint => _homePoint;
+        public float HeightOffset => _heightOffset;
 
+        [SerializeField] private float _heightOffset = 2;
         private Vector3 _homePoint;
         
         protected override void InitializeModules()
