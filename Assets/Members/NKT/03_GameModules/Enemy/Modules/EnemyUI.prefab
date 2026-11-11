@@ -27,8 +27,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2284670194360008234}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 2, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -106,6 +106,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::NKT.Enemy.UI.WorldStatusBar
   barDocument: {fileID: 8976077982351372168}
   healthTemplate: {fileID: 11400000, guid: c0791d705e9bf4e49bb8bf1524becc53, type: 2}
+  lagSpeed: 10
   rootRef:
     m_PanelRenderer: {fileID: 8976077982351372168}
     m_AuthoringPath:
@@ -114,7 +115,6 @@ MonoBehaviour:
     m_PanelRenderer: {fileID: 8976077982351372168}
     m_AuthoringPath:
       m_PathIds: 3863ac52i
-  lagSpeed: 10
 --- !u!114 &2780724227285080262
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -119,7 +119,7 @@ namespace NKT.Enemy.UI
         }
         
         private void FollowTarget()
-            => transform.position = _target.transform.position + Vector3.up * _heightOffset;
+            => transform.localPosition = _target.transform.position + Vector3.up * _heightOffset;
 
         private void LateUpdate()
         {
