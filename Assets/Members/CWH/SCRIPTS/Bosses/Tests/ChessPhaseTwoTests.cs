@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime;
 using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.AI;
+using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Dash;
 using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons;
 using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Combat;
 using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Health;
