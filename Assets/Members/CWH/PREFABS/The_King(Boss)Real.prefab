@@ -12754,7 +12754,7 @@ Transform:
   m_GameObject: {fileID: 2346691917327231199}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: -47.6, y: 18.1, z: 6.93}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -13101,6 +13101,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.BossSwordController
   _swordPrefab: {fileID: 0}
   _breakBonusDamage: 100
+  _throwPreparationCenter: {fileID: 0}
+  _throwPreparationExtraDistance: 1
+  _throwPreparationPortion: 0.35
 --- !u!114 &1219021289891423579
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13411,6 +13414,7 @@ MonoBehaviour:
   _blackKingMesh: {fileID: 4300002, guid: a1edea9a41e71514f94a737abaf1410c, type: 3}
   _bodyRenderer: {fileID: 2847931357123354720}
   _blackKingMaterial: {fileID: 2100000, guid: fed82db7ebed4ff2aebba1fea7f7b18a, type: 2}
+  _deferToCutscene: 0
 --- !u!114 &4556351463414811900
 MonoBehaviour:
   m_ObjectHideFlags: 0
