@@ -30,7 +30,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 2824932376158881210}
+  - {fileID: 7052713056387001993}
   - {fileID: 7020277603546815987}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a87f295200ac45708498d58a5bc067b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CHG._02_Scripts.Agent.AgentFeedbackModule
-  hitFeedback: {fileID: 8361443112154752374}
+  hitFeedback: {fileID: 0}
   deathFeedback: {fileID: 1877277310849320452}
 --- !u!1 &8086358363008410389
 GameObject:
@@ -179,83 +179,65 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CHG._02_Scripts.CoreSystem.FeedbackSystem.Feedback.CameraShakeFeedback
   minForce: 0.1
   maxForce: 0.2
---- !u!1 &9105140456109027397
-GameObject:
+--- !u!1001 &818181135569974377
+PrefabInstance:
   m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2824932376158881210}
-  - component: {fileID: 8361443112154752374}
-  - component: {fileID: 1543652491225052510}
-  - component: {fileID: 1767619443346006184}
-  m_Layer: 7
-  m_Name: Hit Feedback
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2824932376158881210
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9105140456109027397}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 8132233302761895053}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8361443112154752374
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 8132233302761895053}
+    m_Modifications:
+    - target: {fileID: 4332355140682719434, guid: f76d00fab1d32834fa9946bcab231748, type: 3}
+      propertyPath: m_Name
+      value: Hit Feedback
+      objectReference: {fileID: 0}
+    - target: {fileID: 7690606923244509920, guid: f76d00fab1d32834fa9946bcab231748, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7690606923244509920, guid: f76d00fab1d32834fa9946bcab231748, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7690606923244509920, guid: f76d00fab1d32834fa9946bcab231748, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7690606923244509920, guid: f76d00fab1d32834fa9946bcab231748, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7690606923244509920, guid: f76d00fab1d32834fa9946bcab231748, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7690606923244509920, guid: f76d00fab1d32834fa9946bcab231748, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7690606923244509920, guid: f76d00fab1d32834fa9946bcab231748, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7690606923244509920, guid: f76d00fab1d32834fa9946bcab231748, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7690606923244509920, guid: f76d00fab1d32834fa9946bcab231748, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7690606923244509920, guid: f76d00fab1d32834fa9946bcab231748, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: f76d00fab1d32834fa9946bcab231748, type: 3}
+--- !u!4 &7052713056387001993 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7690606923244509920, guid: f76d00fab1d32834fa9946bcab231748, type: 3}
+  m_PrefabInstance: {fileID: 818181135569974377}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9105140456109027397}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6cdf5d3a52c94043b0a8dbc523b9c642, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CHG._02_Scripts.CoreSystem.FeedbackSystem.FeedbackPlayer
-  feelPlayer: {fileID: 0}
-  minIntensity: 0.5
---- !u!114 &1543652491225052510
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9105140456109027397}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e99d5ca388534787af48b3535aa57a3c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CHG._02_Scripts.CoreSystem.FeedbackSystem.Feedback.FlashFeedback
-  targetRenderers:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  flashColor: {r: 2, g: 2, b: 2, a: 0}
-  flashDuration: 0.08
---- !u!114 &1767619443346006184
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9105140456109027397}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5e677587b67548ef9b7d23841dfb92e4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CHG._02_Scripts.CoreSystem.FeedbackSystem.Feedback.HitVfxFeedback
-  createChannel: {fileID: 11400000, guid: 2e0ba72a647af8c4f8c115ece8928979, type: 2}
-  hitVfxItem: {fileID: 11400000, guid: 2b59f3a5de27b6f418fb2da927527aac, type: 2}

@@ -95,6 +95,7 @@ namespace NKT.Enemy.UI
             
             _target = target;
             _heightOffset = heightOffset;
+            transform.localPosition = Vector3.up * _heightOffset;
 
             if (_health != null)
             {
@@ -104,8 +105,6 @@ namespace NKT.Enemy.UI
                 _displayLag = _health.CurrentHealth;
                 _realHealthVM.SetLag(_displayLag);
             }
-
-            FollowTarget(); //타겟 오브젝트를 따라다니도록 셋팅하고
             
             ApplyVisibility(_health.CurrentHealth, _health.MaxHealth);
             
@@ -117,9 +116,6 @@ namespace NKT.Enemy.UI
             if (_rootElement == null) return; 
             _rootElement.style.display = current < max - 0.0001f ?  DisplayStyle.Flex :  DisplayStyle.None;
         }
-        
-        private void FollowTarget()
-            => transform.localPosition = _target.transform.position + Vector3.up * _heightOffset;
 
         private void LateUpdate()
         {
@@ -130,7 +126,6 @@ namespace NKT.Enemy.UI
                 return;
             }
             
-            FollowTarget();
 
             float current = _health.CurrentHealth;
             float newLag = current > _displayLag 
