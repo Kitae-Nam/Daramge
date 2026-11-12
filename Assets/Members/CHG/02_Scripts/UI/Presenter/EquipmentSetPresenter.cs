@@ -40,7 +40,7 @@ namespace CHG._02_Scripts.UI.Presenter
 
             foreach (KeyValuePair<EquipmentSetSO, int> setPair in _model.CountBySet.OrderBy(pair => pair.Key.DisplayName))
             {
-                int reachedTier = setPair.Key.Tiers.Count(tier => setPair.Value >= tier.RequiredCount);
+                int reachedTier = setPair.Key.Tiers.Count(_model.IsTierActive);
                 if (reachedTier == 0) continue;
 
                 CreateCard(setPair.Key, setPair.Value, reachedTier);
@@ -83,7 +83,7 @@ namespace CHG._02_Scripts.UI.Presenter
 
         private VisualElement CreateTierRow(EquipmentSetTier tier, int count)
         {
-            bool isReached = count >= tier.RequiredCount;
+            bool isReached = _model.IsTierActive(tier);
 
             VisualElement row = _tierTemplate.Instantiate().Q<VisualElement>("tier");
             row.EnableInClassList(TierLockedClass, !isReached);

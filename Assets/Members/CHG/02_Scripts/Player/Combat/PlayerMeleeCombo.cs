@@ -32,17 +32,19 @@ namespace CHG._02_Scripts.Player.Combat
 
         private AgentTrigger _trigger;
         private AbstractDamageCaster _damageCaster;
-
         private Coroutine _curCoroutine;
+        private ILockOnModule _lockOnModule;
         private int _comboCounter = 0;
 
         public override void InitializeSkill(ISkillModule skillModule)  
         {
             base.InitializeSkill(skillModule);
             _trigger = _player.GetModule<AgentTrigger>();
-            Debug.Assert(_trigger != null, $"trigger is null : {gameObject.name}");
+            _lockOnModule = _player.GetModule<PlayerLockOnModule>();
             _damageCaster = GetComponentInChildren<AbstractDamageCaster>();
+            Debug.Assert(_trigger != null, $"trigger is null : {gameObject.name}");
             Debug.Assert(_damageCaster != null, $"damageCaster is null : {gameObject.name}");
+            Debug.Assert(_lockOnModule != null, $"lockOnModule is null : {gameObject.name}");
             _damageCaster.InitCaster(skillModule.Owner);
         }
 
@@ -61,16 +63,18 @@ namespace CHG._02_Scripts.Player.Combat
             {
                 _comboCounter = 0;
             }
-            
+    
             _renderer.PlayClip(comboSteps[_comboCounter].comboClip.ParamHash, 0f, 0.05f);
 
-            Vector3 mousePosition = _player.PlayerInput.GetWorldMousePosition();
-            Vector3 direction = mousePosition - _player.transform.position;
-            _movement.RotateTo(direction.normalized);
+            _movement.RotateTo(GetAttackDirection()); // 추가
             _trigger.Subscribe(animationEndTrigger, HandleAnimationEnd);
             _trigger.Subscribe(damageCastTrigger, HandleDamageCast);
             _curCoroutine = StartCoroutine(SwordComboCoroutine());
         }
+
+        private Vector3 GetAttackDirection() => _lockOnModule.HasTarget
+            ? _lockOnModule.DirectionToTarget
+            : _player.PlayerInput.GetWorldMousePosition() - _player.transform.position;
 
         private IEnumerator SwordComboCoroutine()
         {

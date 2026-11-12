@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 13f289844cc24e18b76c147a808d037c, type: 3}
-  m_Name: Dash State
+  m_Name: LockOn State
   m_EditorClassIdentifier: Assembly-CSharp::Agents.FSM.StateSO
-  stateName: IDLE
-  className: CHG._02_Scripts.Player.FSM.PlayerSkillState
-  assetIndex: 0
-  stateParam: {fileID: 11400000, guid: 8b7f7a8adde76a747806745af4ddf272, type: 2}
+  stateName: LOCKON
+  className: CHG._02_Scripts.Player.FSM.PlayerLockOnState
+  assetIndex: 3
+  stateParam: {fileID: 11400000, guid: 00e1fdab73e471246a9ade95f722f062, type: 2}

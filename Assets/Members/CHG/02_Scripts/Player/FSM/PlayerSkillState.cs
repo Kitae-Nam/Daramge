@@ -16,8 +16,8 @@ namespace CHG._02_Scripts.Player.FSM
         public override void Enter(float transitionDuration, int layerIndex = 0)
         {
             _skillModule.OnCurrentSkillEnd += HandleSkillEnd;
-            _player.PlayerInput.OnMovementChange += HandleMovementChange;
-            _controlMovement.SetMovementDirection(_player.PlayerInput.Movement);
+            player.PlayerInput.OnMovementChange += HandleMovementChange;
+            controlMovement.SetMovementDirection(player.PlayerInput.Movement);
             _isSkillEnd = false;
         }
 
@@ -26,21 +26,21 @@ namespace CHG._02_Scripts.Player.FSM
             base.Update();
             if (_isSkillEnd)
             {
-                PlayerState nextState = _player.PlayerInput.Movement.magnitude > INPUT_DEADZONE
-                    ? PlayerState.RUN : PlayerState.IDLE;
-                _player.ChangeState(nextState, 0.1f);
+                PlayerState nextState = lockOn.HasTarget ? PlayerState.LOCKON
+                    : player.PlayerInput.Movement.magnitude > INPUT_DEADZONE ? PlayerState.RUN : PlayerState.IDLE;
+                player.ChangeState(nextState, 0.1f);
             }
         }
 
         public override void Exit()
         {
             _skillModule.OnCurrentSkillEnd -= HandleSkillEnd;
-            _player.PlayerInput.OnMovementChange -= HandleMovementChange;
+            player.PlayerInput.OnMovementChange -= HandleMovementChange;
             base.Exit();
         }
 
         private void HandleMovementChange(Vector2 movementInput)
-            => _controlMovement.SetMovementDirection(movementInput);
+            => controlMovement.SetMovementDirection(movementInput);
 
         private void HandleSkillEnd() => _isSkillEnd = true;
 
