@@ -1,0 +1,14 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Style src="Equipment.uss"/>
+    <ui:Button name="row" class="equipment-row">
+        <ui:VisualElement name="row-icon" picking-mode="Ignore" class="equipment-row__icon"/>
+        <ui:VisualElement picking-mode="Ignore" class="equipment-row__body">
+            <ui:VisualElement picking-mode="Ignore" class="equipment-row__top">
+                <ui:Label name="row-name" picking-mode="Ignore" class="equipment-row__name"/>
+                <ui:Label name="row-state" picking-mode="Ignore" class="equipment-row__state"/>
+            </ui:VisualElement>
+            <ui:Label name="row-stats" picking-mode="Ignore" class="equipment-row__stats"/>
+            <ui:Label name="row-sets" picking-mode="Ignore" class="equipment-row__sets"/>
+        </ui:VisualElement>
+    </ui:Button>
+</ui:UXML>

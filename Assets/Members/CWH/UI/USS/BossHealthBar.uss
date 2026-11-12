@@ -70,19 +70,25 @@
     flex-wrap: wrap;
     max-width: 35%;
     flex-shrink: 0;
-    margin-right: 12px;
     overflow: hidden;
+    padding-left: 12px;
+    padding-top: 24px;
+    margin-right: -2px;
 }
 
 .phase-dot {
-    width: 11px;
-    height: 11px;
+    width: 22px;
+    height: 22px;
     margin: 3px;
     border-radius: 6px;
     border-width: 2px;
     border-color: rgb(240, 93, 94);
     background-color: rgb(200, 45, 54);
     overflow: hidden;
+    margin-top: 5px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    margin-left: 5px;
 }
 
 .phase-dot--current {
@@ -101,7 +107,7 @@
     flex-grow: 1;
     flex-shrink: 1;
     margin: 0;
-    padding-right: 70px;
+    padding-right: 110px;
     color: rgb(247, 243, 233);
     font-size: 40px;
     -unity-font-style: bold;
@@ -128,6 +134,10 @@
     border-right-color: rgb(83, 67, 69);
     border-top-color: rgb(83, 67, 69);
     border-bottom-color: rgb(83, 67, 69);
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    border-bottom-right-radius: 25px;
+    border-bottom-left-radius: 25px;
 }
 
 .health-fill {
