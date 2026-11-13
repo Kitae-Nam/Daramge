@@ -7,11 +7,13 @@ namespace CHG._02_Scripts.CombatSystem
     {
         public ModuleOwner Target { get; }
         public float Amount { get; }
+        public bool IsCritical { get; }
 
-        public DamageTakenEvent(ModuleOwner target, float amount)
+        public DamageTakenEvent(ModuleOwner target, float amount, bool isCritical)
         {
             Target = target;
             Amount = amount;
+            IsCritical = isCritical;
         }
     }
 }

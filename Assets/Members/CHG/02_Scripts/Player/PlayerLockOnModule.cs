@@ -1,5 +1,7 @@
 using System;
 using CHG._02_Scripts.CoreSystem.EventBusSystem;
+using CHG._02_Scripts.CoreSystem.LetterboxSystem;
+using CHG._02_Scripts.UI;
 using GGMLib.ModuleSystems;
 using UnityEngine;
 
@@ -7,6 +9,7 @@ namespace CHG._02_Scripts.Player
 {
     public class PlayerLockOnModule : MonoBehaviour, IModule, IAfterInitModule, ILockOnModule
     {
+        [SerializeField] private LetterboxRequester letterboxRequester;
         [SerializeField] private LayerMask whatIsEnemy;
         [SerializeField] private float searchRadius = 10f;
         [SerializeField] private float releaseRadius = 13f;
@@ -26,6 +29,7 @@ namespace CHG._02_Scripts.Player
             _player = owner as PlayerController;
             Debug.Assert(_player != null, $"this Object not Player child : {gameObject.name}");
             Debug.Assert(releaseRadius >= searchRadius, $"releaseRadius is smaller than searchRadius : {gameObject.name}");
+            Debug.Assert(letterboxRequester != null, $"letterboxRequester is null : {gameObject.name}");
             _results = new Collider[maxSearchCount];
         }
 
@@ -56,11 +60,11 @@ namespace CHG._02_Scripts.Player
             // EventBus<CharacterChangeStartEvent>.Unsubscribe(HandleCharacterChangeStarted);
         }
 
-        private void HandleLockOnKeyPressed() => _isHolding = true;
+        private void HandleLockOnKeyPressed() => SetHolding(true);
 
         private void HandleLockOnKeyReleased()
         {
-            _isHolding = false;
+            SetHolding(false);
             SetTarget(null);
         }
 
@@ -110,6 +114,16 @@ namespace CHG._02_Scripts.Player
             Vector3 offset = position - _player.transform.position;
             offset.y = 0f;
             return offset;
+        }
+
+        private void SetHolding(bool isHolding)
+        {
+            if (_isHolding == isHolding) return;
+            _isHolding = isHolding;
+            if (isHolding)
+                letterboxRequester.Show();
+            else
+                letterboxRequester.Hide();
         }
     }
 }

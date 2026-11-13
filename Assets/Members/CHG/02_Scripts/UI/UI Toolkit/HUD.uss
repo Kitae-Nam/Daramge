@@ -31,24 +31,21 @@
     flex-direction: row;
 }
 
+.heart-container {
+    --heart-size: 40px;
+    flex-direction: row;
+}
+
 .heart {
-    width: 32px;
-    height: 32px;
+    width: var(--heart-size);  
+    height: var(--heart-size); 
     margin-right: 4px;
     background-image: url("project://database/Assets/Members/CHG/05.Graphic/Images/Hollow_heart.png?fileID=2800000&guid=8c5cbc375411e9544bf422bdb9accbe4&type=3#Hollow_heart");
 }
 
-.heart__fill {
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    overflow: hidden;
-}
-
 .heart__fill-image {
-    width: 32px;
-    height: 32px;
+    width: var(--heart-size);  
+    height: var(--heart-size); 
     flex-shrink: 0;
     background-image: url("project://database/Assets/Members/CHG/05.Graphic/Images/Fill_heart.png?fileID=2800000&guid=8b52b309f90c0ec4399e27163de8e1f2&type=3#Fill_heart");
 }
@@ -64,6 +61,7 @@
 }
 
 .stamina-gauge {
+    --fill-color: rgb(26, 242, 115);
     position: absolute;
     left: 0;
     top: 0;
@@ -73,6 +71,41 @@
     transition-duration: 0.3s;
 }
 
+.stamina-gauge--low {
+    --fill-color: rgb(230, 57, 70);
+}
+
 .stamina-gauge--hidden {
     opacity: 0;
+}
+
+.letterbox {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.letterbox__bar {
+    position: absolute;
+    left: 0;
+    right: 0;
+    transition-property: translate, height, background-color;
+    transition-duration: 0.2s;
+    transition-timing-function: ease-out;
+}
+
+.letterbox__bar--top {
+    top: 0;
+    translate: 0 -100%;
+}
+
+.letterbox__bar--bottom {
+    bottom: 0;
+    translate: 0 100%;
+}
+
+.letterbox--visible > .letterbox__bar {
+    translate: 0 0;
 }

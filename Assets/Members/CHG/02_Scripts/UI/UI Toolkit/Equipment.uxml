@@ -7,9 +7,9 @@
                 <ui:VisualElement name="character-tabs" class="equipment__tabs"/>
             </ui:VisualElement>
             <ui:VisualElement class="equipment__body">
-                <ui:VisualElement class="equipment-panel">
+                <ui:VisualElement class="equipment-panel" style="border-bottom-color: rgb(95, 127, 199); border-bottom-width: 3px;">
                     <ui:VisualElement class="equipment-panel__header">
-                        <ui:Label text="맞춰진 조합" class="equipment-panel__title"/>
+                        <ui:Label text="조합" class="equipment-panel__title"/>
                         <ui:Label name="set-count" class="equipment-panel__count"/>
                     </ui:VisualElement>
                     <ui:VisualElement name="set-empty" class="equipment-panel__empty">
@@ -21,7 +21,6 @@
                 <ui:VisualElement class="equipment__stage">
                     <ui:VisualElement name="character-preview" picking-mode="Ignore" class="equipment__preview"/>
                     <ui:Button name="slot-LeftArm" class="equipment-slot equipment-slot--left equipment-slot--arm">
-                        <ui:VisualElement picking-mode="Ignore" class="equipment-slot__line"/>
                         <ui:Label text="왼팔" picking-mode="Ignore" class="equipment-slot__part"/>
                         <ui:VisualElement picking-mode="Ignore" class="equipment-slot__content">
                             <ui:VisualElement name="slot-icon" picking-mode="Ignore" class="equipment-slot__icon"/>
@@ -29,7 +28,6 @@
                         </ui:VisualElement>
                     </ui:Button>
                     <ui:Button name="slot-RightArm" class="equipment-slot equipment-slot--right equipment-slot--arm">
-                        <ui:VisualElement picking-mode="Ignore" class="equipment-slot__line"/>
                         <ui:Label text="오른팔" picking-mode="Ignore" class="equipment-slot__part"/>
                         <ui:VisualElement picking-mode="Ignore" class="equipment-slot__content">
                             <ui:VisualElement name="slot-icon" picking-mode="Ignore" class="equipment-slot__icon"/>
@@ -37,7 +35,6 @@
                         </ui:VisualElement>
                     </ui:Button>
                     <ui:Button name="slot-LeftLeg" class="equipment-slot equipment-slot--left equipment-slot--leg">
-                        <ui:VisualElement picking-mode="Ignore" class="equipment-slot__line"/>
                         <ui:Label text="왼다리" picking-mode="Ignore" class="equipment-slot__part"/>
                         <ui:VisualElement picking-mode="Ignore" class="equipment-slot__content">
                             <ui:VisualElement name="slot-icon" picking-mode="Ignore" class="equipment-slot__icon"/>
@@ -45,7 +42,6 @@
                         </ui:VisualElement>
                     </ui:Button>
                     <ui:Button name="slot-RightLeg" class="equipment-slot equipment-slot--right equipment-slot--leg">
-                        <ui:VisualElement picking-mode="Ignore" class="equipment-slot__line"/>
                         <ui:Label text="오른다리" picking-mode="Ignore" class="equipment-slot__part"/>
                         <ui:VisualElement picking-mode="Ignore" class="equipment-slot__content">
                             <ui:VisualElement name="slot-icon" picking-mode="Ignore" class="equipment-slot__icon"/>
@@ -53,7 +49,7 @@
                         </ui:VisualElement>
                     </ui:Button>
                 </ui:VisualElement>
-                <ui:VisualElement class="equipment-panel">
+                <ui:VisualElement class="equipment-panel" style="border-bottom-color: rgb(95, 127, 199); border-bottom-width: 3px;">
                     <ui:VisualElement name="list-empty" class="equipment-panel__empty">
                         <ui:Label text="칸을 선택하세요" class="equipment-panel__empty-title"/>
                         <ui:Label text="팔이나 다리 칸을 누르면 그 칸에 끼울 수 있는 장비가 나옵니다" class="equipment-panel__empty-text"/>

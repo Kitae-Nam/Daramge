@@ -3,9 +3,7 @@ using System.Collections;
 using CHG._02_Scripts.Agent;
 using CHG._02_Scripts.CombatSystem;
 using CHG._02_Scripts.CoreSystem.AnimationSystem;
-using CHG._02_Scripts.CoreSystem.Events;
 using CHG._02_Scripts.CoreSystem.FeedbackSystem;
-using GGMLib.ObjectPool.Runtime;
 using UnityEngine;
 
 namespace CHG._02_Scripts.Player.Combat
@@ -23,8 +21,6 @@ namespace CHG._02_Scripts.Player.Combat
     {
         [SerializeField] private AnimTriggerSO animationEndTrigger;
         [SerializeField] private AnimTriggerSO damageCastTrigger;
-        [SerializeField] private PoolItemSO slashVfxItem;
-        [SerializeField] private PoolItemSO impactVfxItem;
 
         [SerializeField] private MeleeComboStep[] comboSteps;
         
@@ -102,13 +98,6 @@ namespace CHG._02_Scripts.Player.Combat
 
             if (isHit)
             {
-                if (slashVfxItem != null)
-                    _skillModule.CreateChannel.RaiseEvent(
-                        CreateEvents.ShowPoolingEffect.InitData(slashVfxItem, _damageCaster.LastHitPosition, Quaternion.identity));
-                if (impactVfxItem != null)
-                    _skillModule.CreateChannel.RaiseEvent(
-                        CreateEvents.ShowPoolingEffect.InitData(impactVfxItem, _damageCaster.LastHitPosition, Quaternion.identity));
-                
                 PlayFeedback(comboSteps[_comboCounter].hitFeedback, _damageCaster.LastHitPosition, _player.transform.forward);
             }
         }

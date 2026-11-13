@@ -7,7 +7,10 @@ namespace CHG._02_Scripts.UI
     public partial class RadialGauge : VisualElement
     {
         private float _value = 1f;
+        private static readonly CustomStyleProperty<Color> FillColorProperty = new("--fill-color"); // 추가
 
+        private Color? _styleFillColor; 
+        
         [UxmlAttribute]
         public float Value
         {
@@ -26,6 +29,7 @@ namespace CHG._02_Scripts.UI
         public RadialGauge()
         {
             generateVisualContent += HandleGenerateVisualContent;
+            RegisterCallback<CustomStyleResolvedEvent>(HandleCustomStyleResolved);
         }
 
         private void HandleGenerateVisualContent(MeshGenerationContext context)
@@ -46,10 +50,16 @@ namespace CHG._02_Scripts.UI
             if (_value <= 0f) return;
 
             float startAngle = -90f + (1f - _value) * 360f;
-            painter.strokeColor = FillColor;
+            painter.strokeColor = _styleFillColor ?? FillColor;
             painter.BeginPath();
             painter.Arc(rect.center, radius, Angle.Degrees(startAngle), Angle.Degrees(270f));
             painter.Stroke();
+        }
+
+        private void HandleCustomStyleResolved(CustomStyleResolvedEvent evt)
+        {
+            _styleFillColor = evt.customStyle.TryGetValue(FillColorProperty, out Color color) ? color : null;
+            MarkDirtyRepaint();
         }
     }
 }

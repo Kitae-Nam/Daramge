@@ -60,7 +60,7 @@ namespace CHG._02_Scripts.Agent
             if (Health != null)
             {
                 Health.ApplyDamage(damageData.DamageAmount);
-                EventBus<DamageTakenEvent>.Raise(new DamageTakenEvent(this, damageData.DamageAmount));
+                EventBus<DamageTakenEvent>.Raise(new DamageTakenEvent(this, damageData.DamageAmount, damageData.IsCritical));
             }
             
             OnHit?.Invoke();
