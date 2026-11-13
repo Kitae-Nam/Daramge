@@ -88,7 +88,8 @@ namespace CHG._02_Scripts.Player.Combat
 
         private void AimToMouse()
         {
-            Vector3 dir = _player.PlayerInput.GetWorldMousePosition() - _player.transform.position;
+            Vector3 playerPos = _player.transform.position;
+            Vector3 dir = _player.PlayerInput.GetMousePositionOnPlane(playerPos.y) - playerPos;            
             _movement.RotateTo(dir);
         }
 

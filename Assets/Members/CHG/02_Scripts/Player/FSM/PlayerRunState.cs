@@ -11,22 +11,29 @@ namespace CHG._02_Scripts.Player.FSM
         public override void Enter(float transitionDuration, int layerIndex = 0)
         {
             base.Enter(transitionDuration, layerIndex);
-            _player.PlayerInput.OnMovementChange += HandleMovementChange;
-            _controlMovement.SetMovementDirection(_player.PlayerInput.Movement);
+            player.PlayerInput.OnMovementChange += HandleMovementChange;
+            controlMovement.SetMovementDirection(player.PlayerInput.Movement);
+        }
+        
+        public override void Update() 
+        {
+            base.Update();
+            if (lockOn.HasTarget)
+                player.ChangeState(PlayerState.LOCKON, 0.1f);
         }
 
         public override void Exit()
         {
-            _player.PlayerInput.OnMovementChange -= HandleMovementChange;
+            player.PlayerInput.OnMovementChange -= HandleMovementChange;
             base.Exit();
         }
 
         private void HandleMovementChange(Vector2 movementKey)
         {
-            _controlMovement.SetMovementDirection(movementKey);
+            controlMovement.SetMovementDirection(movementKey);
             if (movementKey.magnitude < INPUT_DEADZONE)
             {
-                _player.ChangeState(PlayerState.IDLE, transitionDuration: 0.1f); 
+                player.ChangeState(PlayerState.IDLE, transitionDuration: 0.1f); 
                 return;
             }
         }

@@ -95,7 +95,8 @@ namespace CHG._02_Scripts.Player.Combat
         
         private void StartCombatJump()
         {
-            Vector3 toMouse = _player.PlayerInput.GetWorldMousePosition() - _player.transform.position;
+            Vector3 playerPos = _player.transform.position; 
+            Vector3 toMouse = _player.PlayerInput.GetWorldMousePosition(playerPos.y) - playerPos; 
             toMouse.y = 0f;
             Vector3 displacement = Vector3.ClampMagnitude(toMouse, combatMaxDistance);
             _movement.RotateTo(displacement);
