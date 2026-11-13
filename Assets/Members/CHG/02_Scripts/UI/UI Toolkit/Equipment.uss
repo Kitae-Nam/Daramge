@@ -1,16 +1,15 @@
 .equipment-root {
-    --ground: #15306F;
-    --panel: #0F2458;
-    --card: #16316F;
-    --tile: #1D3E86;
-    --line: #5F7FC7;
-    --paper: #F6F2E7;
-    --muted: #C6D3F2;
-    --locked: #9DB2E4;
-    --ink: #14224A;
-    --accent: #FFD23F;
-    --shadow: #0A1738;
-
+    --ground: rgb(21, 48, 111);
+    --panel: rgb(15, 36, 88);
+    --card: rgb(22, 49, 111);
+    --tile: rgb(29, 62, 134);
+    --line: rgb(95, 127, 199);
+    --paper: rgb(246, 242, 231);
+    --muted: rgb(198, 211, 242);
+    --locked: rgb(157, 178, 228);
+    --ink: rgb(20, 34, 74);
+    --accent: rgb(255, 210, 63);
+    --shadow: rgb(10, 23, 56);
     position: absolute;
     left: 0;
     top: 0;
@@ -175,7 +174,7 @@
     border-width: 3px;
     border-bottom-width: 9px;
     border-radius: 16px;
-    border-color: #DCE7FF;
+    border-color: rgb(220, 231, 255);
     border-bottom-color: var(--shadow);
     background-color: var(--panel);
     color: var(--paper);
@@ -190,11 +189,11 @@
 }
 
 .equipment-slot--left {
-    left: 0;
+    left: 10px;
 }
 
 .equipment-slot--right {
-    right: 0;
+    right: 10px;
 }
 
 .equipment-slot--arm {
@@ -206,9 +205,9 @@
 }
 
 .equipment-slot--empty {
-    border-color: #7C96D2;
+    border-color: rgb(124, 150, 210);
     border-bottom-color: var(--shadow);
-    background-color: #132A63;
+    background-color: rgb(19, 42, 99);
 }
 
 .equipment-slot--selected,
@@ -224,7 +223,7 @@
     position: absolute;
     top: 50%;
     height: 4px;
-    background-color: #7C96D2;
+    background-color: rgb(124, 150, 210);
 }
 
 .equipment-slot--left > .equipment-slot__line {
@@ -288,7 +287,7 @@
     border-radius: 14px;
     border-color: var(--line);
     border-bottom-color: var(--shadow);
-    background-color: #13295F;
+    background-color: rgb(19, 41, 95);
     color: var(--paper);
 }
 
@@ -341,8 +340,8 @@
     padding: 3px 10px;
     border-width: 2px;
     border-radius: 12px;
-    border-color: #7C96D2;
-    color: #DCE7FF;
+    border-color: rgb(124, 150, 210);
+    color: rgb(220, 231, 255);
     font-size: 16px;
     -unity-font-style: bold;
 }

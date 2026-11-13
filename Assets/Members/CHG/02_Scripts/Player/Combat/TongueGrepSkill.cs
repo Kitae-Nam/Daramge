@@ -17,6 +17,7 @@ namespace CHG._02_Scripts.Player.Combat
         [SerializeField] private Transform startTrm;
         [SerializeField] private LayerMask hitLayer;
         [SerializeField] private float maxRange = 10f;
+        [SerializeField] private float aimSpeed = 30f;
         [SerializeField] private float shootSpeed = 10f;
         [SerializeField] private float pullSpeed = 10f;
         [SerializeField] private float tipRadius = 0.3f;
@@ -58,13 +59,15 @@ namespace CHG._02_Scripts.Player.Combat
 
         private IEnumerator AimingCoroutine()
         {
+            float aimLength = 0f; 
             while (IsHolding)
             {
+                aimLength = Mathf.Min(aimLength + aimSpeed * Time.deltaTime, maxRange); 
                 Vector3 dir = GetAimDirection();
                 Vector3 startPos = startTrm.position;
                 _movement.RotateTo(dir); 
-                bool isHit = Physics.SphereCast(startPos, tipRadius, dir, out RaycastHit hit, maxRange, hitLayer); 
-                UpdateLine(startPos + dir * (isHit ? hit.distance : maxRange), aimColor);
+                bool isHit = Physics.SphereCast(startPos, tipRadius, dir, out RaycastHit hit, aimLength, hitLayer); 
+                UpdateLine(startPos + dir * (isHit ? hit.distance : aimLength), aimColor); 
 
                 yield return null;
             }
@@ -158,9 +161,7 @@ namespace CHG._02_Scripts.Player.Combat
             _movement.CanUseGravity = true;
             base.StopSkill();
         }
-#if UNITY_EDITOR
         
-#endif
         private void UpdateLine(Vector3 tip, Gradient color)
         {
             tongueLine.colorGradient = color;
@@ -170,7 +171,8 @@ namespace CHG._02_Scripts.Player.Combat
 
         private Vector3 GetAimDirection()
         {
-            Vector3 dir = _player.PlayerInput.GetWorldMousePosition() - _player.transform.position;
+            Vector3 playerPos = _player.transform.position;
+            Vector3 dir = _player.PlayerInput.GetMousePositionOnPlane(playerPos.y) - playerPos;
             dir.y = 0f;
             return dir.normalized;
         }

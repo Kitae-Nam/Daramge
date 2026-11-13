@@ -13,6 +13,8 @@ namespace CHG._02_Scripts.Player
         public event Action<PlayerSkillSlot> OnSkillKeyPressed;
         public event Action<PlayerSkillSlot> OnSkillKeyReleased;
         public event Action OnInteractKeyPressed;
+        public event Action OnLockOnKeyPressed;
+        public event Action OnLockOnKeyReleased;
         
 
         public Vector2 Movement { get; private set; }
@@ -105,8 +107,22 @@ namespace CHG._02_Scripts.Player
             if(context.performed)
                 OnSkillKeyPressed?.Invoke(PlayerSkillSlot.Dash);
         }
+        
+        public void OnCameraToggle(InputAction.CallbackContext context)
+        {
 
-        public Vector3 GetWorldMousePosition()
+        }
+
+        public void OnLockOn(InputAction.CallbackContext context)
+        {
+            if (context.performed)
+                OnLockOnKeyPressed?.Invoke();
+            
+            if (context.canceled)
+                OnLockOnKeyReleased?.Invoke();
+        }
+
+        public Vector3 GetWorldMousePosition(float fallbackHeight = 0f)
         {
             if(MainCam == null)
                 return _worldMousePosition;
@@ -116,12 +132,26 @@ namespace CHG._02_Scripts.Player
             {
                 _worldMousePosition = hit.point;
             }
+            else if (RaycastPlane(camRay, fallbackHeight, out Vector3 planePoint))
+            {
+                _worldMousePosition = planePoint;
+            }
             return _worldMousePosition;
         }
 
-        public void OnCameraToggle(InputAction.CallbackContext context)
+        public Vector3 GetMousePositionOnPlane(float height)
         {
+            if (MainCam != null && RaycastPlane(MainCam.ScreenPointToRay(_screenMousePosition), height,
+                    out Vector3 planePoint))
+                _worldMousePosition = planePoint;
+            return _worldMousePosition;
+        }
 
+        private bool RaycastPlane(Ray ray, float height, out Vector3 point)
+        {
+            bool isHit = new Plane(Vector3.up, new Vector3(0f, height, 0f)).Raycast(ray, out float enter);
+            point = isHit ? ray.GetPoint(enter) : Vector3.zero;
+            return isHit;
         }
     }
 }

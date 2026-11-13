@@ -63,7 +63,7 @@ namespace CHG._02_Scripts.UI
         {
             ReleaseWindow();
             _window = window;
-            _tabContainer = window.Q<VisualElement>("character-preview");
+            _tabContainer = window.Q<VisualElement>("character-tabs");
             window.Q<VisualElement>("character-preview").style.backgroundImage =
                 new StyleBackground(Background.FromRenderTexture(characterPreview.Texture));
 
