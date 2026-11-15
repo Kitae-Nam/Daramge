@@ -1,4 +1,5 @@
 using CHG._02_Scripts.CombatSystem;
+using CHG._02_Scripts.CoreSystem;
 using CHG._02_Scripts.CoreSystem.EventBusSystem;
 using GGMLib.ModuleSystems;
 using UnityEngine.Events;
@@ -66,6 +67,15 @@ namespace CHG._02_Scripts.Agent
             OnHit?.Invoke();
         }
 
+        public void ApplyTickDamage(float damageAmount, DamageTextStyle textStyle)
+        {
+            if (IsDead || Health == null) return;
+            if (HasStatus(AgentStatus.Invincible)) return;
+            
+            Health.ApplyDamage(damageAmount);
+            EventBus<DamageTakenEvent>.Raise(new DamageTakenEvent(this, damageAmount, false, textStyle));
+        }
+        
         public bool HasStatus(AgentStatus status) => (Status & status) == status;
         public void AddStatus(AgentStatus status) => Status |= status;
         public void RemoveStatus(AgentStatus status) => Status &= ~status;

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using CHG._02_Scripts.Agent;
 using CHG._02_Scripts.CombatSystem;
+using CHG._02_Scripts.CombatSystem.DotSystem;
 using CHG._02_Scripts.CoreSystem.AnimationSystem;
 using CHG._02_Scripts.CoreSystem.FeedbackSystem;
 using UnityEngine;
@@ -31,6 +32,7 @@ namespace CHG._02_Scripts.Player.Combat
         private Coroutine _curCoroutine;
         private ILockOnModule _lockOnModule;
         private int _comboCounter = 0;
+        private IHitDotModule _hitDotModule;
 
         public override void InitializeSkill(ISkillModule skillModule)  
         {
@@ -42,6 +44,17 @@ namespace CHG._02_Scripts.Player.Combat
             Debug.Assert(_damageCaster != null, $"damageCaster is null : {gameObject.name}");
             Debug.Assert(_lockOnModule != null, $"lockOnModule is null : {gameObject.name}");
             _damageCaster.InitCaster(skillModule.Owner);
+            _damageCaster.OnTargetHit += HandleTargetHit;
+        }
+        
+        private void OnDestroy()
+        {
+            if (_damageCaster != null)
+                _damageCaster.OnTargetHit -= HandleTargetHit;
+            
+            if (_trigger == null) return;
+            _trigger.UnSubscribe(damageCastTrigger, HandleDamageCast);
+            _trigger.UnSubscribe(animationEndTrigger, HandleAnimationEnd);
         }
 
         public override bool CanUseSkill(GameObject target = null)
@@ -103,6 +116,8 @@ namespace CHG._02_Scripts.Player.Combat
         }
 
         private void HandleAnimationEnd() => StopSkill();
+        private void HandleTargetHit(Collider target) => 
+            _hitDotModule?.ApplyDots(target);
 
         public override void StopSkill()
         {
@@ -119,11 +134,6 @@ namespace CHG._02_Scripts.Player.Combat
             base.StopSkill();
         }
 
-        private void OnDestroy()
-        {
-            if (_trigger == null) return;
-            _trigger.UnSubscribe(damageCastTrigger, HandleDamageCast);
-            _trigger.UnSubscribe(animationEndTrigger, HandleAnimationEnd);
-        }
+        
     }
 }

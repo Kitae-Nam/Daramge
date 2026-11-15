@@ -1,3 +1,4 @@
+using CHG._02_Scripts.CoreSystem;
 using CHG._02_Scripts.CoreSystem.EventBusSystem;
 using GGMLib.ModuleSystems;
 
@@ -6,14 +7,16 @@ namespace CHG._02_Scripts.CombatSystem
     public readonly struct DamageTakenEvent : IEvent
     {
         public ModuleOwner Target { get; }
+        public DamageTextStyle TextStyle { get; }
         public float Amount { get; }
         public bool IsCritical { get; }
 
-        public DamageTakenEvent(ModuleOwner target, float amount, bool isCritical)
+        public DamageTakenEvent(ModuleOwner target, float amount, bool isCritical, DamageTextStyle textStyle = null)
         {
             Target = target;
             Amount = amount;
             IsCritical = isCritical;
+            TextStyle = textStyle;
         }
     }
 }

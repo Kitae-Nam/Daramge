@@ -49,6 +49,7 @@ namespace CHG._02_Scripts.CombatSystem
                 damageData.DamageAmount *= multiplier;
                 damageData.HitPoint = _hits[i].ClosestPoint(position);
                 damageable.ApplyDamage(damageData);
+                RaiseTargetHit(_hits[i]);
                 isHit = true;
             }
             return isHit;

@@ -24,6 +24,12 @@ namespace CHG._02_Scripts.UI
             Vector3 position = evt.Target.transform.position + Vector3.up * heightOffset;
             string text = evt.Amount.ToString(numberFormat);
 
+            if (evt.TextStyle != null)
+            {
+                MMFloatingTextSpawnEvent.Trigger(null, position, text, Vector3.zero, evt.TextStyle.Intensity, forceColor: true, animateColorGradient:evt.TextStyle.Gradient, useUnscaledTime:true);
+                return;
+            }
+            
             if (evt.IsCritical) 
             {
                 MMFloatingTextSpawnEvent.Trigger(null, position, text, Vector3.zero, criticalIntensity,
