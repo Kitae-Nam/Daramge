@@ -6,5 +6,6 @@ namespace CHG._02_Scripts.Player
     {
         bool HasTarget { get; }
         Vector3 DirectionToTarget { get; }
+        void SetBlocked(bool isBlocked);
     }
 }

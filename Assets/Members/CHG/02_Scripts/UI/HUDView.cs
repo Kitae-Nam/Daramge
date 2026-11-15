@@ -14,6 +14,7 @@ namespace CHG._02_Scripts.UI
         
         [SerializeField] private VisualElementReference<VisualElement> heartContainer = new(); 
         [SerializeField] private VisualElementReference<RadialGauge> staminaGauge = new();
+        [SerializeField] private VisualElementReference<VisualElement> letterbox = new();
         
         private VisualElement _root;
         private int _uiVersion = -1;
@@ -27,6 +28,7 @@ namespace CHG._02_Scripts.UI
         private HealthPresenter _healthPresenter;
         private StaminaPresenter _staminaPresenter;
         private WorldFollower _staminaFollower;
+        private LetterboxPresenter _letterboxPresenter;
 
         private void Awake()
         {
@@ -41,21 +43,26 @@ namespace CHG._02_Scripts.UI
             heartContainer.RegisterReferenceUnloadedCallback(HandleHeartContainerUnloaded);
             staminaGauge.RegisterReferenceResolvedCallback(HandleStaminaGaugeResolved);
             staminaGauge.RegisterReferenceUnloadedCallback(HandleStaminaGaugeUnloaded);
-            
+            letterbox.RegisterReferenceResolvedCallback(HandleLetterboxResolved);
+            letterbox.RegisterReferenceUnloadedCallback(HandleLetterboxUnloaded);
+    
         }
 
         private void OnDestroy()
         {
             CinemachineCore.CameraUpdatedEvent.RemoveListener(HandleCameraUpdated);
             EventBus<CharacterChangeStartEvent>.Unsubscribe(HandleCharacterChangeStarted);
-            
+    
             heartContainer.UnregisterReferenceResolvedCallback(HandleHeartContainerResolved);
             heartContainer.UnregisterReferenceUnloadedCallback(HandleHeartContainerUnloaded);
             staminaGauge.UnregisterReferenceResolvedCallback(HandleStaminaGaugeResolved);
             staminaGauge.UnregisterReferenceUnloadedCallback(HandleStaminaGaugeUnloaded);
+            letterbox.UnregisterReferenceResolvedCallback(HandleLetterboxResolved); // 추가
+            letterbox.UnregisterReferenceUnloadedCallback(HandleLetterboxUnloaded); // 추가
 
             DisposeHealthPresenter();
             DisposeStaminaPresenter();
+            DisposeLetterboxPresenter(); 
         }
 
         private void HandleHeartContainerResolved(VisualElement container)
@@ -127,6 +134,20 @@ namespace CHG._02_Scripts.UI
             if (_staminaGauge == null || _staminaModule == null) return;
             _staminaPresenter = new StaminaPresenter(_staminaGauge, _staminaModule);
             _staminaFollower = new WorldFollower(_staminaGauge, _player.transform, worldCamera, staminaGaugeOffset);
+        }
+        
+        private void HandleLetterboxResolved(VisualElement element) 
+        {
+            DisposeLetterboxPresenter();
+            _letterboxPresenter = new LetterboxPresenter(element);
+        }
+
+        private void HandleLetterboxUnloaded(VisualElement element) => DisposeLetterboxPresenter(); 
+
+        private void DisposeLetterboxPresenter() 
+        {
+            _letterboxPresenter?.Dispose();
+            _letterboxPresenter = null;
         }
     }
 }
