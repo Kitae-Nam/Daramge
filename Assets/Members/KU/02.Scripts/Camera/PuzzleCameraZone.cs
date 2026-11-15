@@ -12,9 +12,13 @@ public class PuzzleCameraZone : MonoBehaviour
     [SerializeField]
     private Transform cameraPoint;
 
+    [SerializeField, Min(0f)]
+    private float orthographicSizeOverride;
+
     private readonly HashSet<Collider> playerColliders = new();
 
     public Transform CameraPoint => cameraPoint;
+    public float OrthographicSizeOverride => orthographicSizeOverride;
 
     private void Awake()
     {
