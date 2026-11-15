@@ -5575,125 +5575,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 19149608}
   m_LocalEulerAnglesHint: {x: 41.29924, y: 89.999985, z: -90}
---- !u!1 &1689383245 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2188525237127489259, guid: f2ec2ac560ea30c4d8b07ab8bfe4f054, type: 3}
-  m_PrefabInstance: {fileID: 1160913874026896537}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1689383251
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1689383245}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6da43522623d4704e979466dc7650b65, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: MoreMountains.Tools::MoreMountains.Feedbacks.MMF_Player
-  Feedbacks: []
-  InitializationMode: 2
-  AutoInitialization: 1
-  SafeMode: 3
-  Direction: 0
-  AutoChangeDirectionOnEnd: 0
-  AutoPlayOnStart: 0
-  AutoPlayOnEnable: 0
-  ForceTimescaleMode: 0
-  ForcedTimescaleMode: 1
-  DurationMultiplier: 1
-  TimescaleMultiplier: 1
-  RandomizeDuration: 0
-  RandomDurationMultiplier: {x: 0.5, y: 1.5}
-  DisplayFullDurationDetails: 0
-  PlayerTimescaleMode: 0
-  OnlyPlayIfWithinRange: 0
-  RangeCenter: {fileID: 0}
-  RangeDistance: 5
-  UseRangeFalloff: 0
-  RangeFalloff:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  RemapRangeFalloff: {x: 0, y: 1}
-  IgnoreRangeEvents: 0
-  CooldownDuration: 0
-  InitialDelay: 0
-  CanPlay: 1
-  CanPlayWhileAlreadyPlaying: 1
-  ChanceToPlay: 100
-  FeedbacksIntensity: 1
-  Events:
-    TriggerMMFeedbacksEvents: 0
-    TriggerUnityEvents: 1
-    OnPlay:
-      m_PersistentCalls:
-        m_Calls: []
-    OnPause:
-      m_PersistentCalls:
-        m_Calls: []
-    OnStop:
-      m_PersistentCalls:
-        m_Calls: []
-    OnResume:
-      m_PersistentCalls:
-        m_Calls: []
-    OnChangeDirection:
-      m_PersistentCalls:
-        m_Calls: []
-    OnComplete:
-      m_PersistentCalls:
-        m_Calls: []
-    OnRestoreInitialValues:
-      m_PersistentCalls:
-        m_Calls: []
-    OnSkipToTheEnd:
-      m_PersistentCalls:
-        m_Calls: []
-    OnInitializationComplete:
-      m_PersistentCalls:
-        m_Calls: []
-    OnEnable:
-      m_PersistentCalls:
-        m_Calls: []
-    OnDisable:
-      m_PersistentCalls:
-        m_Calls: []
-  DebugActive: 0
-  InScriptDrivenPause: 0
-  FeedbacksList: []
-  KeepPlayModeChanges: 0
-  PerformanceMode: 0
-  RestoreInitialValuesOnDisable: 0
-  StopFeedbacksOnDisable: 0
-  PlayCount: 0
-  MMF_ChannelMode: 0
-  MMF_Channel: 0
-  MMF_ChannelDefinition: {fileID: 0}
-  references:
-    version: 2
-    RefIds: []
 --- !u!1 &1726767765
 GameObject:
   m_ObjectHideFlags: 0
@@ -5900,17 +5781,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 19149608}
   m_LocalEulerAnglesHint: {x: -89.98021, y: 179.99998, z: 0}
---- !u!114 &1801373655 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1554731928132845060, guid: f2ec2ac560ea30c4d8b07ab8bfe4f054, type: 3}
-  m_PrefabInstance: {fileID: 1160913874026896537}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6cdf5d3a52c94043b0a8dbc523b9c642, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CHG._02_Scripts.CoreSystem.FeedbackSystem.FeedbackPlayer
 --- !u!1 &1804119213
 GameObject:
   m_ObjectHideFlags: 0
@@ -7380,44 +7250,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Dummy
       objectReference: {fileID: 0}
-    - target: {fileID: 4415183652661065509, guid: f2ec2ac560ea30c4d8b07ab8bfe4f054, type: 3}
-      propertyPath: hitFeedback
-      value: 
-      objectReference: {fileID: 1801373655}
-    - target: {fileID: 8531509476950975475, guid: f2ec2ac560ea30c4d8b07ab8bfe4f054, type: 3}
-      propertyPath: feelPlayer
-      value: 
-      objectReference: {fileID: 1689383251}
-    - target: {fileID: 8924837405492349538, guid: f2ec2ac560ea30c4d8b07ab8bfe4f054, type: 3}
-      propertyPath: FeedbacksList.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8924837405492349538, guid: f2ec2ac560ea30c4d8b07ab8bfe4f054, type: 3}
-      propertyPath: 'FeedbacksList.Array.data[0]'
-      value: 8926579900121350246
-      objectReference: {fileID: 0}
-    - target: {fileID: 8924837405492349538, guid: f2ec2ac560ea30c4d8b07ab8bfe4f054, type: 3}
-      propertyPath: 'FeedbacksList.Array.data[1]'
-      value: 8926579900121350247
-      objectReference: {fileID: 0}
-    - target: {fileID: 8924837405492349538, guid: f2ec2ac560ea30c4d8b07ab8bfe4f054, type: 3}
-      propertyPath: managedReferences[8926579900121350245].Velocity.z
-      value: 0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 8924837405492349538, guid: f2ec2ac560ea30c4d8b07ab8bfe4f054, type: 3}
-      propertyPath: managedReferences[8926579900121350245].ClearImpulseOnStop
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 6466234165060994983, guid: f2ec2ac560ea30c4d8b07ab8bfe4f054, type: 3}
-    - {fileID: 7412731306859363786, guid: f2ec2ac560ea30c4d8b07ab8bfe4f054, type: 3}
-    - {fileID: 4714728881472039468, guid: f2ec2ac560ea30c4d8b07ab8bfe4f054, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 2188525237127489259, guid: f2ec2ac560ea30c4d8b07ab8bfe4f054, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1689383251}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f2ec2ac560ea30c4d8b07ab8bfe4f054, type: 3}
 --- !u!1001 &3399319948559578022
 PrefabInstance:
@@ -7628,6 +7464,7 @@ SceneRoots:
   - {fileID: 108413692425992072}
   - {fileID: 3399319948559578022}
   - {fileID: 4510106574523943658}
+  - {fileID: 1160913874026896537}
   - {fileID: 817228918}
   - {fileID: 256339034}
   - {fileID: 1339958488}
@@ -7635,6 +7472,5 @@ SceneRoots:
   - {fileID: 1255325735}
   - {fileID: 1345568989}
   - {fileID: 1867506505}
-  - {fileID: 1160913874026896537}
   - {fileID: 435051268907245766}
   - {fileID: 6384192169184513467}
