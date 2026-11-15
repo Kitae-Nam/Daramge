@@ -112,7 +112,7 @@ public class ToyTrainMover : MonoBehaviour
         Action onReturning,
         Action<bool> onFinished)
     {
-        if (!isConfigured || isMoving)
+        if (!isConfigured || isMoving || !isActiveAndEnabled)
             return false;
 
         if (destinationWaypointIndex < 0 ||

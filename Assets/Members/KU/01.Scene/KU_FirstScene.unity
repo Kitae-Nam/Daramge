@@ -2905,7 +2905,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DashRotationPuzzle
   rotatingObject: {fileID: 1583515471}
-  dashPlayer: {fileID: 0}
+  dashPlayer: {fileID: 393123662}
   railHitCollider: {fileID: 7200000005}
   totalSteps: 4
   rotationAngle: 90
@@ -3926,7 +3926,7 @@ Transform:
   m_GameObject: {fileID: 132105891}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -98.75, y: 0.91, z: -10.83}
+  m_LocalPosition: {x: -98.75, y: 0.61, z: -10.83}
   m_LocalScale: {x: 7.2, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3972,11 +3972,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DashRotationPuzzle
   rotatingObject: {fileID: 132105892}
-  dashPlayer: {fileID: 0}
+  dashPlayer: {fileID: 393123662}
   railHitCollider: {fileID: 0}
   totalSteps: 4
   rotationAngle: 90
-  rotationDuration: 0.4
+  rotationDuration: 0.7
   smoothRotation: 1
   reverseDirection: 0
   centerDeadZone: 0.1
@@ -17051,6 +17051,8 @@ Transform:
   - {fileID: 1065066762}
   - {fileID: 743338470}
   - {fileID: 7200000118}
+  - {fileID: 7200000301}
+  - {fileID: 7200000305}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &698896786
@@ -17102,13 +17104,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 698896786}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.35355338, y: 0.35355338, z: -0.1464466, w: 0.8535535}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 45, y: 45, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &698896789
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18721,6 +18723,7 @@ Transform:
   - {fileID: 1360482506}
   - {fileID: 1032684042}
   - {fileID: 2102009688}
+  - {fileID: 1355551467}
   m_Father: {fileID: 697034200}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &747228525
@@ -22739,7 +22742,7 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-  CustomBlends: {fileID: 0}
+  CustomBlends: {fileID: 11400000, guid: ae8aebc42cc74147bfc93d6826424ba1, type: 2}
 --- !u!1001 &937451377
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -23166,8 +23169,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 962274858}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.906308, z: -0.422618, w: 0}
-  m_LocalPosition: {x: 0, y: 20, z: 16}
+  m_LocalRotation: {x: -0, y: 0.90630794, z: -0.42261797, w: 0}
+  m_LocalPosition: {x: -9.890003, y: 3.35, z: -2.8400002}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -23407,7 +23410,6 @@ GameObject:
   - component: {fileID: 970810562}
   - component: {fileID: 970810564}
   - component: {fileID: 970810563}
-  - component: {fileID: 970810565}
   m_Layer: 8
   m_Name: Player_WallE
   m_TagString: Untagged
@@ -23818,7 +23820,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 970810555}
+  m_GameObject: {fileID: 2119891759}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1d668c242c25ce44580bb1489736cdb9, type: 3}
@@ -23831,6 +23833,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   interactionOrigin: {fileID: 0}
+  characterChange: {fileID: 1991469666}
 --- !u!1 &971315571
 GameObject:
   m_ObjectHideFlags: 0
@@ -23945,7 +23948,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PuzzleDoorView
   openOffset: {x: 2, y: 0, z: -2}
   moveOrder: 1
-  moveSpeed: 2
+  moveSpeed: 1
   smoothMovement: 1
   rotationOffset: {x: 0, y: 0, z: 0}
   rotationSpeed: 90
@@ -24402,7 +24405,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 31, y: 5, z: 24}
+  m_Size: {x: 25, y: 5, z: 24}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!4 &985165639
 Transform:
@@ -24413,7 +24416,7 @@ Transform:
   m_GameObject: {fileID: 985165636}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 49.24, y: -1.77, z: -6.29}
+  m_LocalPosition: {x: 50.57, y: -1.77, z: -9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -25606,7 +25609,6 @@ GameObject:
   - component: {fileID: 1032684042}
   - component: {fileID: 1032684045}
   - component: {fileID: 1032684044}
-  - component: {fileID: 1032684043}
   m_Layer: 0
   m_Name: Cylinder (1)
   m_TagString: Untagged
@@ -25629,29 +25631,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 743338470}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!136 &1032684043
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1032684041}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5000001
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
 --- !u!23 &1032684044
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -29869,7 +29848,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DashRotationPuzzle
   rotatingObject: {fileID: 1932792622}
-  dashPlayer: {fileID: 0}
+  dashPlayer: {fileID: 393123662}
   railHitCollider: {fileID: 7200000002}
   totalSteps: 4
   rotationAngle: 90
@@ -33525,6 +33504,96 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4962039562683002, guid: bbc12ae2f967ec04e8c3c39eeb92733b, type: 3}
   m_PrefabInstance: {fileID: 1354258481}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1355551466
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1355551467}
+  - component: {fileID: 1355551469}
+  - component: {fileID: 1355551468}
+  m_Layer: 0
+  m_Name: Cylinder (3)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1355551467
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1355551466}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -5.05, y: -0.03, z: 6.48}
+  m_LocalScale: {x: 7.3, y: 0.1, z: 7.3}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 743338470}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!23 &1355551468
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1355551466}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: b8355fbe6f946254b923bb43afb4cc27, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &1355551469
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1355551466}
+  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1001 &1358737895
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -33606,7 +33675,6 @@ GameObject:
   - component: {fileID: 1360482506}
   - component: {fileID: 1360482509}
   - component: {fileID: 1360482508}
-  - component: {fileID: 1360482507}
   m_Layer: 0
   m_Name: Cylinder
   m_TagString: Untagged
@@ -33629,29 +33697,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 743338470}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!136 &1360482507
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1360482505}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5000001
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
 --- !u!23 &1360482508
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -34579,6 +34624,7 @@ GameObject:
   - component: {fileID: 1418183266}
   - component: {fileID: 1418183268}
   - component: {fileID: 1418183270}
+  - component: {fileID: 1418183271}
   m_Layer: 7
   m_Name: SM_Room_Chair
   m_TagString: Untagged
@@ -34659,7 +34705,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1418183265}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f1f8060195c54ab58f32cc10b0fa16ee, type: 3}
   m_Name: 
@@ -34718,6 +34764,33 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 128.6, y: 183, z: 33.3}
   m_Center: {x: 0, y: 202.5, z: 39.7}
+--- !u!114 &1418183271
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1418183265}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 754114a6cf37425e94df2027289c5a8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CHG._02_Scripts.Player.Combat.Tongue.TongueHitEvent
+  onTongueHit:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1418183266}
+        m_TargetAssemblyTypeName: CoopChairPuzzle, Assembly-CSharp
+        m_MethodName: PullChair
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!23 &1420123299
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -35710,7 +35783,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1460140553
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -38217,7 +38290,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DashRotationPuzzle
   rotatingObject: {fileID: 1722266762}
-  dashPlayer: {fileID: 0}
+  dashPlayer: {fileID: 393123662}
   railHitCollider: {fileID: 7200000008}
   totalSteps: 4
   rotationAngle: 90
@@ -38938,7 +39011,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 100006, guid: 6b12a0e9977a3d349a5a5c593d302910, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1987519716}
   m_SourcePrefab: {fileID: 100100000, guid: 6b12a0e9977a3d349a5a5c593d302910, type: 3}
 --- !u!4 &1584008177 stripped
 Transform:
@@ -39667,6 +39743,7 @@ GameObject:
   - component: {fileID: 1608030785}
   - component: {fileID: 1608030786}
   - component: {fileID: 7200000030}
+  - component: {fileID: 1953449667}
   m_Layer: 7
   m_Name: Collider
   m_TagString: Untagged
@@ -43233,7 +43310,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PuzzleDoorView
   openOffset: {x: 0, y: 0, z: -0.165}
   moveOrder: 1
-  moveSpeed: 2
+  moveSpeed: 1
   smoothMovement: 1
   rotationOffset: {x: 0, y: 0, z: 0}
   rotationSpeed: 90
@@ -44153,6 +44230,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 7200000303}
+        m_TargetAssemblyTypeName: InteractionCameraView, Assembly-CSharp
+        m_MethodName: ShowView
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   onTrainReturning:
     m_PersistentCalls:
       m_Calls: []
@@ -44173,6 +44262,21 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 1
+        m_CallState: 2
+  onTrainStopped:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7200000303}
+        m_TargetAssemblyTypeName: InteractionCameraView, Assembly-CSharp
+        m_MethodName: HideView
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
         m_CallState: 2
 --- !u!1 &1783723642
 GameObject:
@@ -48429,7 +48533,7 @@ MonoBehaviour:
     spawnPoint: {fileID: 1155415560}
   returnDelay: 3
   spawnSampleDistance: 2
-  player: {fileID: 0}
+  player: {fileID: 393123661}
   onAllEnemiesDefeated:
     m_PersistentCalls:
       m_Calls:
@@ -49235,6 +49339,33 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4289126748202998, guid: 9672218ecb324c240ae58e7a390701f2, type: 3}
   m_PrefabInstance: {fileID: 1951759050}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1953449667
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1608030784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 754114a6cf37425e94df2027289c5a8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CHG._02_Scripts.Player.Combat.Tongue.TongueHitEvent
+  onTongueHit:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 609358075}
+        m_TargetAssemblyTypeName: TrainStartLever, Assembly-CSharp
+        m_MethodName: ReceiveTongueHit
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1954156534
 GameObject:
   m_ObjectHideFlags: 0
@@ -49845,6 +49976,32 @@ Transform:
   - {fileID: 7200000116}
   m_Father: {fileID: 697034200}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1987519715 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 100006, guid: 6b12a0e9977a3d349a5a5c593d302910, type: 3}
+  m_PrefabInstance: {fileID: 1584008176}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &1987519716
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1987519715}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.7, y: 1, z: 2.74}
+  m_Center: {x: 0.03, y: 0.51, z: 0}
 --- !u!1001 &1988327866
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -53309,7 +53466,6 @@ GameObject:
   - component: {fileID: 2102009688}
   - component: {fileID: 2102009691}
   - component: {fileID: 2102009690}
-  - component: {fileID: 2102009689}
   m_Layer: 0
   m_Name: Cylinder (2)
   m_TagString: Untagged
@@ -53332,29 +53488,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 743338470}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!136 &2102009689
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2102009687}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5000001
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
 --- !u!23 &2102009690
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -54002,6 +54135,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2119891760}
   - component: {fileID: 2119891761}
+  - component: {fileID: 970810565}
   m_Layer: 0
   m_Name: Dungeon
   m_TagString: Untagged
@@ -55875,7 +56009,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1608030784}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f1f8060195c54ab58f32cc10b0fa16ee, type: 3}
   m_Name: 
@@ -57540,6 +57674,129 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: f11f28527e7024d47b3b7cca9cf97a01, type: 3}
   m_PrefabInstance: {fileID: 939543256}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &7200000300
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7200000301}
+  - component: {fileID: 7200000302}
+  - component: {fileID: 7200000303}
+  m_Layer: 0
+  m_Name: TrainOverviewCamera
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7200000301
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7200000300}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.35355338, y: -0.35355338, z: 0.1464466, w: 0.8535535}
+  m_LocalPosition: {x: 23.38, y: 10, z: -12.86}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 697034200}
+  m_LocalEulerAnglesHint: {x: 45, y: -45, z: 0}
+--- !u!114 &7200000302
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7200000300}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9dfa5b682dcd46bda6128250e975f58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineCamera
+  Priority:
+    Enabled: 1
+    m_Value: 200
+  OutputChannel: 1
+  StandbyUpdate: 0
+  m_StreamingVersion: 20241001
+  m_LegacyPriority: 0
+  Target:
+    TrackingTarget: {fileID: 0}
+    LookAtTarget: {fileID: 0}
+    CustomLookAtTarget: 0
+  Lens:
+    FieldOfView: 40
+    OrthographicSize: 12.5
+    NearClipPlane: 0.1
+    FarClipPlane: 5000
+    Dutch: 0
+    ModeOverride: 0
+    PhysicalProperties:
+      GateFit: 2
+      SensorSize: {x: 21.946, y: 16.002}
+      LensShift: {x: 0, y: 0}
+      FocusDistance: 10
+      Iso: 200
+      ShutterSpeed: 0.005
+      Aperture: 16
+      BladeCount: 5
+      Curvature: {x: 2, y: 11}
+      BarrelClipping: 0.25
+      Anamorphism: 0
+  BlendHint: 0
+--- !u!114 &7200000303
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7200000300}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea598a0e25814f64856b270e9246da72, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InteractionCameraView
+  cameraPoint: {fileID: 7200000305}
+  activePriority: 200
+  verticalFollowTarget: {fileID: 845271821}
+  verticalFollowSmoothTime: 0.35
+--- !u!1 &7200000304
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7200000305}
+  m_Layer: 0
+  m_Name: TrainCameraPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7200000305
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7200000304}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.35355338, y: -0.35355338, z: 0.1464466, w: 0.8535535}
+  m_LocalPosition: {x: 23.38, y: 10, z: -12.86}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 697034200}
+  m_LocalEulerAnglesHint: {x: 45, y: -45, z: 0}
 --- !u!1 &7300000001
 GameObject:
   m_ObjectHideFlags: 0

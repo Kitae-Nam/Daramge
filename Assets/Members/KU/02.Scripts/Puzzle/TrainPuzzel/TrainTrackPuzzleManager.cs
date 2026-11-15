@@ -54,6 +54,9 @@ public class TrainTrackPuzzleManager : MonoBehaviour
     [SerializeField]
     private UnityEvent onPuzzleSolved;
 
+    [SerializeField]
+    private UnityEvent onTrainStopped;
+
     private TrainPuzzleState currentState =
         TrainPuzzleState.Ready;
 
@@ -131,7 +134,7 @@ public class TrainTrackPuzzleManager : MonoBehaviour
     // 레버가 호출하는 메서드
     public bool RequestTrainDeparture()
     {
-        if (!isInitialized)
+        if (!isInitialized || !isActiveAndEnabled)
             return false;
 
         if (currentState != TrainPuzzleState.Ready)
@@ -224,9 +227,11 @@ public class TrainTrackPuzzleManager : MonoBehaviour
 
     private void HandleTrainFinished(bool reachedGoal)
     {
+        currentState = reachedGoal ? TrainPuzzleState.Completed : TrainPuzzleState.Ready;
+        onTrainStopped?.Invoke();
+
         if (reachedGoal)
         {
-            currentState = TrainPuzzleState.Completed;
 
             Debug.Log(
                 "장난감 기차 퍼즐 클리어!",
@@ -237,7 +242,6 @@ public class TrainTrackPuzzleManager : MonoBehaviour
         }
         else
         {
-            currentState = TrainPuzzleState.Ready;
 
             Debug.Log(
                 "기차가 출발 지점으로 복귀했습니다.",
@@ -262,6 +266,17 @@ public class TrainTrackPuzzleManager : MonoBehaviour
         trainMover.StopAndReset();
 
         currentState = TrainPuzzleState.Ready;
+        onTrainStopped?.Invoke();
+    }
+
+    private void OnDisable()
+    {
+        if (trainMover != null &&
+            (currentState == TrainPuzzleState.Running ||
+             currentState == TrainPuzzleState.Returning))
+        {
+            ResetPuzzle();
+        }
     }
 
     // --------------------------------
