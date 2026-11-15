@@ -1943,7 +1943,7 @@ GameObject:
   - component: {fileID: 532692183}
   - component: {fileID: 532692188}
   m_Layer: 0
-  m_Name: Cube (3)
+  m_Name: Character Changer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6265,7 +6265,7 @@ GameObject:
   - component: {fileID: 1528842137}
   - component: {fileID: 1528842144}
   m_Layer: 0
-  m_Name: Cube (4)
+  m_Name: Equipment Changer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6890,7 +6890,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  AnimateColor: 0
+  AnimateColor: 1
   AnimateColorGradient:
     serializedVersion: 2
     key0: {r: 1, g: 1, b: 1, a: 1}
@@ -9236,6 +9236,10 @@ PrefabInstance:
       propertyPath: managedReferences[8926580048104521830].RangeFalloff.m_Curve.Array.data[1].weightedMode
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 576407575973489871, guid: c49cf1837bb874b48990503932a5c15f, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 871687432063058502, guid: c49cf1837bb874b48990503932a5c15f, type: 3}
       propertyPath: FeedbacksList.Array.size
       value: 3
@@ -9840,6 +9844,14 @@ PrefabInstance:
       propertyPath: managedReferences[8926580048104521829].RangeFalloff.m_Curve.Array.data[1].weightedMode
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3280094970320872338, guid: c49cf1837bb874b48990503932a5c15f, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 3997839999044567746, guid: c49cf1837bb874b48990503932a5c15f, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 4112347703684707439, guid: c49cf1837bb874b48990503932a5c15f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -9879,6 +9891,10 @@ PrefabInstance:
     - target: {fileID: 4112347703684707439, guid: c49cf1837bb874b48990503932a5c15f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4978710261995616995, guid: c49cf1837bb874b48990503932a5c15f, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 5389184501006076641, guid: c49cf1837bb874b48990503932a5c15f, type: 3}
       propertyPath: FeedbacksList.Array.size
@@ -10276,6 +10292,18 @@ PrefabInstance:
       propertyPath: pullCurve.m_Curve.Array.data[3].tangentMode
       value: 34
       objectReference: {fileID: 0}
+    - target: {fileID: 5960289643845512860, guid: c49cf1837bb874b48990503932a5c15f, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 6418239405242422025, guid: c49cf1837bb874b48990503932a5c15f, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 6765148974293522504, guid: c49cf1837bb874b48990503932a5c15f, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 7593461189465718541, guid: c49cf1837bb874b48990503932a5c15f, type: 3}
       propertyPath: moveXParam
       value: 
@@ -10291,6 +10319,18 @@ PrefabInstance:
     - target: {fileID: 7593461189465718541, guid: c49cf1837bb874b48990503932a5c15f, type: 3}
       propertyPath: textDic.Array.data[1].key
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7599896127856377315, guid: c49cf1837bb874b48990503932a5c15f, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 7648748402955152695, guid: c49cf1837bb874b48990503932a5c15f, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8065013565553676327, guid: c49cf1837bb874b48990503932a5c15f, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 8842763329535829412, guid: c49cf1837bb874b48990503932a5c15f, type: 3}
       propertyPath: m_Name

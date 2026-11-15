@@ -105,6 +105,9 @@ namespace CHG._02_Scripts.Player
             if (!_skillDict.TryGetValue(skillIndex, out ISkill skill))
                 return false;
 
+            if (IsBlockedByExclusive(skill))
+                return false;
+            
             if (_currentSkill is { IsUsing: true } && !CanInterrupt(_currentSkill, skill))
                 return false;
 
@@ -135,6 +138,17 @@ namespace CHG._02_Scripts.Player
             _currentSkill.OnSkillEnd -= HandleCurrentSkillEnd;
             InvokeSkillEnd();
             _currentSkill = null;
+        }
+
+        private bool IsBlockedByExclusive(ISkill skill)
+        {
+            foreach (ISkill other in _skillDict.Values)
+            {
+                if (other != skill && other is IExclusiveSkill { IsExclusive: true })
+                    return true;
+            }
+
+            return false;
         }
 
         public void InvokeSkillEnd() => OnCurrentSkillEnd?.Invoke();

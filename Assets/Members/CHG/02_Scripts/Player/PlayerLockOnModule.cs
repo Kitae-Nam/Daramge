@@ -19,6 +19,7 @@ namespace CHG._02_Scripts.Player
         private Collider[] _results;
         private Agent.Agent _target;
         private bool _isHolding;
+        private bool _isBlocked;
         
         public bool HasTarget => _target != null;
         public Vector3 DirectionToTarget => HasTarget ?
@@ -60,7 +61,11 @@ namespace CHG._02_Scripts.Player
             // EventBus<CharacterChangeStartEvent>.Unsubscribe(HandleCharacterChangeStarted);
         }
 
-        private void HandleLockOnKeyPressed() => SetHolding(true);
+        private void HandleLockOnKeyPressed()
+        {
+            if (_isBlocked) return;
+            SetHolding(true);
+        }
 
         private void HandleLockOnKeyReleased()
         {
@@ -124,6 +129,13 @@ namespace CHG._02_Scripts.Player
                 letterboxRequester.Show();
             else
                 letterboxRequester.Hide();
+        }
+
+        public void SetBlocked(bool isBlocked)
+        {
+            _isBlocked = isBlocked;
+            if (_isBlocked) 
+                HandleLockOnKeyReleased();
         }
     }
 }
