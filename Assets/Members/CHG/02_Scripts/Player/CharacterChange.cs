@@ -15,7 +15,7 @@ namespace CHG._02_Scripts.Player
         public CinemachineCamera camera;
     }
     
-    public class CharacterChange : AbstractInteractPoint
+    public class CharacterChange : MonoBehaviour
     {
         [SerializeField] private CharacterChangeSettings[] settings;
         [SerializeField] private int startIndex;
@@ -129,9 +129,6 @@ namespace CHG._02_Scripts.Player
         }
         
         public PlayerController GetPlayer(int index) => settings[index].player;
-        protected override void HandleInteractKeyPressed()
-        {
-            
-        }
+        
     }
 }

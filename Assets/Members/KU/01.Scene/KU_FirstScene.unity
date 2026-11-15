@@ -19937,7 +19937,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7579640478725875060, guid: ba9605857e5a32a4aa7c0967411fe4f0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1991469672}
   m_SourcePrefab: {fileID: 100100000, guid: ba9605857e5a32a4aa7c0967411fe4f0, type: 3}
 --- !u!1001 &789776649
 PrefabInstance:
@@ -31926,6 +31929,63 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: ce350c3664e08644e93522a652c8a448, type: 3}
   m_PrefabInstance: {fileID: 1286249376}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &1289199588
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 3745085366681261386, guid: 5e29d09a7d3b72f429c960719b7d36a6, type: 3}
+      propertyPath: m_Name
+      value: Equipment Changer
+      objectReference: {fileID: 0}
+    - target: {fileID: 7467893713402605470, guid: 5e29d09a7d3b72f429c960719b7d36a6, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -93.30923
+      objectReference: {fileID: 0}
+    - target: {fileID: 7467893713402605470, guid: 5e29d09a7d3b72f429c960719b7d36a6, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.5037436
+      objectReference: {fileID: 0}
+    - target: {fileID: 7467893713402605470, guid: 5e29d09a7d3b72f429c960719b7d36a6, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -9.114511
+      objectReference: {fileID: 0}
+    - target: {fileID: 7467893713402605470, guid: 5e29d09a7d3b72f429c960719b7d36a6, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7467893713402605470, guid: 5e29d09a7d3b72f429c960719b7d36a6, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7467893713402605470, guid: 5e29d09a7d3b72f429c960719b7d36a6, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7467893713402605470, guid: 5e29d09a7d3b72f429c960719b7d36a6, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7467893713402605470, guid: 5e29d09a7d3b72f429c960719b7d36a6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7467893713402605470, guid: 5e29d09a7d3b72f429c960719b7d36a6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7467893713402605470, guid: 5e29d09a7d3b72f429c960719b7d36a6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 5e29d09a7d3b72f429c960719b7d36a6, type: 3}
 --- !u!1001 &1291178542
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -46538,6 +46598,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1772267596}
   m_LocalEulerAnglesHint: {x: -0.0000070066217, y: -89.999985, z: -90.00001}
+--- !u!1 &1854142278 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7579640478725875060, guid: ba9605857e5a32a4aa7c0967411fe4f0, type: 3}
+  m_PrefabInstance: {fileID: 786254011}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1857912781
 GameObject:
   m_ObjectHideFlags: 0
@@ -49929,12 +49994,24 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3878902878036666140, guid: ba9605857e5a32a4aa7c0967411fe4f0, type: 3}
   m_PrefabInstance: {fileID: 786254011}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1854142278}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8ecb33c7c89545698c67de2ed280e2ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CHG._02_Scripts.Player.CharacterChange
+--- !u!114 &1991469672
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1854142278}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f47acc022f1349b38334da496791aca8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CHG._02_Scripts.Player.CharacterChangePoint
 --- !u!1001 &1994615582
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -84785,3 +84862,4 @@ SceneRoots:
   - {fileID: 1783723647}
   - {fileID: 1677168748}
   - {fileID: 786254011}
+  - {fileID: 1289199588}
