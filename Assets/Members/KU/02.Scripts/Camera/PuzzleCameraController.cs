@@ -181,8 +181,9 @@ public class PuzzleCameraController : MonoBehaviour
         lens.ModeOverride =
             LensSettings.OverrideModes.Orthographic;
 
-        lens.OrthographicSize =
-            puzzleCameraSize;
+        lens.OrthographicSize = currentZone != null && currentZone.OrthographicSizeOverride > 0f
+            ? currentZone.OrthographicSizeOverride
+            : puzzleCameraSize;
 
         lens.NearClipPlane =
             puzzleNearClip;
@@ -282,6 +283,7 @@ public class PuzzleCameraController : MonoBehaviour
 
         // 현재 퍼즐 구역 등록
         currentZone = zone;
+        ApplyPuzzleLens();
 
         // 퍼즐 카메라 위치 먼저 설정
         UpdatePuzzleCameraTransform();
