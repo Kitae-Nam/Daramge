@@ -17102,13 +17102,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 698896786}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.35355338, y: 0.35355338, z: -0.1464466, w: 0.8535535}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 45, y: 45, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &698896789
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23166,8 +23166,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 962274858}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.906308, z: -0.422618, w: 0}
-  m_LocalPosition: {x: 0, y: 20, z: 16}
+  m_LocalRotation: {x: -0, y: 0.90630794, z: -0.42261797, w: 0}
+  m_LocalPosition: {x: -9.890003, y: 3.35, z: -2.8400002}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -23407,7 +23407,6 @@ GameObject:
   - component: {fileID: 970810562}
   - component: {fileID: 970810564}
   - component: {fileID: 970810563}
-  - component: {fileID: 970810565}
   m_Layer: 8
   m_Name: Player_WallE
   m_TagString: Untagged
@@ -23818,7 +23817,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 970810555}
+  m_GameObject: {fileID: 2119891759}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1d668c242c25ce44580bb1489736cdb9, type: 3}
@@ -23831,6 +23830,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   interactionOrigin: {fileID: 0}
+  characterChange: {fileID: 1991469666}
 --- !u!1 &971315571
 GameObject:
   m_ObjectHideFlags: 0
@@ -24402,7 +24402,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 31, y: 5, z: 24}
+  m_Size: {x: 25, y: 5, z: 24}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!4 &985165639
 Transform:
@@ -24413,7 +24413,7 @@ Transform:
   m_GameObject: {fileID: 985165636}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 49.24, y: -1.77, z: -6.29}
+  m_LocalPosition: {x: 50.57, y: -1.77, z: -9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -35710,7 +35710,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1460140553
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -48429,7 +48429,7 @@ MonoBehaviour:
     spawnPoint: {fileID: 1155415560}
   returnDelay: 3
   spawnSampleDistance: 2
-  player: {fileID: 0}
+  player: {fileID: 393123661}
   onAllEnemiesDefeated:
     m_PersistentCalls:
       m_Calls:
@@ -54002,6 +54002,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2119891760}
   - component: {fileID: 2119891761}
+  - component: {fileID: 970810565}
   m_Layer: 0
   m_Name: Dungeon
   m_TagString: Untagged
