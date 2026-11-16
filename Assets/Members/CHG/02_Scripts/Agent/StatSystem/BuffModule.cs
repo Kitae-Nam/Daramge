@@ -8,6 +8,8 @@ namespace CHG._02_Scripts.Agent.StatSystem
 {
     public class BuffModule : MonoBehaviour, IModule, IBuffModule
     {
+        public event Action<BuffSO> OnBuffEnded;
+        
         private readonly Dictionary<BuffSO, float> _endTimeByBuff = new();
         private readonly List<BuffSO> _expiredBuffs = new();
         
@@ -25,6 +27,7 @@ namespace CHG._02_Scripts.Agent.StatSystem
         }
 
         private void OnDestroy() => _healthModule.OnDeath -= HandleDeath;
+
 
         public void ApplyBuff(BuffSO buff)
         {
@@ -46,6 +49,7 @@ namespace CHG._02_Scripts.Agent.StatSystem
             {
                 _statModule.RemoveBonuses(buff, buff.Bonuses);
                 _endTimeByBuff.Remove(buff);
+                OnBuffEnded?.Invoke(buff);
             }
             
             _expiredBuffs.Clear();
@@ -54,7 +58,10 @@ namespace CHG._02_Scripts.Agent.StatSystem
         private void HandleDeath()
         {
             foreach (BuffSO buff in _endTimeByBuff.Keys)
+            {
                 _statModule.RemoveBonuses(buff, buff.Bonuses);
+                OnBuffEnded?.Invoke(buff);
+            }
             
             _endTimeByBuff.Clear();
         }

@@ -1,6 +1,8 @@
 using System;
+using System.Collections;
 using CHG._02_Scripts.Agent;
 using CHG._02_Scripts.CombatSystem;
+using CHG._02_Scripts.CombatSystem.Indicator;
 using UnityEngine;
 
 namespace NKT.Enemy.Skill
@@ -47,6 +49,19 @@ namespace NKT.Enemy.Skill
             Vector3 distance = target.transform.position - _ownerEnemy.transform.position;
             distance.y = 0; //쿼터뷰라 높이차이는 무시
             return distance.sqrMagnitude <= range * range;
+        }
+
+        protected IEnumerator Telegraph(ISkillRangeIndicator indicator, Vector2 size,
+            float duration, float flashTime = 0.15f)
+        {
+            indicator.SetSize(size);
+            indicator.Show();
+            for (float t = 0; t < duration; t += Time.deltaTime)
+            {
+                indicator.SetProgress(t / duration);
+                yield return null;
+            }
+            indicator.Flash(flashTime);
         }
     }
 }

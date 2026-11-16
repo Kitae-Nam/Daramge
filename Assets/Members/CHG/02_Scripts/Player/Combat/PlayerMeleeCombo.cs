@@ -2,10 +2,9 @@ using System;
 using System.Collections;
 using CHG._02_Scripts.Agent;
 using CHG._02_Scripts.CombatSystem;
+using CHG._02_Scripts.CombatSystem.DotSystem;
 using CHG._02_Scripts.CoreSystem.AnimationSystem;
-using CHG._02_Scripts.CoreSystem.Events;
 using CHG._02_Scripts.CoreSystem.FeedbackSystem;
-using GGMLib.ObjectPool.Runtime;
 using UnityEngine;
 
 namespace CHG._02_Scripts.Player.Combat
@@ -23,8 +22,6 @@ namespace CHG._02_Scripts.Player.Combat
     {
         [SerializeField] private AnimTriggerSO animationEndTrigger;
         [SerializeField] private AnimTriggerSO damageCastTrigger;
-        [SerializeField] private PoolItemSO slashVfxItem;
-        [SerializeField] private PoolItemSO impactVfxItem;
 
         [SerializeField] private MeleeComboStep[] comboSteps;
         
@@ -32,18 +29,33 @@ namespace CHG._02_Scripts.Player.Combat
 
         private AgentTrigger _trigger;
         private AbstractDamageCaster _damageCaster;
-
         private Coroutine _curCoroutine;
+        private ILockOnModule _lockOnModule;
         private int _comboCounter = 0;
+        private IHitDotModule _hitDotModule;
 
         public override void InitializeSkill(ISkillModule skillModule)  
         {
             base.InitializeSkill(skillModule);
             _trigger = _player.GetModule<AgentTrigger>();
-            Debug.Assert(_trigger != null, $"trigger is null : {gameObject.name}");
+            _lockOnModule = _player.GetModule<PlayerLockOnModule>();
             _damageCaster = GetComponentInChildren<AbstractDamageCaster>();
+            _hitDotModule = _player.GetModule<IHitDotModule>();
+            Debug.Assert(_trigger != null, $"trigger is null : {gameObject.name}");
             Debug.Assert(_damageCaster != null, $"damageCaster is null : {gameObject.name}");
+            Debug.Assert(_lockOnModule != null, $"lockOnModule is null : {gameObject.name}");
             _damageCaster.InitCaster(skillModule.Owner);
+            _damageCaster.OnTargetHit += HandleTargetHit;
+        }
+        
+        private void OnDestroy()
+        {
+            if (_damageCaster != null)
+                _damageCaster.OnTargetHit -= HandleTargetHit;
+            
+            if (_trigger == null) return;
+            _trigger.UnSubscribe(damageCastTrigger, HandleDamageCast);
+            _trigger.UnSubscribe(animationEndTrigger, HandleAnimationEnd);
         }
 
         public override bool CanUseSkill(GameObject target = null)
@@ -61,16 +73,18 @@ namespace CHG._02_Scripts.Player.Combat
             {
                 _comboCounter = 0;
             }
-            
+    
             _renderer.PlayClip(comboSteps[_comboCounter].comboClip.ParamHash, 0f, 0.05f);
 
-            Vector3 mousePosition = _player.PlayerInput.GetWorldMousePosition();
-            Vector3 direction = mousePosition - _player.transform.position;
-            _movement.RotateTo(direction.normalized);
+            _movement.RotateTo(GetAttackDirection()); // 추가
             _trigger.Subscribe(animationEndTrigger, HandleAnimationEnd);
             _trigger.Subscribe(damageCastTrigger, HandleDamageCast);
             _curCoroutine = StartCoroutine(SwordComboCoroutine());
         }
+
+        private Vector3 GetAttackDirection() => _lockOnModule.HasTarget
+            ? _lockOnModule.DirectionToTarget
+            : _player.PlayerInput.GetWorldMousePosition() - _player.transform.position;
 
         private IEnumerator SwordComboCoroutine()
         {
@@ -98,18 +112,13 @@ namespace CHG._02_Scripts.Player.Combat
 
             if (isHit)
             {
-                if (slashVfxItem != null)
-                    _skillModule.CreateChannel.RaiseEvent(
-                        CreateEvents.ShowPoolingEffect.InitData(slashVfxItem, _damageCaster.LastHitPosition, Quaternion.identity));
-                if (impactVfxItem != null)
-                    _skillModule.CreateChannel.RaiseEvent(
-                        CreateEvents.ShowPoolingEffect.InitData(impactVfxItem, _damageCaster.LastHitPosition, Quaternion.identity));
-                
                 PlayFeedback(comboSteps[_comboCounter].hitFeedback, _damageCaster.LastHitPosition, _player.transform.forward);
             }
         }
 
         private void HandleAnimationEnd() => StopSkill();
+        private void HandleTargetHit(Collider target) => 
+            _hitDotModule?.ApplyDots(target);
 
         public override void StopSkill()
         {
@@ -126,11 +135,6 @@ namespace CHG._02_Scripts.Player.Combat
             base.StopSkill();
         }
 
-        private void OnDestroy()
-        {
-            if (_trigger == null) return;
-            _trigger.UnSubscribe(damageCastTrigger, HandleDamageCast);
-            _trigger.UnSubscribe(animationEndTrigger, HandleAnimationEnd);
-        }
+        
     }
 }

@@ -30,12 +30,6 @@ public class PuzzleCameraController : MonoBehaviour
     [SerializeField]
     private bool autoSwitchOnEnter = true;
 
-    [SerializeField, Min(0.01f)]
-    private float puzzleCameraSize = 7f;
-
-    [SerializeField]
-    private float puzzleNearClip = 0f;
-
     [Header("Puzzle Camera Priority")]
     [SerializeField]
     private int puzzleActivePriority = 100;
@@ -60,9 +54,7 @@ public class PuzzleCameraController : MonoBehaviour
     private void Awake()
     {
         if (characterChange == null ||
-            puzzleCamera == null ||
-            players == null ||
-            players.Length == 0)
+            puzzleCamera == null)
         {
             Debug.LogError(
                 "PuzzleCameraController 참조를 확인해주세요.",
@@ -72,8 +64,6 @@ public class PuzzleCameraController : MonoBehaviour
             enabled = false;
             return;
         }
-
-        ApplyPuzzleLens();
 
         isPuzzleMode = false;
         activePlayerIndex = -1;
@@ -144,11 +134,10 @@ public class PuzzleCameraController : MonoBehaviour
         if (currentIndex < 0)
             return;
 
-        if (currentIndex >= players.Length)
+        if (currentIndex >= characterChange.Count)
         {
             Debug.LogWarning(
-                $"CharacterChange 인덱스 {currentIndex}가 " +
-                "Player References 배열 범위를 벗어났습니다.",
+                $"CharacterChange 인덱스 {currentIndex}가 캐릭터 목록 범위를 벗어났습니다.",
                 this
             );
             return;
@@ -174,18 +163,15 @@ public class PuzzleCameraController : MonoBehaviour
     // Lens Settings
     // --------------------------------
 
-    private void ApplyPuzzleLens()
+    private void ApplyPuzzleLens(PuzzleCameraZone zone)
     {
         LensSettings lens = puzzleCamera.Lens;
 
         lens.ModeOverride =
             LensSettings.OverrideModes.Orthographic;
 
-        lens.OrthographicSize =
-            puzzleCameraSize;
-
-        lens.NearClipPlane =
-            puzzleNearClip;
+        lens.OrthographicSize = zone.OrthographicSize;
+        lens.NearClipPlane = zone.NearClipPlane;
 
         puzzleCamera.Lens = lens;
     }
@@ -210,6 +196,7 @@ public class PuzzleCameraController : MonoBehaviour
 
         if (isPuzzleMode)
         {
+            ApplyPuzzleLens(currentZone);
             UpdatePuzzleCameraTransform();
 
             puzzleCamera.Priority =
@@ -265,7 +252,8 @@ public class PuzzleCameraController : MonoBehaviour
 
     public void EnterPuzzleZone(PuzzleCameraZone zone)
     {
-        if (zone == null ||
+        if (!isActiveAndEnabled ||
+            zone == null ||
             zone.CameraPoint == null)
             return;
 
@@ -282,6 +270,7 @@ public class PuzzleCameraController : MonoBehaviour
 
         // 현재 퍼즐 구역 등록
         currentZone = zone;
+        ApplyPuzzleLens(zone);
 
         // 퍼즐 카메라 위치 먼저 설정
         UpdatePuzzleCameraTransform();
@@ -323,25 +312,28 @@ public class PuzzleCameraController : MonoBehaviour
 
     public bool IsPlayerCollider(Collider other)
     {
-        if (other == null ||
+        if (!isActiveAndEnabled ||
+            other == null ||
             characterChange == null ||
             characterChange.IsChanging ||
             activePlayerIndex < 0 ||
-            activePlayerIndex >= players.Length)
+            activePlayerIndex >= characterChange.Count)
         {
             return false;
         }
 
-        PlayerSetting setting =
-            players[activePlayerIndex];
+        Transform target = null;
+        if (players != null && activePlayerIndex < players.Length)
+            target = players[activePlayerIndex]?.playerTarget;
 
-        if (setting == null ||
-            setting.playerTarget == null)
+        if (target == null)
         {
-            return false;
-        }
+            var player = characterChange.GetPlayer(activePlayerIndex);
+            if (player == null)
+                return false;
 
-        Transform target = setting.playerTarget;
+            target = player.transform;
+        }
 
         // CharacterController 포함
         if (other.transform == target ||

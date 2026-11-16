@@ -10,6 +10,7 @@ namespace CHG._02_Scripts.Player.Combat
     {
         public bool IsHolding => ChargeLogic.IsCharging;
         [field: SerializeField] public ChargeLogic ChargeLogic { get; private set; }
+        [SerializeField] private FeedbackPlayer hitFeedback;
 
         [SerializeField] private FeedbackPlayer landingFeedback;
         [SerializeField] private AnimParamSO chargeParam;
@@ -95,7 +96,8 @@ namespace CHG._02_Scripts.Player.Combat
         
         private void StartCombatJump()
         {
-            Vector3 toMouse = _player.PlayerInput.GetWorldMousePosition() - _player.transform.position;
+            Vector3 playerPos = _player.transform.position; 
+            Vector3 toMouse = _player.PlayerInput.GetWorldMousePosition(playerPos.y) - playerPos; 
             toMouse.y = 0f;
             Vector3 displacement = Vector3.ClampMagnitude(toMouse, combatMaxDistance);
             _movement.RotateTo(displacement);
@@ -134,7 +136,8 @@ namespace CHG._02_Scripts.Player.Combat
             if (_isCombatJump)
             {
                 damageCaster.ResetHitCaster();
-                damageCaster.CastDamage(damageCaster.transform.position, SkillData, 1f, landingRadius);
+                bool isHit = damageCaster.CastDamage(damageCaster.transform.position, SkillData, 1f, landingRadius);
+                if (isHit) PlayFeedback(hitFeedback, damageCaster.transform.position, Vector3.down, 1f);
             }
 
             StartCoroutine(LandingRecoveryCoroutine());

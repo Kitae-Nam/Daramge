@@ -12,6 +12,7 @@ namespace CHG._02_Scripts.Player.Equipment
         public event Action OnSetCountChanged;
         public IReadOnlyDictionary<EquipmentSetSO, int> CountBySet => _countBySet;
         
+        
         private readonly Dictionary<EquipmentSetSO, int> _countBySet = new();
         private readonly HashSet<EquipmentSetTier> _activeTiers = new();
         private readonly HashSet<EquipmentSetTier> _nextActiveTiers = new();
@@ -91,5 +92,7 @@ namespace CHG._02_Scripts.Player.Equipment
             _activeTiers.Clear();
             _activeTiers.UnionWith(_nextActiveTiers);
         }
+        
+        public bool IsTierActive(EquipmentSetTier tier) => _activeTiers.Contains(tier);
     }
 }
