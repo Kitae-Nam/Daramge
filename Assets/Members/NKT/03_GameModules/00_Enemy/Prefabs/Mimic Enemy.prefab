@@ -315,7 +315,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab04cf5ee6da4b5d897705f295a401cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CHG._02_Scripts.CombatSystem.HealthModule
-  vitalStat: {fileID: 0}
+  vitalStat: {fileID: 11400000, guid: b196cf950956488439c94a54e0b161e4, type: 2}
   baseMaxHealth: 20
   maxHealth: 20
   currentHealth: 20
@@ -1053,7 +1053,7 @@ MonoBehaviour:
       m_Calls: []
   <EnemyData>k__BackingField: {fileID: 11400000, guid: 1cf5b5b196fa7224690746b530dd4a77, type: 2}
   _heightOffset: 1.5
-  <PoolItem>k__BackingField: {fileID: 0}
+  <PoolItem>k__BackingField: {fileID: 11400000, guid: 2ae571a8793902445b18c1e01453e427, type: 2}
   visualRoot: {fileID: 5885640936004734883}
 --- !u!1 &8071921902675781332
 GameObject:
@@ -1193,6 +1193,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8692279257289889865}
     m_Modifications:
+    - target: {fileID: 6484328715284229677, guid: e23340e8e428d2246a6baa2281ac4eb7, type: 3}
+      propertyPath: radius
+      value: 3.5
+      objectReference: {fileID: 0}
     - target: {fileID: 6484328715284229677, guid: e23340e8e428d2246a6baa2281ac4eb7, type: 3}
       propertyPath: isDebug
       value: 1

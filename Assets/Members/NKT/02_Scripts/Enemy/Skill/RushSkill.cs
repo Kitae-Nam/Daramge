@@ -31,6 +31,9 @@ namespace NKT.Enemy.Skill
             base.InitializeSkill(skillModule);
             Debug.Assert(damageCaster != null, $"데미지 캐스터가 없습니다. {gameObject}");
             _indicator = _ownerEnemy.GetComponentInChildren<ISkillRangeIndicator>(true);
+            _navMeshAgent = _ownerEnemy.GetComponent<NavMeshAgent>();
+            Debug.Assert(_navMeshAgent != null, $"MeshAgent가 없습니다. {gameObject}");
+            
             damageCaster.InitCaster(_ownerEnemy);
         }
 
