@@ -25,7 +25,7 @@ namespace NKT.Enemy.BT.Actions
 
             _navMovement = Enemy.Value.NavMovement;
             _destination = TargetGameObject.Value.transform.position;
-            if (IsInStopDistance()) return Status.Failure;
+            if (IsInStopDistance()) return Status.Success;
             _navMovement.SetDestination(_destination);
             return Status.Running;
         }
