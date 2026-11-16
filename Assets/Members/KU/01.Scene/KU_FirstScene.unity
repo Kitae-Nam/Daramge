@@ -2500,9 +2500,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 74254397}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.35355338, y: 0.35355338, z: -0.1464466, w: 0.8535535}
-  m_LocalPosition: {x: 0, y: 3, z: -3.29}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: 0.09904576, y: 0.89239913, z: -0.36964378, w: 0.23911765}
+  m_LocalPosition: {x: 0.033327736, y: 0.7099991, z: -15.225}
+  m_LocalScale: {x: 0.90909094, y: 1.034483, z: 1.0344832}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1460140555}
@@ -17093,7 +17093,7 @@ MonoBehaviour:
   puzzleCamera: {fileID: 698896789}
   autoSwitchOnEnter: 1
   puzzleCameraSize: 7
-  puzzleNearClip: 0
+  puzzleNearClip: -6
   puzzleActivePriority: 100
   puzzleInactivePriority: -100
 --- !u!4 &698896788
@@ -17136,8 +17136,8 @@ MonoBehaviour:
     CustomLookAtTarget: 0
   Lens:
     FieldOfView: 40
-    OrthographicSize: 7.81
-    NearClipPlane: 0.1
+    OrthographicSize: 7.77
+    NearClipPlane: 0.01
     FarClipPlane: 5000
     Dutch: 0
     ModeOverride: 0
@@ -23168,7 +23168,7 @@ Transform:
   m_GameObject: {fileID: 962274858}
   serializedVersion: 2
   m_LocalRotation: {x: 0.35355338, y: 0.35355338, z: -0.1464466, w: 0.8535535}
-  m_LocalPosition: {x: -6.330002, y: 7.35, z: -7.290001}
+  m_LocalPosition: {x: -5.52, y: 5.25, z: -6.37}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -24383,7 +24383,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PuzzleCameraZone
   cameraController: {fileID: 698896787}
   cameraPoint: {fileID: 962274859}
-  orthographicSizeOverride: 12
+  orthographicSizeOverride: 8
 --- !u!65 &985165638
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -35781,7 +35781,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1460140553
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -35816,7 +35816,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 22, y: 6, z: 26}
+  m_Size: {x: 24, y: 3, z: 32}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!4 &1460140555
 Transform:
@@ -35827,7 +35827,7 @@ Transform:
   m_GameObject: {fileID: 1460140552}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 47.239998, y: 0, z: -9.29}
+  m_LocalPosition: {x: 49.22, y: 16.87, z: 4.8}
   m_LocalScale: {x: 0.6, y: 1, z: 0.4}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -44252,7 +44252,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument:
+          m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
   onPuzzleSolved:
