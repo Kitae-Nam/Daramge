@@ -45,6 +45,7 @@ namespace CHG._02_Scripts.CombatSystem
                 LastHitNormal = damageData.HitNormal = hit.normal;
                 
                 damageable.ApplyDamage(damageData);
+                RaiseTargetHit(hit.collider);
             }
             
             return isHit;

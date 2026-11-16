@@ -1,6 +1,3 @@
-
-using System;
-using System.Collections;
 using UnityEngine;
 
 public class ToyTrainMover : MonoBehaviour
@@ -10,17 +7,10 @@ public class ToyTrainMover : MonoBehaviour
     private float forwardSpeed = 3f;
 
     [SerializeField, Min(0.1f)]
-    private float returnSpeed = 4f;
-
-    [SerializeField, Min(0.1f)]
     private float acceleration = 6f;
 
     [SerializeField, Min(0.1f)]
     private float deceleration = 8f;
-
-    [Header("Failed Route")]
-    [SerializeField, Min(0f)]
-    private float stopDelay = 0.8f;
 
     [Header("Train Rotation")]
     [SerializeField]
@@ -35,12 +25,10 @@ public class ToyTrainMover : MonoBehaviour
     private float totalDistance;
     private float currentDistance;
 
-    private Coroutine movementCoroutine;
-
-    private bool isMoving;
+    private float currentSpeed;
     private bool isConfigured;
 
-    public bool IsMoving => isMoving;
+    public bool IsMoving => currentSpeed > 0f;
 
     // --------------------------------
     // Route Configuration
@@ -48,7 +36,7 @@ public class ToyTrainMover : MonoBehaviour
 
     public bool ConfigureRoute(Transform[] waypoints)
     {
-        if (isMoving)
+        if (IsMoving)
             return false;
 
         if (waypoints == null || waypoints.Length < 2)
@@ -102,152 +90,25 @@ public class ToyTrainMover : MonoBehaviour
         return true;
     }
 
-    // --------------------------------
-    // Start Movement
-    // --------------------------------
-
-    public bool BeginRun(
-        int destinationWaypointIndex,
-        bool routeIsClear,
-        Action onReturning,
-        Action<bool> onFinished)
+    // Brake for the next blocked rail or station. Stop this frame at the checkpoint
+    // so the manager can lock a correct rail before the train enters it.
+    internal bool AdvanceToCheckpoint(int checkpointIndex, int stopIndex)
     {
-        if (!isConfigured || isMoving)
-            return false;
+        float checkpointDistance = cumulativeDistances[checkpointIndex];
+        float stopDistance = cumulativeDistances[stopIndex];
+        float remaining = Mathf.Max(0f, stopDistance - currentDistance);
+        float deltaTime = Time.deltaTime;
+        float brakingSpeed = Mathf.Sqrt(2f * deceleration * remaining);
+        float desiredSpeed = Mathf.Min(forwardSpeed, Mathf.Max(0.08f, brakingSpeed));
+        float speedChange = desiredSpeed < currentSpeed ? deceleration : acceleration;
+        currentSpeed = Mathf.MoveTowards(currentSpeed, desiredSpeed, speedChange * deltaTime);
 
-        if (destinationWaypointIndex < 0 ||
-            destinationWaypointIndex >= pathPositions.Length)
-            return false;
+        currentDistance = Mathf.MoveTowards(currentDistance, checkpointDistance, currentSpeed * deltaTime);
+        if (currentDistance >= stopDistance)
+            currentSpeed = 0f;
 
-        // 항상 출발점에서 새로운 주행 시작
-        currentDistance = 0f;
         ApplyTrainPose();
-
-        float targetDistance =
-            cumulativeDistances[destinationWaypointIndex];
-
-        isMoving = true;
-
-        movementCoroutine = StartCoroutine(
-            RunRoutine(
-                targetDistance,
-                routeIsClear,
-                onReturning,
-                onFinished
-            )
-        );
-
-        return true;
-    }
-
-    // --------------------------------
-    // Train Movement Cycle
-    // --------------------------------
-
-    private IEnumerator RunRoutine(
-        float targetDistance,
-        bool routeIsClear,
-        Action onReturning,
-        Action<bool> onFinished)
-    {
-        // 1. 앞으로 이동
-        yield return TravelToDistance(
-            targetDistance,
-            forwardSpeed
-        );
-
-        if (routeIsClear)
-        {
-            // 2-A. 종착역 도착
-            isMoving = false;
-            movementCoroutine = null;
-
-            onFinished?.Invoke(true);
-            yield break;
-        }
-
-        // 2-B. 잘못된 레일 앞에서 잠시 정지
-        if (stopDelay > 0f)
-            yield return new WaitForSeconds(stopDelay);
-
-        onReturning?.Invoke();
-
-        // 3. 지나온 경로를 따라 복귀
-        yield return TravelToDistance(
-            0f,
-            returnSpeed
-        );
-
-        currentDistance = 0f;
-        ApplyTrainPose();
-
-        isMoving = false;
-        movementCoroutine = null;
-
-        onFinished?.Invoke(false);
-    }
-
-    // --------------------------------
-    // Distance-Based Movement
-    // --------------------------------
-
-    private IEnumerator TravelToDistance(
-        float targetDistance,
-        float maxSpeed)
-    {
-        const float tolerance = 0.001f;
-
-        float currentSpeed = 0f;
-
-        while (Mathf.Abs(
-            targetDistance - currentDistance
-        ) > tolerance)
-        {
-            float remaining = Mathf.Abs(
-                targetDistance - currentDistance
-            );
-
-            float direction =
-                targetDistance > currentDistance
-                    ? 1f
-                    : -1f;
-
-            // 남은 거리에 맞춰 감속
-            float brakingSpeed = Mathf.Sqrt(
-                2f * deceleration * remaining
-            );
-
-            float desiredSpeed = Mathf.Min(
-                maxSpeed,
-                brakingSpeed
-            );
-
-            // 너무 작은 속도로 멈춰 버리는 현상 방지
-            desiredSpeed = Mathf.Max(
-                0.08f,
-                desiredSpeed
-            );
-
-            currentSpeed = Mathf.MoveTowards(
-                currentSpeed,
-                desiredSpeed,
-                acceleration * Time.deltaTime
-            );
-
-            float moveDistance = Mathf.Min(
-                remaining,
-                currentSpeed * Time.deltaTime
-            );
-
-            currentDistance += direction * moveDistance;
-
-            ApplyTrainPose();
-
-            yield return null;
-        }
-
-        currentDistance = targetDistance;
-        ApplyTrainPose();
+        return currentDistance >= checkpointDistance;
     }
 
     // --------------------------------
@@ -348,26 +209,13 @@ public class ToyTrainMover : MonoBehaviour
 
     public void StopAndReset()
     {
-        if (movementCoroutine != null)
-        {
-            StopCoroutine(movementCoroutine);
-            movementCoroutine = null;
-        }
-
-        isMoving = false;
+        currentSpeed = 0f;
         currentDistance = 0f;
-
         ApplyTrainPose();
     }
 
     private void OnDisable()
     {
-        if (movementCoroutine != null)
-        {
-            StopCoroutine(movementCoroutine);
-            movementCoroutine = null;
-        }
-
-        isMoving = false;
+        currentSpeed = 0f;
     }
 }

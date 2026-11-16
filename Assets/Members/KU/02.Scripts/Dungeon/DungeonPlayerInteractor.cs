@@ -1,4 +1,5 @@
 
+using CHG._02_Scripts.Player;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -22,14 +23,8 @@ public class DungeonPlayerInteractor : MonoBehaviour
     [SerializeField]
     private Transform interactionOrigin;
 
-    private void Awake()
-    {
-        // 따로 설정하지 않으면 플레이어 위치 사용
-        if (interactionOrigin == null)
-        {
-            interactionOrigin = transform;
-        }
-    }
+    [SerializeField]
+    private CharacterChange characterChange;
 
     // --------------------------------
     // Input
@@ -57,7 +52,11 @@ public class DungeonPlayerInteractor : MonoBehaviour
     // 팀원의 상호작용 시스템에서 직접 호출 가능
     public bool TryInteract()
     {
-        Vector3 origin = interactionOrigin.position;
+        Transform originTransform = GetInteractionOrigin();
+        if (originTransform == null)
+            return false;
+
+        Vector3 origin = originTransform.position;
 
         Collider[] colliders = Physics.OverlapSphere(
             origin,
@@ -103,16 +102,28 @@ public class DungeonPlayerInteractor : MonoBehaviour
         return nearest.Interact();
     }
 
+    private Transform GetInteractionOrigin()
+    {
+        if (characterChange == null)
+            return interactionOrigin != null ? interactionOrigin : transform;
+
+        int index = characterChange.CurrentIndex;
+        if (characterChange.IsChanging || index < 0 || index >= characterChange.Count)
+            return null;
+
+        var player = characterChange.GetPlayer(index);
+        return player != null && player.isActiveAndEnabled ? player.transform : null;
+    }
+
     // --------------------------------
     // Debug
     // --------------------------------
 
     private void OnDrawGizmosSelected()
     {
-        Transform origin =
-            interactionOrigin != null
-                ? interactionOrigin
-                : transform;
+        Transform origin = GetInteractionOrigin();
+        if (origin == null)
+            return;
 
         Gizmos.color = Color.yellow;
 

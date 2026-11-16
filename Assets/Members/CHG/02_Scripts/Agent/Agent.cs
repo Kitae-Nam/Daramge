@@ -1,11 +1,12 @@
 using CHG._02_Scripts.CombatSystem;
+using CHG._02_Scripts.CoreSystem;
 using CHG._02_Scripts.CoreSystem.EventBusSystem;
 using GGMLib.ModuleSystems;
 using UnityEngine.Events;
 
 namespace CHG._02_Scripts.Agent
 {
-    public abstract class Agent : ModuleOwner, IDamageable
+    public abstract class Agent : ModuleOwner, IDamageable, ITickDamageable
     {
         public AgentStatus Status { get; private set; }
         public bool IsDead { get; protected set; }
@@ -60,12 +61,21 @@ namespace CHG._02_Scripts.Agent
             if (Health != null)
             {
                 Health.ApplyDamage(damageData.DamageAmount);
-                EventBus<DamageTakenEvent>.Raise(new DamageTakenEvent(this, damageData.DamageAmount));
+                EventBus<DamageTakenEvent>.Raise(new DamageTakenEvent(this, damageData.DamageAmount, damageData.IsCritical));
             }
             
             OnHit?.Invoke();
         }
 
+        public void ApplyTickDamage(float damageAmount, DamageTextStyle textStyle)
+        {
+            if (IsDead || Health == null) return;
+            if (HasStatus(AgentStatus.Invincible)) return;
+            
+            Health.ApplyDamage(damageAmount);
+            EventBus<DamageTakenEvent>.Raise(new DamageTakenEvent(this, damageAmount, false, textStyle));
+        }
+        
         public bool HasStatus(AgentStatus status) => (Status & status) == status;
         public void AddStatus(AgentStatus status) => Status |= status;
         public void RemoveStatus(AgentStatus status) => Status &= ~status;

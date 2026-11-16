@@ -13,6 +13,10 @@ public class DashRotationPuzzle : MonoBehaviour
     [SerializeField]
     private Transform dashPlayer;
 
+    [Header("Rail Hit Collider")]
+    [SerializeField]
+    private MeshCollider railHitCollider;
+
     [Header("Rotation Settings")]
     [SerializeField, Min(2)]
     private int totalSteps = 4;
@@ -65,6 +69,7 @@ public class DashRotationPuzzle : MonoBehaviour
     private int currentStep;
     private bool isRotating;
     private bool isSolved;
+    private bool trainRouteLocked;
 
     private Coroutine rotationCoroutine;
 
@@ -91,7 +96,19 @@ public class DashRotationPuzzle : MonoBehaviour
             totalSteps - 1
         );
 
-        if (rotationCollisionBox == null)
+        if (railHitCollider != null)
+        {
+            if (!railHitCollider.TryGetComponent(out MeshFilter railMesh) || railMesh.sharedMesh == null)
+            {
+                Debug.LogError("회전 레일의 MeshFilter에 메시가 필요합니다.", this);
+                enabled = false;
+                return;
+            }
+
+            railHitCollider.sharedMesh = railMesh.sharedMesh;
+        }
+
+        if (rotationCollisionBox == null && (railHitCollider == null || obstacleLayers.value != 0))
         {
             Debug.LogError(
                 "Rotation Collision Box가 지정되지 않았습니다.",
@@ -104,7 +121,8 @@ public class DashRotationPuzzle : MonoBehaviour
 
         // 충돌 박스는 회전 오브젝트 또는
         // 그 자식에 있어야 한다.
-        if (rotationCollisionBox.transform != rotatingObject &&
+        if (rotationCollisionBox != null &&
+            rotationCollisionBox.transform != rotatingObject &&
             !rotationCollisionBox.transform.IsChildOf(rotatingObject))
         {
             Debug.LogError(
@@ -146,26 +164,30 @@ public class DashRotationPuzzle : MonoBehaviour
     public void ReceiveDashHitFromPosition(
         Vector3 playerWorldPosition)
     {
-        if (!isActiveAndEnabled)
+        TryRotate(transform.InverseTransformPoint(playerWorldPosition).x);
+    }
+
+    public void ReceiveDashHitAtPoint(Transform attacker, Vector3 hitPoint)
+    {
+        if (attacker == null || attacker != dashPlayer || rotatingObject == null)
             return;
 
-        if (isRotating)
+        Vector3 axis = rotatingObject.up;
+        Vector3 leverArm = hitPoint - rotatingObject.position;
+        Vector3 pushDirection = Vector3.ProjectOnPlane(hitPoint - attacker.position, axis).normalized;
+        float signedLeverArm = Vector3.Dot(Vector3.Cross(leverArm, pushDirection), axis);
+        TryRotate(signedLeverArm);
+    }
+
+    private void TryRotate(float signedLeverArm)
+    {
+        if (!isActiveAndEnabled || isRotating || trainRouteLocked || (isSolved && lockAfterSolved) ||
+            Mathf.Abs(signedLeverArm) <= centerDeadZone)
+        {
             return;
+        }
 
-        if (isSolved && lockAfterSolved)
-            return;
-
-        Vector3 localPlayerPosition =
-            transform.InverseTransformPoint(
-                playerWorldPosition
-            );
-
-        float localX = localPlayerPosition.x;
-
-        if (Mathf.Abs(localX) <= centerDeadZone)
-            return;
-
-        int direction = localX < 0f ? -1 : 1;
+        int direction = signedLeverArm < 0f ? -1 : 1;
 
         if (reverseDirection)
             direction *= -1;
@@ -205,10 +227,14 @@ public class DashRotationPuzzle : MonoBehaviour
 
         float duration =
             Mathf.Max(0.01f, rotationDuration);
+        WaitForFixedUpdate physicsStep = railHitCollider != null ? new WaitForFixedUpdate() : null;
 
         while (elapsed < duration)
         {
-            elapsed += Time.deltaTime;
+            if (physicsStep != null)
+                yield return physicsStep;
+
+            elapsed += physicsStep != null ? Time.fixedDeltaTime : Time.deltaTime;
 
             float t = Mathf.Clamp01(
                 elapsed / duration
@@ -254,7 +280,10 @@ public class DashRotationPuzzle : MonoBehaviour
 
             previousT = t;
 
-            yield return null;
+            if (physicsStep != null)
+                Physics.SyncTransforms();
+            else
+                yield return null;
         }
 
         // 성공한 회전은 정확한 각도로 보정
@@ -285,7 +314,7 @@ public class DashRotationPuzzle : MonoBehaviour
     private bool IsRotationPathBlocked(
         float deltaAngle)
     {
-        if (Mathf.Abs(deltaAngle) < 0.0001f)
+        if (obstacleLayers.value == 0 || Mathf.Abs(deltaAngle) < 0.0001f)
             return false;
 
         float maxStep =
@@ -393,10 +422,14 @@ public class DashRotationPuzzle : MonoBehaviour
 
         float duration =
             Mathf.Max(0.01f, returnDuration);
+        WaitForFixedUpdate physicsStep = railHitCollider != null ? new WaitForFixedUpdate() : null;
 
         while (elapsed < duration)
         {
-            elapsed += Time.deltaTime;
+            if (physicsStep != null)
+                yield return physicsStep;
+
+            elapsed += physicsStep != null ? Time.fixedDeltaTime : Time.deltaTime;
 
             float t = Mathf.Clamp01(
                 elapsed / duration
@@ -412,7 +445,10 @@ public class DashRotationPuzzle : MonoBehaviour
                     t
                 );
 
-            yield return null;
+            if (physicsStep != null)
+                Physics.SyncTransforms();
+            else
+                yield return null;
         }
 
         rotatingObject.localRotation =
@@ -449,6 +485,9 @@ public class DashRotationPuzzle : MonoBehaviour
 
     public void ResetPuzzle()
     {
+        if (trainRouteLocked)
+            return;
+
         if (rotationCoroutine != null)
         {
             StopCoroutine(rotationCoroutine);
@@ -463,6 +502,11 @@ public class DashRotationPuzzle : MonoBehaviour
         isSolved = false;
 
         Physics.SyncTransforms();
+    }
+
+    internal void SetTrainRouteLocked(bool locked)
+    {
+        trainRouteLocked = locked;
     }
 
     // --------------------------------

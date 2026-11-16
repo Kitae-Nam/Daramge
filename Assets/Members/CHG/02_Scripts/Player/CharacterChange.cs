@@ -128,6 +128,7 @@ namespace CHG._02_Scripts.Player
             player.PlayerInput.EnableInput();
         }
         
-        public PlayerController GetPlayer(int index) => settings[index].player; 
+        public PlayerController GetPlayer(int index) => settings[index].player;
+        
     }
 }
