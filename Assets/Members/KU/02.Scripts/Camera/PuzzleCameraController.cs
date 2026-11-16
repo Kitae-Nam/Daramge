@@ -30,12 +30,6 @@ public class PuzzleCameraController : MonoBehaviour
     [SerializeField]
     private bool autoSwitchOnEnter = true;
 
-    [SerializeField, Min(0.01f)]
-    private float puzzleCameraSize = 7f;
-
-    [SerializeField]
-    private float puzzleNearClip = 0f;
-
     [Header("Puzzle Camera Priority")]
     [SerializeField]
     private int puzzleActivePriority = 100;
@@ -70,8 +64,6 @@ public class PuzzleCameraController : MonoBehaviour
             enabled = false;
             return;
         }
-
-        ApplyPuzzleLens();
 
         isPuzzleMode = false;
         activePlayerIndex = -1;
@@ -171,19 +163,15 @@ public class PuzzleCameraController : MonoBehaviour
     // Lens Settings
     // --------------------------------
 
-    private void ApplyPuzzleLens()
+    private void ApplyPuzzleLens(PuzzleCameraZone zone)
     {
         LensSettings lens = puzzleCamera.Lens;
 
         lens.ModeOverride =
             LensSettings.OverrideModes.Orthographic;
 
-        lens.OrthographicSize = currentZone != null && currentZone.OrthographicSizeOverride > 0f
-            ? currentZone.OrthographicSizeOverride
-            : puzzleCameraSize;
-
-        lens.NearClipPlane =
-            puzzleNearClip;
+        lens.OrthographicSize = zone.OrthographicSize;
+        lens.NearClipPlane = zone.NearClipPlane;
 
         puzzleCamera.Lens = lens;
     }
@@ -208,6 +196,7 @@ public class PuzzleCameraController : MonoBehaviour
 
         if (isPuzzleMode)
         {
+            ApplyPuzzleLens(currentZone);
             UpdatePuzzleCameraTransform();
 
             puzzleCamera.Priority =
@@ -281,7 +270,7 @@ public class PuzzleCameraController : MonoBehaviour
 
         // 현재 퍼즐 구역 등록
         currentZone = zone;
-        ApplyPuzzleLens();
+        ApplyPuzzleLens(zone);
 
         // 퍼즐 카메라 위치 먼저 설정
         UpdatePuzzleCameraTransform();

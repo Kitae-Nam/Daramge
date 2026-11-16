@@ -11,6 +11,10 @@ public class ChessPullableBlock : MonoBehaviour
     [SerializeField]
     private List<Transform> goalTiles = new();
 
+    [Header("Tongue Interaction")]
+    [SerializeField]
+    private Transform tongueOwner;
+
     private readonly HashSet<Vector2Int> goalPositions = new();
 
     private ChessPuzzleBoard board;
@@ -119,6 +123,13 @@ public class ChessPullableBlock : MonoBehaviour
     // --------------------------------
     // Tongue Hit Interaction
     // --------------------------------
+
+    // UnityEvent entry point. The pull direction uses the frog's position at impact.
+    public void PullFromTongueOwner()
+    {
+        if (tongueOwner != null)
+            ReceiveTongueHit(tongueOwner.position);
+    }
 
     /// <summary>
     /// 개구리 혀에 맞았을 때 호출.
