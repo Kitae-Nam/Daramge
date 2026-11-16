@@ -40,6 +40,7 @@ namespace CHG._02_Scripts.Player.Combat
             _trigger = _player.GetModule<AgentTrigger>();
             _lockOnModule = _player.GetModule<PlayerLockOnModule>();
             _damageCaster = GetComponentInChildren<AbstractDamageCaster>();
+            _hitDotModule = _player.GetModule<IHitDotModule>();
             Debug.Assert(_trigger != null, $"trigger is null : {gameObject.name}");
             Debug.Assert(_damageCaster != null, $"damageCaster is null : {gameObject.name}");
             Debug.Assert(_lockOnModule != null, $"lockOnModule is null : {gameObject.name}");

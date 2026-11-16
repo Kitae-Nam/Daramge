@@ -6,7 +6,7 @@ using UnityEngine.Events;
 
 namespace CHG._02_Scripts.Agent
 {
-    public abstract class Agent : ModuleOwner, IDamageable
+    public abstract class Agent : ModuleOwner, IDamageable, ITickDamageable
     {
         public AgentStatus Status { get; private set; }
         public bool IsDead { get; protected set; }

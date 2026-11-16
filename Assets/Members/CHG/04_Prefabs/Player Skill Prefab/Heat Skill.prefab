@@ -1,0 +1,52 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2652531223584125897
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3552796655870576002}
+  - component: {fileID: 8192708522258067066}
+  m_Layer: 0
+  m_Name: Heat Skill
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3552796655870576002
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2652531223584125897}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8192708522258067066
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2652531223584125897}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c51bb35f49f842b6936708b748ccc843, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CHG._02_Scripts.Player.Combat.HeatSkill
+  <SkillData>k__BackingField: {fileID: 11400000, guid: 28762e44189c91e40bf8c283e097d464, type: 2}
+  animEndTrigger: {fileID: 11400000, guid: 98fb234076b7d8b4bb0c053bf9829eb6, type: 2}
+  heatParam: {fileID: 11400000, guid: e0a924c7a8a1cf4439ba0eeebecef37a, type: 2}
+  heatBuff: {fileID: 11400000, guid: 0a1ad027fb0337742a6fd596ca7d5c46, type: 2}
+  burnDot: {fileID: 11400000, guid: debf96ac299b9e44aab1eb6065821504, type: 2}
+  staminaUseAmount: 1
