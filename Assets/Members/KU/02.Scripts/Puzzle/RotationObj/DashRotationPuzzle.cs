@@ -69,6 +69,7 @@ public class DashRotationPuzzle : MonoBehaviour
     private int currentStep;
     private bool isRotating;
     private bool isSolved;
+    private bool trainRouteLocked;
 
     private Coroutine rotationCoroutine;
 
@@ -163,26 +164,30 @@ public class DashRotationPuzzle : MonoBehaviour
     public void ReceiveDashHitFromPosition(
         Vector3 playerWorldPosition)
     {
-        if (!isActiveAndEnabled)
+        TryRotate(transform.InverseTransformPoint(playerWorldPosition).x);
+    }
+
+    public void ReceiveDashHitAtPoint(Transform attacker, Vector3 hitPoint)
+    {
+        if (attacker == null || attacker != dashPlayer || rotatingObject == null)
             return;
 
-        if (isRotating)
+        Vector3 axis = rotatingObject.up;
+        Vector3 leverArm = hitPoint - rotatingObject.position;
+        Vector3 pushDirection = Vector3.ProjectOnPlane(hitPoint - attacker.position, axis).normalized;
+        float signedLeverArm = Vector3.Dot(Vector3.Cross(leverArm, pushDirection), axis);
+        TryRotate(signedLeverArm);
+    }
+
+    private void TryRotate(float signedLeverArm)
+    {
+        if (!isActiveAndEnabled || isRotating || trainRouteLocked || (isSolved && lockAfterSolved) ||
+            Mathf.Abs(signedLeverArm) <= centerDeadZone)
+        {
             return;
+        }
 
-        if (isSolved && lockAfterSolved)
-            return;
-
-        Vector3 localPlayerPosition =
-            transform.InverseTransformPoint(
-                playerWorldPosition
-            );
-
-        float localX = localPlayerPosition.x;
-
-        if (Mathf.Abs(localX) <= centerDeadZone)
-            return;
-
-        int direction = localX < 0f ? -1 : 1;
+        int direction = signedLeverArm < 0f ? -1 : 1;
 
         if (reverseDirection)
             direction *= -1;
@@ -222,10 +227,14 @@ public class DashRotationPuzzle : MonoBehaviour
 
         float duration =
             Mathf.Max(0.01f, rotationDuration);
+        WaitForFixedUpdate physicsStep = railHitCollider != null ? new WaitForFixedUpdate() : null;
 
         while (elapsed < duration)
         {
-            elapsed += Time.deltaTime;
+            if (physicsStep != null)
+                yield return physicsStep;
+
+            elapsed += physicsStep != null ? Time.fixedDeltaTime : Time.deltaTime;
 
             float t = Mathf.Clamp01(
                 elapsed / duration
@@ -271,7 +280,10 @@ public class DashRotationPuzzle : MonoBehaviour
 
             previousT = t;
 
-            yield return null;
+            if (physicsStep != null)
+                Physics.SyncTransforms();
+            else
+                yield return null;
         }
 
         // 성공한 회전은 정확한 각도로 보정
@@ -410,10 +422,14 @@ public class DashRotationPuzzle : MonoBehaviour
 
         float duration =
             Mathf.Max(0.01f, returnDuration);
+        WaitForFixedUpdate physicsStep = railHitCollider != null ? new WaitForFixedUpdate() : null;
 
         while (elapsed < duration)
         {
-            elapsed += Time.deltaTime;
+            if (physicsStep != null)
+                yield return physicsStep;
+
+            elapsed += physicsStep != null ? Time.fixedDeltaTime : Time.deltaTime;
 
             float t = Mathf.Clamp01(
                 elapsed / duration
@@ -429,7 +445,10 @@ public class DashRotationPuzzle : MonoBehaviour
                     t
                 );
 
-            yield return null;
+            if (physicsStep != null)
+                Physics.SyncTransforms();
+            else
+                yield return null;
         }
 
         rotatingObject.localRotation =
@@ -466,6 +485,9 @@ public class DashRotationPuzzle : MonoBehaviour
 
     public void ResetPuzzle()
     {
+        if (trainRouteLocked)
+            return;
+
         if (rotationCoroutine != null)
         {
             StopCoroutine(rotationCoroutine);
@@ -480,6 +502,11 @@ public class DashRotationPuzzle : MonoBehaviour
         isSolved = false;
 
         Physics.SyncTransforms();
+    }
+
+    internal void SetTrainRouteLocked(bool locked)
+    {
+        trainRouteLocked = locked;
     }
 
     // --------------------------------

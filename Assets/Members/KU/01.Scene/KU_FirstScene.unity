@@ -17136,7 +17136,7 @@ MonoBehaviour:
     CustomLookAtTarget: 0
   Lens:
     FieldOfView: 40
-    OrthographicSize: 10
+    OrthographicSize: 7.81
     NearClipPlane: 0.1
     FarClipPlane: 5000
     Dutch: 0
@@ -20887,10 +20887,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ToyTrainMover
   forwardSpeed: 3
-  returnSpeed: 4
   acceleration: 6
   deceleration: 8
-  stopDelay: 0.8
   rotateAlongPath: 1
   modelRotationOffset: {x: 0, y: 0, z: 0}
 --- !u!4 &846578419 stripped
@@ -23169,13 +23167,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 962274858}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 0.90630794, z: -0.42261797, w: 0}
-  m_LocalPosition: {x: -9.890003, y: 3.35, z: -2.8400002}
+  m_LocalRotation: {x: 0.35355338, y: 0.35355338, z: -0.1464466, w: 0.8535535}
+  m_LocalPosition: {x: -6.330002, y: 7.35, z: -7.290001}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 985165639}
-  m_LocalEulerAnglesHint: {x: 50, y: 180, z: 0}
+  m_LocalEulerAnglesHint: {x: 45, y: 45, z: 0}
 --- !u!1001 &963529790
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -44242,12 +44240,21 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  onTrainReturning:
+  onTrainResumed:
     m_PersistentCalls:
-      m_Calls: []
-  onTrainReturned:
-    m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 7200000303}
+        m_TargetAssemblyTypeName: InteractionCameraView, Assembly-CSharp
+        m_MethodName: ResumeView
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument:
+          m_BoolArgument: 0
+        m_CallState: 2
   onPuzzleSolved:
     m_PersistentCalls:
       m_Calls:
@@ -55436,24 +55443,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 7200000201}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f1f8060195c54ab58f32cc10b0fa16ee, type: 3}
+  m_Script: {fileID: 11500000, guid: 62fddf26129d4cf19b296fa5cac626c4, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CHG._02_Scripts.CombatSystem.CHG._02_Scripts.CombatSystem.HitReceiver
-  <OnHit>k__BackingField:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1203154929}
-        m_TargetAssemblyTypeName: DashRotationPuzzle, Assembly-CSharp
-        m_MethodName: ReceiveDashHit
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+  m_EditorClassIdentifier: Assembly-CSharp::RailDashHitReceiver
+  rail: {fileID: 1203154929}
 --- !u!64 &7200000005
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -55485,24 +55478,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 7200000202}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f1f8060195c54ab58f32cc10b0fa16ee, type: 3}
+  m_Script: {fileID: 11500000, guid: 62fddf26129d4cf19b296fa5cac626c4, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CHG._02_Scripts.CombatSystem.CHG._02_Scripts.CombatSystem.HitReceiver
-  <OnHit>k__BackingField:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 96101369}
-        m_TargetAssemblyTypeName: DashRotationPuzzle, Assembly-CSharp
-        m_MethodName: ReceiveDashHit
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+  m_EditorClassIdentifier: Assembly-CSharp::RailDashHitReceiver
+  rail: {fileID: 96101369}
 --- !u!64 &7200000008
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -55534,24 +55513,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 7200000203}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f1f8060195c54ab58f32cc10b0fa16ee, type: 3}
+  m_Script: {fileID: 11500000, guid: 62fddf26129d4cf19b296fa5cac626c4, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CHG._02_Scripts.CombatSystem.CHG._02_Scripts.CombatSystem.HitReceiver
-  <OnHit>k__BackingField:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1552321743}
-        m_TargetAssemblyTypeName: DashRotationPuzzle, Assembly-CSharp
-        m_MethodName: ReceiveDashHit
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+  m_EditorClassIdentifier: Assembly-CSharp::RailDashHitReceiver
+  rail: {fileID: 1552321743}
 --- !u!1 &7200000010
 GameObject:
   m_ObjectHideFlags: 0

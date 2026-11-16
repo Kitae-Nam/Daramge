@@ -48,6 +48,14 @@ public sealed class InteractionCameraView : MonoBehaviour
             startTargetY = verticalFollowTarget.position.y;
         }
 
+        ResumeView();
+    }
+
+    public void ResumeView()
+    {
+        if (!isActiveAndEnabled)
+            return;
+
         viewCamera.Priority = activePriority;
         viewCamera.enabled = true;
     }

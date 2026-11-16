@@ -10,7 +10,7 @@ public class TrainTrackPuzzleManager : MonoBehaviour
     {
         Ready,
         Running,
-        Returning,
+        WaitingForRail,
         Completed
     }
 
@@ -46,10 +46,7 @@ public class TrainTrackPuzzleManager : MonoBehaviour
     private UnityEvent onTrainDeparted;
 
     [SerializeField]
-    private UnityEvent onTrainReturning;
-
-    [SerializeField]
-    private UnityEvent onTrainReturned;
+    private UnityEvent onTrainResumed;
 
     [SerializeField]
     private UnityEvent onPuzzleSolved;
@@ -61,6 +58,7 @@ public class TrainTrackPuzzleManager : MonoBehaviour
         TrainPuzzleState.Ready;
 
     private bool isInitialized;
+    private int nextRailIndex;
 
     public TrainPuzzleState CurrentState => currentState;
 
@@ -96,7 +94,6 @@ public class TrainTrackPuzzleManager : MonoBehaviour
             }
         }
 
-        // 모든 회전식 레일 정보 검증
         foreach (RailSetting setting in railSettings)
         {
             if (setting == null || setting.rail == null)
@@ -120,6 +117,8 @@ public class TrainTrackPuzzleManager : MonoBehaviour
             }
         }
 
+        railSettings.Sort((left, right) => left.stopWaypointIndex.CompareTo(right.stopWaypointIndex));
+
         if (!trainMover.ConfigureRoute(waypoints))
             return;
 
@@ -134,149 +133,121 @@ public class TrainTrackPuzzleManager : MonoBehaviour
     // 레버가 호출하는 메서드
     public bool RequestTrainDeparture()
     {
-        if (!isInitialized || !isActiveAndEnabled)
-            return false;
-
-        if (currentState != TrainPuzzleState.Ready)
-            return false;
-
-        if (trainMover.IsMoving)
-            return false;
-
-        // 레일이 회전 중이면 출발 불가
-        foreach (RailSetting setting in railSettings)
+        if (!isInitialized || !isActiveAndEnabled || trainMover == null || !trainMover.isActiveAndEnabled ||
+            currentState != TrainPuzzleState.Ready)
         {
-            if (setting.rail.IsRotating)
-                return false;
-        }
-
-        // 기차가 이동할 최종 Waypoint
-        int destinationIndex =
-            waypoints.Length - 1;
-
-        bool routeIsClear = true;
-
-        // 모든 레일의 회전 상태 검사
-        foreach (RailSetting setting in railSettings)
-        {
-            bool isCorrect =
-                setting.rail.CurrentStep ==
-                setting.requiredStep;
-
-            if (isCorrect)
-                continue;
-
-            routeIsClear = false;
-
-            // 여러 레일이 틀렸다면
-            // 가장 먼저 만나는 레일 앞에서 정지
-            destinationIndex = Mathf.Min(
-                destinationIndex,
-                setting.stopWaypointIndex
-            );
+            return false;
         }
 
         currentState = TrainPuzzleState.Running;
-
-        bool started = trainMover.BeginRun(
-            destinationIndex,
-            routeIsClear,
-            HandleTrainReturning,
-            HandleTrainFinished
-        );
-
-        if (!started)
-        {
-            currentState = TrainPuzzleState.Ready;
-            return false;
-        }
-
-        Debug.Log(
-            routeIsClear
-                ? "모든 레일이 연결되어 기차가 출발합니다."
-                : $"레일 연결 실패. Waypoint {destinationIndex}에서 정지 예정.",
-            this
-        );
-
         onTrainDeparted?.Invoke();
-
         return true;
     }
 
-    // UnityEvent에서 직접 사용할 수 있는 버전
     public void StartTrain()
     {
         RequestTrainDeparture();
     }
 
-    // --------------------------------
-    // Train Callbacks
-    // --------------------------------
-
-    private void HandleTrainReturning()
+    private void Update()
     {
-        currentState = TrainPuzzleState.Returning;
+        if (currentState != TrainPuzzleState.Running && currentState != TrainPuzzleState.WaitingForRail)
+            return;
 
-        Debug.Log(
-            "기차가 막힌 선로 앞에서 되돌아갑니다.",
-            this
-        );
+        if (trainMover == null || !trainMover.isActiveAndEnabled)
+        {
+            ResetPuzzle();
+            return;
+        }
 
-        onTrainReturning?.Invoke();
+        if (currentState == TrainPuzzleState.WaitingForRail)
+        {
+            if (!TryLockRailsAtCheckpoint(railSettings[nextRailIndex].stopWaypointIndex))
+                return;
+
+            currentState = TrainPuzzleState.Running;
+            onTrainResumed?.Invoke();
+            if (currentState != TrainPuzzleState.Running)
+                return;
+        }
+
+        int stationIndex = waypoints.Length - 1;
+        int checkpointIndex = nextRailIndex < railSettings.Count
+            ? railSettings[nextRailIndex].stopWaypointIndex
+            : stationIndex;
+        int stopIndex = stationIndex;
+        for (int i = nextRailIndex; i < railSettings.Count; i++)
+        {
+            if (!CanCross(railSettings[i]))
+            {
+                stopIndex = railSettings[i].stopWaypointIndex;
+                break;
+            }
+        }
+
+        if (!trainMover.AdvanceToCheckpoint(checkpointIndex, stopIndex))
+            return;
+
+        if (checkpointIndex == stationIndex)
+        {
+            currentState = TrainPuzzleState.Completed;
+            onTrainStopped?.Invoke();
+            if (currentState == TrainPuzzleState.Completed)
+                onPuzzleSolved?.Invoke();
+        }
+        else if (!TryLockRailsAtCheckpoint(checkpointIndex))
+        {
+            currentState = TrainPuzzleState.WaitingForRail;
+            onTrainStopped?.Invoke();
+        }
     }
 
-    private void HandleTrainFinished(bool reachedGoal)
+    private static bool CanCross(RailSetting setting)
     {
-        currentState = reachedGoal ? TrainPuzzleState.Completed : TrainPuzzleState.Ready;
-        onTrainStopped?.Invoke();
-
-        if (reachedGoal)
-        {
-
-            Debug.Log(
-                "장난감 기차 퍼즐 클리어!",
-                this
-            );
-
-            onPuzzleSolved?.Invoke();
-        }
-        else
-        {
-
-            Debug.Log(
-                "기차가 출발 지점으로 복귀했습니다.",
-                this
-            );
-
-            onTrainReturned?.Invoke();
-        }
+        return setting.rail != null && !setting.rail.IsRotating &&
+            setting.rail.CurrentStep == setting.requiredStep;
     }
 
-    // --------------------------------
-    // Reset
-    // --------------------------------
+    private bool TryLockRailsAtCheckpoint(int checkpointIndex)
+    {
+        while (nextRailIndex < railSettings.Count && railSettings[nextRailIndex].stopWaypointIndex == checkpointIndex)
+        {
+            RailSetting setting = railSettings[nextRailIndex];
+            if (!CanCross(setting))
+                return false;
 
-    // 기차와 퍼즐 진행 상태만 초기화
-    // 개별 레일의 회전 상태는 유지
+            setting.rail.SetTrainRouteLocked(true);
+            nextRailIndex++;
+        }
+
+        return true;
+    }
+
+    // Reset the train and release its locks while keeping the rail orientations.
     public void ResetPuzzle()
     {
         if (!isInitialized)
             return;
 
-        trainMover.StopAndReset();
+        if (trainMover != null)
+            trainMover.StopAndReset();
 
+        for (int i = 0; i < nextRailIndex; i++)
+        {
+            DashRotationPuzzle rail = railSettings[i].rail;
+            if (rail != null)
+                rail.SetTrainRouteLocked(false);
+        }
+
+        nextRailIndex = 0;
         currentState = TrainPuzzleState.Ready;
         onTrainStopped?.Invoke();
     }
 
     private void OnDisable()
     {
-        if (trainMover != null &&
-            (currentState == TrainPuzzleState.Running ||
-             currentState == TrainPuzzleState.Returning))
-        {
+        if (currentState == TrainPuzzleState.Running || currentState == TrainPuzzleState.WaitingForRail)
             ResetPuzzle();
-        }
     }
 
     // --------------------------------
