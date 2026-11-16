@@ -13,6 +13,9 @@ namespace Daramge.BossUI.Members.CWH.SCRIPTS.UI
 
         private void Awake()
         {
+            // 재사용 UI 프리팹에서도 Canvas 참조 누락 때문에 처음부터 표시되지 않도록 한다.
+            if (_canvas == null) _canvas = GetComponent<Canvas>();
+            if (_canvas != null) _canvas.enabled = false;
             if (_fill != null)
                 _fullWidth = _fill.rect.width;
         }

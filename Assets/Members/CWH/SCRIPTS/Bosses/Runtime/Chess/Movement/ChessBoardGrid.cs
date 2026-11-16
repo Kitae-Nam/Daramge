@@ -19,6 +19,24 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
             (cell.x - (_columns - 1) * 0.5f) * _cellSize, 0f, (cell.y - (_rows - 1) * 0.5f) * _cellSize);
         private bool Contains(Vector2Int cell) => cell.x >= 0 && cell.y >= 0 && cell.x < _columns && cell.y < _rows;
 
+        /// <summary>복귀 후보를 가까운 순서로 제공한다. 물리/내비게이션 통과 판단은 이동기에 맡긴다.</summary>
+        public bool TryFindNearestUsableCell(Vector3 position, Func<Vector2Int, bool> canUse, out Vector2Int result)
+        {
+            result = WorldToCell(position);
+            var cells = new List<Vector2Int>(_columns * _rows);
+            for (int x = 0; x < _columns; x++)
+                for (int y = 0; y < _rows; y++) cells.Add(new Vector2Int(x, y));
+            position.y = _center.y;
+            cells.Sort((a, b) => (CellToWorld(a) - position).sqrMagnitude.CompareTo((CellToWorld(b) - position).sqrMagnitude));
+            foreach (Vector2Int cell in cells)
+            {
+                if (!canUse(cell)) continue;
+                result = cell;
+                return true;
+            }
+            return false;
+        }
+
         /// <summary>BFS로 우회 경로를 찾되 반환값은 다음 한 칸뿐이다. 킹은 항상 인접한 8칸 중 하나로 이동한다.</summary>
         public bool TryFindKingStep(Vector2Int from, Vector2Int target,
             Func<Vector2Int, Vector2Int, bool> canTraverse, out Vector2Int next)

@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 6126483847035732814}
   - component: {fileID: 8610166367790590368}
   - component: {fileID: 1022861448980494087}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Visual
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -136,8 +136,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Outline
   outlineMode: 0
   outlineColor: {r: 1, g: 0, b: 0, a: 1}
-  outlineWidth: 3
-  hideOccluded: 0
+  outlineWidth: 2
+  hideOccluded: 1
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
@@ -12738,7 +12738,8 @@ GameObject:
   - component: {fileID: 3687739977607650637}
   - component: {fileID: 6061896893339085805}
   - component: {fileID: 2895652652101351683}
-  m_Layer: 0
+  - component: {fileID: 7600161100000000001}
+  m_Layer: 7
   m_Name: The_King(Boss)Real
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12769,6 +12770,7 @@ Transform:
   - {fileID: 3383587476774390516}
   - {fileID: 5361067650801897251}
   - {fileID: 1408698438136091727}
+  - {fileID: 1323045650545179603}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!95 &1994957069360715352
@@ -13099,9 +13101,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbeb8aaa6e8148bf95c3f960d84a0c99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.BossSwordController
-  _swordPrefab: {fileID: 0}
+  _swordPrefab: {fileID: 6706654251722409689, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
   _breakBonusDamage: 100
-  _throwPreparationCenter: {fileID: 0}
+  _throwPreparationCenter: {fileID: 2196311429030900225}
   _throwPreparationExtraDistance: 1
   _throwPreparationPortion: 0.35
 --- !u!114 &1219021289891423579
@@ -13414,7 +13416,7 @@ MonoBehaviour:
   _blackKingMesh: {fileID: 4300002, guid: a1edea9a41e71514f94a737abaf1410c, type: 3}
   _bodyRenderer: {fileID: 2847931357123354720}
   _blackKingMaterial: {fileID: 2100000, guid: fed82db7ebed4ff2aebba1fea7f7b18a, type: 2}
-  _deferToCutscene: 0
+  _deferToCutscene: 1
 --- !u!114 &4556351463414811900
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13445,6 +13447,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.DashScorchFactory
   _material: {fileID: 2100000, guid: 04cf6b939dbf42e598b76ed540dea69c, type: 2}
+  _flamePrefab: {fileID: 8244148681294550272, guid: 6bebfd3731cef854ebd977e4cebfc580, type: 3}
+  _widthMultiplier: 1
+  _flameSpacing: 1
+  _flameHeightOffset: 0.08
 --- !u!114 &3687739977607650637
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28162,14 +28168,17 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5139045277658150859, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5363923721619401694}
   m_SourcePrefab: {fileID: 100100000, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
 --- !u!114 &4700714301244737402 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8467886809492656382, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
   m_PrefabInstance: {fileID: 3800951156877563780}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 8353683093751226447}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 682e30de6e004926854de5bfd5a332a1, type: 3}
@@ -28179,6 +28188,181 @@ MonoBehaviour:
 Transform:
   m_CorrespondingSourceObject: {fileID: 6030440720845073576, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
   m_PrefabInstance: {fileID: 3800951156877563780}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &8353683093751226447 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5139045277658150859, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
+  m_PrefabInstance: {fileID: 3800951156877563780}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &5363923721619401694
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8353683093751226447}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5461ef308f445489fb5e34df3a83943, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons.SwordThrowPreparationMotion
+--- !u!1001 &4104996774873467598
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 2470285756533836981}
+    m_Modifications:
+    - target: {fileID: 3074700511659421981, guid: 0b2b04a34bf26904588bdb88ebd0bacd, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1.3412781
+      objectReference: {fileID: 0}
+    - target: {fileID: 3074700511659421981, guid: 0b2b04a34bf26904588bdb88ebd0bacd, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -18.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3074700511659421981, guid: 0b2b04a34bf26904588bdb88ebd0bacd, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 2.3000498
+      objectReference: {fileID: 0}
+    - target: {fileID: 3074700511659421981, guid: 0b2b04a34bf26904588bdb88ebd0bacd, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3074700511659421981, guid: 0b2b04a34bf26904588bdb88ebd0bacd, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3074700511659421981, guid: 0b2b04a34bf26904588bdb88ebd0bacd, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3074700511659421981, guid: 0b2b04a34bf26904588bdb88ebd0bacd, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3074700511659421981, guid: 0b2b04a34bf26904588bdb88ebd0bacd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3074700511659421981, guid: 0b2b04a34bf26904588bdb88ebd0bacd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3074700511659421981, guid: 0b2b04a34bf26904588bdb88ebd0bacd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3796286997726362214, guid: 0b2b04a34bf26904588bdb88ebd0bacd, type: 3}
+      propertyPath: minIntensity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6550484348142128640, guid: 0b2b04a34bf26904588bdb88ebd0bacd, type: 3}
+      propertyPath: managedReferences[8926579900121350245].Velocity.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6550484348142128640, guid: 0b2b04a34bf26904588bdb88ebd0bacd, type: 3}
+      propertyPath: managedReferences[8926579900121350245].Velocity.y
+      value: -0.18
+      objectReference: {fileID: 0}
+    - target: {fileID: 6550484348142128640, guid: 0b2b04a34bf26904588bdb88ebd0bacd, type: 3}
+      propertyPath: managedReferences[8926579900121350245].Velocity.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6550484348142128640, guid: 0b2b04a34bf26904588bdb88ebd0bacd, type: 3}
+      propertyPath: managedReferences[8926579900121350246].PropertyName
+      value: _Emission
+      objectReference: {fileID: 0}
+    - target: {fileID: 6550484348142128640, guid: 0b2b04a34bf26904588bdb88ebd0bacd, type: 3}
+      propertyPath: managedReferences[8926579900121350246].BoundRenderer
+      value: 
+      objectReference: {fileID: 2847931357123354720}
+    - target: {fileID: 6550484348142128640, guid: 0b2b04a34bf26904588bdb88ebd0bacd, type: 3}
+      propertyPath: managedReferences[8926579900121350246].FlickerColor.b
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6550484348142128640, guid: 0b2b04a34bf26904588bdb88ebd0bacd, type: 3}
+      propertyPath: managedReferences[8926579900121350246].FlickerColor.g
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6550484348142128640, guid: 0b2b04a34bf26904588bdb88ebd0bacd, type: 3}
+      propertyPath: managedReferences[8926579900121350246].FlickerColor.r
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6550484348142128640, guid: 0b2b04a34bf26904588bdb88ebd0bacd, type: 3}
+      propertyPath: managedReferences[8926579900121350245].ClearImpulseOnStop
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6550484348142128640, guid: 0b2b04a34bf26904588bdb88ebd0bacd, type: 3}
+      propertyPath: managedReferences[8926579900121350245].Timing.NumberOfRepeats
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6550484348142128640, guid: 0b2b04a34bf26904588bdb88ebd0bacd, type: 3}
+      propertyPath: managedReferences[8926579900121350245].Timing.CooldownDuration
+      value: 0.08
+      objectReference: {fileID: 0}
+    - target: {fileID: 6550484348142128640, guid: 0b2b04a34bf26904588bdb88ebd0bacd, type: 3}
+      propertyPath: managedReferences[8926579900121350245].Timing.DelayBetweenRepeats
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6550484348142128640, guid: 0b2b04a34bf26904588bdb88ebd0bacd, type: 3}
+      propertyPath: managedReferences[8926579900121350245].m_ImpulseDefinition.Randomize
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6550484348142128640, guid: 0b2b04a34bf26904588bdb88ebd0bacd, type: 3}
+      propertyPath: managedReferences[8926579900121350245].m_ImpulseDefinition.ImpulseType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6550484348142128640, guid: 0b2b04a34bf26904588bdb88ebd0bacd, type: 3}
+      propertyPath: managedReferences[8926579900121350245].m_ImpulseDefinition.ImpulseShape
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6550484348142128640, guid: 0b2b04a34bf26904588bdb88ebd0bacd, type: 3}
+      propertyPath: managedReferences[8926579900121350245].m_ImpulseDefinition.AmplitudeGain
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6550484348142128640, guid: 0b2b04a34bf26904588bdb88ebd0bacd, type: 3}
+      propertyPath: managedReferences[8926579900121350245].m_ImpulseDefinition.FrequencyGain
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6550484348142128640, guid: 0b2b04a34bf26904588bdb88ebd0bacd, type: 3}
+      propertyPath: managedReferences[8926579900121350245].m_ImpulseDefinition.ImpulseChannel
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6550484348142128640, guid: 0b2b04a34bf26904588bdb88ebd0bacd, type: 3}
+      propertyPath: managedReferences[8926579900121350245].m_ImpulseDefinition.ImpulseDuration
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6550484348142128640, guid: 0b2b04a34bf26904588bdb88ebd0bacd, type: 3}
+      propertyPath: managedReferences[8926579900121350245].m_ImpulseDefinition.TimeEnvelope.DecayTime
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6550484348142128640, guid: 0b2b04a34bf26904588bdb88ebd0bacd, type: 3}
+      propertyPath: managedReferences[8926579900121350245].m_ImpulseDefinition.TimeEnvelope.AttackTime
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6550484348142128640, guid: 0b2b04a34bf26904588bdb88ebd0bacd, type: 3}
+      propertyPath: managedReferences[8926579900121350245].m_ImpulseDefinition.TimeEnvelope.SustainTime
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6550484348142128640, guid: 0b2b04a34bf26904588bdb88ebd0bacd, type: 3}
+      propertyPath: managedReferences[8926579900121350245].m_ImpulseDefinition.TimeEnvelope.ScaleWithImpact
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6802914318040931382, guid: 0b2b04a34bf26904588bdb88ebd0bacd, type: 3}
+      propertyPath: m_Name
+      value: HitFeedback
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 0b2b04a34bf26904588bdb88ebd0bacd, type: 3}
+--- !u!4 &1323045650545179603 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3074700511659421981, guid: 0b2b04a34bf26904588bdb88ebd0bacd, type: 3}
+  m_PrefabInstance: {fileID: 4104996774873467598}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4607693505864709902
 PrefabInstance:
@@ -28326,3 +28510,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 682e30de6e004926854de5bfd5a332a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons.BossSword
+
+--- !u!114 &7600161100000000001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2346691917327231199}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14bd89864673b704b8f617b047d32edb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons.PhaseTwoSwordReplenisher
+  _swordPrefab: {fileID: 8467886809492656382, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
+  _swordParent: {fileID: 2196311429030900225}
+  _targetCount: 6

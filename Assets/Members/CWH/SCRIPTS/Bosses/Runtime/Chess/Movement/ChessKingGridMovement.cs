@@ -59,11 +59,13 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
             if (!_target.HasTarget || Time.time < _nextStepTime || (_runner != null && _runner.CurrentPattern != null)) return;
             _agent.isStopped = true;
             Vector2Int cell = _grid.WorldToCell(transform.position);
-            Vector3 goal = _grid.CellToWorld(cell);
             if (!IsCentered)
             {
-                // 대쉬/컷신이 칸 사이에서 끝났으면 순간이동하지 않고 가까운 칸 중심에 먼저 정렬한다.
-                if (TryResolve(goal, out Vector3 aligned) && CanTravel(transform.position, aligned)) BeginStep(aligned);
+                // 가장 가까운 칸이 벽/경계에 막혀도 도달 가능한 다음 칸으로 부드럽게 복귀한다.
+                // 칸 중심 조건과 직선 통과 검사는 유지하므로 벽 관통이나 순간이동으로 해결하지 않는다.
+                if (_grid.TryFindNearestUsableCell(transform.position, CanAlignTo, out Vector2Int alignmentCell) &&
+                    TryResolve(_grid.CellToWorld(alignmentCell), out Vector3 aligned)) BeginStep(aligned);
+                else _nextStepTime = Time.time + Mathf.Max(0.1f, _stepPause);
                 return;
             }
             Vector3 offset = _target.Target.position - transform.position; offset.y = 0f;
@@ -73,6 +75,8 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
         }
         private bool CanTraverse(Vector2Int from, Vector2Int to)
             => TryResolve(_grid.CellToWorld(from), out Vector3 start) && TryResolve(_grid.CellToWorld(to), out Vector3 end) && CanTravel(start, end);
+        private bool CanAlignTo(Vector2Int cell)
+            => TryResolve(_grid.CellToWorld(cell), out Vector3 destination) && CanTravel(transform.position, destination);
         private bool TryResolve(Vector3 point, out Vector3 result)
         {
             point.y = transform.position.y;

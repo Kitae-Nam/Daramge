@@ -10,6 +10,32 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons
     public sealed class BossSwordInventory : MonoBehaviour
     {
         [SerializeField] private List<BossSword> _swords = new List<BossSword>();
+        private int _nextMeleeIndex;
+
+        /// <summary>파괴된 참조를 제외한 보유 수. 비행하거나 박힌 검도 보유한 검에 포함한다.</summary>
+        public int LivingCount
+        {
+            get
+            {
+                int count = 0;
+                foreach (BossSword sword in _swords)
+                    if (sword != null && sword.State != BossSwordState.Destroyed) count++;
+                return count;
+            }
+        }
+
+        /// <summary>생성 담당이 제공한 검만 등록한다. Inventory는 프리팹 생성 방법을 알지 않는다.</summary>
+        public void Register(BossSword sword)
+        {
+            if (sword != null && !_swords.Contains(sword)) _swords.Add(sword);
+        }
+
+        public void RemoveDestroyed()
+        {
+            // 전환 시 빈 슬롯을 제거해야 보충한 여섯 검이 공전 원 전체에 균등하게 배치된다.
+            _swords.RemoveAll(sword => sword == null || sword.State == BossSwordState.Destroyed);
+            _nextMeleeIndex = _swords.Count == 0 ? 0 : _nextMeleeIndex % _swords.Count;
+        }
 
         /// <summary>
         /// 공전 코드가 같은 검 목록을 읽을 수 있도록한다.
@@ -64,18 +90,22 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons
         }
 
         /// <summary>
-        /// 손에 들수 있는 첫번째 검을 선택합니다.
+        /// 마지막 선택 다음부터 공전 중인 검을 순환 선택합니다.
         /// 상태 변경 가능 여부는 각 검이 판단하도록 맡깁니다.
         /// </summary>
         public bool TryHoldSword(out BossSword selectSword)
         {
             selectSword = null;
-            foreach (BossSword sword in _swords)
+            // 직전에 돌려놓은 첫 검을 반복 선택하지 않고, 마지막 선택 다음부터 순환한다.
+            for (int offset = 0; offset < _swords.Count; offset++)
             {
+                int index = (_nextMeleeIndex + offset) % _swords.Count;
+                BossSword sword = _swords[index];
                 if (sword == null || !sword.isActiveAndEnabled) continue;
                 if (!sword.TryHold()) continue;
 
                 selectSword = sword;
+                _nextMeleeIndex = (index + 1) % _swords.Count;
                 return true;
             }
 

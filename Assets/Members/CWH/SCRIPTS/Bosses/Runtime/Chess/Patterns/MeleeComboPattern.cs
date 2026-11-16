@@ -110,6 +110,10 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Patterns
                     if (!_target.HasTarget || _heldSword == null) yield break;
                     if (strike > 0)
                     {
+                        // 앞 타격의 자세를 복원한 뒤 다음 검을 장착한다. 한 자루만 남으면 그 검을 재사용한다.
+                        ReleaseSword();
+                        if (!_inventory.TryHoldSword(out _heldSword) ||
+                            !_presentation.TryAttachSword(_heldSword.transform)) yield break;
                         // 한 패턴 안의 두 번째 공격도 피할 시간을 보장한다.
                         ShowWarning();
                         _presentation.BeginCharge(strike);

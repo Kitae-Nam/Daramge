@@ -12469,6 +12469,7 @@ GameObject:
   - component: {fileID: 335436049160081673}
   - component: {fileID: 3172685831011236018}
   - component: {fileID: 7300000000000000000}
+  - component: {fileID: 7600161100000000001}
   m_Layer: 0
   m_Name: The_King(Boss)
   m_TagString: Untagged
@@ -29322,3 +29323,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e95c97d815645104891778b3278e1f56, type: 3}
   m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::CWH.BossIntegration.BossPlayerHealthBinding
+
+--- !u!114 &7600161100000000001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3269441842003620616}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14bd89864673b704b8f617b047d32edb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons.PhaseTwoSwordReplenisher
+  _swordPrefab: {fileID: 8467886809492656382, guid: adcfe2956f927d244be8ce1fbcd09ec3, type: 3}
+  _swordParent: {fileID: 7541547966863665179}
+  _targetCount: 6

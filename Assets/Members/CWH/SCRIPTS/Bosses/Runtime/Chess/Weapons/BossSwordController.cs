@@ -25,18 +25,43 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons
 
         private readonly List<ThrownBossSword> _active = new List<ThrownBossSword>();
         private readonly List<BossSword> _preparedSwords = new List<BossSword>();
+        private object _sequenceOwner;
         public ThrownBossSword ActiveSword => _active.Count > 0 ? _active[0] : null;
         public bool HasSword => _active.Count > 0;
 
         public int AvailableCount =>
             _inventory != null ? _inventory.OrbitingCount : (!HasSword && _swordPrefab != null ? 1 : 0);
 
-        public bool CanThrow => isActiveAndEnabled && !HasSword && AvailableCount > 0 && !_health.IsDead;
+        public bool CanThrow => isActiveAndEnabled && _sequenceOwner == null &&
+                                !HasSword && AvailableCount > 0 && !_health.IsDead;
 
         public bool CanLaunchPrepared => isActiveAndEnabled &&
                                          !_health.IsDead &&
-                                         !HasSword &&
+                                         (!HasSword || _sequenceOwner != null) &&
                                          _preparedSwords.Count > 0;
+
+        /// <summary>새 패턴은 박힌 검이 없을 때만 시작하고 같은 연속 공격만 예외적으로 다음 검을 준비한다.</summary>
+        public bool TryBeginThrowSequence(object owner)
+        {
+            if (owner == null || !CanThrow || _preparedSwords.Count > 0) return false;
+            _sequenceOwner = owner;
+            return true;
+        }
+
+        public bool OwnsThrowSequence(object owner) => owner != null && ReferenceEquals(_sequenceOwner, owner);
+
+        public int PrepareNextThrow(object owner)
+        {
+            if (!OwnsThrowSequence(owner) || !isActiveAndEnabled || _health.IsDead) return 0;
+            return PrepareThrowInternal(1);
+        }
+
+        public void EndThrowSequence(object owner)
+        {
+            if (!OwnsThrowSequence(owner)) return;
+            CancelThrowPrepared();
+            _sequenceOwner = null;
+        }
 
         private void Awake()
         {
@@ -82,8 +107,14 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons
 
         public int PrepareThrow(int cnt)
         {
+            if (!CanThrow) return 0;
+            return PrepareThrowInternal(cnt);
+        }
+
+        private int PrepareThrowInternal(int cnt)
+        {
             if (cnt <= 0 || _preparedSwords.Count > 0 ||
-                _inventory == null || !CanThrow)
+                _inventory == null)
             {
                 return 0;
             }
@@ -251,6 +282,8 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons
 
         public void Clear()
         {
+            // 전투 차단 시 소유권도 폐기해 중단된 연속 투척이 다음 검을 준비하지 못하게 한다.
+            _sequenceOwner = null;
             CancelThrowPrepared();
             RecallAll(false);
         }
@@ -266,6 +299,7 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons
 
         private void OnDisable()
         {
+            _sequenceOwner = null;
             _health.Died -= Clear;
             _groggy.Entered -= Clear;
             if (_combatGate != null) _combatGate.AvailabilityChanged -= HandleCombatAvailability;
