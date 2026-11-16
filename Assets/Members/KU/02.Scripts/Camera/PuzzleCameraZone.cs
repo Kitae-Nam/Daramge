@@ -1,10 +1,13 @@
 
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [RequireComponent(typeof(BoxCollider))]
 public class PuzzleCameraZone : MonoBehaviour
 {
+    private const float DefaultOrthographicSize = 7f;
+
     [Header("References")]
     [SerializeField]
     private PuzzleCameraController cameraController;
@@ -12,13 +15,19 @@ public class PuzzleCameraZone : MonoBehaviour
     [SerializeField]
     private Transform cameraPoint;
 
-    [SerializeField, Min(0f)]
-    private float orthographicSizeOverride;
+    [Header("Camera Lens")]
+    [FormerlySerializedAs("orthographicSizeOverride")]
+    [SerializeField, Min(0.01f)]
+    private float orthographicSize = DefaultOrthographicSize;
+
+    [SerializeField]
+    private float nearClipPlane;
 
     private readonly HashSet<Collider> playerColliders = new();
 
     public Transform CameraPoint => cameraPoint;
-    public float OrthographicSizeOverride => orthographicSizeOverride;
+    public float OrthographicSize => orthographicSize > 0f ? orthographicSize : DefaultOrthographicSize;
+    public float NearClipPlane => nearClipPlane;
 
     private void Awake()
     {
