@@ -130,6 +130,7 @@ namespace CHG._02_Scripts.Player.Combat
             Transform anchor = null;
             Vector3 localHit = Vector3.zero;
             ITonguePullable pullable = null;
+            bool isTongueEventHit = false;
             
             _renderer.PlayClip(grepParam.ParamHash, 0f, 0.01f);
             while (moveDistance < maxRange)  //발사해서 닿거나 최대 사거리까지
@@ -141,7 +142,11 @@ namespace CHG._02_Scripts.Player.Combat
                     localHit = anchor.InverseTransformPoint(hit.point);
                     damageCaster.ResetHitCaster();
                     damageCaster.CastDamage(hit.point, SkillData, 1f);
-                    hit.collider.GetComponentInParent<ITongueHitHandler>()?.HandleTongueHit(hit.point);
+                    if (hit.collider.TryGetComponent<ITongueHitHandler>(out var handler))
+                    {
+                        handler?.HandleTongueHit(hit.point);
+                        isTongueEventHit = true;
+                    }
                     pullable = hit.collider.GetComponentInParent<ITonguePullable>();
                     break;
                 }
@@ -152,7 +157,7 @@ namespace CHG._02_Scripts.Player.Combat
                 yield return null;
             }
 
-            if (pullable != null)
+            if (pullable != null )
             {
                 yield return PullObjectCoroutine(pullable);
                 if (pullable is ITongueHoldable)
@@ -163,7 +168,7 @@ namespace CHG._02_Scripts.Player.Combat
                 else 
                     pullable.EndPull();
             }
-            else if (anchor != null)
+            else if (anchor != null && !isTongueEventHit)
             {
                 //맞았을 때 이동
                 _renderer.PlayClip(dragParam.ParamHash, 0f, 0.01f);
