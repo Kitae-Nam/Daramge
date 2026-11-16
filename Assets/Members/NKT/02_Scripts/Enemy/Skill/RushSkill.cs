@@ -26,6 +26,11 @@ namespace NKT.Enemy.Skill
         private NavMeshAgent _navMeshAgent;
         private Coroutine _routine;
         
+        private Transform _indicatorTransform;
+        private Transform _indicatorParent;
+        private Vector3 _indicatorLocalPosition;
+        private Quaternion _indicatorLocalRotation;
+        
         public override void InitializeSkill(ISkillModule skillModule)
         {
             base.InitializeSkill(skillModule);
@@ -35,6 +40,11 @@ namespace NKT.Enemy.Skill
             Debug.Assert(_navMeshAgent != null, $"MeshAgent가 없습니다. {gameObject}");
             
             damageCaster.InitCaster(_ownerEnemy);
+            
+            _indicatorTransform = ((Component)_indicator).transform;
+            _indicatorParent = _indicatorTransform.parent;
+            _indicatorLocalPosition = _indicatorTransform.localPosition;
+            _indicatorLocalRotation = _indicatorTransform.localRotation;
         }
 
         public override bool CanUseSkill(GameObject target = null)
@@ -71,7 +81,8 @@ namespace NKT.Enemy.Skill
             //경로 보여주기
             _renderer.PlayClip(windupAnimParam.ParamHash, 0, 0.1f);
             yield return Telegraph(_indicator, new Vector2(pathWidth, length), windupTime, 0.15f);
-            
+            DetachIndicator();
+                
             //위치 이동
             _renderer.PlayClip(dashAnimParam.ParamHash, 0, 0.1f);
             if (damageCaster is OverlapDamageCaster overlapCaster)
@@ -97,7 +108,18 @@ namespace NKT.Enemy.Skill
                 _routine = null;
             }
             _indicator.Hide();
+            AttachIndicator();
             base.StopSkill();
+        }
+        
+        private void DetachIndicator() => _indicatorTransform.SetParent(null, true);
+        
+        private void AttachIndicator()
+        {
+            if (_indicatorTransform.parent == _indicatorParent) return;
+            _indicatorTransform.SetParent(_indicatorParent, false);
+            _indicatorTransform.localPosition = _indicatorLocalPosition;
+            _indicatorTransform.localRotation = _indicatorLocalRotation;
         }
     }
 }

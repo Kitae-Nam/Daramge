@@ -1190,14 +1190,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1038305455002440309, guid: f307cfd99c448bf4b8aecc0782b551df, type: 3}
-      propertyPath: feelPlayer
-      value: 
-      objectReference: {fileID: 1744789460120823569}
-    - target: {fileID: 1587605000269180607, guid: f307cfd99c448bf4b8aecc0782b551df, type: 3}
-      propertyPath: hitFeedback
-      value: 
-      objectReference: {fileID: 1744789460120823570}
     - target: {fileID: 2269498295117407284, guid: f307cfd99c448bf4b8aecc0782b551df, type: 3}
       propertyPath: m_LocalPosition.x
       value: -4.39
@@ -1238,14 +1230,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5512309608276834958, guid: f307cfd99c448bf4b8aecc0782b551df, type: 3}
-      propertyPath: radius
-      value: 3.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 6716060928342067872, guid: f307cfd99c448bf4b8aecc0782b551df, type: 3}
-      propertyPath: vitalStat
-      value: 
-      objectReference: {fileID: 11400000, guid: b196cf950956488439c94a54e0b161e4, type: 2}
     - target: {fileID: 7873231847524905661, guid: f307cfd99c448bf4b8aecc0782b551df, type: 3}
       propertyPath: m_Name
       value: Mimic Enemy
@@ -1255,28 +1239,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f307cfd99c448bf4b8aecc0782b551df, type: 3}
---- !u!114 &1744789460120823569 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7510132994667925915, guid: f307cfd99c448bf4b8aecc0782b551df, type: 3}
-  m_PrefabInstance: {fileID: 1744789460120823568}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6da43522623d4704e979466dc7650b65, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: MoreMountains.Tools::MoreMountains.Feedbacks.MMF_Player
---- !u!114 &1744789460120823570 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7045936447104940767, guid: f307cfd99c448bf4b8aecc0782b551df, type: 3}
-  m_PrefabInstance: {fileID: 1744789460120823568}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6cdf5d3a52c94043b0a8dbc523b9c642, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CHG._02_Scripts.CoreSystem.FeedbackSystem.FeedbackPlayer
 --- !u!1001 &2660736237760353275
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1288,22 +1250,6 @@ PrefabInstance:
     - target: {fileID: 3730470706518936825, guid: 38dd1a6d89c407c40bee830d161d5ab7, type: 3}
       propertyPath: m_Name
       value: Rush Enemy
-      objectReference: {fileID: 0}
-    - target: {fileID: 7310264010694220658, guid: 38dd1a6d89c407c40bee830d161d5ab7, type: 3}
-      propertyPath: maxHealth
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 7310264010694220658, guid: 38dd1a6d89c407c40bee830d161d5ab7, type: 3}
-      propertyPath: vitalStat
-      value: 
-      objectReference: {fileID: 11400000, guid: b196cf950956488439c94a54e0b161e4, type: 2}
-    - target: {fileID: 7310264010694220658, guid: 38dd1a6d89c407c40bee830d161d5ab7, type: 3}
-      propertyPath: baseMaxHealth
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 7310264010694220658, guid: 38dd1a6d89c407c40bee830d161d5ab7, type: 3}
-      propertyPath: currentHealth
-      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 8722732367661867726, guid: 38dd1a6d89c407c40bee830d161d5ab7, type: 3}
       propertyPath: m_LocalPosition.x
