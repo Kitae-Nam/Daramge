@@ -17,6 +17,9 @@ namespace Memebers.CWH.SCRIPTS.TEST
         {
             if (Keyboard.current.rKey.wasPressedThisFrame)
                 bossHealth.ReceiveDamage(100f);
+            if(Keyboard.current.shiftKey.isPressed&&Keyboard.current.eKey.wasPressedThisFrame)
+                bossHealth.ReceiveDamage(-100f);
+                
             if (Keyboard.current.tKey.wasPressedThisFrame)
                 _bossGroggyController.TryEnterGroggy();
             // 에디터 전용 ContextMenu 함수를 참조하지 않아 플레이어 빌드에서도 컴파일된다.

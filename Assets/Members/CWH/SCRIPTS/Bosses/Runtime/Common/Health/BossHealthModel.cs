@@ -76,7 +76,7 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Health
         private static void ValidateNonNegativeFinite(float value, string parameterName)
         {
             // NaN/Infinity가 체력이나 배율에 들어가면 이후 전투 상태 전체가 망가지므로 입구에서 거절한다.
-            if (float.IsNaN(value) || float.IsInfinity(value) || value < 0f)
+            if (float.IsNaN(value) || float.IsInfinity(value))
                 throw new ArgumentOutOfRangeException(parameterName, "유한한 0 이상의 값이어야 합니다.");
         }
     }
