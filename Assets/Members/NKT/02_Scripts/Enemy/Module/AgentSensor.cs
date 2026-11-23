@@ -42,6 +42,22 @@ namespace NKT.Enemy.Module
             => (targetTrm.position - transform.position).sqrMagnitude <=  viewRadius * viewRadius;
         public int FindTargetsInRadius(float viewRadius)
             => Physics.OverlapSphereNonAlloc(transform.position, viewRadius, _colliderResults, whatIsTarget);
+        
+#if UNITY_EDITOR
+        private void OnDrawGizmosSelected()
+        {
+            AbstractEnemy enemy = GetComponentInParent<AbstractEnemy>();
+            if (enemy == null || enemy.EnemyData == null) return;
 
+            float radius = enemy.EnemyData.DetectRadius;
+            float angle = enemy.EnemyData.ViewAngle;
+            Vector3 from = Quaternion.Euler(0f, -angle * 0.5f, 0f) * transform.forward; //부채꼴 왼쪽 끝
+
+            UnityEditor.Handles.color = new Color(1f, 0.8f, 0f, 0.15f);
+            UnityEditor.Handles.DrawSolidArc(transform.position, Vector3.up, from, angle, radius); //시야각
+            UnityEditor.Handles.color = Color.yellow;
+            UnityEditor.Handles.DrawWireDisc(transform.position, Vector3.up, radius);              //감지 반경
+        }
+#endif
     }
 }
