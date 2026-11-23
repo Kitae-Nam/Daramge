@@ -105,7 +105,10 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
 
             // 바닥과 겹치지 않도록 몸체 하단에 여유를 둔 얇은 박스를 직선으로 쓸어 검사한다.
             Vector3 center = start + Vector3.up * (BodyHeight * 0.5f);
-            Vector3 halfSize = new Vector3(width * 0.5f, BodyHeight * 0.5f - 0.05f, _bodyHalfDepth);
+            // 공격 폭과 실제 몸체 폭은 별개다. Agent보다 작은 검사로 벽에 파고들지 않게 한다.
+            float radius = Mathf.Max(0.01f, Agent.radius);
+            Vector3 halfSize = new Vector3(Mathf.Max(width * 0.5f, radius),
+                Mathf.Max(0.05f, BodyHeight * 0.5f - 0.05f), Mathf.Max(_bodyHalfDepth, radius));
             RaycastHit[] hits = Physics.BoxCastAll(center, halfSize, direction,
                 Quaternion.LookRotation(direction), distance, _obstacleLayers, QueryTriggerInteraction.Ignore);
             foreach (RaycastHit hit in hits)

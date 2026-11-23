@@ -28,7 +28,7 @@ namespace CWH.SCRIPTS.BOSS
         private void Update()
         {
             if (_orbitCenter == null || !_isOrbiting || _inventory == null) return;
-            if (_inventory.HasHeldSword) return;
+            // 공격에 선택된 검만 아래 상태 검사에서 제외하고 나머지 공전은 계속한다.
             
             // var를 쓴이유 어차피 BossSword인데 또 쓰면 길어지잖아 ㅋㅋ 귀찮아
             var _swords = _inventory.Swords;

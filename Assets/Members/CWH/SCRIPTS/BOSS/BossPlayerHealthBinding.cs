@@ -39,6 +39,15 @@ namespace CWH.BossIntegration
             _receiver = root.GetComponent<PlayerHealthDamageReceiver>();
             if (_receiver == null) _receiver = root.gameObject.AddComponent<PlayerHealthDamageReceiver>();
             _receiver.Bind(health);
+            // 수신자를 타깃 루트에 조립해 포효의 GetComponentInParent 검색과 일치시킨다.
+            // 플레이어 프리팹은 수정하지 않고 실제 CharacterController가 있을 때만 이동을 연결한다.
+            CharacterController controller = root.GetComponent<CharacterController>();
+            if (controller != null)
+            {
+                PlayerKnockbackMovement movement = root.GetComponent<PlayerKnockbackMovement>();
+                if (movement == null) movement = root.gameObject.AddComponent<PlayerKnockbackMovement>();
+                movement.Bind(controller);
+            }
             _boundTarget = target;
             return true;
         }

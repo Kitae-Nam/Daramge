@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Linq;
 using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime;
 using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.AI;
 using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Dash;
@@ -169,7 +170,10 @@ namespace Members.CWH.SCRIPTS.Bosses.Tests
         {
             ThrownBossSword thrown = _boss.GetComponent<BossSwordController>().Throw(_player.transform, Vector3.forward * 10f, 2f);
             Set(thrown, "_flightDuration", 0.02f);
-            yield return new WaitForSeconds(0.08f);
+            // 비행은 상승/공중 이동/낙하를 포함하므로 실제 착지 상태를 기다린다.
+            float landingDeadline = Time.time + 2f;
+            while (thrown.IsFlying && Time.time < landingDeadline) yield return null;
+            Assert.That(thrown.IsEmbedded, Is.True);
             BreakableHealth health = thrown.GetComponent<BreakableHealth>();
             health.ReceiveDamage(1000f);
             health.ReceiveDamage(1000f);
@@ -219,7 +223,7 @@ namespace Members.CWH.SCRIPTS.Bosses.Tests
             Assert.That(Runner.TryRun(_boss.GetComponent<MeleeComboPattern>()), Is.True);
             yield return new WaitForSeconds(0.8f);
             Assert.That(_player.GetComponent<DashTestReceiver>().DamageCalls, Is.EqualTo(3));
-            Assert.That(Inventory.OrbitingCount, Is.EqualTo(4));
+            Assert.That(Inventory.OrbitingCount, Is.EqualTo(6));
         }
 
         [UnityTest]
@@ -229,10 +233,10 @@ namespace Members.CWH.SCRIPTS.Bosses.Tests
             ThrownBossSword[] swords = _boss.GetComponent<BossSwordController>().ThrowVolley(_player.transform,
                 new[] { Vector3.forward * 10f, Vector3.forward * 12f, Vector3.forward * 14f }, 2f);
             Assert.That(swords.Length, Is.EqualTo(3));
-            Assert.That(Inventory.OrbitingCount, Is.EqualTo(1));
+            Assert.That(Inventory.OrbitingCount, Is.EqualTo(3));
             Assert.That(_boss.GetComponent<MeleeComboPattern>().CanExecute(), Is.True);
             _boss.GetComponent<BossCombatGate>().Block(this);
-            Assert.That(Inventory.OrbitingCount, Is.EqualTo(4));
+            Assert.That(Inventory.OrbitingCount, Is.EqualTo(6));
             Assert.That(_boss.GetComponent<BossSwordController>().HasSword, Is.False);
         }
 
@@ -306,6 +310,161 @@ namespace Members.CWH.SCRIPTS.Bosses.Tests
             Object.Destroy(_boss);
             yield return null; yield return null;
             _boss = null;
+        }
+
+        [UnityTest]
+        public IEnumerator CompletionReplenishesSixFromZeroOnlyAtTransition()
+        {
+            foreach (BossSword sword in Inventory.Swords) Object.Destroy(sword.gameObject);
+            yield return null;
+            Assert.That(Inventory.LivingCount, Is.Zero);
+            yield return EnterPhaseTwo();
+            Assert.That(Inventory.LivingCount, Is.EqualTo(6));
+            Object.Destroy(Inventory.Swords[0].gameObject);
+            yield return null;
+            _boss.GetComponent<PhaseTwoSwordReplenisher>().ReplenishOnce();
+            Assert.That(Inventory.LivingCount, Is.EqualTo(5), "2페이즈 전투 중 손실은 재생성하지 않는다.");
+        }
+
+        [UnityTest]
+        public IEnumerator CompletionPreservesExistingSwordsWhenReplenishing()
+        {
+            BossSword[] original = Inventory.Swords.ToArray();
+            yield return EnterPhaseTwo();
+            Assert.That(Inventory.LivingCount, Is.EqualTo(6));
+            foreach (BossSword sword in original) Assert.That(Inventory.Swords.Contains(sword), Is.True);
+        }
+
+        [UnityTest]
+        public IEnumerator CompletionMeleeUsesDifferentSwordsPerStrike()
+        {
+            yield return EnterPhaseTwo();
+            FastMelee();
+            Profiles.PhaseTwo.SwingDuration = 0.05f;
+            Profiles.PhaseTwo.ComboWarning = 0.05f;
+            var used = new HashSet<BossSword>();
+            Assert.That(Runner.TryRun(_boss.GetComponent<MeleeComboPattern>()), Is.True);
+            float deadline = Time.time + 3f;
+            do
+            {
+                foreach (BossSword sword in Inventory.Swords)
+                    if (sword != null && sword.State == BossSwordState.Held) used.Add(sword);
+                yield return null;
+            } while (Runner.CurrentPattern != null && Time.time < deadline);
+            Assert.That(used.Count, Is.EqualTo(3));
+            Assert.That(Inventory.OrbitingCount, Is.EqualTo(6));
+        }
+
+        [UnityTest]
+        public IEnumerator CompletionSequentialThrowRetargetsAndDoesNotLaunchTogether()
+        {
+            yield return EnterPhaseTwo();
+            var pattern = _boss.GetComponent<SwordThrowPattern>();
+            var controller = _boss.GetComponent<BossSwordController>();
+            Set(controller, "_throwPreparationCenter", _boss.transform);
+            Set(pattern, "_warningDuration", 0.03f);
+            Set(pattern, "_repeatWarningDuration", 0.06f);
+            Profiles.PhaseTwo.ThrowCount = 3;
+            var seen = new HashSet<ThrownBossSword>();
+            var embedded = new List<Vector3>();
+            Assert.That(Runner.TryRun(pattern), Is.True);
+            float deadline = Time.time + 5f;
+            do
+            {
+                ThrownBossSword active = controller.ActiveSword;
+                // ActiveSword는 첫 박힌 검을 반환하므로 전체 목록에서 새 비행 검을 찾는다.
+                foreach (BossSword sword in Inventory.Swords)
+                {
+                    var thrown = sword != null ? sword.GetComponent<ThrownBossSword>() : null;
+                    if (thrown == null || !thrown.IsFlying || !seen.Add(thrown)) continue;
+                    thrown.Embedded += landed =>
+                    {
+                        embedded.Add(landed.transform.position);
+                        _player.transform.position += Vector3.right * 3f;
+                    };
+                }
+                Assert.That(Inventory.Swords.Count(sword => sword != null && sword.State == BossSwordState.Flying), Is.LessThanOrEqualTo(1));
+                Assert.That(Inventory.Swords.Count(sword => sword != null && sword.State == BossSwordState.PreparingThrow), Is.LessThanOrEqualTo(1));
+                yield return null;
+            } while (Runner.CurrentPattern != null && Time.time < deadline);
+            Assert.That(seen.Count, Is.EqualTo(3));
+            Assert.That(embedded.Count, Is.EqualTo(3));
+            Assert.That(embedded[1].x - embedded[0].x, Is.EqualTo(3f).Within(0.15f));
+            Assert.That(embedded[2].x - embedded[1].x, Is.EqualTo(3f).Within(0.15f));
+            Assert.That(controller.CanThrow, Is.False, "박힌 검이 남으면 새 패턴은 금지한다.");
+        }
+
+        [UnityTest]
+        public IEnumerator CompletionSequenceCancellationRestoresReservations()
+        {
+            yield return EnterPhaseTwo();
+            var controller = _boss.GetComponent<BossSwordController>();
+            Set(controller, "_throwPreparationCenter", _boss.transform);
+            Assert.That(controller.TryBeginThrowSequence(this), Is.True);
+            Assert.That(controller.TryBeginThrowSequence(new object()), Is.False);
+            Assert.That(controller.PrepareNextThrow(this), Is.EqualTo(1));
+            controller.UpdateThrowPreparation(0.5f);
+            _boss.GetComponent<BossCombatGate>().Block(this);
+            Assert.That(controller.OwnsThrowSequence(this), Is.False);
+            Assert.That(Inventory.OrbitingCount, Is.EqualTo(6));
+            Assert.That(controller.PrepareNextThrow(this), Is.Zero);
+        }
+
+        [UnityTest]
+        public IEnumerator CompletionKnockbackMovesCharacterControllerAndHitsWallOnce()
+        {
+            var actor = new GameObject("Knockback integration actor");
+            var wall = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            try
+            {
+                actor.transform.position = new Vector3(15f, 1f, 0f);
+                wall.transform.position = new Vector3(15f, 1f, 2f);
+                wall.transform.localScale = new Vector3(5f, 3f, 0.2f);
+                var body = actor.AddComponent<CharacterController>();
+                var health = actor.AddComponent<DashTestReceiver>();
+                var receiver = actor.AddComponent<KnockbackReceiver>();
+                // Runtime 테스트에 Assembly-CSharp 참조를 추가하지 않고 실제 어댑터 경계를 검증한다.
+                var type = System.Type.GetType("CWH.BossIntegration.PlayerKnockbackMovement, Assembly-CSharp");
+                Assert.That(type, Is.Not.Null);
+                Component movement = actor.AddComponent(type);
+                type.GetMethod("Bind").Invoke(movement, new object[] { body });
+                var impact = actor.AddComponent<RoarWallImpact>();
+                impact.Arm(_boss.transform, Vector3.forward, 0.5f, 2f, ~0);
+                Physics.SyncTransforms();
+                receiver.ReceiveKnockBack(Vector3.forward, 20f, 0.4f);
+                yield return new WaitForSeconds(0.45f);
+                Assert.That(actor.transform.position.z, Is.GreaterThan(0.5f));
+                Assert.That(actor.transform.position.z, Is.LessThan(2f));
+                Assert.That(health.DamageCalls, Is.EqualTo(1));
+            }
+            finally
+            {
+                Object.DestroyImmediate(actor);
+                Object.DestroyImmediate(wall);
+            }
+        }
+
+        [UnityTest]
+        public IEnumerator PolishDeathCleansUpSummonsThrownSwordsAndScorch()
+        {
+            _boss.AddComponent<BossDeathCleanup>();
+            var thrown = _boss.GetComponent<BossSwordController>().Throw(_player.transform, Vector3.forward * 10f, 2f);
+            var field = _boss.GetComponent<DashScorchFactory>().Spawn(_player.transform, 4f, new ScorchSettings(5f, 0.1f, 1f));
+            field.ExtendTo(Vector3.forward * 10f);
+#if UNITY_EDITOR
+            var minion = Object.Instantiate(AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Members/CWH/PREFABS/PhaseOne/PhaseOnePawn.prefab"))
+                .GetComponent<ChessMinion>();
+            minion.Initialize(_player.transform, 10f, Runner);
+            _boss.GetComponent<BossSummonRoster>().Register(minion);
+#endif
+            _boss.GetComponent<BossHealth>().ReceiveDamage(float.MaxValue);
+            yield return null; yield return null;
+            Assert.That(_boss == null, Is.True);
+            Assert.That(thrown == null, Is.True);
+            Assert.That(field == null, Is.True);
+#if UNITY_EDITOR
+            Assert.That(minion == null, Is.True);
+#endif
         }
 
         [UnityTest]

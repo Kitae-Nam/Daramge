@@ -54,6 +54,8 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
         private IEnumerator Transition()
         {
             _gate.Block(this);
+            // 공격/투척 정리 후 실행해 기존 검과 새 검의 소유권이 겹치지 않게 한다.
+            GetComponent<PhaseTwoSwordReplenisher>()?.ReplenishOnce();
             // 컷신 차단과 다른 잠금이 남아 있으면 우리 전환이 끝나도 전투는 재개되지 않는다.
             yield return new WaitForSeconds(Mathf.Max(0f, _transitionDuration));
             if (_phase.CurrentPhase != 2) yield break;

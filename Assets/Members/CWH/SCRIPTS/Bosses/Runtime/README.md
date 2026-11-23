@@ -21,7 +21,7 @@ Unity의 씬/프리팹은 경로가 아니라 GUID로 스크립트를 찾으므�
 
 ## 이번 변경을 읽는 순서
 
-1. Chess/Weapons/ThrownBossSword.cs: Launch에서 칼끝을 비행 방향에 맞추고 Update에서는 직선 보간만 한다.
+1. Chess/Weapons/ThrownBossSword.cs: 투척 검의 비행·착지·회수 흐름을 확인한다. 이후 변경된 궤적과 실제 공전 검 사용 방식은 [2페이즈 학습](../PhaseTwoStudy.md)을 함께 읽는다.
 2. Common/Combat/BossCombatGate.cs → Common/Cinematics/BossCutsceneGate.cs: 차단 사유 관리와 Timeline 감지를 분리했다.
 3. Chess/AI/PhaseOneBrain.cs: 각 패턴의 GetSelectionScore로 거리 적합도를 받고 쿨타임을 확인한다.
 4. Chess/Movement/ChessBoardGrid.cs: 월드 위치 ↔ 칸 좌표, BFS로 다음 한 칸 찾기.

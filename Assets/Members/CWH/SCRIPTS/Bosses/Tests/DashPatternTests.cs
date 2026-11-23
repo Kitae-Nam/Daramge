@@ -107,7 +107,10 @@ namespace Members.CWH.SCRIPTS.Bosses.Tests
             wall.transform.localScale = new Vector3(6f, 2f, 1f);
             Physics.SyncTransforms();
             Assert.That(motor.TryPlan(Vector3.forward * 10f, 12f, 2f, out DashPath path), Is.True);
-            Assert.That(path.Distance, Is.InRange(5f, 5.5f));
+            // 얇은 검사용 두께가 아니라 몸체 반경만큼 벽 앞에서 멈춰야 한다.
+            Assert.That(path.Distance, Is.InRange(4.5f, 5f));
+            Assert.That(path.End.z + boss.GetComponent<NavMeshAgent>().radius,
+                Is.LessThanOrEqualTo(wall.GetComponent<Collider>().bounds.min.z));
             Assert.That(motor.TryPlan(boss.transform.position, 12f, 2f, out _), Is.False);
         }
 
