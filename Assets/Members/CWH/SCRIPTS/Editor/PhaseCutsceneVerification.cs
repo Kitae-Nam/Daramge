@@ -24,7 +24,9 @@ namespace Members.CWH.SCRIPTS.Editor
     public static class PhaseCutsceneVerification
     {
         private const string ActiveKey = "CWH.KingCutscene.Verifying";
-        private const string Request = "Temp/KingPhaseCutscene/verify.request";
+        // 요청·스크린샷·로그를 한 외부 폴더에 모아 프로젝트에 검증 산출물이 남지 않게 한다.
+        private const string OutputDirectory = @"C:\Users\WHChoi\Desktop\프로젝트 백업\Daramge\Verification\KingPhaseCutscene";
+        private static readonly string Request = Path.Combine(OutputDirectory, "verify.request");
         private static readonly List<string> Checks = new List<string>();
         private static BossPhaseCutscene _cutscene;
         private static BossHealth _health;
@@ -45,13 +47,13 @@ namespace Members.CWH.SCRIPTS.Editor
             EditorApplication.playModeStateChanged += OnPlayMode;
             EditorApplication.delayCall += () =>
             {
-                const string viewRequest = "Temp/KingPhaseCutscene/view.request";
+                string viewRequest = Path.Combine(OutputDirectory, "view.request");
                 if (File.Exists(viewRequest) && !EditorApplication.isPlayingOrWillChangePlaymode)
                 {
                     File.Delete(viewRequest);
                     PhaseCutsceneBuilder.MatchGameplayView();
                 }
-                const string lensRequest = "Temp/KingPhaseCutscene/lens.request";
+                string lensRequest = Path.Combine(OutputDirectory, "lens.request");
                 if (File.Exists(lensRequest) && !EditorApplication.isPlayingOrWillChangePlaymode)
                 {
                     File.Delete(lensRequest);
@@ -71,6 +73,7 @@ namespace Members.CWH.SCRIPTS.Editor
         {
             if (SceneManager.GetActiveScene().path != PhaseCutsceneBuilder.ScenePath)
                 throw new InvalidOperationException("DEV_SCNE_2 씬을 열어 주세요.");
+            Directory.CreateDirectory(OutputDirectory);
             // 검증 중 변경은 Play Mode 안에 한정한다. 진입 전의 편집 상태를 먼저 저장해 복원 기준을 만든다.
             if (SceneManager.GetActiveScene().isDirty) EditorSceneManager.SaveScene(SceneManager.GetActiveScene());
             SessionState.SetBool(ActiveKey, true);
@@ -168,14 +171,14 @@ namespace Members.CWH.SCRIPTS.Editor
                     var upper = output.WorldToViewportPoint(body.bounds.center + Vector3.up * body.bounds.extents.y);
                     Check(Mathf.Abs(upper.y - lower.y) > 0.4f, "boss fills at least 40 percent of output frame during zoom");
                     Check(Vector3.Distance(_anchor, _cutscene.transform.position) < 0.01f, "cutscene anchor remains fixed");
-                    ScreenCapture.CaptureScreenshot("Temp/KingPhaseCutscene/charge.png");
+                    ScreenCapture.CaptureScreenshot(Path.Combine(OutputDirectory, "charge.png"));
                     _step = 2;
                 }
                 if (_step == 2 && elapsed > 3.15)
                 {
                     Check(_mesh.sharedMesh != _before, "impact Signal reveals black king");
                     Check(_cutscene.transform.Find("Dark fire impact").gameObject.activeSelf, "impact particle is active at reveal");
-                    ScreenCapture.CaptureScreenshot("Temp/KingPhaseCutscene/reveal.png");
+                    ScreenCapture.CaptureScreenshot(Path.Combine(OutputDirectory, "reveal.png"));
                     _step = 3;
                 }
                 if (_step == 3 && elapsed > 6.1)
@@ -207,7 +210,8 @@ namespace Members.CWH.SCRIPTS.Editor
             EditorApplication.update -= Tick;
             SessionState.SetBool(ActiveKey, false);
             if (exception != null) { Checks.Add("FAIL " + exception); Debug.LogException(exception); }
-            File.WriteAllLines("Temp/KingPhaseCutscene/verification.txt", Checks);
+            Directory.CreateDirectory(OutputDirectory);
+            File.WriteAllLines(Path.Combine(OutputDirectory, "verification.txt"), Checks);
             Debug.Log("KING_PHASE_CUTSCENE_VERIFIED " + (exception == null ? "PASS" : "FAIL"));
             EditorApplication.isPlaying = false;
         }

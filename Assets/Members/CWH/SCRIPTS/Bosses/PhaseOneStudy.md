@@ -1,5 +1,7 @@
 # 체스 보스 1페이즈 사용법과 공부 순서
 
+> 이 문서는 초기 구현의 학습 자료다. 직접 작성 → 검토 방식으로 필요한 부분을 골라 사용하며, 연습문제는 요청할 때만 진행한다. 이후 검 공전·투척·2페이즈 변경은 [2페이즈 학습](PhaseTwoStudy.md), 최종 피해 규칙은 [플레이어 체력 연결](../../PlayerHealth_BossDamage.md)을 참고한다. 아래 수치와 테스트 결과는 당시 기록이다.
+
 ## 먼저 실행하기
 
 Unity에서 `Assets/Members/CWH/SCENCES/PhaseOne_Playground.unity`를 열고 Play를 누른다.
