@@ -15379,6 +15379,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   interactionOrigin: {fileID: 0}
+  characterChange: {fileID: 0}
 --- !u!1 &377013062
 GameObject:
   m_ObjectHideFlags: 0
@@ -17229,6 +17230,7 @@ MonoBehaviour:
   goalTiles:
   - {fileID: 1860459682}
   - {fileID: 36325997}
+  tongueOwner: {fileID: 0}
 --- !u!1001 &451447349
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -25960,8 +25962,6 @@ MonoBehaviour:
   - playerTarget: {fileID: 1692302095}
   puzzleCamera: {fileID: 698896789}
   autoSwitchOnEnter: 1
-  puzzleCameraSize: 7
-  puzzleNearClip: 0
   puzzleActivePriority: 100
   puzzleInactivePriority: -100
 --- !u!4 &698896788
@@ -35950,6 +35950,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   interactionOrigin: {fileID: 0}
+  characterChange: {fileID: 0}
 --- !u!1001 &971259340
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -36888,6 +36889,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PuzzleCameraZone
   cameraController: {fileID: 698896787}
   cameraPoint: {fileID: 962274859}
+  orthographicSize: 7
+  nearClipPlane: 0
 --- !u!65 &985165638
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -37342,6 +37345,10 @@ MonoBehaviour:
     m_PanelRenderer: {fileID: 995590797}
     m_AuthoringPath:
       m_PathIds: 52b6082ei
+  letterbox:
+    m_PanelRenderer: {fileID: 0}
+    m_AuthoringPath:
+      m_PathIds: 
 --- !u!1931382934 &995590797
 PanelRenderer:
   m_ObjectHideFlags: 0
@@ -39311,6 +39318,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PuzzleCameraZone
   cameraController: {fileID: 698896787}
   cameraPoint: {fileID: 839927751}
+  orthographicSize: 7
+  nearClipPlane: 0
 --- !u!65 &1053713942
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -44751,6 +44760,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PuzzleCameraZone
   cameraController: {fileID: 698896787}
   cameraPoint: {fileID: 1244800472}
+  orthographicSize: 7
+  nearClipPlane: 0
 --- !u!65 &1208473947
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -46947,6 +46958,7 @@ MonoBehaviour:
   goalTiles:
   - {fileID: 1860459682}
   - {fileID: 36325997}
+  tongueOwner: {fileID: 0}
 --- !u!1001 &1278416924
 PrefabInstance:
   m_ObjectHideFlags: 0

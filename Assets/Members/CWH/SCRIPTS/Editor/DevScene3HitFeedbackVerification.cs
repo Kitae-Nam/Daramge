@@ -19,8 +19,10 @@ namespace CWH.Verification
     [InitializeOnLoad]
     public static class DevScene3HitFeedbackVerification
     {
-        private const string RequestPath = "Assets/Members/CWH/Validation~/DevScene3HitFeedback.request";
-        private const string ResultPath = "Assets/Members/CWH/Validation~/DevScene3HitFeedback.result.txt";
+        // 검증 결과가 Unity 에셋으로 쌓이지 않도록 사용자가 지정한 외부 폴더에 저장한다.
+        private const string OutputDirectory = @"C:\Users\WHChoi\Desktop\프로젝트 백업\Daramge\Verification\HitFeedback";
+        private static readonly string RequestPath = Path.Combine(OutputDirectory, "DevScene3HitFeedback.request");
+        private static readonly string ResultPath = Path.Combine(OutputDirectory, "DevScene3HitFeedback.result.txt");
 
         static DevScene3HitFeedbackVerification()
         {
@@ -47,6 +49,7 @@ namespace CWH.Verification
             bool previousIgnoreTimeScale = manager.IgnoreTimeScale;
             try
             {
+                Directory.CreateDirectory(OutputDirectory);
                 preview = EditorSceneManager.OpenPreviewScene("Assets/Members/CWH/SCENCES/DEV_SCNE_3.unity");
                 var roots = preview.GetRootGameObjects();
                 var players = roots.SelectMany(root => root.GetComponentsInChildren<MMF_Player>(true));

@@ -1,11 +1,13 @@
 using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Health;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Combat
 {
     [RequireComponent(typeof(BossHealth))]
     public sealed class BossDeathCleanup : MonoBehaviour
     {
+        [SerializeField] private UnityEvent deathEvent = new UnityEvent();
         private BossHealth _health;
 
         private void Awake()
@@ -28,6 +30,7 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Combat
 
         private void HandleDeath()
         {
+            deathEvent?.Invoke();
             Destroy(gameObject);
         }
     }
