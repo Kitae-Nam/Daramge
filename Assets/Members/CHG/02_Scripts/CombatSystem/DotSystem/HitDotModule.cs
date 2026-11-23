@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using GGMLib.ModuleSystems;
 using UnityEngine;
@@ -6,6 +7,7 @@ namespace CHG._02_Scripts.CombatSystem.DotSystem
 {
     public class HitDotModule : MonoBehaviour, IModule, IHitDotModule
     {
+        public event Action<Collider> OnDotsApplied;
         private readonly List<DotSO> _dots = new();
 
         public void Initialize(ModuleOwner owner) { }
@@ -28,6 +30,8 @@ namespace CHG._02_Scripts.CombatSystem.DotSystem
             
             foreach (DotSO dot in _dots)
                 dotModule.ApplyDot(dot);
+            
+            OnDotsApplied?.Invoke(target);
         }
     }
 }

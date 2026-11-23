@@ -5,7 +5,7 @@ namespace CHG._02_Scripts.Player.Equipment
 {
     public class EquipmentPoint : AbstractInteractPoint
     {
-        protected override void HandleInteractKeyPressed()
+        public override void Interact(PlayerController player)
         {
             EventBus<EquipmentWindowRequestEvent>.Raise(new EquipmentWindowRequestEvent());
         }

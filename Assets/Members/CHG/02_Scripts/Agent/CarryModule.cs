@@ -8,10 +8,9 @@ using UnityEngine.InputSystem;
 
 namespace CHG._02_Scripts.Agent
 {
-    public class InteractionModule : MonoBehaviour, IModule
+    public class CarryModule : MonoBehaviour, IModule
     {
         [Header("Carry Settings")] 
-        [SerializeField] private float pickupRange = 1.8f; 
         [SerializeField] private float carryDistance = 1.0f; 
         [SerializeField] private float carryHeight = 0.8f; 
         [SerializeField] private float carrySmoothTime = 0.15f; 
@@ -45,77 +44,31 @@ namespace CHG._02_Scripts.Agent
         private PushableCrate _pendingCrate; 
         private bool _isWaitingTrigger; 
         
-        public void Initialize(ModuleOwner owner)
+        public void Initialize(ModuleOwner owner) 
         {
             _player = owner as PlayerController;
             Debug.Assert(_player != null, $"this Object not Player child : {gameObject.name}");
 
             _ownerTrm = _player.transform;
-            _renderer = owner.GetModule<IRenderer>(); 
-            _trigger = owner.GetModule<AgentTrigger>(); 
-            Debug.Assert(_renderer != null, $"renderer is null : {gameObject.name}"); 
-            Debug.Assert(_trigger != null, $"AgentTrigger is null : {gameObject.name}"); 
+            _renderer = owner.GetModule<IRenderer>();
+            _trigger = owner.GetModule<AgentTrigger>();
+            Debug.Assert(_renderer != null, $"renderer is null : {gameObject.name}");
+            Debug.Assert(_trigger != null, $"AgentTrigger is null : {gameObject.name}");
 
-            _player.PlayerInput.OnInteractKeyPressed += HandleInteractKeyPressed;
-            _trigger.Subscribe(pickupTrigger, HandlePickupTrigger); 
-            _trigger.Subscribe(dropTrigger, HandleDropTrigger); 
+            _trigger.Subscribe(pickupTrigger, HandlePickupTrigger);
+            _trigger.Subscribe(dropTrigger, HandleDropTrigger);
         }
 
         private void LateUpdate() => UpdateHeldCrate(); 
 
         private void OnDestroy()
         {
-            if (_player != null && _player.PlayerInput != null)
-                _player.PlayerInput.OnInteractKeyPressed -= HandleInteractKeyPressed;
-
             if (_trigger == null) return; 
             _trigger.UnSubscribe(pickupTrigger, HandlePickupTrigger); 
             _trigger.UnSubscribe(dropTrigger, HandleDropTrigger); 
         }
         
-        private void HandleInteractKeyPressed()
-        {
-            if (_isDropping || _isWaitingTrigger) return; 
-
-            if (_heldCrate != null)
-                TryDropCrate();
-            else
-                TryPickUpCrate();
-        }
-
-        private void TryPickUpCrate()
-        {
-            Collider[] nearbyColliders = Physics.OverlapSphere(_ownerTrm.position, pickupRange, ~0, QueryTriggerInteraction.Ignore);
-
-            PushableCrate closestCrate = null;
-            float closestDistance = float.MaxValue;
-
-            foreach (Collider col in nearbyColliders)
-            {
-                PushableCrate crate = col.GetComponentInParent<PushableCrate>();
-                if (crate == null) continue;
-                if (crate.IsHeld || crate.IsTransitioning) continue;
-
-                Vector3 toCrate = crate.transform.position - _ownerTrm.position;
-                toCrate.y = 0f;
-
-                // 플레이어 앞쪽에 있는 상자만 선택
-                if (Vector3.Dot(_ownerTrm.forward, toCrate) <= 0f) continue;
-
-                float distance = toCrate.sqrMagnitude;
-                if (distance < closestDistance)
-                {
-                    closestDistance = distance;
-                    closestCrate = crate;
-                }
-            }
-
-            if (closestCrate == null) return;
-
-            _pendingCrate = closestCrate; 
-            _isWaitingTrigger = true; 
-            PlayAnimation(pickupParam); 
-        }
+        
 
         private void TryDropCrate()
         {
@@ -156,12 +109,6 @@ namespace CHG._02_Scripts.Agent
             _isDropping = false;
 
             Debug.Log("상자를 내려놓았습니다.");
-        }
-
-        private void OnDrawGizmosSelected() 
-        {
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawWireSphere(transform.position, pickupRange);
         }
         
         private void HandlePickupTrigger() 
@@ -272,7 +219,27 @@ namespace CHG._02_Scripts.Agent
                 _heldCrate.SetCarryPosition(targetPosition);
             }
         }
+        
         private void PlayAnimation(AnimParamSO param) 
             => _renderer.PlayClip(param.ParamHash, 0f, crossFadeDuration, animLayerIndex);
+
+        public bool TryHandleInteract()
+        {
+            if (_isDropping || _isWaitingTrigger) return true; 
+            if (_heldCrate == null) return false;
+            
+            TryDropCrate();
+            return true;
+        }
+
+        public void RequestPickUp(PushableCrate crate)
+        {
+            if (crate == null || crate.IsHeld || crate.IsTransitioning) return;
+            if (_heldCrate != null || _isDropping || _isWaitingTrigger) return;
+
+            _pendingCrate = crate;
+            _isWaitingTrigger = true;
+            PlayAnimation(pickupParam);
+        }
     }
 }

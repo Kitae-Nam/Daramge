@@ -23,8 +23,8 @@ namespace CHG._02_Scripts.Player.Combat
         public override void InitializeSkill(ISkillModule skillModule)
         {
             base.InitializeSkill(skillModule);
-            _trigger = _player.GetModule<AgentTrigger>();
-            _stamina = _player.GetModule<StaminaModule>();
+            _trigger = player.GetModule<AgentTrigger>();
+            _stamina = player.GetModule<StaminaModule>();
             Debug.Assert(_trigger != null, $"Animation Trigger is null : {gameObject.name}");
             Debug.Assert(_stamina != null, $"StaminaModule is null : {gameObject.name}");
         }
@@ -45,22 +45,22 @@ namespace CHG._02_Scripts.Player.Combat
 
         private IEnumerator RollingCoroutine()
         {
-            _renderer.PlayClip(dashParam.ParamHash, 0f, 0.01f);
+            renderer.PlayClip(dashParam.ParamHash, 0f, 0.01f);
             _trigger.Subscribe(animationEndTrigger, HandleAnimationEnd);
-            _movement.CanManualMove = false;
+            movement.CanManualMove = false;
             float currentDuration = 0f;
-            Vector3 forward = _player.transform.forward;
+            Vector3 forward = player.transform.forward;
             while (IsUsing)
             {
                 float percent =  currentDuration / dashDuration;
                 currentDuration += Time.fixedDeltaTime;
                 float force = dashCurve.Evaluate(percent) * speed;
-                _movement.SetMovementVelocity(forward * force);
+                movement.SetMovementVelocity(forward * force);
                 yield return new WaitForFixedUpdate();
             }
             
             _trigger.UnSubscribe(animationEndTrigger, HandleAnimationEnd);
-            _movement.CanManualMove = true;
+            movement.CanManualMove = true;
         }
 
         private void HandleAnimationEnd() => StopSkill();
