@@ -6,6 +6,8 @@ namespace NKT.Enemy.Projectile
 {
     //타겟을 향해 회전 속도 제한을 두고 유도하다가, 일정 시간이 지나면 직진하는 유도탄.
     //플레이어나 장애물에 닿으면 터지고 풀로 돌아간다.
+    //판정은 프리팹의 트리거 콜라이더로 한다.
+    [RequireComponent(typeof(Rigidbody))]
     public class HomingMissile : AbstractMonoPoolable
     {
         [Header("이동")]
@@ -17,7 +19,7 @@ namespace NKT.Enemy.Projectile
         [SerializeField] private float lifeTime = 4f;
 
         [Header("충돌")]
-        [SerializeField] private float hitRadius = 0.3f;
+        [Tooltip("타겟(Fire로 받는 레이어) 외에 닿으면 터지는 레이어. 보통 Wall.")]
         [SerializeField] private LayerMask whatIsObstacle;
 
         [Header("폭발 이펙트 (선택)")]
@@ -29,7 +31,22 @@ namespace NKT.Enemy.Projectile
         private LayerMask _whatIsTarget;
         private float _spawnTime;
         private bool _isFlying;
-        private readonly Collider[] _hits = new Collider[4];
+
+        private void Awake()
+        {
+            //판정 콜라이더는 트리거여야 OnTriggerEnter가 온다. (CharacterController와는 일반 충돌 이벤트가 오지 않는다)
+            foreach (Collider col in GetComponents<Collider>())
+                col.isTrigger = true;
+
+            //RequireComponent는 이미 만든 프리팹에는 자동으로 붙지 않으므로 없으면 붙인다.
+            if (!TryGetComponent(out Rigidbody rb))
+                rb = gameObject.AddComponent<Rigidbody>();
+
+            //transform으로 직접 움직이므로 물리에 밀리거나 떨어지지 않게 한다.
+            rb.isKinematic = true;
+            rb.useGravity = false;
+            rb.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
+        }
 
         public void Fire(PoolManagerSO poolManager, Vector3 position, Vector3 direction,
             Transform target, DamageData damageData, LayerMask whatIsTarget)
@@ -56,10 +73,11 @@ namespace NKT.Enemy.Projectile
                 SteerToTarget();
 
             transform.position += transform.forward * (speed * Time.deltaTime);
-            CheckHit();
 
-            if (_isFlying && elapsed >= lifeTime)
+            if (elapsed >= lifeTime)
+            {
                 Explode();
+            }
         }
 
         private void SteerToTarget()
@@ -72,28 +90,27 @@ namespace NKT.Enemy.Projectile
                 Quaternion.LookRotation(direction), turnSpeed * Time.deltaTime);
         }
 
-        private void CheckHit()
+        private void OnTriggerEnter(Collider other)
         {
-            int count = Physics.OverlapSphereNonAlloc(
-                transform.position, hitRadius, _hits, _whatIsTarget | whatIsObstacle);
+            if (!_isFlying) return; //풀에서 꺼낸 직후(Fire 전)나 이미 터진 뒤에 들어오는 충돌은 무시
 
-            for (int i = 0; i < count; i++)
+            int hitMask = _whatIsTarget | whatIsObstacle;
+            if ((hitMask & (1 << other.gameObject.layer)) == 0) return;
+
+            if (_damageData.Attacker != null && other.transform.IsChildOf(_damageData.Attacker.transform))
+                return; //쏜 적 자신에게는 맞지 않는다.
+
+            //콜라이더가 자식에 있어도 루트의 Agent(IDamageable)를 찾는다.
+            IDamageable damageable = other.GetComponentInParent<IDamageable>();
+            if (damageable != null)
             {
-                Collider hit = _hits[i];
-                if (_damageData.Attacker != null && hit.transform.IsChildOf(_damageData.Attacker.transform))
-                    continue; //쏜 적 자신에게는 맞지 않는다.
-
-                if (hit.TryGetComponent(out IDamageable damageable))
-                {
-                    DamageData damage = _damageData;
-                    damage.HitPoint = transform.position;
-                    damage.HitNormal = -transform.forward;
-                    damageable.ApplyDamage(damage);
-                }
-
-                Explode(); //플레이어든 벽이든 닿으면 터진다.
-                return;
+                DamageData damage = _damageData;
+                damage.HitPoint = other.ClosestPoint(transform.position);
+                damage.HitNormal = -transform.forward;
+                damageable.ApplyDamage(damage);
             }
+
+            Explode(); //플레이어든 벽이든 닿으면 터진다.
         }
 
         private void Explode()
@@ -116,13 +133,5 @@ namespace NKT.Enemy.Projectile
             _isFlying = false;
             _target = null;
         }
-
-#if UNITY_EDITOR
-        private void OnDrawGizmosSelected()
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(transform.position, hitRadius);
-        }
-#endif
     }
 }
