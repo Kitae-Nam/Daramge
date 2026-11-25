@@ -205,7 +205,7 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
             _dashRecovery = active;
             // 본체와 무기만 기울여 반격 타이밍을 알린다. 이동과 충돌 판정은 그대로 유지한다.
             if (_bodyVisual != null)
-                _bodyVisual.localRotation = _bodyRotation * Quaternion.Euler(active ? 12f : 0f, 0f, 0f);
+                _bodyVisual.localRotation = _bodyRotation;
             if (_weaponPivot != null)
                 _weaponPivot.localRotation = Quaternion.Euler(active ? -22f : 0f, 0f, 0f);
             if (active) _pulse = 0.65f;

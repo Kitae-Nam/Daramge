@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
 {
-    /// <summary>체스판의 칸 좌표와 킹의 한 칸 경로 탐색만 담당한다. NavMesh/애니메이션은 이동기가 맡는다.</summary>
+    /// <summary>체스판의 공용 칸 좌표와 킹의 한 칸 경로를 제공한다. NavMesh와 애니메이션은 이동기가 맡는다.</summary>
     public sealed class ChessBoardGrid : MonoBehaviour
     {
         [SerializeField] private Vector3 _center;
@@ -26,7 +26,7 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
             Mathf.Clamp(Mathf.RoundToInt((world.z - _center.z) / _cellSize + (_rows - 1) * 0.5f), 0, _rows - 1));
         public Vector3 CellToWorld(Vector2Int cell) => _center + new Vector3(
             (cell.x - (_columns - 1) * 0.5f) * _cellSize, 0f, (cell.y - (_rows - 1) * 0.5f) * _cellSize);
-        private bool Contains(Vector2Int cell) => cell.x >= 0 && cell.y >= 0 && cell.x < _columns && cell.y < _rows;
+        public bool Contains(Vector2Int cell) => cell.x >= 0 && cell.y >= 0 && cell.x < _columns && cell.y < _rows;
 
         /// <summary>복귀 후보를 가까운 순서로 제공한다. 물리/내비게이션 통과 판단은 이동기에 맡긴다.</summary>
         public bool TryFindNearestUsableCell(Vector3 position, Func<Vector2Int, bool> canUse, out Vector2Int result)
