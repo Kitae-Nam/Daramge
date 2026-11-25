@@ -12,6 +12,15 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
         [SerializeField, Min(1)] private int _columns = 8;
         [SerializeField, Min(1)] private int _rows = 8;
         public float CellSize => _cellSize;
+        public IEnumerable<Vector3> CellCenters
+        {
+            get
+            {
+                for (int x = 0; x < _columns; x++)
+                    for (int y = 0; y < _rows; y++)
+                        yield return CellToWorld(new Vector2Int(x, y));
+            }
+        }
         public Vector2Int WorldToCell(Vector3 world) => new Vector2Int(
             Mathf.Clamp(Mathf.RoundToInt((world.x - _center.x) / _cellSize + (_columns - 1) * 0.5f), 0, _columns - 1),
             Mathf.Clamp(Mathf.RoundToInt((world.z - _center.z) / _cellSize + (_rows - 1) * 0.5f), 0, _rows - 1));
