@@ -1,7 +1,5 @@
 using System.Collections;
 using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.AI;
-using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Dash;
-using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons;
 using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Combat;
 using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Movement;
 using UnityEngine;
@@ -9,8 +7,8 @@ using UnityEngine;
 namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Patterns
 {
     /// <summary>
-    /// 1페이즈 직선 돌진의 순서만 조율한다. 이동/경고 배치/명중은 각각의 컴포넌트에 맡긴다.
-    /// 방향은 BeginWarning에서 한 번만 저장하므로 경고 뒤 플레이어가 움직여도 유도되지 않는다.
+    /// 직선 돌진의 순서만 조율한다. 이동/경고 배치/명중은 각각의 컴포넌트에 맡긴다.
+    /// 돌진마다 경고 시작 시 방향을 저장하므로 예고한 뒤 플레이어가 움직여도 경로를 유지한다.
     /// </summary>
     [DisallowMultipleComponent]
     [RequireComponent(typeof(BossPatternRunner), typeof(BossTarget), typeof(BossDashMotor))]
@@ -27,18 +25,36 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Patterns
         [SerializeField, Min(0f)] private float _knockbackDuration = 0.35f;
         [SerializeField, Range(0f, 1f)] private float _warningOpacity = 0.7f;
         [SerializeField, Min(0f)] private float _preferredMinimumDistance = 12f;
+        [SerializeField, Min(0.01f)] private float _repeatWarningDuration = 0.35f;
+        [SerializeField, Min(0f), Tooltip("설정하면 연속 대쉬의 세 경고에 동일한 시간을 적용합니다. 0이면 기본 경고 시간을 사용합니다.")]
+        private float _comboWarningDuration;
+        [SerializeField, Min(0f)] private float _comboRecoveryDuration;
+        [SerializeField] private bool _showBoardWarnings;
         private BossPatternRunner _runner;
         private BossTarget _target;
         private BossDashMotor _motor;
         private DashHitbox _hitbox;
         private DashPath _path;
         private bool _prepared;
+        private bool _warningVisible;
+        private bool _finishedCombo;
+        private BossCombatPresentation _presentation;
+        private ChessBoardGrid _warningBoard;
         [SerializeField, Tooltip("IDashTuningSource 구현체. 비우면 기본 설정을 사용한다.")]
         private MonoBehaviour _tuningSource;
         private IDashTuningSource _profiles;
-        private DashScorchFactory _scorchFactory;
 
         public DashPath PlannedPath => _path;
+        private DashTuning Tuning => _profiles?.GetDash() ?? DashTuning.Normal;
+
+        // 경고가 표시되는 동안 회피 시간을 주어 예고가 사라진 뒤 출발 시점을 추측하지 않게 한다.
+        public override float WarningDuration => Tuning.Count > 1 && _comboWarningDuration > 0f
+            ? Mathf.Max(0.01f, _comboWarningDuration)
+            : base.WarningDuration;
+        // 마지막 돌진을 완료한 경우에만 반격 시간을 늘린다. 러너가 기존 후딜 상태를 유지한다.
+        public override float RecoveryDuration => _finishedCombo
+            ? Mathf.Max(base.RecoveryDuration, _comboRecoveryDuration)
+            : base.RecoveryDuration;
         public override float GetSelectionScore(float targetDistance) => targetDistance >= _preferredMinimumDistance ? 100f : 10f;
 
         private void Awake()
@@ -47,8 +63,9 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Patterns
             _target = GetComponent<BossTarget>();
             _motor = GetComponent<BossDashMotor>();
             _hitbox = GetComponent<DashHitbox>();
+            _presentation = GetComponent<BossCombatPresentation>();
+            if (_showBoardWarnings) _warningBoard = GetComponent<ChessBoardGrid>();
             _profiles = _tuningSource as IDashTuningSource ?? GetComponent<ChessCombatProfiles>();
-            _scorchFactory = GetComponent<DashScorchFactory>();
         }
 
         public override bool CanExecute()
@@ -60,19 +77,25 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Patterns
 
         public override void BeginWarning()
         {
+            // 첫 경고를 만들지 못하면 러너에 취소를 요청해 실행과 후딜을 건너뛴다.
+            if (!TryBeginWarning()) _runner.CancelCurrentPattern();
+        }
+
+        private bool TryBeginWarning()
+        {
             _prepared = false;
             if (_target.HasTarget && _motor.TryPlan(_target.Target.position, _dashDistance, _dashWidth, out _path))
                 _prepared = _telegraph.Show(_path, _dashWidth, _warningOpacity);
 
-            if (!_prepared)
-            {
-                // 경고를 만들지 못한 공격은 실행하지 않는다. 쿨타임을 다시 초기화하지는 않는다.
-                _runner.CancelCurrentPattern();
-                return;
-            }
+            if (!_prepared) return false;
+
+            if (_warningBoard != null && Tuning.Count > 1)
+                _telegraph.ShowBoardCells(_warningBoard, _path, _dashWidth);
             transform.rotation = Quaternion.LookRotation(_path.Direction);
-            GetComponent<BossCombatPresentation>()?.SetThrust(true);
+            _presentation?.SetThrust(true);
+            _warningVisible = true;
             base.BeginWarning();
+            return true;
         }
 
         public override void UpdateWarningProgress(float progress)
@@ -83,18 +106,49 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Patterns
         public override void EndWarning()
         {
             if (_telegraph != null) _telegraph.Hide();
+            if (!_warningVisible) return;
+            _warningVisible = false;
             base.EndWarning();
         }
 
         public override IEnumerator Execute()
         {
-            if (!_prepared || !_motor.Begin(_path)) yield break;
-            DashTuning tuning = _profiles != null ? _profiles.GetDash() : DashTuning.Normal;
+            DashTuning tuning = Tuning;
             float damage = BossAttackDamage.Resolve(transform, _damage * tuning.DamageMultiplier);
             float speed = _dashSpeed * tuning.SpeedMultiplier;
-            DashScorchField scorch = tuning.LeavesScorch && _scorchFactory != null
-                ? _scorchFactory.Spawn(_target.HasTarget ? _target.Target : null, _dashWidth, tuning.Scorch) : null;
-            bool completed = false;
+            float repeatWarningDuration = Mathf.Max(0.01f, _comboWarningDuration > 0f
+                ? _comboWarningDuration
+                : _repeatWarningDuration);
+
+            for (int index = 0; index < tuning.Count; index++)
+            {
+                if (index > 0)
+                {
+                    // 직전 돌진이 끝난 위치에서 다시 조준한다. 후속 예고도 패턴 안에 두어 함께 취소된다.
+                    if (_telegraph == null || !TryBeginWarning()) yield break;
+                    for (float elapsed = 0f; elapsed < repeatWarningDuration; elapsed += Time.deltaTime)
+                    {
+                        UpdateWarningProgress(elapsed / repeatWarningDuration);
+                        yield return null;
+                    }
+                    UpdateWarningProgress(1f);
+                    EndWarning();
+                }
+
+                if (!_prepared || !_motor.Begin(_path)) yield break;
+                yield return ExecuteDash(speed, damage);
+            }
+
+            if (tuning.Count > 1 && _comboRecoveryDuration > 0f)
+            {
+                _finishedCombo = true;
+                _presentation?.SetDashRecovery(true);
+            }
+        }
+
+        private IEnumerator ExecuteDash(float speed, float damage)
+        {
+            // 돌진마다 명중 기록을 초기화해 같은 대상을 한 돌진에 한 번씩 맞힐 수 있다.
             _hitbox.TargetRoot = _target.HasTarget ? _target.Target : null;
             _hitbox.Begin();
             try
@@ -111,29 +165,28 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Patterns
                     bool canContinue = _motor.Step(_path.Direction, step, _dashWidth);
                     _hitbox.Sweep(before, transform.position, _path.Direction, _dashWidth,
                         _motor.BodyHeight, damage, _knockbackSpeed, _knockbackDuration);
-                    if (scorch != null) scorch.ExtendTo(transform.position);
                     travelled += Mathf.Max(0f, Vector3.Dot(transform.position - before, _path.Direction));
                     if (!canContinue) break;
                     yield return null;
                 }
-                completed = true;
             }
             finally
             {
-                // 후딜이 시작되기 전에 판정을 끈다. Cleanup까지 켜 두면 후딜 중에도 맞을 수 있다.
+                // 다음 예고나 후딜 중에는 돌진 판정과 이동 제어를 해제한다.
                 _hitbox.Stop();
                 _motor.Stop();
-                if (!completed && scorch != null) scorch.Cancel();
             }
         }
 
         public override void Cleanup()
         {
             _prepared = false;
-            if (_telegraph != null) _telegraph.Hide();
+            _finishedCombo = false;
+            EndWarning();
             _hitbox.Stop();
             _motor.Stop();
-            GetComponent<BossCombatPresentation>()?.ResetWeapon();
+            _presentation?.SetDashRecovery(false);
+            _presentation?.ResetWeapon();
         }
 
         private void OnDisable()

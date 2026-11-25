@@ -11,6 +11,7 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons
     {
         [SerializeField] private ThrownBossSword _swordPrefab;
         [SerializeField, Min(0f)] private float _breakBonusDamage = 100f;
+        [SerializeField] private bool _showThrowFeedback;
 
         [Header("투척 준비 연출")] [SerializeField] private Transform _throwPreparationCenter;
 
@@ -26,6 +27,10 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons
         private readonly List<ThrownBossSword> _active = new List<ThrownBossSword>();
         private readonly List<BossSword> _preparedSwords = new List<BossSword>();
         private object _sequenceOwner;
+        private int _launchedSwordCount;
+        private int _brokenSwordCount;
+        private int _plannedSwordCount;
+        private bool _swordRecalled;
         public ThrownBossSword ActiveSword => _active.Count > 0 ? _active[0] : null;
         public bool HasSword => _active.Count > 0;
 
@@ -41,10 +46,11 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons
                                          _preparedSwords.Count > 0;
 
         /// <summary>새 패턴은 박힌 검이 없을 때만 시작하고 같은 연속 공격만 예외적으로 다음 검을 준비한다.</summary>
-        public bool TryBeginThrowSequence(object owner)
+        public bool TryBeginThrowSequence(object owner, int plannedSwordCount = 0)
         {
             if (owner == null || !CanThrow || _preparedSwords.Count > 0) return false;
             _sequenceOwner = owner;
+            _plannedSwordCount = plannedSwordCount;
             return true;
         }
 
@@ -61,6 +67,9 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons
             if (!OwnsThrowSequence(owner)) return;
             CancelThrowPrepared();
             _sequenceOwner = null;
+            _plannedSwordCount = 0;
+            RefreshThrowFeedback();
+            TryFinishThrowGroup();
         }
 
         private void Awake()
@@ -75,7 +84,7 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons
         private void OnEnable()
         {
             _health.Died += Clear;
-            _groggy.Entered += Clear;
+            _groggy.Entered += HandleGroggyEntered;
             if (_combatGate != null) _combatGate.AvailabilityChanged += HandleCombatAvailability;
         }
 
@@ -83,6 +92,8 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons
         {
             if (!open) Clear();
         }
+
+        private void HandleGroggyEntered() => CancelThrows(animateEmbedded: true);
 
         public ThrownBossSword Throw(Transform target, Vector3 destination, float radius)
         {
@@ -185,7 +196,7 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons
             }
         }
 
-    public ThrownBossSword[] LaunchPreparedVolley(
+        public ThrownBossSword[] LaunchPreparedVolley(
             Transform target, Vector3[] destinations, float radius)
         {
             if (!CanLaunchPrepared || target == null || destinations == null)
@@ -214,16 +225,7 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons
                 if (thrown == null)
                     thrown = physical.gameObject.AddComponent<ThrownBossSword>();
 
-                _active.Add(thrown);
-                thrown.Finished += HandleFinished;
-                thrown.Embedded += HandleEmbedded;
-
-                thrown.Launch(
-                    transform,
-                    target,
-                    physical.transform.position,
-                    destinations[i],
-                    radius);
+                LaunchTrackedSword(thrown, target, physical.transform.position, destinations[i], radius);
 
                 launched.Add(thrown);
             }
@@ -253,11 +255,20 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons
                 if (_presentation != null) _presentation.SetWeaponVisible(false);
             }
 
+            LaunchTrackedSword(thrown, target, start, destination, radius);
+            return thrown;
+        }
+
+        private void LaunchTrackedSword(ThrownBossSword thrown, Transform target, Vector3 start,
+            Vector3 destination, float radius)
+        {
+            // 발사한 검만 집계해서 준비가 취소된 검은 그로기 조건에 포함하지 않는다.
+            _launchedSwordCount++;
             _active.Add(thrown);
             thrown.Finished += HandleFinished;
             thrown.Embedded += HandleEmbedded;
-            thrown.Launch(transform, target, start, destination, radius);
-            return thrown;
+            thrown.Launch(transform, target, start, destination, radius, _showThrowFeedback);
+            RefreshThrowFeedback();
         }
 
         private void HandleEmbedded(ThrownBossSword sword)
@@ -273,38 +284,75 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons
             sword.Embedded -= HandleEmbedded;
             if (_inventory == null && _presentation != null) _presentation.SetWeaponVisible(true);
             if (broken)
+            {
+                _brokenSwordCount++;
+                if (_showThrowFeedback) _presentation?.PulseSwordBreak();
                 _presentation?.PlaySwordBroken();
-            if (!broken || _health.IsDead || !isActiveAndEnabled) return;
-            // 보너스 피해를 먼저 주므로 이 보상 자체에 새 그로기의 1.5배가 소급 적용되지는 않는다.
-            _health.ReceiveDamage(_breakBonusDamage);
-            if (!_health.IsDead) _groggy.TryEnterGroggy();
+                // 각 검의 보너스 피해는 그로기 배율이 적용되기 전에 지급한다.
+                if (!_health.IsDead && isActiveAndEnabled)
+                    _health.ReceiveDamage(_breakBonusDamage);
+            }
+            else if (_launchedSwordCount > 0)
+            {
+                _swordRecalled = true;
+            }
+
+            RefreshThrowFeedback();
+            TryFinishThrowGroup();
         }
 
-        public void Clear()
+        private void RefreshThrowFeedback()
         {
-            // 전투 차단 시 소유권도 폐기해 중단된 연속 투척이 다음 검을 준비하지 못하게 한다.
+            if (!_showThrowFeedback || _presentation == null) return;
+            // 연속 투척 중에는 이번 패턴의 예정 수량을 보여준다. 종료 후에는 실제 발사만 집계한다.
+            int total = _launchedSwordCount == 0 ? 0 : Mathf.Max(_plannedSwordCount, _launchedSwordCount);
+            _presentation.ShowSwordBreakProgress(_brokenSwordCount, total, _swordRecalled);
+        }
+
+        private void TryFinishThrowGroup()
+        {
+            // 다음 투척이 남았거나 아직 필드에 검이 있으면 한 패턴의 결과가 확정되지 않았다.
+            if (_sequenceOwner != null || HasSword) return;
+
+            // 회수된 검도 발사 수에 남으므로 모든 검의 파괴 여부를 구분할 수 있다.
+            bool allBroken = _launchedSwordCount > 0 && _launchedSwordCount == _brokenSwordCount;
+            _launchedSwordCount = _brokenSwordCount = 0;
+            _swordRecalled = false;
+            RefreshThrowFeedback();
+            if (allBroken && isActiveAndEnabled && !_health.IsDead && (_combatGate == null || _combatGate.IsOpen))
+                _groggy.TryEnterGroggy();
+        }
+
+        public void Clear() => CancelThrows();
+
+        private void CancelThrows(bool deferParenting = false, bool animateEmbedded = false)
+        {
+            // 중단된 연속 투척은 다음 검을 준비할 수 없으며 이전 파괴 기록도 폐기한다.
             _sequenceOwner = null;
-            CancelThrowPrepared();
-            RecallAll(false);
-        }
+            _plannedSwordCount = 0;
+            _launchedSwordCount = _brokenSwordCount = 0;
+            _swordRecalled = false;
+            RefreshThrowFeedback();
+            CancelThrowPrepared(deferParenting);
 
-        private void RecallAll(bool deferParenting)
-        {
-            // 콜백에서 목록이 바뀌므로 복사본을 순회한다. 파괴된 검은 회수로 재생하지 않는다.
+            // 즉시 회수 콜백은 목록을 바꾼다. 연출 중인 검은 복귀 완료까지 목록에 남긴다.
             foreach (ThrownBossSword sword in _active.ToArray())
-                if (sword != null)
+            {
+                if (sword == null)
+                    _active.Remove(sword);
+                else if (animateEmbedded && !sword.IsFlying)
+                    sword.BeginAnimatedRecall();
+                else
                     sword.Recall(deferParenting);
-            _active.Clear();
+            }
         }
 
         private void OnDisable()
         {
-            _sequenceOwner = null;
             _health.Died -= Clear;
-            _groggy.Entered -= Clear;
+            _groggy.Entered -= HandleGroggyEntered;
             if (_combatGate != null) _combatGate.AvailabilityChanged -= HandleCombatAvailability;
-            CancelThrowPrepared(true);
-            RecallAll(true);
+            CancelThrows(deferParenting: true);
         }
     }
 }
