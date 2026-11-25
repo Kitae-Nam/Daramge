@@ -49,7 +49,13 @@ namespace NKT.Enemy.BT.Actions
 
             return Status.Running;
         }
-        
+
+        protected override void OnEnd()
+        {
+            if (_navMovement != null && _navMovement.NavAgent.isOnNavMesh)
+                _navMovement.NavAgent.ResetPath();
+        }
+
         private bool IsInStopDistance()
         {
             Vector3 diff = TargetGameObject.Value.transform.position - Enemy.Value.transform.position;
