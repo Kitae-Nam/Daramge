@@ -25,13 +25,12 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
 
     public readonly struct DashTuning
     {
+        public int Count { get; }
         public float SpeedMultiplier { get; }
         public float DamageMultiplier { get; }
-        public bool LeavesScorch { get; }
-        public ScorchSettings Scorch { get; }
-        public DashTuning(float speed, float damage, bool leavesScorch, ScorchSettings scorch)
-        { SpeedMultiplier = speed; DamageMultiplier = damage; LeavesScorch = leavesScorch; Scorch = scorch; }
-        public static DashTuning Normal => new DashTuning(1f, 1f, false, default);
+        public DashTuning(int count, float speed, float damage)
+        { Count = Mathf.Max(1, count); SpeedMultiplier = speed; DamageMultiplier = damage; }
+        public static DashTuning Normal => new DashTuning(1, 1f, 1f);
     }
 
     public readonly struct ThrowTuning

@@ -37,9 +37,49 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
         private Vector3 _chargeStartScale;
         private float _chargeStartAngle;
         private float _roarChargeProgress;
+        private TextMesh _swordProgress;
+        private bool _dashRecovery;
 
         public void PlaySwordEmbedded() => _swordEmbedded.Invoke();
         public void PlaySwordBroken() => _swordBroken.Invoke();
+
+        public void ShowSwordBreakProgress(int broken, int total, bool recalled)
+        {
+            if (total == 0)
+            {
+                if (_swordProgress != null) _swordProgress.gameObject.SetActive(false);
+                return;
+            }
+
+            if (_swordProgress == null)
+            {
+                // 전투 공간 안에 진행도를 두면 플레이어가 박힌 검에서 보스로 바로 시선을 옮길 수 있다.
+                var marker = new GameObject("Thrown Sword Progress");
+                marker.transform.SetParent(transform, false);
+                _swordProgress = marker.AddComponent<TextMesh>();
+                _swordProgress.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+                _swordProgress.GetComponent<MeshRenderer>().sharedMaterial = _swordProgress.font.material;
+                _swordProgress.anchor = TextAnchor.MiddleCenter;
+                _swordProgress.alignment = TextAlignment.Center;
+                _swordProgress.fontSize = 64;
+                _swordProgress.characterSize = 0.075f;
+            }
+
+            _swordProgress.text = recalled ? $"×  {broken}/{total}" : $"{broken}/{total}";
+            _swordProgress.color = recalled ? new Color(0.8f, 0.8f, 0.8f) : new Color(1f, 0.81f, 0.34f);
+            _swordProgress.gameObject.SetActive(true);
+        }
+
+        public void PulseSwordBreak() => _pulse = 1f;
+
+        private void LateUpdate()
+        {
+            if (_swordProgress == null || !_swordProgress.gameObject.activeSelf) return;
+            Camera view = Camera.main;
+            if (view == null) return;
+            Vector3 position = transform.position + Vector3.up * 3f;
+            _swordProgress.transform.SetPositionAndRotation(position, view.transform.rotation);
+        }
         
         public void BeginCharge(int strike)
         {
@@ -159,6 +199,18 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
             if (_weaponPivot != null) _weaponPivot.localRotation = Quaternion.Euler(active ? 25f : 0f, 0f, 0f);
         }
 
+        public void SetDashRecovery(bool active)
+        {
+            if (_dashRecovery == active) return;
+            _dashRecovery = active;
+            // 본체와 무기만 기울여 반격 타이밍을 알린다. 이동과 충돌 판정은 그대로 유지한다.
+            if (_bodyVisual != null)
+                _bodyVisual.localRotation = _bodyRotation * Quaternion.Euler(active ? 12f : 0f, 0f, 0f);
+            if (_weaponPivot != null)
+                _weaponPivot.localRotation = Quaternion.Euler(active ? -22f : 0f, 0f, 0f);
+            if (active) _pulse = 0.65f;
+        }
+
         public void SetWeaponVisible(bool visible)
         {
             if (_weaponPivot != null) _weaponPivot.gameObject.SetActive(visible);
@@ -189,6 +241,8 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
 
         private void OnDisable()
         {
+            ShowSwordBreakProgress(0, 0, false);
+            SetDashRecovery(false);
             DetachSword();
             SetRoarCharge(0f);
             if (_bodyVisual != null)

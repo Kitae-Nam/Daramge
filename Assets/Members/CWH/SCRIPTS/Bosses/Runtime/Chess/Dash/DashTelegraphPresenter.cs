@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Telegraphs;
 using UnityEngine;
 
@@ -17,6 +18,9 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
         private Quaternion _originalRotation;
         private Vector3 _originalScale;
         private bool _placed;
+        private readonly List<Vector3> _warningCells = new List<Vector3>();
+        private readonly List<BossTelegraphPresenter> _cellMarkers = new List<BossTelegraphPresenter>();
+        private GameObject _cellMarkerRoot;
 
         private BossTelegraphPresenter Presenter => _presenter != null ? _presenter
             : (_presenter = GetComponent<BossTelegraphPresenter>());
@@ -59,10 +63,88 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
             return true;
         }
 
-        public void SetProgress(float progress) => Presenter.SetProgress(progress);
+        public void ShowBoardCells(ChessBoardGrid board, DashPath path, float width)
+        {
+            Mesh mesh = GetComponent<MeshFilter>().sharedMesh;
+            Material material = GetComponent<Renderer>().sharedMaterial;
+            if (mesh == null || material == null ||
+                !TryGetUvBasis(mesh, out Vector3 u, out Vector3 v, out Vector3 localCenter)) return;
+
+            _warningCells.Clear();
+            foreach (Vector3 cell in board.CellCenters)
+                if (OverlapsDash(cell, board.CellSize * 0.5f, path, width * 0.5f))
+                    _warningCells.Add(cell);
+
+            // 경로에 투영한 순서대로 밝히면 대각선에서도 보스가 진행할 방향이 보인다.
+            _warningCells.Sort((a, b) => Vector3.Dot(a, path.Direction).CompareTo(Vector3.Dot(b, path.Direction)));
+            Quaternion rotation = Quaternion.Inverse(Quaternion.LookRotation(v.normalized, Vector3.Cross(v, u).normalized));
+            float size = board.CellSize * 0.9f;
+            Vector3 scale = Vector3.one;
+            scale[DominantAxis(u)] = size / (u.magnitude * GetCoverage(material, "_OutRectangleW"));
+            scale[DominantAxis(v)] = size / (v.magnitude * GetCoverage(material, "_OutRectangleH"));
+            for (int i = 0; i < _warningCells.Count; i++)
+            {
+                BossTelegraphPresenter presenter = GetCellMarker(i, mesh, material);
+                Transform marker = presenter.transform;
+                marker.localScale = scale;
+                Vector3 center = _warningCells[i];
+                center.y = path.Start.y + _heightOffset * 0.5f;
+                marker.SetPositionAndRotation(center - rotation * Vector3.Scale(scale, localCenter), rotation);
+                marker.gameObject.SetActive(true);
+                presenter.SetProgress(1f);
+            }
+
+            SetProgress(0f);
+        }
+
+        // 칸과 실제 경고 사각형을 네 축에서 비교해 가장자리에 걸친 칸도 포함한다.
+        private static bool OverlapsDash(Vector3 cell, float halfCell, DashPath path, float halfWidth)
+        {
+            Vector3 forward = path.Direction;
+            Vector3 right = Vector3.Cross(Vector3.up, forward);
+            float halfLength = path.Distance * 0.5f;
+            Vector3 offset = cell - (path.Start + forward * halfLength);
+            float cellProjection = halfCell * (Mathf.Abs(forward.x) + Mathf.Abs(forward.z));
+            return Mathf.Abs(offset.x) < halfCell + halfLength * Mathf.Abs(forward.x) + halfWidth * Mathf.Abs(right.x) &&
+                   Mathf.Abs(offset.z) < halfCell + halfLength * Mathf.Abs(forward.z) + halfWidth * Mathf.Abs(right.z) &&
+                   Mathf.Abs(Vector3.Dot(offset, forward)) < halfLength + cellProjection &&
+                   Mathf.Abs(Vector3.Dot(offset, right)) < halfWidth + cellProjection;
+        }
+
+        private BossTelegraphPresenter GetCellMarker(int index, Mesh mesh, Material material)
+        {
+            if (index < _cellMarkers.Count) return _cellMarkers[index];
+            if (_cellMarkerRoot == null) _cellMarkerRoot = new GameObject("Dash Board Warning");
+
+            // 같은 판과 머티리얼을 다시 사용해 연속 대쉬 중 표시 오브젝트를 반복 생성하지 않는다.
+            var cell = new GameObject("Warning Cell");
+            cell.layer = gameObject.layer;
+            cell.transform.SetParent(_cellMarkerRoot.transform, false);
+            cell.AddComponent<MeshFilter>().sharedMesh = mesh;
+            var renderer = cell.AddComponent<MeshRenderer>();
+            renderer.sharedMaterial = material;
+            renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+            renderer.receiveShadows = false;
+            var marker = cell.AddComponent<BossTelegraphPresenter>();
+            _cellMarkers.Add(marker);
+            return marker;
+        }
+
+        public void SetProgress(float progress)
+        {
+            Presenter.SetProgress(progress);
+            for (int i = 0; i < _warningCells.Count; i++)
+            {
+                float lit = Mathf.Clamp01(progress * _warningCells.Count - i);
+                _cellMarkers[i].SetOpacity(Mathf.Lerp(0.2f, 0.56f, lit));
+            }
+        }
 
         public void Hide()
         {
+            for (int i = 0; i < _warningCells.Count; i++)
+                if (_cellMarkers[i] != null) _cellMarkers[i].gameObject.SetActive(false);
+            _warningCells.Clear();
             if (Presenter != null) Presenter.SetOpacity(0f);
             if (!_placed) return;
             _placed = false;
@@ -107,5 +189,11 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
         }
 
         private void OnDisable() => Hide();
+        private void OnDestroy()
+        {
+            if (_cellMarkerRoot == null) return;
+            if (Application.isPlaying) Destroy(_cellMarkerRoot);
+            else DestroyImmediate(_cellMarkerRoot);
+        }
     }
 }

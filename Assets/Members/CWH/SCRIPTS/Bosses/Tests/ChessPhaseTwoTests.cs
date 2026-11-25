@@ -166,6 +166,42 @@ namespace Members.CWH.SCRIPTS.Bosses.Tests
         }
 
         [UnityTest]
+        public IEnumerator GroggyRecallsEmbeddedSwordsWithTheUsualAnimation()
+        {
+            yield return EnterPhaseTwo();
+            var controller = _boss.GetComponent<BossSwordController>();
+            var groggy = _boss.GetComponent<BossGroggyController>();
+            var bossHealth = _boss.GetComponent<BossHealth>();
+            float healthBeforeRecall = bossHealth.CurrentHealth;
+            int orbitingBeforeThrow = Inventory.OrbitingCount;
+            ThrownBossSword[] thrown = controller.ThrowVolley(_player.transform,
+                new[] { Vector3.forward * 10f, Vector3.right * 10f }, 2f);
+            Assert.That(thrown.Length, Is.EqualTo(2));
+
+            float landingDeadline = Time.time + 2f;
+            while (thrown.Any(sword => sword.IsFlying) && Time.time < landingDeadline)
+                yield return null;
+            Assert.That(thrown.All(sword => sword.IsEmbedded), Is.True);
+
+            Assert.That(groggy.TryEnterGroggy(), Is.True);
+            // 즉시 순간이동하지 않고 복귀 중에도 실물 검을 추적하며 피격을 막는다.
+            Assert.That(controller.HasSword, Is.True);
+            Assert.That(Inventory.OrbitingCount, Is.EqualTo(orbitingBeforeThrow - 2));
+            foreach (ThrownBossSword sword in thrown)
+            {
+                Assert.That(sword.IsRecalling, Is.True);
+                Assert.That(sword.GetComponent<BreakableHealth>().ReceiveDamage(1000f), Is.Zero);
+            }
+
+            float recallDeadline = Time.time + 3f;
+            while (controller.HasSword && Time.time < recallDeadline) yield return null;
+            Assert.That(controller.HasSword, Is.False);
+            Assert.That(Inventory.OrbitingCount, Is.EqualTo(orbitingBeforeThrow));
+            Assert.That(thrown.All(sword => sword.GetComponent<BossSword>().State == BossSwordState.Orbiting), Is.True);
+            Assert.That(bossHealth.CurrentHealth, Is.EqualTo(healthBeforeRecall));
+        }
+
+        [UnityTest]
         public IEnumerator BreakingPhysicalSwordRemovesItAndRewardsOnlyOnce()
         {
             ThrownBossSword thrown = _boss.GetComponent<BossSwordController>().Throw(_player.transform, Vector3.forward * 10f, 2f);
@@ -336,6 +372,81 @@ namespace Members.CWH.SCRIPTS.Bosses.Tests
         }
 
         [UnityTest]
+        public IEnumerator CompletionDashRetargetsThreeTimesWithoutLeavingScorch()
+        {
+            yield return EnterPhaseTwo();
+            var pattern = _boss.GetComponent<DashPattern>();
+            var motor = _boss.GetComponent<BossDashMotor>();
+            var receiver = _player.GetComponent<DashTestReceiver>();
+            Set(pattern, "_warningDuration", 0.05f);
+            Set(pattern, "_repeatWarningDuration", 0.05f);
+            Set(pattern, "_dashDistance", 12f);
+            Set(pattern, "_recoveryDuration", 0.2f);
+            Set(pattern, "_comboRecoveryDuration", 0.65f);
+            Physics.SyncTransforms();
+
+            // 같은 플레이어를 지나치도록 배치해 다음 돌진이 되돌아오는지와 매번의 명중을 확인한다.
+            Assert.That(Runner.TryRun(pattern), Is.True);
+            var directions = new List<Vector3>();
+            bool wasDashing = false;
+            float deadline = Time.time + 5f;
+            while (Runner.State != BossActionState.Recovery && Time.time < deadline)
+            {
+                if (motor.IsDashing && !wasDashing)
+                    directions.Add(pattern.PlannedPath.Direction);
+                wasDashing = motor.IsDashing;
+                Assert.That(Object.FindAnyObjectByType<DashScorchField>(), Is.Null);
+                yield return null;
+            }
+
+            Assert.That(Runner.State, Is.EqualTo(BossActionState.Recovery));
+            Assert.That(pattern.RecoveryDuration, Is.EqualTo(0.65f));
+            Assert.That(directions.Count, Is.EqualTo(3));
+            Assert.That(Vector3.Dot(directions[0], Vector3.forward), Is.GreaterThan(0.99f));
+            Assert.That(Vector3.Dot(directions[1], Vector3.back), Is.GreaterThan(0.99f));
+            Assert.That(Vector3.Dot(directions[2], Vector3.forward), Is.GreaterThan(0.99f));
+            Assert.That(receiver.DamageCalls, Is.EqualTo(3));
+            Assert.That(receiver.TotalDamage, Is.EqualTo(6f));
+            Assert.That(_boss.GetComponent<DashHitbox>().IsActive, Is.False);
+            Assert.That(Object.FindAnyObjectByType<DashScorchField>(), Is.Null);
+        }
+
+        [UnityTest]
+        public IEnumerator CompletionDashCancellationDuringFollowUpWarningStopsTheCombo()
+        {
+            yield return EnterPhaseTwo();
+            var pattern = _boss.GetComponent<DashPattern>();
+            var motor = _boss.GetComponent<BossDashMotor>();
+            var groggy = _boss.GetComponent<BossGroggyController>();
+            var telegraph = _boss.GetComponentInChildren<DashTelegraphPresenter>(true);
+            Transform originalParent = telegraph.transform.parent;
+            Set(pattern, "_warningDuration", 0.05f);
+            Set(pattern, "_repeatWarningDuration", 0.35f);
+            Set(pattern, "_dashDistance", 12f);
+            Physics.SyncTransforms();
+
+            Assert.That(Runner.TryRun(pattern), Is.True);
+            float deadline = Time.time + 5f;
+            // 두 번째 예고는 러너의 실행 구간에 표시된다. 이때 그로기가 남은 돌진과 예고를 정리해야 한다.
+            while ((Runner.State != BossActionState.Executing || telegraph.transform.parent != null) &&
+                   Time.time < deadline)
+                yield return null;
+
+            Assert.That(Runner.State, Is.EqualTo(BossActionState.Executing));
+            Assert.That(telegraph.transform.parent, Is.Null);
+            Assert.That(motor.IsDashing, Is.False);
+            Assert.That(groggy.TryEnterGroggy(2f), Is.True);
+            Vector3 stopped = _boss.transform.position;
+            yield return new WaitForSeconds(0.45f);
+
+            Assert.That(Runner.State, Is.EqualTo(BossActionState.Groggy));
+            Assert.That(Runner.CurrentPattern, Is.Null);
+            Assert.That(telegraph.transform.parent, Is.EqualTo(originalParent));
+            Assert.That(_boss.GetComponent<DashHitbox>().IsActive, Is.False);
+            Assert.That(Vector3.Distance(stopped, _boss.transform.position), Is.LessThan(0.05f));
+        }
+
+        [UnityTest]
         public IEnumerator CompletionMeleeUsesDifferentSwordsPerStrike()
         {
             yield return EnterPhaseTwo();
@@ -392,6 +503,77 @@ namespace Members.CWH.SCRIPTS.Bosses.Tests
             Assert.That(embedded[1].x - embedded[0].x, Is.EqualTo(3f).Within(0.15f));
             Assert.That(embedded[2].x - embedded[1].x, Is.EqualTo(3f).Within(0.15f));
             Assert.That(controller.CanThrow, Is.False, "박힌 검이 남으면 새 패턴은 금지한다.");
+        }
+
+        [UnityTest]
+        public IEnumerator CompletionSequentialThrowEntersGroggyAfterAllLaunchedSwordsBreak()
+        {
+            yield return EnterPhaseTwo();
+            var pattern = _boss.GetComponent<SwordThrowPattern>();
+            var controller = _boss.GetComponent<BossSwordController>();
+            var groggy = _boss.GetComponent<BossGroggyController>();
+            var bossHealth = _boss.GetComponent<BossHealth>();
+            float initialHealth = bossHealth.CurrentHealth;
+            Set(controller, "_throwPreparationCenter", _boss.transform);
+            Set(pattern, "_warningDuration", 0.03f);
+            Set(pattern, "_repeatWarningDuration", 0.1f);
+            Profiles.PhaseTwo.ThrowCount = 3;
+
+            Assert.That(Runner.TryRun(pattern), Is.True);
+            float deadline = Time.time + 5f;
+            while ((controller.ActiveSword == null || !controller.ActiveSword.IsEmbedded) && Time.time < deadline)
+                yield return null;
+
+            ThrownBossSword first = controller.ActiveSword;
+            Assert.That(first != null && first.IsEmbedded, Is.True);
+            // 첫 검이 다음 발사 전에 부서져 필드가 비어도 연속 투척은 계속되어야 한다.
+            first.GetComponent<BreakableHealth>().ReceiveDamage(1000f);
+            Assert.That(controller.HasSword, Is.False);
+            Assert.That(controller.OwnsThrowSequence(pattern), Is.True);
+            Assert.That(groggy.IsGroggy, Is.False);
+            Assert.That(bossHealth.CurrentHealth, Is.EqualTo(initialHealth - 100f));
+
+            ThrownBossSword[] embedded = System.Array.Empty<ThrownBossSword>();
+            while (Time.time < deadline)
+            {
+                embedded = Inventory.Swords
+                    .Where(sword => sword != null && sword.State == BossSwordState.Embedded)
+                    .Select(sword => sword.GetComponent<ThrownBossSword>())
+                    .ToArray();
+                if (embedded.Length == 2 && !controller.OwnsThrowSequence(pattern)) break;
+                yield return null;
+            }
+
+            Assert.That(embedded.Length, Is.EqualTo(2));
+            Assert.That(controller.OwnsThrowSequence(pattern), Is.False);
+            embedded[0].GetComponent<BreakableHealth>().ReceiveDamage(1000f);
+            Assert.That(groggy.IsGroggy, Is.False);
+            Assert.That(embedded[1].IsEmbedded, Is.True);
+
+            embedded[1].GetComponent<BreakableHealth>().ReceiveDamage(1000f);
+            Assert.That(groggy.IsGroggy, Is.True);
+            Assert.That(bossHealth.CurrentHealth, Is.EqualTo(initialHealth - 300f));
+        }
+
+        [UnityTest]
+        public IEnumerator CompletionThrowWithARecalledSwordDoesNotEnterGroggy()
+        {
+            yield return EnterPhaseTwo();
+            var controller = _boss.GetComponent<BossSwordController>();
+            var groggy = _boss.GetComponent<BossGroggyController>();
+            ThrownBossSword[] thrown = controller.ThrowVolley(_player.transform,
+                new[] { Vector3.forward * 10f, Vector3.right * 10f }, 2f);
+            Assert.That(thrown.Length, Is.EqualTo(2));
+
+            // 회수로 목록에서 빠진 검도 파괴 조건에는 계속 포함된다.
+            thrown[0].Recall();
+            float deadline = Time.time + 2f;
+            while (thrown[1].IsFlying && Time.time < deadline) yield return null;
+            Assert.That(thrown[1].IsEmbedded, Is.True);
+            thrown[1].GetComponent<BreakableHealth>().ReceiveDamage(1000f);
+
+            Assert.That(controller.HasSword, Is.False);
+            Assert.That(groggy.IsGroggy, Is.False);
         }
 
         [UnityTest]

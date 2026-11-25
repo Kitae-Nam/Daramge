@@ -33,6 +33,8 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons
         private Vector3 _landingPosition;
         private Coroutine _recallRoutine;
         private MonoBehaviour _orbitSource;
+        private bool _showEmbeddedFeedback;
+        private EmbeddedSwordFeedback _embeddedFeedback;
 
         private float _radius;
         private float _launchDamage;
@@ -65,9 +67,11 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons
 
         private void OnEnable() => _health.Broken += HandleBroken;
 
-        public void Launch(Transform owner, Transform target, Vector3 start, Vector3 destination, float radius)
+        public void Launch(Transform owner, Transform target, Vector3 start, Vector3 destination, float radius,
+            bool showEmbeddedFeedback = false)
         {
             _finished = false;
+            _showEmbeddedFeedback = showEmbeddedFeedback;
             _hitbox.SetDamageable(false);
             _visual = _ownership.Prepare();
             _owner = owner;
@@ -108,7 +112,8 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons
             _timer += Time.deltaTime;
             if (!IsFlying)
             {
-                if (_timer >= _embeddedDuration) BeginNaturalRecall();
+                if (_timer >= _embeddedDuration) BeginAnimatedRecall();
+                else _embeddedFeedback?.Update(_embeddedDuration - _timer);
                 return;
             }
 
@@ -118,6 +123,11 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons
             _timer = 0f;
             _ownership.Embed();
             _hitbox.SetDamageable(true);
+            if (_showEmbeddedFeedback)
+            {
+                _embeddedFeedback ??= new EmbeddedSwordFeedback(_visual);
+                _embeddedFeedback.Show(_embeddedDuration);
+            }
             Embedded?.Invoke(this);
             if (_target != null && _owner != null)
                 BossAttackQuery.ApplySector(_owner, _destination, Vector3.forward, _radius, 360f, 5f,
@@ -135,6 +145,7 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons
         {
             if (_finished) return;
             _finished = true;
+            _embeddedFeedback?.Hide();
             if (_recallRoutine != null)
             {
                 StopCoroutine(_recallRoutine);
@@ -149,11 +160,13 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons
             Finished?.Invoke(this, broken);
         }
 
-        private void BeginNaturalRecall()
+        internal void BeginAnimatedRecall()
         {
-            if (_finished || IsRecalling) return;
+            // 수명 만료와 그로기 진입은 같은 연출을 사용한다. 이미 회수 중인 검은 계속 돌아온다.
+            if (!IsEmbedded) return;
 
             IsRecalling = true;
+            _embeddedFeedback?.Hide();
             _hitbox.SetDamageable(false);
             _recallRoutine = StartCoroutine(RecallSequence());
         }
@@ -180,6 +193,72 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Weapons
         {
             _health.Broken -= HandleBroken;
             if (_launched && !_finished) Finish(false, true);
+        }
+    }
+
+    /// <summary>박힌 검의 색과 떨림만 제어하며, 검의 루트와 피격 콜라이더는 움직이지 않는다.</summary>
+    internal sealed class EmbeddedSwordFeedback
+    {
+        private static readonly int BaseColor = Shader.PropertyToID("_BaseColor");
+        private readonly Transform _visual;
+        private readonly MaterialPropertyBlock _properties = new MaterialPropertyBlock();
+        private MeshRenderer _source;
+        private MeshRenderer _display;
+        private bool _sourceWasHidden;
+
+        public EmbeddedSwordFeedback(Transform visual) => _visual = visual;
+
+        public void Show(float remaining)
+        {
+            if (_display == null)
+            {
+                _source = _visual != null ? _visual.GetComponentInChildren<MeshRenderer>() : null;
+                if (_source == null || !_source.TryGetComponent(out MeshFilter filter) || filter.sharedMesh == null)
+                    return;
+
+                // 같은 메시를 렌더링하는 자식만 흔들어 검 파괴 판정이 움직이지 않게 한다.
+                var child = new GameObject("Embedded Sword Feedback");
+                child.layer = _source.gameObject.layer;
+                child.transform.SetParent(_source.transform, false);
+                child.AddComponent<MeshFilter>().sharedMesh = filter.sharedMesh;
+                _display = child.AddComponent<MeshRenderer>();
+                _display.sharedMaterials = _source.sharedMaterials;
+                _display.shadowCastingMode = _source.shadowCastingMode;
+                _display.receiveShadows = _source.receiveShadows;
+                _display.renderingLayerMask = _source.renderingLayerMask;
+            }
+
+            _source.GetPropertyBlock(_properties);
+            _sourceWasHidden = _source.forceRenderingOff;
+            _source.forceRenderingOff = true;
+            _display.gameObject.SetActive(true);
+            Update(remaining);
+        }
+
+        public void Update(float remaining)
+        {
+            if (_display == null || !_display.gameObject.activeSelf) return;
+            const float recallWarning = 1.2f;
+            if (remaining > recallWarning)
+            {
+                _properties.SetColor(BaseColor, new Color(1.7f, 1.05f, 0.32f));
+                _display.transform.localRotation = Quaternion.identity;
+            }
+            else
+            {
+                float tremor = Mathf.Sin((recallWarning - remaining) * 46f);
+                _display.transform.localRotation = Quaternion.Euler(0f, 0f, tremor * 2f);
+                _properties.SetColor(BaseColor, Color.Lerp(new Color(1.7f, 0.35f, 0.13f),
+                    new Color(2.4f, 1.4f, 0.4f), (tremor + 1f) * 0.5f));
+            }
+            _display.SetPropertyBlock(_properties);
+        }
+
+        public void Hide()
+        {
+            if (_display == null || !_display.gameObject.activeSelf) return;
+            _display.gameObject.SetActive(false);
+            if (_source != null) _source.forceRenderingOff = _sourceWasHidden;
         }
     }
 }
