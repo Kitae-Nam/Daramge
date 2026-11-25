@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using CHG._02_Scripts.Player.FSM;
+using CHG._02_Scripts.Player.Hold;
 using GGMLib.ModuleSystems;
 using UnityEngine;
 
@@ -10,6 +12,7 @@ namespace CHG._02_Scripts.Player
         private readonly HashSet<AbstractInteractPoint> _pointsInRange = new();
         private PlayerController _player;
         private ICarrier _carrier;
+        private IHolder _holder;
         
         public void Initialize(ModuleOwner owner)
         {
@@ -17,6 +20,7 @@ namespace CHG._02_Scripts.Player
             Debug.Assert(_player != null, $"not player child : {gameObject.name}");
             
             _carrier = owner.GetModule<ICarrier>();
+            _holder = owner.GetModule<IHolder>();
             _player.PlayerInput.OnInteractKeyPressed += HandleInteractKeyPressed;
         }
 
@@ -31,7 +35,9 @@ namespace CHG._02_Scripts.Player
 
         private void HandleInteractKeyPressed()
         {
+            if (_player.CurrentState is PlayerState.SKILL or PlayerState.INTERACT) return;
             if (_carrier != null && _carrier.TryHandleInteract()) return;
+            if (_holder != null && _holder.IsHolding) return;
 
             AbstractInteractPoint target = FindClosestPoint();
             if (target != null)
@@ -46,7 +52,7 @@ namespace CHG._02_Scripts.Player
 
             foreach (AbstractInteractPoint point in _pointsInRange)
             {
-                if (point == null || !point.CanInteract) continue;
+                if (point == null || !point.CanInteract(_player)) continue;
 
                 float distance = (point.transform.position - position).sqrMagnitude;
                 if (distance >= closestDistance) continue;

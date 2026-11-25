@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace CHG._02_Scripts.CoreSystem.EffectSystem
 {
-    public class DotVfxView : MonoBehaviour
+    public class DotVfxView : MonoBehaviour, IModule
     {
         private struct ActiveVfx
         {

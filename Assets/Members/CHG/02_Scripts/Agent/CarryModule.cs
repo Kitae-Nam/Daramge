@@ -2,18 +2,18 @@ using System;
 using System.Collections;
 using CHG._02_Scripts.CoreSystem.AnimationSystem;
 using CHG._02_Scripts.Player;
+using CHG._02_Scripts.Player.FSM;
+using CHG._02_Scripts.Player.Hold;
 using GGMLib.ModuleSystems;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace CHG._02_Scripts.Agent
 {
-    public class CarryModule : MonoBehaviour, IModule
+    public class CarryModule : MonoBehaviour, IModule, ICarrier
     {
         [Header("Carry Settings")] 
-        [SerializeField] private float carryDistance = 1.0f; 
-        [SerializeField] private float carryHeight = 0.8f; 
-        [SerializeField] private float carrySmoothTime = 0.15f; 
+        [SerializeField] private float dropDistance = 1f;
         [SerializeField] private float dropDuration = 0.25f; 
 
         [Header("Ground Detection")] 
@@ -21,13 +21,6 @@ namespace CHG._02_Scripts.Agent
         [SerializeField] private float groundRayHeight = 3f; 
         [SerializeField] private float groundRayDistance = 8f; 
 
-        private PlayerController _player; 
-        private Transform _ownerTrm; 
-        private PushableCrate _heldCrate; 
-        private Vector3 _carryVelocity; 
-        private bool _isDropping;
-        // 상자를 집었을 때 플레이어와 상자의 상대 회전값
-        private Quaternion _carryRotationOffset = Quaternion.identity;
 
         [Header("Animation")] 
         [SerializeField] private AnimParamSO pickupParam; 
@@ -35,14 +28,21 @@ namespace CHG._02_Scripts.Agent
         [SerializeField] private AnimParamSO dropParam; 
         [SerializeField] private AnimParamSO emptyParam; 
         [SerializeField] private AnimTriggerSO pickupTrigger; 
-        [SerializeField] private AnimTriggerSO dropTrigger; 
+        [SerializeField] private AnimTriggerSO dropTrigger;
+        [SerializeField] private AnimTriggerSO actionEndTrigger;
         [SerializeField] private int animLayerIndex = 1; 
         [SerializeField] private float crossFadeDuration = 0.1f; 
 
+        private PlayerController _player;
+        private IHolder _holder;
+        private IHoldable _pending;
+        private Transform _ownerTrm; 
         private IRenderer _renderer; 
         private AgentTrigger _trigger; 
-        private PushableCrate _pendingCrate; 
-        private bool _isWaitingTrigger; 
+        private bool _isWaitingTrigger;
+        private bool _isCarrying;
+        
+        public bool IsActing { get; private set; }
         
         public void Initialize(ModuleOwner owner) 
         {
@@ -52,194 +52,140 @@ namespace CHG._02_Scripts.Agent
             _ownerTrm = _player.transform;
             _renderer = owner.GetModule<IRenderer>();
             _trigger = owner.GetModule<AgentTrigger>();
+            _holder = owner.GetModule<IHolder>();
             Debug.Assert(_renderer != null, $"renderer is null : {gameObject.name}");
             Debug.Assert(_trigger != null, $"AgentTrigger is null : {gameObject.name}");
+            Debug.Assert(_holder != null, $"holder is null : {gameObject.name}");
 
             _trigger.Subscribe(pickupTrigger, HandlePickupTrigger);
             _trigger.Subscribe(dropTrigger, HandleDropTrigger);
+            _trigger.Subscribe(actionEndTrigger, HandleActionEnd);
+            _holder.OnReleased += HandleReleased;
         }
-
-        private void LateUpdate() => UpdateHeldCrate(); 
 
         private void OnDestroy()
         {
+            if (_holder != null)
+                _holder.OnReleased -= HandleReleased;
+            
             if (_trigger == null) return; 
             _trigger.UnSubscribe(pickupTrigger, HandlePickupTrigger); 
             _trigger.UnSubscribe(dropTrigger, HandleDropTrigger); 
+            _trigger.UnSubscribe(actionEndTrigger, HandleActionEnd);
         }
-        
-        
 
-        private void TryDropCrate()
+        private void HandleReleased(IHoldable released)
         {
-            if (_heldCrate == null) return;
-            if (_heldCrate.IsTransitioning) return;
-            if (!TryGetDropPosition(out _)) return; 
+            if (!_isCarrying) return;
 
-            _isWaitingTrigger = true; 
-            PlayAnimation(dropParam); 
+            _isCarrying = false;
+            PlayAnimation(emptyParam);
+            ActionEnd();
         }
 
-        private IEnumerator DropCrateRoutine(Vector3 targetPosition) 
-        {
-            _isDropping = true;
 
-            PushableCrate crate = _heldCrate;
-            crate.BeginDrop();
-
-            Vector3 startPosition = crate.transform.position;
-            float elapsed = 0f;
-
-            while (elapsed < dropDuration)
-            {
-                elapsed += Time.deltaTime;
-                float t = Mathf.Clamp01(elapsed / Mathf.Max(dropDuration, 0.01f));
-
-                // SmoothStep 형태의 부드러운 이동
-                t = t * t * (3f - 2f * t);
-
-                crate.SetCarryPosition(Vector3.Lerp(startPosition, targetPosition, t));
-                yield return null;
-            }
-
-            crate.FinishDrop(targetPosition);
-
-            _heldCrate = null;
-            _carryVelocity = Vector3.zero;
-            _isDropping = false;
-
-            Debug.Log("상자를 내려놓았습니다.");
-        }
-        
         private void HandlePickupTrigger() 
         {
-            if (!_isWaitingTrigger || _heldCrate != null) return;
+            if (!_isWaitingTrigger || _isCarrying) return;
 
             _isWaitingTrigger = false;
-            PushableCrate crate = _pendingCrate;
-            _pendingCrate = null;
+            IHoldable holdable = _pending;
+            _pending = null;
 
-            // 애니메이션 도중 상자가 사라졌거나 다른 곳에서 잡혔으면 취소
-            if (crate == null || crate.IsHeld || crate.IsTransitioning)
+            if (!_holder.Hold(holdable))
             {
                 PlayAnimation(emptyParam);
+                ActionEnd();
                 return;
             }
 
-            _heldCrate = crate;
-            _carryVelocity = Vector3.zero;
-
-            // 상자를 집는 순간 플레이어 기준 상대 회전 저장
-            _carryRotationOffset =
-                Quaternion.Inverse(_ownerTrm.rotation)
-                * _heldCrate.transform.rotation;
-
-            _heldCrate.PickUp();
-            Debug.Log("상자를 집었습니다.");
+            _isCarrying = true;
         }
 
-        private void HandleDropTrigger() 
+        private void HandleDropTrigger()
         {
-            if (!_isWaitingTrigger || _heldCrate == null) return;
+            if (!_isWaitingTrigger || !_isCarrying) return;
 
             _isWaitingTrigger = false;
 
-            // 애니메이션 동안 이동했을 수 있으므로 놓는 시점에 다시 검사
             if (!TryGetDropPosition(out Vector3 dropPosition))
             {
                 PlayAnimation(carryParam);
+                ActionEnd(); 
                 return;
             }
 
-            StartCoroutine(DropCrateRoutine(dropPosition));
+            _isCarrying = false;
+            _holder.Release(dropPosition, dropDuration);
         }
+
+        private void HandleActionEnd() => ActionEnd();
 
         private bool TryGetDropPosition(out Vector3 dropPosition) 
         {
-            dropPosition = Vector3.zero; 
+            dropPosition = Vector3.zero;
 
-            Vector3 dropXZ = _ownerTrm.position + _ownerTrm.forward * carryDistance;
+            Vector3 dropXZ = _ownerTrm.position + _ownerTrm.forward * dropDistance;
             Vector3 rayOrigin = dropXZ + Vector3.up * groundRayHeight;
 
             if (!Physics.Raycast(rayOrigin, Vector3.down, out RaycastHit hit, groundRayDistance, groundLayer, QueryTriggerInteraction.Ignore))
             {
                 Debug.Log("내려놓을 바닥이 없습니다.");
-                return false; 
+                return false;
             }
 
-            Vector3 halfExtents = _heldCrate.HalfExtents;
-            dropPosition = new Vector3(dropXZ.x, hit.point.y + halfExtents.y + 0.02f, dropXZ.z); 
-
+            dropPosition = new Vector3(dropXZ.x, hit.point.y + _holder.Current.BottomOffset + 0.02f, dropXZ.z);
             Physics.SyncTransforms();
 
-            Collider[] overlaps = Physics.OverlapBox(dropPosition, halfExtents * 0.9f, Quaternion.identity, ~0, QueryTriggerInteraction.Ignore);
+            if (_holder.CanPlace(dropPosition)) return true;
 
-            foreach (Collider col in overlaps)
-            {
-                if ((groundLayer.value & (1 << col.gameObject.layer)) != 0) continue;
-                if (col.transform == _ownerTrm || col.transform.IsChildOf(_ownerTrm)) continue;
-                if (col.GetComponentInParent<PushableCrate>() == _heldCrate) continue;
-
-                Debug.Log("해당 위치에는 상자를 놓을 수 없습니다.");
-                return false; 
-            }
-
-            return true; 
+            Debug.Log("해당 위치에는 놓을 수 없습니다.");
+            return false;
         }
-        // 캐릭터의 정면 방향을 기준으로 상자를 배 앞쪽에 위치시킨다.
-        private Vector3 GetCarryPosition() 
-            => _ownerTrm.position + _ownerTrm.forward * carryDistance + Vector3.up * carryHeight;
 
-        private void UpdateHeldCrate() 
+        public bool TryHandleInteract()
         {
-            if (_heldCrate == null || _isDropping) return;
-
-            Vector3 targetPosition = GetCarryPosition();
-
-            // 플레이어 회전에 맞춰 상자도 함께 회전
-            _heldCrate.transform.rotation =
-                _ownerTrm.rotation * _carryRotationOffset;
-
-            // 상자를 처음 들어 올릴 때만 부드럽게 보간
-            if (_heldCrate.IsTransitioning)
-            {
-                Vector3 smoothPosition = Vector3.SmoothDamp(_heldCrate.transform.position, targetPosition, ref _carryVelocity, carrySmoothTime);
-                _heldCrate.SetCarryPosition(smoothPosition);
-
-                if (Vector3.Distance(_heldCrate.transform.position, targetPosition) < 0.08f)
-                {
-                    _heldCrate.SetCarryPosition(targetPosition);
-                    _heldCrate.FinishPickUp();
-                    _carryVelocity = Vector3.zero;
-                }
-            }
-            else
-            {
-                // 운반 중에는 지연 없이 정면 위치 유지
-                _heldCrate.SetCarryPosition(targetPosition);
-            }
+            if (IsActing) return true;
+            if (!_isCarrying) return false;
+            
+            TryDrop();
+            return true;
         }
         
         private void PlayAnimation(AnimParamSO param) 
             => _renderer.PlayClip(param.ParamHash, 0f, crossFadeDuration, animLayerIndex);
-
-        public bool TryHandleInteract()
+        
+        public void RequestPickUp(IHoldable holdable) 
         {
-            if (_isDropping || _isWaitingTrigger) return true; 
-            if (_heldCrate == null) return false;
-            
-            TryDropCrate();
-            return true;
+            if (holdable == null || !holdable.CanHold) return; 
+            if (_holder.IsHolding || IsActing) return;          
+
+            _pending = holdable;
+            _isWaitingTrigger = true;
+            BeginAction(pickupParam); 
         }
 
-        public void RequestPickUp(PushableCrate crate)
+        private void TryDrop() 
         {
-            if (crate == null || crate.IsHeld || crate.IsTransitioning) return;
-            if (_heldCrate != null || _isDropping || _isWaitingTrigger) return;
+            if (_holder.IsBusy) return;
+            if (!TryGetDropPosition(out _)) return;
 
-            _pendingCrate = crate;
             _isWaitingTrigger = true;
-            PlayAnimation(pickupParam);
+            BeginAction(dropParam); 
+        }
+
+        private void BeginAction(AnimParamSO param)
+        {
+            IsActing = true;
+            _player.ChangeState(PlayerState.INTERACT, 0.1f);
+            PlayAnimation(param);
+        }
+
+        private void ActionEnd()
+        {
+            IsActing = false;
+            _isWaitingTrigger = false;
+            _pending = null;
         }
     }
 }

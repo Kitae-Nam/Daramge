@@ -15,7 +15,6 @@ namespace CHG._02_Scripts.Player.Combat
         [SerializeField] private FeedbackPlayer heatStartFeedback;
         [SerializeField] private FeedbackPlayer heatWarningFeedback;
         [SerializeField] private FeedbackPlayer heatEndFeedback;
-        [SerializeField] private FeedbackPlayer burnHitFeedback;
         [SerializeField] private AnimTriggerSO animEndTrigger;
         [SerializeField] private AnimParamSO heatParam;
         [SerializeField] private BuffSO heatBuff;
@@ -43,7 +42,6 @@ namespace CHG._02_Scripts.Player.Combat
             Debug.Assert(_hitDotModule != null, $"hitDotModule is null : {gameObject.name}");
 
             _buffModule.OnBuffEnded += HandleBuffEnded;
-            _hitDotModule.OnDotsApplied += HandleDotsApplied;
         }
 
         private void OnDestroy()
@@ -52,9 +50,6 @@ namespace CHG._02_Scripts.Player.Combat
                 _trigger.UnSubscribe(animEndTrigger, HandleAnimationEnd);
             if (_buffModule != null)
                 _buffModule.OnBuffEnded -= HandleBuffEnded;
-            if (_hitDotModule != null)  
-                _hitDotModule.OnDotsApplied -= HandleDotsApplied;
-                
         }
 
         public override bool CanUseSkill(GameObject target = null)
@@ -103,11 +98,6 @@ namespace CHG._02_Scripts.Player.Combat
             _warningCoroutine = null;
         }
 
-        private void HandleDotsApplied(Collider target)
-        {
-            if (!_isHeated) return;
-            PlayFeedback(burnHitFeedback, target.bounds.center, player.transform.forward);
-        }
         
         private void PlayHeatFeedback(FeedbackPlayer feedbackPlayer)
             => PlayFeedback(feedbackPlayer, player.transform.position, player.transform.forward);

@@ -84,6 +84,8 @@ namespace CHG._02_Scripts.Player
 
         private void HandleSkillKeyPressed(PlayerSkillSlot slot)
         {
+            if (Player.CurrentState == PlayerState.INTERACT) return;
+            
             if (CanUseSkill((int)slot))
             {
                 Player.ChangeState(PlayerState.SKILL, 0); 

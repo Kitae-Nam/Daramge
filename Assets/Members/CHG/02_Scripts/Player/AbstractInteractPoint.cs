@@ -6,16 +6,11 @@ namespace CHG._02_Scripts.Player
 {
     public abstract class AbstractInteractPoint : MonoBehaviour
     {
-        public virtual bool CanInteract => true;
         private readonly HashSet<PlayerInteractor> _interactorsInRange = new();
 
-        private void OnDisable()
-        {
-            foreach (PlayerInteractor interactor in _interactorsInRange)
-                if (interactor != null) interactor.Unregister(this);
-            
-            _interactorsInRange.Clear();
-        }
+        private void OnDisable() => ClearInteractors();
+
+        
 
         private void OnTriggerEnter(Collider collider)
         {
@@ -39,6 +34,15 @@ namespace CHG._02_Scripts.Player
                 interactor.Unregister(this);
         }
 
+        protected void ClearInteractors()
+        {
+            foreach (PlayerInteractor interactor in _interactorsInRange)
+                if (interactor != null) interactor.Unregister(this);
+            
+            _interactorsInRange.Clear();
+        }
+        
         public abstract void Interact(PlayerController player);
+        public virtual bool CanInteract(PlayerController player) => true;
     }
 }

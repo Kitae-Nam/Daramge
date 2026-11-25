@@ -16,10 +16,12 @@ namespace CHG._02_Scripts.Player.Combat
         public AnimationCurve comboCurve;
         public float comboDuration;
         public FeedbackPlayer hitFeedback;
+        public FeedbackPlayer swingFeedback;
     }
     
     public class PlayerMeleeCombo : AbstractPlayerSkill
     {
+        
         [SerializeField] private AnimTriggerSO animationEndTrigger;
         [SerializeField] private AnimTriggerSO damageCastTrigger;
 
@@ -109,6 +111,7 @@ namespace CHG._02_Scripts.Player.Combat
         {
             Vector3 position = _damageCaster.transform.position;
             bool isHit = _damageCaster.CastDamage(position, transform.forward, SkillData);
+            PlayFeedback(comboSteps[_comboCounter].swingFeedback, position, player.transform.forward);
 
             if (isHit)
             {
