@@ -53,7 +53,7 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Patterns
             ThrowTuning tuning = _profiles != null ? _profiles.GetThrow() : ThrowTuning.Normal;
             // 시작 시 본수를 상한으로 정해 자연 회수 때문에 같은 공격이 끝없이 이어지지 않게 한다.
             _throwCount = Mathf.Min(tuning.Count, _swords.AvailableCount);
-            if (_throwCount == 0 || !_swords.TryBeginThrowSequence(this))
+            if (_throwCount == 0 || !_swords.TryBeginThrowSequence(this, _throwCount))
             {
                 _runner.CancelCurrentPattern();
                 return;
@@ -118,6 +118,9 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Patterns
                 while (_launched != null && _launched.IsFlying) yield return null;
                 _telegraph.Hide();
             }
+
+            // 마지막 착지 후 바로 투척을 마감해 후딜 중에도 마지막 검의 파괴를 판정한다.
+            _swords.EndThrowSequence(this);
         }
 
         public override void Cleanup()

@@ -19,9 +19,9 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.AI
             ? new MeleeTuning(_phaseTwo.MeleeStrikes, _phaseTwo.SwingDuration, _phaseTwo.ComboWarning, _phaseTwo.DamageMultiplier)
             : MeleeTuning.Normal(normalSwing, normalWarning);
 
+        // 페이즈별 돌진 횟수를 여기서 정해 패턴은 페이즈 판정 없이 같은 이동을 반복한다.
         public DashTuning GetDash() => Enhanced
-            ? new DashTuning(_phaseTwo.DashSpeedMultiplier, _phaseTwo.DamageMultiplier, true,
-                new ScorchSettings(_phaseTwo.DashHazardLifetime, _phaseTwo.DashHazardTickInterval, _phaseTwo.DashHazardDamage))
+            ? new DashTuning(3, _phaseTwo.DashSpeedMultiplier, _phaseTwo.DamageMultiplier)
             : DashTuning.Normal;
 
         public ThrowTuning GetThrow() => Enhanced ? new ThrowTuning(_phaseTwo.ThrowCount, _phaseTwo.ThrowSpread) : ThrowTuning.Normal;

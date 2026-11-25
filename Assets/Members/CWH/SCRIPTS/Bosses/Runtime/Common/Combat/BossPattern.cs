@@ -16,8 +16,8 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Combat
         [SerializeField] private UnityEvent _warningStarted = new UnityEvent();
         [SerializeField] private UnityEvent _warningEnded = new UnityEvent();
 
-        public float WarningDuration => Mathf.Max(0.01f, _warningDuration);
-        public float RecoveryDuration => Mathf.Max(0f, _recoveryDuration);
+        public virtual float WarningDuration => Mathf.Max(0.01f, _warningDuration);
+        public virtual float RecoveryDuration => Mathf.Max(0f, _recoveryDuration);
         public float Cooldown => Mathf.Max(0f, _cooldown);
 
         // 거리/소환 기물 존재 여부 같은 조건은 각 패턴이 판단한다(ISP).
