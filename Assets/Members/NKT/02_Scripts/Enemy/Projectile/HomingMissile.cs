@@ -1,4 +1,8 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using CHG._02_Scripts.CombatSystem;
+using CHG._02_Scripts.CoreSystem.EffectSystem;
 using GGMLib.ObjectPool.Runtime;
 using UnityEngine;
 
@@ -19,11 +23,16 @@ namespace NKT.Enemy.Projectile
         [SerializeField] private float lifeTime = 4f;
 
         [Header("충돌")]
-        [Tooltip("타겟(Fire로 받는 레이어) 외에 닿으면 터지는 레이어. 보통 Wall.")]
         [SerializeField] private LayerMask whatIsObstacle;
 
-        [Header("폭발 이펙트 (선택)")]
+        [Header("이펙트")]
         [SerializeField] private PoolItemSO explosionVfx;
+        [SerializeField] private ParticleSystem trailVfx;
+        [SerializeField] private float maxTrailFadeTime = 2f;
+
+        private Renderer[] _bodyRenderers; //트레일을 뺀 미사일 본체 렌더러
+        private Collider[] _colliders;
+        private Coroutine _returnRoutine;
 
         private PoolManagerSO _poolManager;
         private Transform _target;
@@ -34,15 +43,21 @@ namespace NKT.Enemy.Projectile
 
         private void Awake()
         {
-            //판정 콜라이더는 트리거여야 OnTriggerEnter가 온다. (CharacterController와는 일반 충돌 이벤트가 오지 않는다)
-            foreach (Collider col in GetComponents<Collider>())
+            _colliders = GetComponents<Collider>();
+            foreach (Collider col in _colliders)
                 col.isTrigger = true;
 
-            //RequireComponent는 이미 만든 프리팹에는 자동으로 붙지 않으므로 없으면 붙인다.
+            List<Renderer> bodyRenderers = new List<Renderer>();
+            foreach (Renderer rend in GetComponentsInChildren<Renderer>(true))
+            {
+                if (trailVfx != null && rend.transform.IsChildOf(trailVfx.transform)) continue;
+                bodyRenderers.Add(rend);
+            }
+            _bodyRenderers = bodyRenderers.ToArray();
+
             if (!TryGetComponent(out Rigidbody rb))
                 rb = gameObject.AddComponent<Rigidbody>();
 
-            //transform으로 직접 움직이므로 물리에 밀리거나 떨어지지 않게 한다.
             rb.isKinematic = true;
             rb.useGravity = false;
             rb.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
@@ -56,9 +71,16 @@ namespace NKT.Enemy.Projectile
             _damageData = damageData;
             _whatIsTarget = whatIsTarget;
 
-            direction.y = 0; //쿼터뷰에서 읽기 쉽게 높이는 고정
+            direction.y = 0;
             if (direction.sqrMagnitude < 0.01f) direction = Vector3.forward;
             transform.SetPositionAndRotation(position, Quaternion.LookRotation(direction));
+            SetBodyActive(true);
+
+            if (trailVfx != null)
+            {
+                trailVfx.Clear(true);
+                trailVfx.Play(true);
+            }
 
             _spawnTime = Time.time;
             _isFlying = true;
@@ -92,7 +114,7 @@ namespace NKT.Enemy.Projectile
 
         private void OnTriggerEnter(Collider other)
         {
-            if (!_isFlying) return; //풀에서 꺼낸 직후(Fire 전)나 이미 터진 뒤에 들어오는 충돌은 무시
+            if (!_isFlying) return;
 
             int hitMask = _whatIsTarget | whatIsObstacle;
             if ((hitMask & (1 << other.gameObject.layer)) == 0) return;
@@ -100,7 +122,6 @@ namespace NKT.Enemy.Projectile
             if (_damageData.Attacker != null && other.transform.IsChildOf(_damageData.Attacker.transform))
                 return; //쏜 적 자신에게는 맞지 않는다.
 
-            //콜라이더가 자식에 있어도 루트의 Agent(IDamageable)를 찾는다.
             IDamageable damageable = other.GetComponentInParent<IDamageable>();
             if (damageable != null)
             {
@@ -118,20 +139,71 @@ namespace NKT.Enemy.Projectile
             if (!_isFlying) return;
             _isFlying = false;
 
-            if (explosionVfx != null)
+            PlayExplosion();
+
+            SetBodyActive(false);
+            if (trailVfx != null)
+                trailVfx.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+
+            _returnRoutine = StartCoroutine(ReturnAfterTrailFade());
+        }
+
+        private IEnumerator ReturnAfterTrailFade()
+        {
+            float elapsed = 0f;
+            while (trailVfx != null && trailVfx.IsAlive(true) && elapsed < maxTrailFadeTime)
             {
-                IPoolable vfx = _poolManager.Pop<IPoolable>(explosionVfx);
-                if (vfx != null)
-                    vfx.GameObject.transform.position = transform.position;
+                elapsed += Time.deltaTime;
+                yield return null;
             }
 
+            _returnRoutine = null;
             _poolManager.Push(this);
+        }
+
+        private void SetBodyActive(bool active)
+        {
+            foreach (Renderer rend in _bodyRenderers)
+                rend.enabled = active;
+            foreach (Collider col in _colliders)
+                col.enabled = active;
+        }
+
+        private void PlayExplosion()
+        {
+            if (explosionVfx == null) return;
+
+            PoolableVfx vfx = _poolManager.Pop<PoolableVfx>(explosionVfx);
+            if (vfx == null)
+            {
+                Debug.LogWarning($"{explosionVfx.name}을 꺼내지 못했습니다. 프리팹에 PoolableVfx가 있는지 확인하세요.", this);
+                return;
+            }
+
+            PoolManagerSO poolManager = _poolManager;
+            void HandleVfxEnd(PoolableVfx endedVfx)
+            {
+                endedVfx.OnVfxEnd -= HandleVfxEnd;
+                poolManager.Push(endedVfx);
+            }
+
+            vfx.OnVfxEnd += HandleVfxEnd;
+            vfx.PlayVfx(transform.position, Quaternion.identity);
         }
 
         public override void ResetItem()
         {
+            if (_returnRoutine != null)
+            {
+                StopCoroutine(_returnRoutine);
+                _returnRoutine = null;
+            }
+
             _isFlying = false;
             _target = null;
+            SetBodyActive(true); //다음에 꺼낼 때 보이도록 되돌린다.
+            if (trailVfx != null)
+                trailVfx.Clear(true);
         }
     }
 }
