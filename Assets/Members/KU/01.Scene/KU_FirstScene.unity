@@ -9669,15 +9669,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CHG._02_Scripts.UI.HUDView
   worldCamera: {fileID: 936561004}
   staminaGaugeOffset: {x: -100.3, y: -16.44}
-  displaySkillSlots: 0200000003000000i
   heartContainer:
     m_PanelRenderer: {fileID: 361026418}
     m_AuthoringPath:
       m_PathIds: dacc3602i
-  skillContainer:
-    m_PanelRenderer: {fileID: 0}
-    m_AuthoringPath:
-      m_PathIds: 
   staminaGauge:
     m_PanelRenderer: {fileID: 361026418}
     m_AuthoringPath:
@@ -9686,10 +9681,6 @@ MonoBehaviour:
     m_PanelRenderer: {fileID: 361026418}
     m_AuthoringPath:
       m_PathIds: aed5e1e3i
-  screenFade:
-    m_PanelRenderer: {fileID: 0}
-    m_AuthoringPath:
-      m_PathIds: 
 --- !u!1931382934 &361026418
 PanelRenderer:
   m_ObjectHideFlags: 0
@@ -27895,9 +27886,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-  onDungeonReset:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!4 &1005581056
 Transform:
   m_ObjectHideFlags: 0
@@ -29111,15 +29099,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4047503882683654, guid: e0d3f8289f60e1e49a5d66d5eb8582f3, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -98.87
+      value: -99
       objectReference: {fileID: 0}
     - target: {fileID: 4047503882683654, guid: e0d3f8289f60e1e49a5d66d5eb8582f3, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.055
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4047503882683654, guid: e0d3f8289f60e1e49a5d66d5eb8582f3, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -5.95
+      value: -6
       objectReference: {fileID: 0}
     - target: {fileID: 4047503882683654, guid: e0d3f8289f60e1e49a5d66d5eb8582f3, type: 3}
       propertyPath: m_LocalRotation.w
@@ -34357,9 +34345,9 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1035560551}
   - {fileID: 133388367}
   - {fileID: 1128322999}
-  - {fileID: 1035560551}
   - {fileID: 2130482679}
   - {fileID: 1626056393}
   - {fileID: 1668946268}
@@ -61477,9 +61465,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-  onDungeonReset:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1001 &2123987078
 PrefabInstance:
   m_ObjectHideFlags: 0
