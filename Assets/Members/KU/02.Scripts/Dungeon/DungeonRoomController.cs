@@ -21,10 +21,6 @@ public class DungeonRoomController : MonoBehaviour
     [SerializeField]
     private PuzzleDoorView exitDoor;
 
-    [Header("Entrance Settings")]
-    [SerializeField, Min(0f)]
-    private float entranceOpenDelay = 2f;
-
     [Header("Combat Settings")]
     [SerializeField, Min(0f)]
     private float enemySpawnDelay = 0.5f;
@@ -37,9 +33,7 @@ public class DungeonRoomController : MonoBehaviour
     private UnityEvent onDungeonCleared;
 
     private DungeonState currentState =
-        DungeonState.Waiting;
-
-    private Coroutine entranceCoroutine;
+        DungeonState.EntranceOpen;
     private Coroutine combatCoroutine;
 
     public DungeonState CurrentState => currentState;
@@ -49,54 +43,20 @@ public class DungeonRoomController : MonoBehaviour
 
     private void Start()
     {
-        currentState = DungeonState.Waiting;
-
         if (entranceDoor != null)
-            entranceDoor.SetOpen(false);
+            entranceDoor.SetOpenImmediately(currentState == DungeonState.EntranceOpen);
 
         if (exitDoor != null)
             exitDoor.SetOpen(false);
     }
 
     // --------------------------------
-    // Entrance Interaction
+    // Legacy scene event compatibility
     // --------------------------------
 
     public bool TryEnterDungeon()
     {
-        if (currentState != DungeonState.Waiting)
-            return false;
-
-        currentState = DungeonState.Opening;
-
-        Debug.Log("던전 입구 문 열기", this);
-
-        entranceCoroutine = StartCoroutine(
-            OpenEntranceRoutine()
-        );
-
-        return true;
-    }
-
-    private IEnumerator OpenEntranceRoutine()
-    {
-        // 입구 문 열기
-        if (entranceDoor != null)
-            entranceDoor.SetOpen(true);
-
-        // 입구 문이 열리는 동안 대기
-        if (entranceOpenDelay > 0f)
-        {
-            yield return new WaitForSeconds(
-                entranceOpenDelay
-            );
-        }
-
-        currentState = DungeonState.EntranceOpen;
-
-        entranceCoroutine = null;
-
-        Debug.Log("던전 입장 가능", this);
+        return false;
     }
 
     // --------------------------------

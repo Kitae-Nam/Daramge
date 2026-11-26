@@ -112,6 +112,18 @@ public class PuzzleDoorView : MonoBehaviour
         );
     }
 
+    public void SetOpenImmediately(bool open)
+    {
+        if (!isInitialized)
+            return;
+
+        StopAllDoorAnimations();
+        isOpen = open;
+        transform.localPosition = open ? openedPosition : closedPosition;
+        transform.localRotation = open ? openedRotation : closedRotation;
+        Physics.SyncTransforms();
+    }
+
     // --------------------------------
     // Main Animation
     // --------------------------------
