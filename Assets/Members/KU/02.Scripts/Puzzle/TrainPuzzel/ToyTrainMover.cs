@@ -1,3 +1,4 @@
+using CHG._02_Scripts.Player;
 using UnityEngine;
 
 public class ToyTrainMover : MonoBehaviour
@@ -18,6 +19,8 @@ public class ToyTrainMover : MonoBehaviour
 
     [SerializeField]
     private Vector3 modelRotationOffset;
+
+    [SerializeField] private PlayerMovement interactPlayer;
 
     private Vector3[] pathPositions;
     private float[] cumulativeDistances;
