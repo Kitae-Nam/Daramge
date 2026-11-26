@@ -57,7 +57,48 @@
 }
 
 .skill-container {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 32px;
     flex-direction: row;
+    justify-content: center;
+}
+
+.skill-slot {
+    width: 64px;
+    height: 64px;
+    margin: 0 4px;
+    border-width: 2px;
+    border-color: rgb(120, 100, 60);
+    border-radius: 6px;
+    background-color: rgba(0, 0, 0, 0.6);
+    overflow: hidden;
+}
+
+.skill-slot__icon,
+.skill-slot__cooldown {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.skill-slot__cooldown {
+    --overlay-color: rgba(0, 0, 0, 0.7);
+}
+
+.skill-slot__key {
+    position: absolute;
+    right: 3px;
+    bottom: 1px;
+    margin: 0;
+    padding: 0;
+    font-size: 14px;
+    color: white;
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: black;
 }
 
 .stamina-gauge {
@@ -109,3 +150,5 @@
 .letterbox--visible > .letterbox__bar {
     translate: 0 0;
 }
+
+

@@ -36,6 +36,8 @@ public class DungeonRoomController : MonoBehaviour
     [SerializeField]
     private UnityEvent onDungeonCleared;
 
+    [SerializeField] private UnityEvent onDungeonReset;
+
     private DungeonState currentState =
         DungeonState.Waiting;
 
@@ -159,5 +161,27 @@ public class DungeonRoomController : MonoBehaviour
             exitDoor.SetOpen(true);
 
         onDungeonCleared?.Invoke();
+    }
+
+    public void ResetDungeon()  
+    {
+        if (currentState == DungeonState.Cleared)
+            return;
+        
+        StopAllCoroutines();
+        entranceCoroutine = null;
+        combatCoroutine = null;
+
+        currentState = DungeonState.Waiting;
+        
+        if (entranceDoor != null)
+            entranceDoor.SetOpen(false);
+        if (exitDoor != null)
+            exitDoor.SetOpen(false);
+        
+        if (exitDoor != null)
+            exitDoor.SetOpen(false);
+        
+        onDungeonReset?.Invoke();
     }
 }

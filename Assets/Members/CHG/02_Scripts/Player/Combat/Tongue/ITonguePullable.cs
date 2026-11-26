@@ -7,6 +7,5 @@ namespace CHG._02_Scripts.Player.Combat.Tongue
         Transform Root { get; }
         void BeginPull();
         void EndPull();
-        bool CanPlace(LayerMask obstacleMask);
     }
 }

@@ -1,6 +1,7 @@
 
 using System;
 using System.Collections.Generic;
+using CHG._02_Scripts.Player.Hold;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider))]
@@ -32,7 +33,7 @@ public class PressurePlateController : MonoBehaviour
         view.UpdateView(model.IsActivated);
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other) 
     {
         PushableCrate crate =
             other.GetComponentInParent<PushableCrate>();
@@ -40,12 +41,13 @@ public class PressurePlateController : MonoBehaviour
         if (crate == null)
             return;
 
-        cratesOnPlate.Add(crate);
+        if (cratesOnPlate.Add(crate))      
+            crate.OnHold += HandleCrateHold; 
 
         CheckPlate();
     }
 
-    private void OnTriggerExit(Collider other)
+    private void OnTriggerExit(Collider other) 
     {
         PushableCrate crate =
             other.GetComponentInParent<PushableCrate>();
@@ -53,7 +55,8 @@ public class PressurePlateController : MonoBehaviour
         if (crate == null)
             return;
 
-        cratesOnPlate.Remove(crate);
+        if (cratesOnPlate.Remove(crate))   
+            crate.OnHold -= HandleCrateHold; 
 
         CheckPlate();
     }
@@ -76,6 +79,15 @@ public class PressurePlateController : MonoBehaviour
 
         model.SetActivated(hasCorrectCrate);
     }
+    
+    private void HandleCrateHold(IHoldable holdable) 
+    {
+        holdable.OnHold -= HandleCrateHold;
+        if (holdable is PushableCrate crate)
+            cratesOnPlate.Remove(crate);
+
+        CheckPlate();
+    }
 
     private void HandleStateChanged(bool activated)
     {
@@ -84,9 +96,13 @@ public class PressurePlateController : MonoBehaviour
         OnPlateStateChanged?.Invoke(activated);
     }
 
-    private void OnDestroy()
+    private void OnDestroy() 
     {
         if (model != null)
             model.OnStateChanged -= HandleStateChanged;
+
+        foreach (PushableCrate crate in cratesOnPlate) 
+            if (crate != null)                         
+                crate.OnHold -= HandleCrateHold;       
     }
 }

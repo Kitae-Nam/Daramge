@@ -25,11 +25,7 @@ namespace CHG._02_Scripts.Player.FSM
         {
             base.Update();
             if (_isSkillEnd)
-            {
-                PlayerState nextState = lockOn.HasTarget ? PlayerState.LOCKON
-                    : player.PlayerInput.Movement.magnitude > INPUT_DEADZONE ? PlayerState.RUN : PlayerState.IDLE;
-                player.ChangeState(nextState, 0.1f);
-            }
+                player.ChangeState(GetDefaultState(), 0.1f);
         }
 
         public override void Exit()

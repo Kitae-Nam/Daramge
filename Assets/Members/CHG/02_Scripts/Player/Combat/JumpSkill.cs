@@ -41,12 +41,12 @@ namespace CHG._02_Scripts.Player.Combat
         public override void InitializeSkill(ISkillModule skillModule)
         {
             base.InitializeSkill(skillModule);
-            _launchMovement = _player.GetModule<ILaunchMovement>();
-            _combatState = _player.GetModule<ICombatState>();
+            _launchMovement = player.GetModule<ILaunchMovement>();
+            _combatState = player.GetModule<ICombatState>();
             Debug.Assert(_launchMovement != null, $"LaunchMovement is null : {gameObject.name}");
             Debug.Assert(_combatState != null, $"CombatState is null : {gameObject.name}");
             Debug.Assert(damageCaster != null, $"DamageCaster is null : {gameObject.name}");
-            damageCaster.InitCaster(_player);
+            damageCaster.InitCaster(player);
         }
 
         private void OnDestroy()
@@ -61,8 +61,8 @@ namespace CHG._02_Scripts.Player.Combat
         public override void UseSkill(GameObject target = null)
         {
             base.UseSkill(target);
-            _movement.CanManualMove = false;
-            _movement.SetMovementVelocity(Vector3.zero);
+            movement.CanManualMove = false;
+            movement.SetMovementVelocity(Vector3.zero);
             _isCombatJump = _combatState.IsCombat;
 
             if (_isCombatJump)
@@ -71,7 +71,7 @@ namespace CHG._02_Scripts.Player.Combat
                 return;
             }
             
-            _renderer.PlayClip(chargeParam.ParamHash, 0f, 0.1f);
+            renderer.PlayClip(chargeParam.ParamHash, 0f, 0.1f);
             ChargeLogic.Begin();
         }
 
@@ -79,7 +79,7 @@ namespace CHG._02_Scripts.Player.Combat
         {
             if (!ChargeLogic.IsCharging) return;
             ChargeLogic.Tick(Time.deltaTime);
-            _movement.RotateTo(GetInputDirection());
+            movement.RotateTo(GetInputDirection());
         }
         
         public void Release()
@@ -96,18 +96,18 @@ namespace CHG._02_Scripts.Player.Combat
         
         private void StartCombatJump()
         {
-            Vector3 playerPos = _player.transform.position; 
-            Vector3 toMouse = _player.PlayerInput.GetWorldMousePosition(playerPos.y) - playerPos; 
+            Vector3 playerPos = player.transform.position; 
+            Vector3 toMouse = player.PlayerInput.GetWorldMousePosition(playerPos.y) - playerPos; 
             toMouse.y = 0f;
             Vector3 displacement = Vector3.ClampMagnitude(toMouse, combatMaxDistance);
-            _movement.RotateTo(displacement);
+            movement.RotateTo(displacement);
             _landingPower = 1f;
             StartJump(displacement, combatHeight);
         }
 
         private void StartJump(Vector3 displacement, float height)
         {
-            _renderer.PlayClip(jumpParam.ParamHash, 0f, 0.05f);
+            renderer.PlayClip(jumpParam.ParamHash, 0f, 0.05f);
             _launchMovement.OnLanded += HandleLanded;
             _launchMovement.Launch(CalculateLaunchVelocity(displacement, height), riseGravityScale, fallGravityScale);
         }
@@ -130,8 +130,8 @@ namespace CHG._02_Scripts.Player.Combat
         private void HandleLanded()
         {
             _launchMovement.OnLanded -= HandleLanded;
-            _renderer.PlayClip(landParam.ParamHash, 0f, 0.05f);
-            PlayFeedback(landingFeedback, _player.transform.position, Vector3.down, _landingPower);
+            renderer.PlayClip(landParam.ParamHash, 0f, 0.05f);
+            PlayFeedback(landingFeedback, player.transform.position, Vector3.down, _landingPower);
 
             if (_isCombatJump)
             {
@@ -150,7 +150,7 @@ namespace CHG._02_Scripts.Player.Combat
         }
 
         private Vector3 GetInputDirection()
-            => _movement.ToWorldDirection(_player.PlayerInput.Movement);
+            => movement.ToWorldDirection(player.PlayerInput.Movement);
 
         public override void StopSkill()
         {
@@ -158,7 +158,7 @@ namespace CHG._02_Scripts.Player.Combat
             ChargeLogic.Cancel();
             _launchMovement.OnLanded -= HandleLanded;
             _launchMovement.CancelLaunch();
-            _movement.CanManualMove = true;
+            movement.CanManualMove = true;
             base.StopSkill();   
         }
     }

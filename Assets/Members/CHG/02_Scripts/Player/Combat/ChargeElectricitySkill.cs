@@ -35,9 +35,9 @@ namespace CHG._02_Scripts.Player.Combat
         public override void InitializeSkill(ISkillModule skillModule)
         {
             base.InitializeSkill(skillModule);
-            _statModule = _player.GetModule<IStatModule>();
+            _statModule = player.GetModule<IStatModule>();
             Debug.Assert(_statModule != null, $"statModule is null : {gameObject.name}");
-            damageCaster.InitCaster(_player);
+            damageCaster.InitCaster(player);
             
             _rangeIndicator =  GetComponentInChildren<ISkillRangeIndicator>();
             Debug.Assert(_rangeIndicator != null, $"rangeIndicator is null : {gameObject.name}");
@@ -50,9 +50,9 @@ namespace CHG._02_Scripts.Player.Combat
         public override void UseSkill(GameObject target = null)
         {
             base.UseSkill(target);
-            _renderer.PlayClip(chargeParam.ParamHash, 0f, 0.1f);
+            renderer.PlayClip(chargeParam.ParamHash, 0f, 0.1f);
             ChargeLogic.Begin();
-            _movement.CanManualMove = true;
+            movement.CanManualMove = true;
             ApplyChargeSlow(); 
             _isMaxChargeNotified = false;
             _rangeIndicator.Show();
@@ -69,14 +69,14 @@ namespace CHG._02_Scripts.Player.Combat
                 power = 0f;
 
             RemoveChargeSlow();
-            _movement.CanManualMove = false;
-            _movement.SetMovementVelocity(Vector3.zero);
+            movement.CanManualMove = false;
+            movement.SetMovementVelocity(Vector3.zero);
             StartCoroutine(SlamCoroutine(power));
         }
 
         private IEnumerator SlamCoroutine(float power)
         {
-            _renderer.PlayClip(impactParam.ParamHash, 0f, 0.1f);
+            renderer.PlayClip(impactParam.ParamHash, 0f, 0.1f);
             damageCaster.ResetHitCaster();
             
             float radius = Mathf.Lerp(minRadius, maxRadius, power);
@@ -95,7 +95,7 @@ namespace CHG._02_Scripts.Player.Combat
             ChargeLogic.Cancel();
             _rangeIndicator.Hide();
             RemoveChargeSlow();
-            _movement.CanManualMove = true;
+            movement.CanManualMove = true;
             base.StopSkill();
         }
 

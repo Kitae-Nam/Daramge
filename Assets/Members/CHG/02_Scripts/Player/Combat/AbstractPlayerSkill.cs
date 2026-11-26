@@ -11,26 +11,26 @@ namespace CHG._02_Scripts.Player.Combat
         public event Action OnSkillEnd;
         [field: SerializeField] public SkillDataSO SkillData { get; private set; }
 
-        protected PlayerController _player;
-        protected PlayerSkillModule _skillModule;
-        protected IRenderer _renderer;
-        protected IControlMovement _movement;
-        protected float _lastUseTime;
+        protected PlayerController player;
+        protected PlayerSkillModule skillModule;
+        protected IRenderer renderer;
+        protected IControlMovement movement;
+        protected float lastUseTime = float.NegativeInfinity;
         
         public bool IsUsing { get; private set; }
         public float NormalizedCooldown => Mathf.Approximately(SkillData.cooldown, 0) 
-            ? 1f : Mathf.Clamp01((Time.time - _lastUseTime) / SkillData.cooldown);
+            ? 1f : Mathf.Clamp01((Time.time - lastUseTime) / SkillData.cooldown);
         
         public virtual void InitializeSkill(ISkillModule skillModule)
         {
-            _skillModule = skillModule as PlayerSkillModule;
-            Debug.Assert(_skillModule != null, $"parentScript is not a PlayerSkillModule : {gameObject.name}");
+            this.skillModule = skillModule as PlayerSkillModule;
+            Debug.Assert(this.skillModule != null, $"parentScript is not a PlayerSkillModule : {gameObject.name}");
             
-            _player = _skillModule.Player;
-            _renderer = _player.GetModule<IRenderer>();
-            Debug.Assert(_renderer != null, $"renderer is null : {gameObject.name}");
-            _movement = _player.GetModule<IControlMovement>();
-            Debug.Assert(_movement != null, $"movement is null : {gameObject.name}");
+            player = this.skillModule.Player;
+            renderer = player.GetModule<IRenderer>();
+            Debug.Assert(renderer != null, $"renderer is null : {gameObject.name}");
+            movement = player.GetModule<IControlMovement>();
+            Debug.Assert(movement != null, $"movement is null : {gameObject.name}");
             IsUsing = false;
         }
 
@@ -44,7 +44,7 @@ namespace CHG._02_Scripts.Player.Combat
         public virtual void StopSkill()
         {
             IsUsing = false;
-            _lastUseTime = Time.time;
+            lastUseTime = Time.time;
             OnSkillEnd?.Invoke();
         }
 

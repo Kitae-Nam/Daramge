@@ -10,6 +10,8 @@ namespace CHG._02_Scripts.Player
         [SerializeField] private StateListSO playerStates;
         
         private StateMachine _stateMachine;
+        
+        public PlayerState CurrentState { get; private set; }
 
         protected override void InitializeModules()
         {
@@ -31,8 +33,11 @@ namespace CHG._02_Scripts.Player
         {
             _stateMachine.UpdateMachine();
         }
-        
+
         public void ChangeState(PlayerState newState, float transitionDuration)
-            => _stateMachine.ChangeState((int)newState, transitionDuration);
+        {
+            CurrentState = newState;
+            _stateMachine.ChangeState((int)newState, transitionDuration);
+        }
     }
 }

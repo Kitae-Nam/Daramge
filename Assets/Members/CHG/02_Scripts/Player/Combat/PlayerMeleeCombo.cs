@@ -16,10 +16,12 @@ namespace CHG._02_Scripts.Player.Combat
         public AnimationCurve comboCurve;
         public float comboDuration;
         public FeedbackPlayer hitFeedback;
+        public FeedbackPlayer swingFeedback;
     }
     
     public class PlayerMeleeCombo : AbstractPlayerSkill
     {
+        
         [SerializeField] private AnimTriggerSO animationEndTrigger;
         [SerializeField] private AnimTriggerSO damageCastTrigger;
 
@@ -37,10 +39,10 @@ namespace CHG._02_Scripts.Player.Combat
         public override void InitializeSkill(ISkillModule skillModule)  
         {
             base.InitializeSkill(skillModule);
-            _trigger = _player.GetModule<AgentTrigger>();
-            _lockOnModule = _player.GetModule<PlayerLockOnModule>();
+            _trigger = player.GetModule<AgentTrigger>();
+            _lockOnModule = player.GetModule<PlayerLockOnModule>();
             _damageCaster = GetComponentInChildren<AbstractDamageCaster>();
-            _hitDotModule = _player.GetModule<IHitDotModule>();
+            _hitDotModule = player.GetModule<IHitDotModule>();
             Debug.Assert(_trigger != null, $"trigger is null : {gameObject.name}");
             Debug.Assert(_damageCaster != null, $"damageCaster is null : {gameObject.name}");
             Debug.Assert(_lockOnModule != null, $"lockOnModule is null : {gameObject.name}");
@@ -67,16 +69,16 @@ namespace CHG._02_Scripts.Player.Combat
         {
             base.UseSkill(target);
             bool comboCounterOver = _comboCounter >= comboSteps.Length;
-            bool comboWindowExhausted = Time.time >= _lastUseTime + comboWindow;
+            bool comboWindowExhausted = Time.time >= lastUseTime + comboWindow;
 
             if (comboCounterOver || comboWindowExhausted)
             {
                 _comboCounter = 0;
             }
     
-            _renderer.PlayClip(comboSteps[_comboCounter].comboClip.ParamHash, 0f, 0.05f);
+            renderer.PlayClip(comboSteps[_comboCounter].comboClip.ParamHash, 0f, 0.05f);
 
-            _movement.RotateTo(GetAttackDirection()); // 추가
+            movement.RotateTo(GetAttackDirection()); // 추가
             _trigger.Subscribe(animationEndTrigger, HandleAnimationEnd);
             _trigger.Subscribe(damageCastTrigger, HandleDamageCast);
             _curCoroutine = StartCoroutine(SwordComboCoroutine());
@@ -84,22 +86,22 @@ namespace CHG._02_Scripts.Player.Combat
 
         private Vector3 GetAttackDirection() => _lockOnModule.HasTarget
             ? _lockOnModule.DirectionToTarget
-            : _player.PlayerInput.GetWorldMousePosition() - _player.transform.position;
+            : player.PlayerInput.GetWorldMousePosition() - player.transform.position;
 
         private IEnumerator SwordComboCoroutine()
         {
             AnimationCurve comboCurve = comboSteps[_comboCounter].comboCurve;
-            float comboDuration = comboSteps[_comboCounter].comboDuration / _skillModule.AttackSpeed;
+            float comboDuration = comboSteps[_comboCounter].comboDuration / skillModule.AttackSpeed;
             float currentDuration = 0f;
-            Vector3 forward = _player.transform.forward;
-            _movement.CanManualMove = false;
+            Vector3 forward = player.transform.forward;
+            movement.CanManualMove = false;
             WaitForFixedUpdate waitForFixedUpdate = new WaitForFixedUpdate();
             while (IsUsing)
             {
                 float percent = currentDuration / comboDuration;
                 currentDuration += Time.fixedDeltaTime;
                 float force = comboCurve.Evaluate(percent);
-                _movement.SetMovementVelocity(forward * force);
+                movement.SetMovementVelocity(forward * force);
                 yield return waitForFixedUpdate;
             }
             
@@ -109,10 +111,11 @@ namespace CHG._02_Scripts.Player.Combat
         {
             Vector3 position = _damageCaster.transform.position;
             bool isHit = _damageCaster.CastDamage(position, transform.forward, SkillData);
+            PlayFeedback(comboSteps[_comboCounter].swingFeedback, position, player.transform.forward);
 
             if (isHit)
             {
-                PlayFeedback(comboSteps[_comboCounter].hitFeedback, _damageCaster.LastHitPosition, _player.transform.forward);
+                PlayFeedback(comboSteps[_comboCounter].hitFeedback, _damageCaster.LastHitPosition, player.transform.forward);
             }
         }
 
@@ -127,7 +130,7 @@ namespace CHG._02_Scripts.Player.Combat
                 StopCoroutine(_curCoroutine);
                 _curCoroutine = null;
             }
-            _movement.CanManualMove = true;
+            movement.CanManualMove = true;
             _comboCounter++;
             
             _trigger.UnSubscribe(damageCastTrigger, HandleDamageCast);

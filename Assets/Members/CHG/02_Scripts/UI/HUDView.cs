@@ -1,5 +1,8 @@
+using System;
+using CHG._02_Scripts.CombatSystem;
 using CHG._02_Scripts.CoreSystem.EventBusSystem;
 using CHG._02_Scripts.Player;
+using CHG._02_Scripts.Player.Combat;
 using CHG._02_Scripts.UI.Presenter;
 using Unity.Cinemachine;
 using UnityEngine;
@@ -11,8 +14,10 @@ namespace CHG._02_Scripts.UI
     {
         [SerializeField] private Camera worldCamera;
         [SerializeField] private Vector2 staminaGaugeOffset;
+        [SerializeField] private PlayerSkillSlot[] displaySkillSlots = {PlayerSkillSlot.FirstSkill, PlayerSkillSlot.SecondSkill};
         
         [SerializeField] private VisualElementReference<VisualElement> heartContainer = new(); 
+        [SerializeField] private VisualElementReference<VisualElement> skillContainer = new();
         [SerializeField] private VisualElementReference<RadialGauge> staminaGauge = new();
         [SerializeField] private VisualElementReference<VisualElement> letterbox = new();
         
@@ -29,6 +34,9 @@ namespace CHG._02_Scripts.UI
         private StaminaPresenter _staminaPresenter;
         private WorldFollower _staminaFollower;
         private LetterboxPresenter _letterboxPresenter;
+        private VisualElement _skillContainer;
+        private ISkillProvider _skillProvider;
+        private SkillBarPresenter _skillBarPresenter;
 
         private void Awake()
         {
@@ -45,8 +53,11 @@ namespace CHG._02_Scripts.UI
             staminaGauge.RegisterReferenceUnloadedCallback(HandleStaminaGaugeUnloaded);
             letterbox.RegisterReferenceResolvedCallback(HandleLetterboxResolved);
             letterbox.RegisterReferenceUnloadedCallback(HandleLetterboxUnloaded);
-    
+            skillContainer.RegisterReferenceResolvedCallback(HandleSkillContainerResolved);
+            skillContainer.RegisterReferenceUnloadedCallback(HandleSkillContainerUnloaded);
         }
+
+        private void Update() => _skillBarPresenter?.Tick();
 
         private void OnDestroy()
         {
@@ -57,12 +68,13 @@ namespace CHG._02_Scripts.UI
             heartContainer.UnregisterReferenceUnloadedCallback(HandleHeartContainerUnloaded);
             staminaGauge.UnregisterReferenceResolvedCallback(HandleStaminaGaugeResolved);
             staminaGauge.UnregisterReferenceUnloadedCallback(HandleStaminaGaugeUnloaded);
-            letterbox.UnregisterReferenceResolvedCallback(HandleLetterboxResolved); // 추가
-            letterbox.UnregisterReferenceUnloadedCallback(HandleLetterboxUnloaded); // 추가
+            letterbox.UnregisterReferenceResolvedCallback(HandleLetterboxResolved); 
+            letterbox.UnregisterReferenceUnloadedCallback(HandleLetterboxUnloaded); 
 
             DisposeHealthPresenter();
             DisposeStaminaPresenter();
             DisposeLetterboxPresenter(); 
+            DisposeSkillBarPresenter();
         }
 
         private void HandleHeartContainerResolved(VisualElement container)
@@ -102,6 +114,12 @@ namespace CHG._02_Scripts.UI
             _staminaFollower = null;
         }
         
+        private void DisposeSkillBarPresenter()
+        {
+            _skillBarPresenter?.Dispose();
+            _skillBarPresenter = null;
+        }
+
         private void HandleCameraUpdated(CinemachineBrain brain)
         {
             if (brain.OutputCamera != worldCamera) return;
@@ -113,12 +131,16 @@ namespace CHG._02_Scripts.UI
         {
             _player = evt.Current;
             _healthModule = _player.GetModule<PlayerHealthModule>();
-            Debug.Assert(_healthModule != null, $"_healthModule is null : {gameObject.name}");
             _staminaModule = _player.GetModule<StaminaModule>();
-            Debug.Assert(_staminaModule != null, $"_staminaModule is null : {gameObject.name}");
+            _skillProvider = _player.GetModule<ISkillProvider>();
+            Debug.Assert(_healthModule != null, $"healthModule is null : {gameObject.name}");
+            Debug.Assert(_staminaModule != null, $"staminaModule is null : {gameObject.name}");
+            Debug.Assert(_skillProvider != null, $"skillProvider is null : {gameObject.name}");
+            
 
             RebuildHealthPresenter();
             RebuildStaminaPresenter();
+            RebuildSkillBarPresenter();
         }
 
         private void RebuildHealthPresenter()
@@ -135,19 +157,41 @@ namespace CHG._02_Scripts.UI
             _staminaPresenter = new StaminaPresenter(_staminaGauge, _staminaModule);
             _staminaFollower = new WorldFollower(_staminaGauge, _player.transform, worldCamera, staminaGaugeOffset);
         }
+
+        private void RebuildSkillBarPresenter()
+        {
+            DisposeSkillBarPresenter();
+            if (_skillContainer == null || _skillProvider == null) return;
+            _skillBarPresenter = new SkillBarPresenter(_skillContainer, _skillProvider, _player.PlayerInput, displaySkillSlots);
+        }
+
         
+
         private void HandleLetterboxResolved(VisualElement element) 
         {
             DisposeLetterboxPresenter();
             _letterboxPresenter = new LetterboxPresenter(element);
         }
 
-        private void HandleLetterboxUnloaded(VisualElement element) => DisposeLetterboxPresenter(); 
+        private void HandleLetterboxUnloaded(VisualElement element) => DisposeLetterboxPresenter();
+
+        private void HandleSkillContainerResolved(VisualElement container)
+        {
+            _skillContainer = container;
+            RebuildSkillBarPresenter();
+        }
+
+        private void HandleSkillContainerUnloaded(VisualElement container)
+        {
+            _skillBarPresenter = null;
+            DisposeSkillBarPresenter();
+        }
 
         private void DisposeLetterboxPresenter() 
         {
             _letterboxPresenter?.Dispose();
             _letterboxPresenter = null;
         }
+        
     }
 }

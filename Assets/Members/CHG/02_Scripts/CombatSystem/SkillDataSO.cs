@@ -14,5 +14,7 @@ namespace CHG._02_Scripts.CombatSystem
         
         public float baseDamage = 1f;
         public float damageMultiplier = 1f;
+        
+        [field:SerializeField] public Sprite Icon { get; private set; }
     }
 }
