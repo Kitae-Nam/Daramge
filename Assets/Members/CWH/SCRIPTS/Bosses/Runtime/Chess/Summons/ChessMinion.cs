@@ -28,6 +28,7 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
         [SerializeField, HideInInspector] private float _lineAttackRange = 10f;
         [SerializeField, HideInInspector] private float _lineAttackAngle = 18f;
         private NavMeshAgent _agent;
+        private ChessMinionMovement _movement;
         private BreakableHealth _health;
         private AreaTelegraphPresenter _warning;
         private Transform _target;
@@ -44,6 +45,7 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
         private void Awake()
         {
             _agent = GetComponent<NavMeshAgent>();
+            _movement = GetComponent<ChessMinionMovement>();
             _health = GetComponent<BreakableHealth>();
             _warning = AreaTelegraphPresenter.Create(transform, _warningMaterial, "Minion warning");
             if (_attack == null) _attack = GetComponent<ChessMinionAttack>();
@@ -60,6 +62,8 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
             float damage = BossAttackDamage.Resolve(ownerRunner != null ? ownerRunner.transform : null, _damage);
             _attack.Initialize(_agent, _attackRadius, damage, _warning);
             _roster = ownerRunner != null ? ownerRunner.GetComponent<BossSummonRoster>() : null;
+            _movement?.Bind(ownerRunner != null ? ownerRunner.GetComponent<ChessBoardGrid>() : null, target,
+                ownerRunner != null ? ownerRunner.transform : null);
             _initialized = true;
             _timer = delay;
             _state = State.Resting;
@@ -68,17 +72,16 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
 
         private void Update()
         {
-            if (!_initialized || _removed || _health.IsDead || _target == null) return;
+            if (!_initialized || _removed || _health.IsDead || _target == null)
+            {
+                _movement?.Stop();
+                return;
+            }
             _timer -= Time.deltaTime;
             switch (_state)
             {
                 case State.Approaching:
-                    if (!_agent.isOnNavMesh) return;
-                    _agent.isStopped = false;
-                    _agent.SetDestination(_target.position);
-                    Vector3 offset = _target.position - transform.position;
-                    offset.y = 0f;
-                    if (offset.sqrMagnitude <= _attack.TriggerDistance * _attack.TriggerDistance &&
+                    if (AdvanceTowardsTarget() &&
                         (_ownerRunner == null || (_ownerRunner.State == BossActionState.Idle && _ownerRunner.CurrentPattern == null)) &&
                         (_roster == null || !_roster.IsAttackInProgress)) StartWarning();
                     break;
@@ -98,9 +101,23 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
             }
         }
 
+        private bool AdvanceTowardsTarget()
+        {
+            // 이동 컴포넌트를 가진 기물만 새 규칙을 사용한다. 기존 소환수의 추적은 그대로 둔다.
+            if (_movement != null)
+                return _movement.isActiveAndEnabled && _movement.Advance(_attack.TriggerDistance, Time.deltaTime);
+            if (!_agent.isOnNavMesh) return false;
+            _agent.isStopped = false;
+            _agent.SetDestination(_target.position);
+            Vector3 offset = _target.position - transform.position;
+            offset.y = 0f;
+            return offset.sqrMagnitude <= _attack.TriggerDistance * _attack.TriggerDistance;
+        }
+
         private void StartWarning()
         {
             if (!_attack.Prepare(_target)) return;
+            _movement?.Stop();
             _agent.isStopped = true;
             _agent.ResetPath();
             _state = State.Warning;
@@ -114,6 +131,7 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
         {
             if (_removed) return;
             _removed = true;
+            _movement?.Stop();
             _attack.Cancel();
             _warning.Hide();
             if (_agent.isActiveAndEnabled && _agent.isOnNavMesh) _agent.isStopped = true;
