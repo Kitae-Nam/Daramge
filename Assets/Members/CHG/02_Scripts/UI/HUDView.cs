@@ -20,6 +20,7 @@ namespace CHG._02_Scripts.UI
         [SerializeField] private VisualElementReference<VisualElement> skillContainer = new();
         [SerializeField] private VisualElementReference<RadialGauge> staminaGauge = new();
         [SerializeField] private VisualElementReference<VisualElement> letterbox = new();
+        [SerializeField] private VisualElementReference<VisualElement> screenFade = new();
         
         private VisualElement _root;
         private int _uiVersion = -1;
@@ -37,6 +38,7 @@ namespace CHG._02_Scripts.UI
         private VisualElement _skillContainer;
         private ISkillProvider _skillProvider;
         private SkillBarPresenter _skillBarPresenter;
+        private ScreenFadePresenter _screenFadePresenter;
 
         private void Awake()
         {
@@ -55,6 +57,8 @@ namespace CHG._02_Scripts.UI
             letterbox.RegisterReferenceUnloadedCallback(HandleLetterboxUnloaded);
             skillContainer.RegisterReferenceResolvedCallback(HandleSkillContainerResolved);
             skillContainer.RegisterReferenceUnloadedCallback(HandleSkillContainerUnloaded);
+            screenFade.RegisterReferenceResolvedCallback(HandleScreenFadeResolved);
+            screenFade.RegisterReferenceUnloadedCallback(HandleScreenFadeUnloaded);
         }
 
         private void Update() => _skillBarPresenter?.Tick();
@@ -70,11 +74,14 @@ namespace CHG._02_Scripts.UI
             staminaGauge.UnregisterReferenceUnloadedCallback(HandleStaminaGaugeUnloaded);
             letterbox.UnregisterReferenceResolvedCallback(HandleLetterboxResolved); 
             letterbox.UnregisterReferenceUnloadedCallback(HandleLetterboxUnloaded); 
+            screenFade.UnregisterReferenceResolvedCallback(HandleScreenFadeResolved);
+            screenFade.UnregisterReferenceUnloadedCallback(HandleScreenFadeUnloaded);
 
             DisposeHealthPresenter();
             DisposeStaminaPresenter();
             DisposeLetterboxPresenter(); 
             DisposeSkillBarPresenter();
+            DisposeScreenFadePresenter();
         }
 
         private void HandleHeartContainerResolved(VisualElement container)
@@ -193,5 +200,18 @@ namespace CHG._02_Scripts.UI
             _letterboxPresenter = null;
         }
         
+        private void HandleScreenFadeResolved(VisualElement element)
+        {
+            DisposeScreenFadePresenter();
+            _screenFadePresenter = new ScreenFadePresenter(element);
+        }
+        
+        private void HandleScreenFadeUnloaded(VisualElement element) => DisposeScreenFadePresenter();
+        
+        private void DisposeScreenFadePresenter()
+        {
+            _screenFadePresenter?.Dispose();
+            _screenFadePresenter = null;
+        }
     }
 }

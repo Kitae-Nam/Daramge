@@ -9,9 +9,4 @@ public class PushableCrate : Holdable
 
     public PuzzleColor CrateColor => crateColor;
 
-    protected override void Awake() 
-    {
-        base.Awake();
-        GetComponent<Rigidbody>().isKinematic = true;
-    }
 }

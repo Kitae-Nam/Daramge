@@ -9669,10 +9669,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CHG._02_Scripts.UI.HUDView
   worldCamera: {fileID: 936561004}
   staminaGaugeOffset: {x: -100.3, y: -16.44}
+  displaySkillSlots: 0200000003000000i
   heartContainer:
     m_PanelRenderer: {fileID: 361026418}
     m_AuthoringPath:
       m_PathIds: dacc3602i
+  skillContainer:
+    m_PanelRenderer: {fileID: 0}
+    m_AuthoringPath:
+      m_PathIds: 
   staminaGauge:
     m_PanelRenderer: {fileID: 361026418}
     m_AuthoringPath:
@@ -9681,6 +9686,10 @@ MonoBehaviour:
     m_PanelRenderer: {fileID: 361026418}
     m_AuthoringPath:
       m_PathIds: aed5e1e3i
+  screenFade:
+    m_PanelRenderer: {fileID: 0}
+    m_AuthoringPath:
+      m_PathIds: 
 --- !u!1931382934 &361026418
 PanelRenderer:
   m_ObjectHideFlags: 0
@@ -26199,21 +26208,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec166569d9cf4e84289e5ee9597d25ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WallERobotController
-  moveSpeed: 5
-  rotationSpeed: 540
-  dashSpeed: 13
-  dashDuration: 0.2
-  dashCooldown: 1
-  pickupRange: 1.8
-  carryDistance: 1.3
-  carryHeight: 0
-  carrySmoothTime: 0.15
-  dropDuration: 0.25
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 64
-  groundRayHeight: 3
-  groundRayDistance: 8
 --- !u!54 &970810557
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -27745,6 +27739,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+  onDungeonReset:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!4 &1005581056
 Transform:
   m_ObjectHideFlags: 0
@@ -61166,6 +61163,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+  onDungeonReset:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1001 &2123987078
 PrefabInstance:
   m_ObjectHideFlags: 0
