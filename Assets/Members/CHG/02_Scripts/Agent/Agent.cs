@@ -75,6 +75,12 @@ namespace CHG._02_Scripts.Agent
             Health.ApplyDamage(damageAmount);
             EventBus<DamageTakenEvent>.Raise(new DamageTakenEvent(this, damageAmount, false, textStyle));
         }
+
+        public void Revive()
+        {
+            IsDead = false;
+            Health.ResetHealth();
+        }
         
         public bool HasStatus(AgentStatus status) => (Status & status) == status;
         public void AddStatus(AgentStatus status) => Status |= status;

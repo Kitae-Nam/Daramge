@@ -4,20 +4,19 @@ using CHG._02_Scripts.CombatSystem;
 using CHG._02_Scripts.CoreSystem.AnimationSystem;
 using CHG._02_Scripts.CoreSystem.EventBusSystem;
 using CHG._02_Scripts.Player.Combat.Tongue;
+using CHG._02_Scripts.Player.Hold;
 using UnityEngine;
 
 namespace CHG._02_Scripts.Player.Combat
 {
     public class TongueGrepSkill : AbstractPlayerSkill, IReleasable, IExclusiveSkill
     {
-        private const int FORCE_DROP_STEPS = 5;
         
         [SerializeField] private AnimParamSO grepParam;
         [SerializeField] private AnimParamSO aimingParam;
         [SerializeField] private AnimParamSO dragParam;
         [Space(10)]
         [SerializeField] private LayerMask hitLayer;
-        [SerializeField] private LayerMask dropBlockLayer;
         [SerializeField] private LineRenderer tongueLine;
         [SerializeField] private Transform startTrm;
         [SerializeField] private float maxRange = 10f;
@@ -28,65 +27,64 @@ namespace CHG._02_Scripts.Player.Combat
         [SerializeField] private float endPointOffset = 0.5f;
         [SerializeField] private float maxPullTime = 2f;
         [SerializeField] private float objectPullSpeed = 15f;
-        [SerializeField] private float holdDistance = 1f;
-        [SerializeField] private float holdHeight = 0.5f;
         [Space(10)]
         [SerializeField] private OverlapDamageCaster damageCaster;
         [SerializeField] private Gradient aimColor;
         [SerializeField] private Gradient tongueColor;
 
-        private ITonguePullable _carried;
         private ILockOnModule _lockOn;
         
         public bool IsHolding { get; private set; }
-        public bool IsExclusive => _carried != null;
+        private IHolder _holder;
+        private bool _isTongueHolding;
+        public bool IsExclusive => _isTongueHolding;
         
 
         public override void InitializeSkill(ISkillModule skillModule)
         {
             base.InitializeSkill(skillModule);
             Debug.Assert(damageCaster != null, $"DamageCaster is null : {gameObject.name}");
-            damageCaster.InitCaster(_player);
-            _lockOn = _player.GetModule<ILockOnModule>();
+            damageCaster.InitCaster(player);
+            _lockOn = player.GetModule<ILockOnModule>();
+            _holder = player.GetModule<IHolder>();
             Debug.Assert(_lockOn != null, $"LockOnModule is null : {gameObject.name}");
-            _player.OnHit.AddListener(HandlePlayerHit);
-            EventBus<CharacterChangeStartEvent>.Subscribe(HandleCharacterChangeStart);
+            Debug.Assert(_holder != null, $"Holder is null : {gameObject.name}");
+            _holder.OnReleased += HandleReleased;
         }
 
         private void LateUpdate()
         {
-            if (_carried == null) return;
-            Vector3 holdPos = GetHoldPosition();
-            _carried.Root.position = holdPos;
-            UpdateLine(holdPos, tongueColor);
+            if (!_isTongueHolding) return;   
+            UpdateLine(_holder.Current.Root.position, tongueColor);
         }
 
         private void OnDestroy()
         {
-            if (_player != null)
-                _player.OnHit.RemoveListener(HandlePlayerHit);
-            EventBus<CharacterChangeStartEvent>.Unsubscribe(HandleCharacterChangeStart);
+            if (_holder != null)
+                _holder.OnReleased -= HandleReleased;
         }
 
         public override bool CanUseSkill(GameObject target = null)
         {
-            return _carried != null || (NormalizedCooldown >= 1f && !IsUsing);
+            return _isTongueHolding || (NormalizedCooldown >= 1f && !IsUsing);
+            
         }
 
         public override void UseSkill(GameObject target = null)
         {
             base.UseSkill(target);
 
-            if (_carried != null)
+            if (_isTongueHolding)
             {
-                if (_carried.CanPlace(dropBlockLayer))
-                    Drop();
+                Vector3 rootPosition = _holder.Current.Root.position;
+                if (_holder.CanPlace(rootPosition))
+                    _holder.Release(rootPosition, 0f);
                 StopSkill();
                 return;
             }
-            
-            _movement.CanManualMove = false;
-            _movement.SetMovementVelocity(Vector3.zero);
+
+            movement.CanManualMove = false;
+            movement.SetMovementVelocity(Vector3.zero);
             AimingTongue();
         }
 
@@ -94,7 +92,7 @@ namespace CHG._02_Scripts.Player.Combat
         {
             IsHolding = true;
             tongueLine.enabled = true;
-            _renderer.PlayClip(aimingParam.ParamHash, 0f, 0.01f);
+            renderer.PlayClip(aimingParam.ParamHash, 0f, 0.01f);
             StartCoroutine(AimingCoroutine());
         }
 
@@ -106,7 +104,7 @@ namespace CHG._02_Scripts.Player.Combat
                 aimLength = Mathf.Min(aimLength + aimSpeed * Time.deltaTime, maxRange); 
                 Vector3 dir = GetAimDirection();
                 Vector3 startPos = startTrm.position;
-                _movement.RotateTo(dir); 
+                movement.RotateTo(dir); 
                 bool isHit = Physics.SphereCast(startPos, tipRadius, dir, out RaycastHit hit, aimLength, hitLayer); 
                 UpdateLine(startPos + dir * (isHit ? hit.distance : aimLength), aimColor); 
 
@@ -120,19 +118,20 @@ namespace CHG._02_Scripts.Player.Combat
             StartCoroutine(GrepCoroutine());
         }
 
-        private IEnumerator GrepCoroutine()
+        private IEnumerator GrepCoroutine() 
         {
             Vector3 dir = GetAimDirection();
-            _movement.RotateTo(dir);
+            movement.RotateTo(dir);
             Vector3 tip = startTrm.position;
             Vector3 startPos = startTrm.position;
             float moveDistance = 0f;
             Transform anchor = null;
             Vector3 localHit = Vector3.zero;
             ITonguePullable pullable = null;
+            IHoldable holdable = null;
             bool isTongueEventHit = false;
-            
-            _renderer.PlayClip(grepParam.ParamHash, 0f, 0.01f);
+
+            renderer.PlayClip(grepParam.ParamHash, 0f, 0.01f);
             while (moveDistance < maxRange)  //발사해서 닿거나 최대 사거리까지
             {
                 float step = shootSpeed * Time.deltaTime;
@@ -147,7 +146,9 @@ namespace CHG._02_Scripts.Player.Combat
                         handler?.HandleTongueHit(hit.point);
                         isTongueEventHit = true;
                     }
-                    pullable = hit.collider.GetComponentInParent<ITonguePullable>();
+                    holdable = hit.collider.GetComponentInParent<IHoldable>();
+                    if (holdable == null)
+                        pullable = hit.collider.GetComponentInParent<ITonguePullable>(); 
                     break;
                 }
 
@@ -157,33 +158,32 @@ namespace CHG._02_Scripts.Player.Combat
                 yield return null;
             }
 
-            if (pullable != null )
+            if (holdable != null && _holder.Hold(holdable)) 
+            {
+                _isTongueHolding = true; 
+                _lockOn.SetBlocked(true);
+            }
+            else if (pullable != null) 
             {
                 yield return PullObjectCoroutine(pullable);
-                if (pullable is ITongueHoldable)
-                {
-                    _carried = pullable;
-                    _lockOn.SetBlocked(true);
-                }
-                else 
-                    pullable.EndPull();
+                pullable.EndPull();
             }
             else if (anchor != null && !isTongueEventHit)
             {
                 //맞았을 때 이동
-                _renderer.PlayClip(dragParam.ParamHash, 0f, 0.01f);
-                _movement.CanUseGravity = false;
+                renderer.PlayClip(dragParam.ParamHash, 0f, 0.01f);
+                movement.CanUseGravity = false;
                 float t = 0f;
                 while (anchor != null && t < maxPullTime)
                 {
                     tip = anchor.TransformPoint(localHit);
-                    Vector3 toTip = tip - _player.transform.position;
+                    Vector3 toTip = tip - player.transform.position;
                     if (toTip.magnitude <= endPointOffset) break;
-            
-                    _movement.SetMovementVelocity(toTip.normalized * pullSpeed);
+
+                    movement.SetMovementVelocity(toTip.normalized * pullSpeed);
                     UpdateLine(tip, tongueColor);
                     t += Time.deltaTime;
-            
+
                     yield return null;
                 }
             }
@@ -196,18 +196,18 @@ namespace CHG._02_Scripts.Player.Combat
                     yield return null;
                 }
             }
-            
+
             StopSkill();
         }
 
         public override void StopSkill()
         {
             StopAllCoroutines();
-            _movement.SetMovementVelocity(Vector3.zero);
-            tongueLine.enabled = _carried != null;
+            movement.SetMovementVelocity(Vector3.zero);
+            tongueLine.enabled = _isTongueHolding;
             IsHolding = false;
-            _movement.CanManualMove = true;
-            _movement.CanUseGravity = true;
+            movement.CanManualMove = true;
+            movement.CanUseGravity = true;
             base.StopSkill();
         }
         
@@ -220,56 +220,32 @@ namespace CHG._02_Scripts.Player.Combat
 
         private Vector3 GetAimDirection()
         {
-            Vector3 playerPos = _player.transform.position;
-            Vector3 dir = _player.PlayerInput.GetMousePositionOnPlane(playerPos.y) - playerPos;
+            Vector3 playerPos = player.transform.position;
+            Vector3 dir = player.PlayerInput.GetMousePositionOnPlane(playerPos.y) - playerPos;
             dir.y = 0f;
             return dir.normalized;
         }
 
-        private IEnumerator PullObjectCoroutine(ITonguePullable pullable)
+        private IEnumerator PullObjectCoroutine(ITonguePullable pullable) 
         {
             pullable.BeginPull();
             Transform target = pullable.Root;
-            while (Vector3.Distance(target.position, GetHoldPosition()) > 0.05f)
+            while (Vector3.Distance(target.position, _holder.HoldPosition) > 0.05f) 
             {
-                target.position = Vector3.MoveTowards(target.position, 
-                    GetHoldPosition(), objectPullSpeed * Time.deltaTime);
+                target.position = Vector3.MoveTowards(target.position,
+                    _holder.HoldPosition, objectPullSpeed * Time.deltaTime); 
                 UpdateLine(target.position, tongueColor);
                 yield return null;
             }
         }
 
-        private void Drop()
+        private void HandleReleased(IHoldable released)
         {
-            _carried.EndPull();
-            _carried = null;
+            if (!_isTongueHolding) return;
+
+            _isTongueHolding = false;
             tongueLine.enabled = false;
             _lockOn.SetBlocked(false);
-        }
-
-        private void HandlePlayerHit()
-        {
-            
-            if (_carried != null)
-                ForceDrop();
-        }
-
-        private void HandleCharacterChangeStart(CharacterChangeStartEvent evt)
-        {
-            if (evt.Prev == _player && _carried != null)
-                ForceDrop();
-        }
-
-        private Vector3 GetHoldPosition() => _player.transform.position + _player.transform.forward * holdDistance +
-                                             Vector3.up * holdHeight;
-
-        private void ForceDrop()
-        {
-            Vector3 holdPos = GetHoldPosition();
-            Vector3 playerCenter = _player.transform.position + Vector3.up * holdHeight;
-            for (int i = 1; i <= FORCE_DROP_STEPS && !_carried.CanPlace(dropBlockLayer); i++)
-                _carried.Root.position = Vector3.Lerp(holdPos, playerCenter, (float)i / FORCE_DROP_STEPS);
-            Drop();
         }
     }
 }

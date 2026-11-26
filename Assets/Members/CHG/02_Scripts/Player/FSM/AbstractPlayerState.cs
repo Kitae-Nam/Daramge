@@ -17,5 +17,9 @@ namespace CHG._02_Scripts.Player.FSM
             controlMovement = agent.GetModule<IControlMovement>();
             lockOn = agent.GetModule<ILockOnModule>();
         }
+        
+        protected PlayerState GetDefaultState() 
+            => lockOn.HasTarget ? PlayerState.LOCKON
+                : player.PlayerInput.Movement.magnitude > INPUT_DEADZONE ? PlayerState.RUN : PlayerState.IDLE;
     }
 }

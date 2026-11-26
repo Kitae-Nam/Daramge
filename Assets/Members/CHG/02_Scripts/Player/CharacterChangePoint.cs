@@ -4,7 +4,7 @@ namespace CHG._02_Scripts.Player
 {
     public class CharacterChangePoint : AbstractInteractPoint
     {
-        protected override void HandleInteractKeyPressed()
+        public override void Interact(PlayerController player)
         {
             EventBus<CharacterSelectedRequestEvent>.Raise(new CharacterSelectedRequestEvent());
         }
