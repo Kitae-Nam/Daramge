@@ -39,6 +39,7 @@ namespace CHG._02_Scripts.CombatSystem
             bool isHit = false;
             for (int i = 0; i < count; i++)
             {
+                Debug.Log($"[Overlap] {CasterOwner.name} -> {_hits[i].name}", _hits[i]); // 추가 (임시)
                 if (!_hits[i].TryGetComponent(out IDamageable damageable)) continue;
                 if (!_hitSet.Add(damageable)) continue;
 

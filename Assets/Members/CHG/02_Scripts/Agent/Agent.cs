@@ -3,6 +3,7 @@ using CHG._02_Scripts.CombatSystem;
 using CHG._02_Scripts.CoreSystem;
 using CHG._02_Scripts.CoreSystem.EventBusSystem;
 using GGMLib.ModuleSystems;
+using UnityEngine;
 using UnityEngine.Events;
 
 namespace CHG._02_Scripts.Agent
@@ -49,6 +50,7 @@ namespace CHG._02_Scripts.Agent
 
         public void ApplyDamage(DamageData damageData)
         {
+            Debug.Log($"[ApplyDamage] {name} dead:{IsDead} status:{Status} health:{Health}", this); // 추가 (임시)
             if(IsDead) return;
 
             if (HasStatus(AgentStatus.Invincible))
@@ -87,19 +89,21 @@ namespace CHG._02_Scripts.Agent
         
         public bool HasStatus(AgentStatus status) => (Status & status) == status;
 
-        public void AddStatus(AgentStatus status) 
+        public void AddStatus(AgentStatus status)
         {
-            _statusCounts.TryGetValue(status, out int count); 
-            _statusCounts[status] = count + 1; 
-            Status |= status; 
+            _statusCounts.TryGetValue(status, out int count);
+            _statusCounts[status] = count + 1;
+            Status |= status;
+            Debug.Log($"[AddStatus] {name} {status} -> {count + 1}", this); 
         }
 
-        public void RemoveStatus(AgentStatus status) 
+        public void RemoveStatus(AgentStatus status)
         {
-            if (!_statusCounts.TryGetValue(status, out int count) || count == 0) return; 
-            _statusCounts[status] = --count; 
-            if (count == 0) 
-                Status &= ~status; 
+            Debug.Log($"[RemoveStatus] {name} {status}", this); // 추가 (임시)
+            if (!_statusCounts.TryGetValue(status, out int count) || count == 0) return;
+            _statusCounts[status] = --count;
+            if (count == 0)
+                Status &= ~status;
         }
     }
 }
