@@ -1,6 +1,7 @@
 
 using System;
 using System.Collections.Generic;
+using CHG._02_Scripts.Player;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -54,10 +55,13 @@ public class TrainTrackPuzzleManager : MonoBehaviour
     [SerializeField]
     private UnityEvent onTrainStopped;
 
+    [SerializeField] private CharacterChange characterChange;
+    
     private TrainPuzzleState currentState =
         TrainPuzzleState.Ready;
 
     private bool isInitialized;
+    private bool isInputLocked;
     private int nextRailIndex;
 
     public TrainPuzzleState CurrentState => currentState;
@@ -140,6 +144,7 @@ public class TrainTrackPuzzleManager : MonoBehaviour
         }
 
         currentState = TrainPuzzleState.Running;
+        SetInputLocked(true);
         onTrainDeparted?.Invoke();
         return true;
     }
@@ -166,6 +171,7 @@ public class TrainTrackPuzzleManager : MonoBehaviour
                 return;
 
             currentState = TrainPuzzleState.Running;
+            SetInputLocked(true);
             onTrainResumed?.Invoke();
             if (currentState != TrainPuzzleState.Running)
                 return;
@@ -191,6 +197,7 @@ public class TrainTrackPuzzleManager : MonoBehaviour
         if (checkpointIndex == stationIndex)
         {
             currentState = TrainPuzzleState.Completed;
+            SetInputLocked(false);
             onTrainStopped?.Invoke();
             if (currentState == TrainPuzzleState.Completed)
                 onPuzzleSolved?.Invoke();
@@ -241,6 +248,7 @@ public class TrainTrackPuzzleManager : MonoBehaviour
 
         nextRailIndex = 0;
         currentState = TrainPuzzleState.Ready;
+        SetInputLocked(false);
         onTrainStopped?.Invoke();
     }
 
@@ -248,6 +256,23 @@ public class TrainTrackPuzzleManager : MonoBehaviour
     {
         if (currentState == TrainPuzzleState.Running || currentState == TrainPuzzleState.WaitingForRail)
             ResetPuzzle();
+    }
+    
+    
+    private void SetInputLocked(bool locked)
+    {
+        if (isInputLocked == locked)
+            return;
+
+        Debug.Assert(characterChange != null, $"CharacterChange is null : {gameObject.name}");
+        if (characterChange == null)
+            return;
+
+        isInputLocked = locked;
+        if (locked)
+            characterChange.LockInput();
+        else
+            characterChange.UnlockInput();
     }
 
     // --------------------------------

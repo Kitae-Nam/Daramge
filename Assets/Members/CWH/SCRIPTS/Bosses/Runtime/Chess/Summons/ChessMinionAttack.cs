@@ -3,7 +3,7 @@ using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Telegraphs;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
+namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Summons
 {
     /// <summary>
     /// 기물 FSM이 사용하는 공격 계약이다. 새 행동은 이 클래스를 구현하여 연결하며 FSM을 수정하지 않는다.
@@ -17,6 +17,7 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
         protected float Damage { get; private set; }
         protected AreaTelegraphPresenter Warning { get; private set; }
         public abstract float TriggerDistance { get; }
+        public virtual void BindBoard(ChessBoardGrid board, Transform summoner) { }
         public void Initialize(NavMeshAgent agent, float radius, float damage, AreaTelegraphPresenter warning)
         { Agent = agent; BaseRadius = radius; Damage = damage; Warning = warning; }
         public bool Prepare(Transform target)
@@ -27,6 +28,7 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
         }
         protected abstract bool TryPrepare();
         public abstract void ShowWarning();
+        public virtual void SetWarningProgress(float progress) { }
         public abstract void BeginAttack();
         public abstract bool Tick(float deltaTime);
         public virtual void Cancel() { }

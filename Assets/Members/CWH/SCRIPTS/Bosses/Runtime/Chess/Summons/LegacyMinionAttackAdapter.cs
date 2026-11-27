@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
+namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Summons
 {
     /// <summary>
     /// 공격 컴포넌트가 저장되지 않은 옛 프리팹만 한 번 조립한다.
