@@ -35,13 +35,13 @@ namespace CHG._02_Scripts.Player.Combat
         {
             base.InitializeSkill(skillModule);
             Debug.Assert(damageCaster != null, $"DamageCaster is null : {gameObject.name}");
-            damageCaster.InitCaster(_player);
+            damageCaster.InitCaster(player);
             
             _rangeIndicator = GetComponentInChildren<ISkillRangeIndicator>(true);
             Debug.Assert(_rangeIndicator != null, $"RangeIndicator is null : {gameObject.name}");
             _dashCurveAverage = CalculateCurveAverage(dashCurve);
-            _castReach = Vector3.Dot(damageCaster.transform.position - _player.transform.position,
-                _player.transform.forward) + damageCaster.Radius;
+            _castReach = Vector3.Dot(damageCaster.transform.position - player.transform.position,
+                player.transform.forward) + damageCaster.Radius;
             ChargeLogic.OnChargeChanged += HandleChargeChanged;
         }
 
@@ -53,9 +53,9 @@ namespace CHG._02_Scripts.Player.Combat
         public override void UseSkill(GameObject target = null)
         {
             base.UseSkill(target);
-            _movement.CanManualMove = false;
-            _movement.SetMovementVelocity(Vector3.zero);
-            _renderer.PlayClip(chargeParam.ParamHash, 0f, 0.1f);
+            movement.CanManualMove = false;
+            movement.SetMovementVelocity(Vector3.zero);
+            renderer.PlayClip(chargeParam.ParamHash, 0f, 0.1f);
             ChargeLogic.Begin();
             _rangeIndicator.Show();
             UpdateRangeIndicator(0f);
@@ -77,10 +77,10 @@ namespace CHG._02_Scripts.Player.Combat
 
         private IEnumerator HeadbuttCoroutine(float power)
         {
-            _renderer.PlayClip(dashParam.ParamHash, 0f, 0.01f);
+            renderer.PlayClip(dashParam.ParamHash, 0f, 0.01f);
             damageCaster.ResetHitCaster();
 
-            Vector3 forward = _player.transform.forward;
+            Vector3 forward = player.transform.forward;
             float speed = Mathf.Lerp(minSpeed, maxSpeed, power);
             float multiplier = damageByCharge.Evaluate(power);
             float elapsed = 0f;
@@ -88,7 +88,7 @@ namespace CHG._02_Scripts.Player.Combat
             while (IsUsing && elapsed < dashDuration)
             {
                 float percent = elapsed / dashDuration;
-                _movement.SetMovementVelocity(forward * (dashCurve.Evaluate(percent) * speed));
+                movement.SetMovementVelocity(forward * (dashCurve.Evaluate(percent) * speed));
 
                 bool hit = damageCaster.CastDamage(damageCaster.transform.position, SkillData, multiplier);
                 if (hit) PlayFeedback(hitFeedback, damageCaster.transform.position, forward, power);
@@ -106,8 +106,8 @@ namespace CHG._02_Scripts.Player.Combat
             StopAllCoroutines();
             ChargeLogic.Cancel();
             _rangeIndicator.Hide();
-            _movement.SetMovementVelocity(Vector3.zero);
-            _movement.CanManualMove = true;
+            movement.SetMovementVelocity(Vector3.zero);
+            movement.CanManualMove = true;
             base.StopSkill();
         }
         
@@ -126,7 +126,7 @@ namespace CHG._02_Scripts.Player.Combat
         }
 
         private float GetDashDistance(float power)
-            => Mathf.Lerp(minSpeed, maxSpeed, power) * _movement.MoveSpeed * dashDuration * _dashCurveAverage;
+            => Mathf.Lerp(minSpeed, maxSpeed, power) * movement.MoveSpeed * dashDuration * _dashCurveAverage;
 
         private static float CalculateCurveAverage(AnimationCurve curve)
         {

@@ -146,6 +146,9 @@ namespace CHG._02_Scripts.Player
                 _worldMousePosition = planePoint;
             return _worldMousePosition;
         }
+        
+        public string GetSkillKeyName(PlayerSkillSlot slot)
+            => GetSkillAction(slot)?.GetBindingDisplayString() ?? string.Empty;
 
         private bool RaycastPlane(Ray ray, float height, out Vector3 point)
         {
@@ -153,5 +156,14 @@ namespace CHG._02_Scripts.Player
             point = isHit ? ray.GetPoint(enter) : Vector3.zero;
             return isHit;
         }
+
+        private InputAction GetSkillAction(PlayerSkillSlot slot) => slot switch
+        {
+            PlayerSkillSlot.Attack => _controls.Player.Attack,
+            PlayerSkillSlot.Dash => _controls.Player.Dash,
+            PlayerSkillSlot.FirstSkill => _controls.Player.FirstSkill,
+            PlayerSkillSlot.SecondSkill => _controls.Player.ScendSkill,
+            _ => null
+        };
     }
 }

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace CHG._02_Scripts.Player
 {
-    public class PlayerMovement : MonoBehaviour, IModule, IControlMovement, ILaunchMovement, IAfterInitModule
+    public class PlayerMovement : MonoBehaviour, IModule, IControlMovement, ILaunchMovement, IAfterInitModule, IWarpMovement
     {
         [SerializeField] private StatSO moveSpeedStat;
         [SerializeField] private float gravity = -9.8f;
@@ -176,6 +176,15 @@ namespace CHG._02_Scripts.Player
             if (!_isLaunched || _verticalVelocity > 0f || !IsGround) return;
             CancelLaunch();
             OnLanded?.Invoke();
+        }
+
+        public void Warp(Vector3 position)
+        {
+            CancelLaunch();
+            _verticalVelocity = 0f;
+            _characterController.enabled = false;
+            _owner.transform.position = position;
+            _characterController.enabled = true;
         }
     }
 }

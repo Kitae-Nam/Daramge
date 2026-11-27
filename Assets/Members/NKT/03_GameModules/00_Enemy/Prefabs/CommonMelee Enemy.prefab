@@ -961,9 +961,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Members.CHG._02_Scripts.CombatSystem.HealthModule
   vitalStat: {fileID: 11400000, guid: b196cf950956488439c94a54e0b161e4, type: 2}
-  baseMaxHealth: 20
-  maxHealth: 20
-  currentHealth: 20
+  baseMaxHealth: 30
+  maxHealth: 30
+  currentHealth: 30
 --- !u!1 &4240948984804730934
 GameObject:
   m_ObjectHideFlags: 0
@@ -3265,6 +3265,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3235215930194168058, guid: 48d5e74a89e8d0040a34501b0f0f2544, type: 3}
+      propertyPath: FeedbacksList.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3235215930194168058, guid: 48d5e74a89e8d0040a34501b0f0f2544, type: 3}
+      propertyPath: 'FeedbacksList.Array.data[0]'
+      value: 656606590667587588
+      objectReference: {fileID: 0}
+    - target: {fileID: 3235215930194168058, guid: 48d5e74a89e8d0040a34501b0f0f2544, type: 3}
+      propertyPath: 'FeedbacksList.Array.data[1]'
+      value: 656606590667587589
+      objectReference: {fileID: 0}
+    - target: {fileID: 3235215930194168058, guid: 48d5e74a89e8d0040a34501b0f0f2544, type: 3}
+      propertyPath: managedReferences[656606590667587588].BoundRenderer
+      value: 
+      objectReference: {fileID: 7449928904279529267}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

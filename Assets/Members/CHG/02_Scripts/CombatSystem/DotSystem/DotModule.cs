@@ -15,6 +15,9 @@ namespace CHG._02_Scripts.CombatSystem.DotSystem
             public float EndTime;
             public float NextTickTime;
         }
+        
+        public event Action<DotSO> OnDotStarted;
+        public event Action<DotSO> OnDotEnded;
 
         private readonly List<DotInstance> _dots = new();
 
@@ -45,7 +48,10 @@ namespace CHG._02_Scripts.CombatSystem.DotSystem
                 }
                 
                 if (Time.time >= instance.EndTime)
+                {
                     _dots.RemoveAt(i);
+                    OnDotEnded?.Invoke(instance.Data);
+                }
             }
         }
 
@@ -58,12 +64,19 @@ namespace CHG._02_Scripts.CombatSystem.DotSystem
             {
                 instance = new DotInstance {Data = dot, NextTickTime = Time.time + dot.TickInterval};
                 _dots.Add(instance);
+                OnDotStarted?.Invoke(dot);
             }
             
             instance.Stack = Mathf.Min(instance.Stack + 1, dot.MaxStack);
             instance.EndTime = Time.time + dot.Duration;
         }
 
-        private void HandleDeath() => _dots.Clear();
+        private void HandleDeath()
+        {
+            foreach (DotInstance instance in _dots)
+                OnDotEnded?.Invoke(instance.Data);
+
+            _dots.Clear();
+        }
     }
 }

@@ -1,4 +1,5 @@
 using CHG._02_Scripts.CoreSystem;
+using GGMLib.ObjectPool.Runtime;
 using UnityEngine;
 
 namespace CHG._02_Scripts.CombatSystem.DotSystem
@@ -11,5 +12,6 @@ namespace CHG._02_Scripts.CombatSystem.DotSystem
         [field: SerializeField] public float TickDamage { get; private set; } = 1f;
         [field: SerializeField] public int MaxStack { get; private set; } = 5; 
         [field: SerializeField] public DamageTextStyle TextStyle { get; private set; }
+        [field: SerializeField] public PoolItemSO VfxItem { get; private set; } 
     }
 }

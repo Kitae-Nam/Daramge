@@ -6,17 +6,15 @@ namespace CHG._02_Scripts.Player.Combat.Tongue
     [RequireComponent(typeof(Rigidbody))]
     public class TonguePullable : MonoBehaviour, ITonguePullable
     {
-        private const float PLACE_CHECK_SCALE = 0.9f;
-        
         private Rigidbody _rb;
         private Collider[] _colliders;
         private bool _wasKinematic;
-        private Vector3 _boundsOffset;
-        private Vector3 _halfExtents;
+        protected Vector3 boundsOffset;
+        protected Vector3 halfExtents;
 
         public Transform Root => transform;
 
-        private void Awake()
+        protected virtual void Awake()
         {
             _rb = GetComponent<Rigidbody>();
             _colliders = GetComponentsInChildren<Collider>();
@@ -43,17 +41,24 @@ namespace CHG._02_Scripts.Player.Combat.Tongue
                 col.enabled = isEnabled;
         }
         
-        public bool CanPlace(LayerMask obstacleMask) 
-            => !Physics.CheckBox(transform.position + _boundsOffset, _halfExtents * PLACE_CHECK_SCALE,
-                Quaternion.identity, obstacleMask, QueryTriggerInteraction.Ignore);
-
-        private void CacheBounds()
+        private void CacheBounds() 
         {
-            Bounds bounds = _colliders[0].bounds;
+            bool hasBounds = false;
+            Bounds bounds = default;
             foreach (Collider col in _colliders)
-                bounds.Encapsulate(col.bounds);
-            _boundsOffset = bounds.center - transform.position;
-            _halfExtents = bounds.extents;
+            {
+                if (col.isTrigger) continue; 
+                if (!hasBounds)
+                {
+                    bounds = col.bounds;
+                    hasBounds = true;
+                }
+                else
+                    bounds.Encapsulate(col.bounds);
+            }
+
+            boundsOffset = bounds.center - transform.position;
+            halfExtents = bounds.extents;
         }
     }
 }

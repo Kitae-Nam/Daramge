@@ -12,7 +12,7 @@ using UnityEngine;
 
 namespace CHG._02_Scripts.Player
 {
-    public class PlayerSkillModule : MonoBehaviour, IModule, ISkillModule, IAfterInitModule
+    public class PlayerSkillModule : MonoBehaviour, IModule, ISkillModule, ISkillProvider, IAfterInitModule
     {
         
         public float AttackSpeed { get; private set; } = 1f;
@@ -84,6 +84,8 @@ namespace CHG._02_Scripts.Player
 
         private void HandleSkillKeyPressed(PlayerSkillSlot slot)
         {
+            if (Player.CurrentState == PlayerState.INTERACT) return;
+            
             if (CanUseSkill((int)slot))
             {
                 Player.ChangeState(PlayerState.SKILL, 0); 
@@ -160,5 +162,8 @@ namespace CHG._02_Scripts.Player
                 _currentSkill = null;
             }
         }
+
+        public bool TryGetSkill(int skillIndex, out ISkill skill)
+            => _skillDict.TryGetValue(skillIndex, out skill);
     }
 }

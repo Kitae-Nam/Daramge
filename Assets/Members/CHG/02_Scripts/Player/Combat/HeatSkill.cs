@@ -1,34 +1,41 @@
 using System;
+using System.Collections;
 using CHG._02_Scripts.Agent;
 using CHG._02_Scripts.Agent.StatSystem;
 using CHG._02_Scripts.CombatSystem;
 using CHG._02_Scripts.CombatSystem.DotSystem;
 using CHG._02_Scripts.CoreSystem.AnimationSystem;
+using CHG._02_Scripts.CoreSystem.FeedbackSystem;
 using UnityEngine;
 
 namespace CHG._02_Scripts.Player.Combat
 {
     public class HeatSkill : AbstractPlayerSkill
     {
+        [SerializeField] private FeedbackPlayer heatStartFeedback;
+        [SerializeField] private FeedbackPlayer heatWarningFeedback;
+        [SerializeField] private FeedbackPlayer heatEndFeedback;
         [SerializeField] private AnimTriggerSO animEndTrigger;
         [SerializeField] private AnimParamSO heatParam;
         [SerializeField] private BuffSO heatBuff;
         [SerializeField] private DotSO burnDot;
         [SerializeField] private float staminaUseAmount = 1f;
+        [SerializeField] private float warningTime = 2f;
 
         private AgentTrigger _trigger;
         private StaminaModule _stamina;
         private IBuffModule _buffModule;
         private IHitDotModule _hitDotModule;
+        private Coroutine _warningCoroutine;
         private bool _isHeated;
 
         public override void InitializeSkill(ISkillModule skillModule)
         {
             base.InitializeSkill(skillModule);
-            _trigger = _player.GetModule<AgentTrigger>();
-            _stamina = _player.GetModule<StaminaModule>();
-            _buffModule = _player.GetModule<IBuffModule>();
-            _hitDotModule = _player.GetModule<IHitDotModule>();
+            _trigger = player.GetModule<AgentTrigger>();
+            _stamina = player.GetModule<StaminaModule>();
+            _buffModule = player.GetModule<IBuffModule>();
+            _hitDotModule = player.GetModule<IHitDotModule>();
             Debug.Assert(_trigger != null, $"trigger is null : {gameObject.name}");
             Debug.Assert(_stamina != null, $"staminaModule is null : {gameObject.name}");
             Debug.Assert(_buffModule != null, $"buffModule is null : {gameObject.name}");
@@ -53,9 +60,9 @@ namespace CHG._02_Scripts.Player.Combat
         {
             base.UseSkill(target);
             _stamina.TryUseStamina(staminaUseAmount);
-            _movement.CanManualMove = false;
-            _movement.SetMovementVelocity(Vector3.zero);
-            _renderer.PlayClip(heatParam.ParamHash, 0f,0.05f);
+            movement.CanManualMove = false;
+            movement.SetMovementVelocity(Vector3.zero);
+            renderer.PlayClip(heatParam.ParamHash, 0f,0.05f);
             _trigger.Subscribe(animEndTrigger, HandleAnimationEnd);
         }
 
@@ -64,6 +71,8 @@ namespace CHG._02_Scripts.Player.Combat
             _isHeated = true;
             _buffModule.ApplyBuff(heatBuff);
             _hitDotModule.AddDot(burnDot);
+            PlayHeatFeedback(heatStartFeedback);
+            _warningCoroutine = StartCoroutine(WarningCoroutine());
             StopSkill();
         }
 
@@ -73,13 +82,30 @@ namespace CHG._02_Scripts.Player.Combat
             
             _isHeated = false;
             _hitDotModule.RemoveDot(burnDot);
-            _lastUseTime = Time.time;
+            if (_warningCoroutine != null)
+            {
+                StopCoroutine(_warningCoroutine);
+                _warningCoroutine = null;
+            }
+            PlayHeatFeedback(heatEndFeedback);
+            lastUseTime = Time.time;
         }
+
+        private IEnumerator WarningCoroutine()
+        {
+            yield return new WaitForSeconds(heatBuff.Duration - warningTime);
+            PlayHeatFeedback(heatWarningFeedback);
+            _warningCoroutine = null;
+        }
+
+        
+        private void PlayHeatFeedback(FeedbackPlayer feedbackPlayer)
+            => PlayFeedback(feedbackPlayer, player.transform.position, player.transform.forward);
 
         public override void StopSkill()
         {
             _trigger.UnSubscribe(animEndTrigger, HandleAnimationEnd);
-            _movement.CanManualMove = true;
+            movement.CanManualMove = true;
             base.StopSkill();
         }
     }

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace CHG._02_Scripts.CombatSystem.DotSystem
