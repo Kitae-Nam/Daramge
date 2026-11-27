@@ -1,3 +1,4 @@
+using CHG._02_Scripts.Agent;
 using CHG._02_Scripts.Agent.FSM;
 using CHG._02_Scripts.Player.FSM;
 using UnityEngine;
@@ -12,6 +13,7 @@ namespace CHG._02_Scripts.Player
         private StateMachine _stateMachine;
         
         public PlayerState CurrentState { get; private set; }
+        public bool IsFrozen { get; private set; }
 
         protected override void InitializeModules()
         {
@@ -38,6 +40,22 @@ namespace CHG._02_Scripts.Player
         {
             CurrentState = newState;
             _stateMachine.ChangeState((int)newState, transitionDuration);
+        }
+        
+        public void Freeze() 
+        {
+            if (IsFrozen) return;
+            IsFrozen = true;
+            PlayerInput.DisableInput();
+            AddStatus(AgentStatus.Invincible);
+        }
+
+        public void Unfreeze() 
+        {
+            if (!IsFrozen) return;
+            IsFrozen = false;
+            RemoveStatus(AgentStatus.Invincible);
+            PlayerInput.EnableInput();
         }
     }
 }

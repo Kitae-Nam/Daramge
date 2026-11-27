@@ -21,10 +21,6 @@ public class DungeonRoomController : MonoBehaviour
     [SerializeField]
     private PuzzleDoorView exitDoor;
 
-    [Header("Entrance Settings")]
-    [SerializeField, Min(0f)]
-    private float entranceOpenDelay = 2f;
-
     [Header("Combat Settings")]
     [SerializeField, Min(0f)]
     private float enemySpawnDelay = 0.5f;
@@ -36,12 +32,12 @@ public class DungeonRoomController : MonoBehaviour
     [SerializeField]
     private UnityEvent onDungeonCleared;
 
-    [SerializeField] private UnityEvent onDungeonReset;
+    [SerializeField]
+    private UnityEvent onDungeonReset;
 
     private DungeonState currentState =
-        DungeonState.Waiting;
+        DungeonState.EntranceOpen;
 
-    private Coroutine entranceCoroutine;
     private Coroutine combatCoroutine;
 
     public DungeonState CurrentState => currentState;
@@ -49,63 +45,35 @@ public class DungeonRoomController : MonoBehaviour
     public bool IsCleared =>
         currentState == DungeonState.Cleared;
 
+    // --------------------------------
+    // Initialize
+    // --------------------------------
+
     private void Start()
     {
-        currentState = DungeonState.Waiting;
-
-        if (entranceDoor != null)
-            entranceDoor.SetOpen(false);
-
-        if (exitDoor != null)
-            exitDoor.SetOpen(false);
-    }
-
-    // --------------------------------
-    // Entrance Interaction
-    // --------------------------------
-
-    public bool TryEnterDungeon()
-    {
-        if (currentState != DungeonState.Waiting)
-            return false;
-
-        currentState = DungeonState.Opening;
-
-        Debug.Log("던전 입구 문 열기", this);
-
-        entranceCoroutine = StartCoroutine(
-            OpenEntranceRoutine()
-        );
-
-        return true;
-    }
-
-    private IEnumerator OpenEntranceRoutine()
-    {
-        // 입구 문 열기
-        if (entranceDoor != null)
-            entranceDoor.SetOpen(true);
-
-        // 입구 문이 열리는 동안 대기
-        if (entranceOpenDelay > 0f)
-        {
-            yield return new WaitForSeconds(
-                entranceOpenDelay
-            );
-        }
-
         currentState = DungeonState.EntranceOpen;
 
-        entranceCoroutine = null;
+        if (entranceDoor != null)
+            entranceDoor.SetOpenImmediately(true);
 
-        Debug.Log("던전 입장 가능", this);
+        if (exitDoor != null)
+            exitDoor.SetOpenImmediately(false);
+    }
+
+    // --------------------------------
+    // Legacy Compatibility
+    // --------------------------------
+
+    // 기존 씬 이벤트 참조 유지
+    public bool TryEnterDungeon()
+    {
+        return false;
     }
 
     // --------------------------------
     // Player Entry
     // --------------------------------
 
-    // DungeonEntryTrigger에서 호출
     public void NotifyPlayerEntered()
     {
         if (currentState != DungeonState.EntranceOpen)
@@ -118,9 +86,10 @@ public class DungeonRoomController : MonoBehaviour
             this
         );
 
-        // 입구 문 닫기
         if (entranceDoor != null)
             entranceDoor.SetOpen(false);
+
+        StopCombatCoroutine();
 
         combatCoroutine = StartCoroutine(
             BeginCombatRoutine()
@@ -129,7 +98,6 @@ public class DungeonRoomController : MonoBehaviour
 
     private IEnumerator BeginCombatRoutine()
     {
-        // 문이 닫히는 시간을 고려하여 적 생성
         if (enemySpawnDelay > 0f)
         {
             yield return new WaitForSeconds(
@@ -137,11 +105,19 @@ public class DungeonRoomController : MonoBehaviour
             );
         }
 
-        Debug.Log("던전 적 생성 시작", this);
+        combatCoroutine = null;
+
+        // 리셋 등으로 상태가 바뀌었다면
+        // 적을 생성하지 않음
+        if (currentState != DungeonState.Combat)
+            yield break;
+
+        Debug.Log(
+            "던전 적 생성 시작",
+            this
+        );
 
         onSpawnEnemies?.Invoke();
-
-        combatCoroutine = null;
     }
 
     // --------------------------------
@@ -153,9 +129,14 @@ public class DungeonRoomController : MonoBehaviour
         if (currentState != DungeonState.Combat)
             return;
 
+        StopCombatCoroutine();
+
         currentState = DungeonState.Cleared;
 
-        Debug.Log("던전 클리어!", this);
+        Debug.Log(
+            "던전 클리어!",
+            this
+        );
 
         if (exitDoor != null)
             exitDoor.SetOpen(true);
@@ -163,25 +144,89 @@ public class DungeonRoomController : MonoBehaviour
         onDungeonCleared?.Invoke();
     }
 
-    public void ResetDungeon()  
+    // --------------------------------
+    // Reset Dungeon
+    // --------------------------------
+
+    // 플레이어 사망 또는 재도전 시 호출
+    public void ResetDungeon()
     {
+        // 이미 클리어한 던전은 초기화하지 않음
         if (currentState == DungeonState.Cleared)
             return;
-        
-        StopAllCoroutines();
-        entranceCoroutine = null;
-        combatCoroutine = null;
 
-        currentState = DungeonState.Waiting;
-        
-        if (entranceDoor != null)
-            entranceDoor.SetOpen(false);
-        if (exitDoor != null)
-            exitDoor.SetOpen(false);
-        
-        if (exitDoor != null)
-            exitDoor.SetOpen(false);
-        
+        Debug.Log(
+            "던전 초기화 시작",
+            this
+        );
+
+        // 적 생성 대기 코루틴 중지
+        StopCombatCoroutine();
+
+        // 적 제거 및 전투 오브젝트 초기화
         onDungeonReset?.Invoke();
+
+        // 재입장 가능 상태로 복구
+        currentState = DungeonState.EntranceOpen;
+
+        // 입구 다시 열기
+        if (entranceDoor != null)
+            entranceDoor.SetOpen(true);
+
+        // 출구 닫기
+        if (exitDoor != null)
+            exitDoor.SetOpen(false);
+
+        Debug.Log(
+            "던전 초기화 완료 - 재입장 가능",
+            this
+        );
+    }
+
+    // --------------------------------
+    // Coroutine Management
+    // --------------------------------
+
+    private void StopCombatCoroutine()
+    {
+        if (combatCoroutine == null)
+            return;
+
+        StopCoroutine(combatCoroutine);
+        combatCoroutine = null;
+    }
+
+    // --------------------------------
+    // Editor Test
+    // --------------------------------
+
+    [ContextMenu("Test Enter Dungeon")]
+    private void TestEnterDungeon()
+    {
+        if (Application.isPlaying)
+            NotifyPlayerEntered();
+    }
+
+    [ContextMenu("Test Clear Dungeon")]
+    private void TestClearDungeon()
+    {
+        if (Application.isPlaying)
+            NotifyAllEnemiesDefeated();
+    }
+
+    [ContextMenu("Test Reset Dungeon")]
+    private void TestResetDungeon()
+    {
+        if (Application.isPlaying)
+            ResetDungeon();
+    }
+
+    // --------------------------------
+    // Disable
+    // --------------------------------
+
+    private void OnDisable()
+    {
+        StopCombatCoroutine();
     }
 }

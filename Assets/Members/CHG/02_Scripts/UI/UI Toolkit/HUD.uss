@@ -43,6 +43,14 @@
     background-image: url("project://database/Assets/Members/CHG/05.Graphic/Images/Hollow_heart.png?fileID=2800000&guid=8c5cbc375411e9544bf422bdb9accbe4&type=3#Hollow_heart");
 }
 
+.heart__fill {          
+    position: absolute; 
+    left: 0;            
+    top: 0;             
+    bottom: 0;          
+    overflow: hidden;   
+}                       
+
 .heart__fill-image {
     width: var(--heart-size);  
     height: var(--heart-size); 
@@ -151,4 +159,15 @@
     translate: 0 0;
 }
 
+.screen-fade {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background-color: black;
+    opacity: 0;
+    transition-property: opacity;
+    transition-timing-function: ease-in-out;
+}
 

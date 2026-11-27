@@ -45,12 +45,12 @@ namespace CHG._02_Scripts.Player
         private void Start()
         {
             for (int i = 0; i < settings.Length; i++)
-                Freeze(settings[i].player);
-            
+                settings[i].player.Freeze(); 
+    
             _currentIndex = startIndex;
             FocusCamera(_currentIndex); 
-            Unfreeze(settings[_currentIndex].player);
-            
+            settings[_currentIndex].player.Unfreeze(); 
+    
             PlayerController current = settings[_currentIndex].player;
             EventBus<CharacterChangeStartEvent>.Raise(new CharacterChangeStartEvent(null, current));
             EventBus<CharacterChangeEndedEvent>.Raise(new CharacterChangeEndedEvent(null, current));
@@ -77,7 +77,7 @@ namespace CHG._02_Scripts.Player
             PlayerController prev = settings[_currentIndex].player;
             PlayerController next = settings[_targetIndex].player;
 
-            Freeze(prev);
+            prev.Freeze();
             EventBus<CharacterChangeStartEvent>.Raise(new CharacterChangeStartEvent(prev, next));
             FocusCamera(_targetIndex);
             return true;
@@ -106,7 +106,7 @@ namespace CHG._02_Scripts.Player
             _targetIndex = -1;
             _isChanging = false;
 
-            Unfreeze(settings[_currentIndex].player);
+            next.Unfreeze();
             EventBus<CharacterChangeEndedEvent>.Raise(new CharacterChangeEndedEvent(prev, next));
         }
 
@@ -116,18 +116,6 @@ namespace CHG._02_Scripts.Player
                 settings[i].camera.Priority = i == index ? activePriority : inactivePriority;
         }
 
-        private static void Freeze(PlayerController player)
-        {
-            player.PlayerInput.DisableInput();
-            player.AddStatus(AgentStatus.Invincible);
-        }
-
-        private static void Unfreeze(PlayerController player)
-        {
-            player.RemoveStatus(AgentStatus.Invincible);
-            player.PlayerInput.EnableInput();
-        }
-        
         public PlayerController GetPlayer(int index) => settings[index].player;
         
     }

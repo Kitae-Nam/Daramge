@@ -27,6 +27,16 @@ public class DungeonEntryTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        CheckPlayer(other);
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        CheckPlayer(other);
+    }
+
+    private void CheckPlayer(Collider other)
+    {
         // 플레이어 레이어만 감지
         if ((playerLayer.value &
             (1 << other.gameObject.layer)) == 0)
