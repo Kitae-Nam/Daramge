@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
+namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Summons
 {
     /// <summary>고정된 착지점을 예고하고 점프한다. 기물 종류나 다른 공격의 구현은 알지 못한다.</summary>
     public sealed class JumpMinionAttack : ChessMinionAttack

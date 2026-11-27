@@ -12873,7 +12873,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3aea0b3af03e4b56a4e89a9272e38ab4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.BossHealth
-  _maxHealth: 1000
+  _maxHealth: 100000
 --- !u!114 &-2158953491051892634
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13110,7 +13110,7 @@ MonoBehaviour:
   _repeatWarningDuration: 0.35
   _comboWarningDuration: 0.85
   _comboRecoveryDuration: 0.65
-  _showBoardWarnings: 1
+  _showBoardWarnings: 0
   _tuningSource: {fileID: 0}
 --- !u!114 &5236150174565958719
 MonoBehaviour:
@@ -13142,6 +13142,7 @@ MonoBehaviour:
   - {fileID: 3616601426648974870}
   - {fileID: 7990778034534108907}
   - {fileID: 4650001719414438072}
+  - {fileID: 7686050205553137576}
   _openingDelay: 3
   _decisionInterval: 0.35
 --- !u!114 &7605947213558782659
@@ -13233,10 +13234,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa8c0b89dfcc4e39ab1bc88ee765d50b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.ChessBoardGrid
-  _center: {x: -49.8, y: 18.1, z: 6.25}
+  _center: {x: -49.8, y: 18.1, z: 6.23}
   _cellSize: 1.5
   _columns: 8
   _rows: 8
+  _visualSurface: {fileID: 0}
 --- !u!114 &4802689460745178192
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13401,6 +13403,7 @@ MonoBehaviour:
   _firstWarning: {fileID: 4531517547266022274}
   _secondWarning: {fileID: 6294599191099463759}
   _maximumSelectionDistance: 16
+  _minimumPhase: 2
 --- !u!114 &4650001719414438072
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13483,11 +13486,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a88ec899e0e4df2a4611ec4c020d80d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Daramge.Bosses::Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.ChessSummonCatalog
-  _phaseTwoPrefabs:
-  - {fileID: 8171601983415308940, guid: f68b480cde4347fb87eeb8a2a0b0e460, type: 3}
-  - {fileID: 3679876647263537345, guid: b26abb476e8e4313ab75221827203957, type: 3}
-  - {fileID: 8171601983415308940, guid: 6327c9a984294ef78c76f5c854e98829, type: 3}
-  - {fileID: 8171601983415308940, guid: 63e1881dc520423896b25c4d9bbad172, type: 3}
+  _phaseTwoPrefabs: []
 --- !u!114 &547688701287622653
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
+namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Summons
 {
     /// <summary>폰의 근접 원형과 룩/비숍의 방향 고정 공격을 같은 부채꼴 규칙으로 표현한다.</summary>
     public sealed class SectorMinionAttack : ChessMinionAttack

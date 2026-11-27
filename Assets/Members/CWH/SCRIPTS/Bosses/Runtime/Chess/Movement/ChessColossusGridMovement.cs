@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Movement;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -9,6 +10,8 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
     public sealed class ChessColossusGridMovement : ChessMinionMovement
     {
         private static readonly int Moving = Animator.StringToHash("Moving");
+        public override ChessBoardGrid Board => _board;
+        public override Transform StandaloneTarget => _externallyDriven ? null : _target;
         private static readonly int DragPhase = Animator.StringToHash("DragPhase");
         private static readonly int DragStride = Animator.StringToHash("DragStride");
         [SerializeField] private ChessBoardGrid _board;
@@ -22,6 +25,7 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
 
         private readonly RaycastHit[] _obstacles = new RaycastHit[24];
         private NavMeshAgent _agent;
+        private ChessColossusFacing _facing;
         private Transform _summoner;
         private bool _externallyDriven;
         private bool _moving;
@@ -45,6 +49,8 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
         private void Awake()
         {
             _agent = GetComponent<NavMeshAgent>();
+            _facing = GetComponent<ChessColossusFacing>();
+            _facing?.SetTarget(_target);
             if (_animator == null) _animator = GetComponentInChildren<Animator>();
         }
 
@@ -60,6 +66,7 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
             _externallyDriven = true;
             if (board != null) _board = board;
             _target = target;
+            _facing?.SetTarget(target);
             _summoner = summoner;
             _retry = 0f;
             _preferred = ChessColossusMoveKind.Rook;
@@ -132,6 +139,9 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
         {
             _start = transform.position;
             _destination = destination;
+            Vector3 heading = destination - _start;
+            heading.y = 0f;
+            _facing?.SetMoveDirection(heading);
             _elapsed = 0f;
             float distance = Mathf.Sqrt(HorizontalDistanceSquared(_start, destination));
             _pullCount = Mathf.Max(1, Mathf.CeilToInt(distance / ChessColossusDragGait.MaxStride));
@@ -155,7 +165,7 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
 
             Vector3 heading = _destination - _start;
             heading.y = 0f;
-            if (heading.sqrMagnitude > 0.0001f)
+            if ((_facing == null || !_facing.isActiveAndEnabled) && heading.sqrMagnitude > 0.0001f)
                 transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(heading), 540f * deltaTime);
             if (_animator != null && _animator.runtimeAnimatorController != null) _animator.SetFloat(DragPhase, phase);
             _agent.Move(next - current);
@@ -241,6 +251,7 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
         {
             if (!_moving) return;
             _moving = false;
+            _facing?.ClearMoveDirection();
             _hasSecondLeg = false;
             if (Ready)
             {
