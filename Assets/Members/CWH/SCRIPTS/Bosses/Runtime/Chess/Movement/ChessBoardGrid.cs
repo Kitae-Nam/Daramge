@@ -11,7 +11,10 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
         [SerializeField, Min(0.1f)] private float _cellSize = 4.5f;
         [SerializeField, Min(1)] private int _columns = 8;
         [SerializeField, Min(1)] private int _rows = 8;
+        [SerializeField] private Transform _visualSurface;
         public float CellSize => _cellSize;
+        // 보드 모델의 윗면 피벗을 연결하면 판정 그리드의 높이와 무관하게 바닥에 그릴 수 있다.
+        public float SurfaceHeight => _visualSurface != null ? _visualSurface.position.y : _center.y;
         public IEnumerable<Vector3> CellCenters
         {
             get

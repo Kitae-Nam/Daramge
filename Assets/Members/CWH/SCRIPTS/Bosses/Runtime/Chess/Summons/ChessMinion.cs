@@ -5,9 +5,9 @@ using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Telegraphs;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
+namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Summons
 {
-    public enum ChessMinionKind { Pawn, Knight, Rook, Bishop }
+    public enum ChessMinionKind { Pawn, Knight, Rook, Bishop, Colossus }
 
     /// <summary>
     /// 접근→경고→공격→휴식의 공통 순서와 생존 수명만 관리한다.
@@ -20,6 +20,7 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
         [SerializeField] private ChessMinionKind _kind;
         [SerializeField] private Material _warningMaterial;
         [SerializeField] private ChessMinionAttack _attack;
+        [SerializeField, Range(1, 2)] private int _summonCount = 2;
         [SerializeField, Min(0.1f)] private float _attackRadius = 2.5f;
         [SerializeField, Min(0f)] private float _damage = 1f;
         [SerializeField, Min(0.1f)] private float _warningTime = 1.3f;
@@ -39,6 +40,7 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
         private bool _initialized;
         private bool _removed;
         public ChessMinionKind Kind => _kind;
+        public int SummonCount => Mathf.Clamp(_summonCount, 1, 2);
         public bool IsAttacking => _state == State.Warning || _state == State.Attacking;
         public event Action<ChessMinion> Removed;
 
@@ -53,6 +55,12 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
             _attack.Initialize(_agent, _attackRadius, _damage, _warning);
         }
         private void OnEnable() => _health.Broken += OnBroken;
+        private void Start()
+        {
+            // 씬에 직접 배치한 기물도 이동기에 지정한 대상을 사용한다. 보스가 초기화한 소환체는 그대로 둔다.
+            if (!_initialized && _movement != null && _movement.StandaloneTarget != null)
+                Initialize(_movement.StandaloneTarget, 0f);
+        }
 
         public void Initialize(Transform target, float delay, BossPatternRunner ownerRunner = null)
         {
@@ -62,8 +70,10 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
             float damage = BossAttackDamage.Resolve(ownerRunner != null ? ownerRunner.transform : null, _damage);
             _attack.Initialize(_agent, _attackRadius, damage, _warning);
             _roster = ownerRunner != null ? ownerRunner.GetComponent<BossSummonRoster>() : null;
-            _movement?.Bind(ownerRunner != null ? ownerRunner.GetComponent<ChessBoardGrid>() : null, target,
-                ownerRunner != null ? ownerRunner.transform : null);
+            ChessBoardGrid board = ownerRunner != null ? ownerRunner.GetComponent<ChessBoardGrid>() : _movement?.Board;
+            Transform summoner = ownerRunner != null ? ownerRunner.transform : null;
+            _movement?.Bind(board, target, summoner);
+            _attack.BindBoard(board, summoner);
             _initialized = true;
             _timer = delay;
             _state = State.Resting;
@@ -72,9 +82,12 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
 
         private void Update()
         {
-            if (!_initialized || _removed || _health.IsDead || _target == null)
+            // 초기화 전에는 소환수 FSM이 아직 이동기를 소유하지 않는다.
+            if (!_initialized) return;
+            if (_removed || _health.IsDead || _target == null)
             {
                 _movement?.Stop();
+                if (!_removed && IsAttacking) { _attack.Cancel(); Rest(); }
                 return;
             }
             _timer -= Time.deltaTime;
@@ -86,7 +99,9 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
                         (_roster == null || !_roster.IsAttackInProgress)) StartWarning();
                     break;
                 case State.Warning:
-                    _warning.SetProgress(1f - Mathf.Max(0f, _timer) / _warningTime);
+                    float progress = 1f - Mathf.Max(0f, _timer) / _warningTime;
+                    _warning.SetProgress(progress);
+                    _attack.SetWarningProgress(progress);
                     if (_timer > 0f) return;
                     _attack.BeginAttack();
                     _state = State.Attacking;

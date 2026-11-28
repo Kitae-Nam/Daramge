@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
+namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Summons
 {
     /// <summary>소환 후보만 제공한다. 퀸 등 새 기물은 배열에 등록하며 소환 패턴의 코드를 수정하지 않는다.</summary>
     [DisallowMultipleComponent, RequireComponent(typeof(BossPhaseController))]

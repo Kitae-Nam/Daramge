@@ -4,7 +4,7 @@ using Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Common.Health;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
+namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime.Chess.Summons
 {
     /// <summary>살아 있는 기물 목록과 소환 보호 배율의 수명을 함께 관리한다.</summary>
     [RequireComponent(typeof(BossHealth))]
@@ -48,12 +48,12 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
             }
             _health.RemoveDamageMultiplier(this);
         }
-        /// <summary>같은 NavMesh 섬에서 서로 겹치지 않는 두 위치를 먼저 확보한다.</summary>
-        public bool TryGetSpawnPoints(out Vector3[] points)
+        /// <summary>같은 NavMesh 섬에서 서로 겹치지 않는 소환 위치를 먼저 확보한다.</summary>
+        public bool TryGetSpawnPoints(int count, out Vector3[] points)
         {
             var found = new List<Vector3>();
             var path = new NavMeshPath();
-            for (int i = 0; i < 16 && found.Count < 2; i++)
+            for (int i = 0; i < 16 && found.Count < count; i++)
             {
                 float radians = (i * 137.5f) * Mathf.Deg2Rad;
                 Vector3 desired = transform.position + new Vector3(Mathf.Cos(radians), 0f, Mathf.Sin(radians)) * 6f;
@@ -64,7 +64,7 @@ namespace Daramge.Bosses.Members.CWH.SCRIPTS.Bosses.Runtime
                 found.Add(hit.position);
             }
             points = found.ToArray();
-            return points.Length == 2;
+            return points.Length == count;
         }
         private void OnDisable()
         {
