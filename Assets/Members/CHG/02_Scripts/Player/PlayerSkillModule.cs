@@ -26,6 +26,7 @@ namespace CHG._02_Scripts.Player
 
         private IStatModule _statModule;
         private IRenderer _renderer;
+        private ICarrier _carrier;
         private Dictionary<int, ISkill> _skillDict;
         private ISkill _currentSkill;
         
@@ -49,6 +50,7 @@ namespace CHG._02_Scripts.Player
             
             _statModule = Owner.GetModule<IStatModule>();
             _renderer = Owner.GetModule<IRenderer>();
+            _carrier = Owner.GetModule<ICarrier>();
             Debug.Assert(_statModule != null, $"statModule is null : {gameObject.name}");
             Debug.Assert(_renderer != null, $"renderer is null : {gameObject.name}");
         }
@@ -85,6 +87,7 @@ namespace CHG._02_Scripts.Player
         private void HandleSkillKeyPressed(PlayerSkillSlot slot)
         {
             if (Player.CurrentState == PlayerState.INTERACT) return;
+            if (_carrier is { IsCarrying: true }) return;
             
             if (CanUseSkill((int)slot))
             {

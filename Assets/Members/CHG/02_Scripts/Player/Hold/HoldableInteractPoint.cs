@@ -17,7 +17,7 @@ namespace CHG._02_Scripts.Player.Hold
         private void OnDestroy()
         {
             if (_holdable != null)
-                _holdable.OnHold += HandleHold;
+                _holdable.OnHold -= HandleHold;
                 
         }
 

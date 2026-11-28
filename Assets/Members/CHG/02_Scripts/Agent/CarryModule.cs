@@ -13,7 +13,7 @@ namespace CHG._02_Scripts.Agent
     public class CarryModule : MonoBehaviour, IModule, ICarrier
     {
         [Header("Carry Settings")] 
-        [SerializeField] private float dropDistance = 1f;
+        [SerializeField] private float dropGap = 0.05f;
         [SerializeField] private float dropDuration = 0.25f; 
 
         [Header("Ground Detection")] 
@@ -34,6 +34,7 @@ namespace CHG._02_Scripts.Agent
         [SerializeField] private float crossFadeDuration = 0.1f; 
 
         private PlayerController _player;
+        private CharacterController _characterController;  
         private IHolder _holder;
         private IHoldable _pending;
         private Transform _ownerTrm; 
@@ -43,8 +44,9 @@ namespace CHG._02_Scripts.Agent
         private bool _isCarrying;
         
         public bool IsActing { get; private set; }
+        public bool IsCarrying  => _isCarrying;
         
-        public void Initialize(ModuleOwner owner) 
+        public void Initialize(ModuleOwner owner)
         {
             _player = owner as PlayerController;
             Debug.Assert(_player != null, $"this Object not Player child : {gameObject.name}");
@@ -53,9 +55,11 @@ namespace CHG._02_Scripts.Agent
             _renderer = owner.GetModule<IRenderer>();
             _trigger = owner.GetModule<AgentTrigger>();
             _holder = owner.GetModule<IHolder>();
+            _characterController = owner.GetComponent<CharacterController>();  
             Debug.Assert(_renderer != null, $"renderer is null : {gameObject.name}");
             Debug.Assert(_trigger != null, $"AgentTrigger is null : {gameObject.name}");
             Debug.Assert(_holder != null, $"holder is null : {gameObject.name}");
+            Debug.Assert(_characterController != null, $"CharacterController is null : {gameObject.name}");  
 
             _trigger.Subscribe(pickupTrigger, HandlePickupTrigger);
             _trigger.Subscribe(dropTrigger, HandleDropTrigger);
@@ -121,11 +125,14 @@ namespace CHG._02_Scripts.Agent
 
         private void HandleActionEnd() => ActionEnd();
 
-        private bool TryGetDropPosition(out Vector3 dropPosition) 
+        private bool TryGetDropPosition(out Vector3 dropPosition)
         {
             dropPosition = Vector3.zero;
 
-            Vector3 dropXZ = _ownerTrm.position + _ownerTrm.forward * dropDistance;
+            Vector3 forward = _ownerTrm.forward;                                                        
+            float bodyRadius = _characterController.radius + _characterController.skinWidth;            
+            float dropDistance = bodyRadius + _holder.Current.GetReach(-forward) + dropGap;             
+            Vector3 dropXZ = _ownerTrm.position + forward * dropDistance;                               
             Vector3 rayOrigin = dropXZ + Vector3.up * groundRayHeight;
 
             if (!Physics.Raycast(rayOrigin, Vector3.down, out RaycastHit hit, groundRayDistance, groundLayer, QueryTriggerInteraction.Ignore))

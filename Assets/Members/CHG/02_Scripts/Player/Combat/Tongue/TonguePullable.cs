@@ -19,11 +19,11 @@ namespace CHG._02_Scripts.Player.Combat.Tongue
             _rb = GetComponent<Rigidbody>();
             _colliders = GetComponentsInChildren<Collider>();
             Debug.Assert(_colliders.Length > 0, $"Collider is null : {gameObject.name}");
+            CacheBounds();
         }
 
         public void BeginPull()
         {
-            CacheBounds();
             _wasKinematic = _rb.isKinematic;
             _rb.isKinematic = true;
             SetColliderEnabled(false);
@@ -41,13 +41,17 @@ namespace CHG._02_Scripts.Player.Combat.Tongue
                 col.enabled = isEnabled;
         }
         
-        private void CacheBounds() 
+        private void CacheBounds()
         {
+            Quaternion rotation = transform.rotation;  
+            transform.rotation = Quaternion.identity;  
+            Physics.SyncTransforms();                  
+
             bool hasBounds = false;
             Bounds bounds = default;
             foreach (Collider col in _colliders)
             {
-                if (col.isTrigger) continue; 
+                if (col.isTrigger) continue;
                 if (!hasBounds)
                 {
                     bounds = col.bounds;
@@ -59,6 +63,8 @@ namespace CHG._02_Scripts.Player.Combat.Tongue
 
             boundsOffset = bounds.center - transform.position;
             halfExtents = bounds.extents;
+
+            transform.rotation = rotation;  
         }
     }
 }

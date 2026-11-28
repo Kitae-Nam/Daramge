@@ -13,7 +13,7 @@ namespace CHG._02_Scripts.Player.Hold
         private bool _isHeld;
 
         public bool CanHold => !_isHeld;
-        public float BottomOffset => halfExtents.y - boundsOffset.y;
+        public float BottomOffset => GetReach(Vector3.down);   
 
         public void BeginHold()
         {
@@ -29,7 +29,19 @@ namespace CHG._02_Scripts.Player.Hold
         }
 
         public bool CanPlace(Vector3 rootPosition, LayerMask obstacleMask)
-            => !Physics.CheckBox(rootPosition + boundsOffset, halfExtents * PLACE_CHECK_SCALE,
-                Quaternion.identity, obstacleMask, QueryTriggerInteraction.Ignore);
+        {
+            Quaternion rotation = Root.rotation;
+            return !Physics.CheckBox(rootPosition + rotation * boundsOffset, halfExtents * PLACE_CHECK_SCALE,
+                rotation, obstacleMask, QueryTriggerInteraction.Ignore);
+        }
+        
+        public float GetReach(Vector3 direction) 
+        {
+            Vector3 local = Quaternion.Inverse(Root.rotation) * direction.normalized;
+            return Vector3.Dot(boundsOffset, local)
+                   + Mathf.Abs(local.x) * halfExtents.x
+                   + Mathf.Abs(local.y) * halfExtents.y
+                   + Mathf.Abs(local.z) * halfExtents.z;
+        }
     }
 }
